@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Player {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  preferredRole String // 'attaccante', 'portiere', 'entrambi'
+  createdAt     DateTime @default(now())
+
+  teamsAsPlayer1 Team[]                   @relation("Player1")
+  teamsAsPlayer2 Team[]                   @relation("Player2")
+  registrations  TournamentRegistration[]
+}
+
+model Team {
+  id            String   @id @default(uuid())
+  player1Id     String
+  player2Id     String
+  uniqueTeamKey String   @unique
+  createdAt     DateTime @default(now())
+
+  player1 Player @relation("Player1", fields: [player1Id], references: [id])
+  player2 Player @relation("Player2", fields: [player2Id], references: [id])
+
+  matchesAsTeamA  Match[] @relation("TeamA")
+  matchesAsTeamB  Match[] @relation("TeamB")
+  matchesAsWinner Match[] @relation("MatchWinner")
+
+  tournamentsWon Tournament[]    @relation("TournamentWinner")
+  groupStandings GroupStanding[]
+}
+
+model TournamentGroup {
+  id           String   @id @default(uuid())
+  tournamentId String
+  name         String
+  createdAt    DateTime @default(now())
+
+  tournament Tournament      @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  standings  GroupStanding[]
+  matches    Match[]
+}
+
+model GroupStanding {
+  id          String @id @default(uuid())
+  groupId     String
+  teamId      String
+  played      Int    @default(0)
+  won         Int    @default(0)
+  lost        Int    @default(0)
+  setsFor     Int    @default(0)
+  setsAgainst Int    @default(0)
+  points      Int    @default(0)
+
+  group TournamentGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  team  Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model Match {
+  id           String    @id @default(uuid())
+  teamAId      String?
+  teamBId      String?
+  winnerTeamId String?
+  scoreTeamA   Int       @default(0)
+  scoreTeamB   Int       @default(0)
+  tournamentId String?
+  groupId      String?
+  bracketType  String    @default("winners") // 'winners', 'losers', 'grand_final', 'group_stage', 'playoff'
+  scheduledAt  DateTime?
+  playedAt     DateTime  @default(now())
+
+  teamA      Team?            @relation("TeamA", fields: [teamAId], references: [id])
+  teamB      Team?            @relation("TeamB", fields: [teamBId], references: [id])
+  winnerTeam Team?            @relation("MatchWinner", fields: [winnerTeamId], references: [id])
+  tournament Tournament?      @relation(fields: [tournamentId], references: [id])
+  group      TournamentGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+}
+
+model Tournament {
+  id             String                   @id @default(uuid())
+  name           String
+  type           String // 'coppie_fisse', 'sorteggio_ruoli', 'sorteggio_integrale'
+  format         String                   @default("eliminazione_diretta") // 'eliminazione_diretta', 'doppia_eliminazione', 'gironi_eliminazione'
+  status         String // 'setup', 'ready_to_draw', 'in_progress', 'completed'
+  startDate      DateTime?
+  pricePerPlayer Float?
+  prizes         String?
+  registrations  TournamentRegistration[]
+  winnerTeamId   String?
+  bracketData    String?
+  createdAt      DateTime                 @default(now())
+
+  winnerTeam Team?             @relation("TournamentWinner", fields: [winnerTeamId], references: [id])
+  matches    Match[]
+  groups     TournamentGroup[]
+}
+
+model TournamentRegistration {
+  id           String   @id @default(uuid())
+  tournamentId String
+  playerId     String
+  hasPaid      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  player     Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([tournamentId, playerId])
+}
