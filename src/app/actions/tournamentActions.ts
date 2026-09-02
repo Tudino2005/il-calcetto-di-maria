@@ -236,10 +236,11 @@ export async function getTournament(id: string) {
         include: {
           teamA: { include: { player1: true, player2: true } },
           teamB: { include: { player1: true, player2: true } },
-          winnerTeam: true,
+          winnerTeam: { include: { player1: true, player2: true } },
         },
         orderBy: { playedAt: "asc" }
       },
+      winnerTeam: { include: { player1: true, player2: true } },
       groups: {
         include: {
           standings: {

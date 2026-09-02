@@ -1,4 +1,10 @@
-import TournamentForm from "@/components/TournamentForm";
+import re
+
+with open("src/app/tournaments/page.tsx", "r") as f:
+    content = f.read()
+
+# Replace the component content
+replacement = """import TournamentForm from "@/components/TournamentForm";
 import { getTournaments } from "@/app/actions/tournamentActions";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
@@ -68,3 +74,7 @@ export default async function TournamentsPage() {
     </main>
   );
 }
+"""
+
+with open("src/app/tournaments/page.tsx", "w") as f:
+    f.write(replacement)

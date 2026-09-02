@@ -14,8 +14,8 @@ type MatchInfo = {
   scoreTeamB: number;
   winnerTeamId: string | null;
   tournamentId: string | null;
-  teamA: TeamInfo;
-  teamB: TeamInfo;
+  teamA: TeamInfo | null;
+  teamB: TeamInfo | null;
 };
 
 export default function MatchScorer({ match }: { match: MatchInfo }) {
