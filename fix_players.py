@@ -3,11 +3,15 @@ import re
 with open("src/app/players/page.tsx", "r") as f:
     content = f.read()
 
-pattern = r'(<div key=\{p\.id\} className="bg-slate-900 p-4 rounded-xl flex justify-between items-center border border-slate-700">)'
-replacement = r'<Link href={`/players/${p.id}`} key={p.id} className="bg-slate-900 p-4 rounded-xl flex justify-between items-center border border-slate-700 hover:border-emerald-500 transition-colors">'
+content = content.replace(
+    'import { ArrowLeft, UserPlus } from "lucide-react";',
+    'import { ArrowLeft, UserPlus } from "lucide-react";\nimport WipeAllDataButton from "@/components/WipeAllDataButton";'
+)
 
-content = re.sub(pattern, replacement, content)
-content = content.replace('</div>\n              ))', '</Link>\n              ))')
+content = content.replace(
+    '      </div>\n    </main>',
+    '      </div>\n      <div className="mt-16 border-t border-slate-800 pt-8">\n        <WipeAllDataButton />\n      </div>\n    </main>'
+)
 
 with open("src/app/players/page.tsx", "w") as f:
     f.write(content)

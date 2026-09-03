@@ -365,3 +365,25 @@ export async function wipeTournamentData(pin: string) {
   revalidatePath("/admin");
   revalidatePath("/tournaments");
 }
+
+
+export async function wipeAllData(pin: string) {
+  if (pin !== "MARIA2026") {
+    throw new Error("PIN errato!");
+  }
+  
+  // Wipe in correct order due to foreign keys
+  await prisma.match.deleteMany({});
+  await prisma.groupStanding.deleteMany({});
+  await prisma.tournamentGroup.deleteMany({});
+  await prisma.tournamentRegistration.deleteMany({});
+  await prisma.tournament.deleteMany({});
+  await prisma.team.deleteMany({});
+  await prisma.player.deleteMany({});
+  
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/tournaments");
+  revalidatePath("/players");
+  revalidatePath("/match");
+}

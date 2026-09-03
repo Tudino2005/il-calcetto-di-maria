@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { getPlayers, createPlayer } from "@/app/actions/matchActions";
 import Link from "next/link";
 import { ArrowLeft, UserPlus } from "lucide-react";
+import WipeAllDataButton from "@/components/WipeAllDataButton";
 import { revalidatePath } from "next/cache";
 
 export default async function PlayersPage() {
@@ -81,6 +82,9 @@ export default async function PlayersPage() {
             )}
           </div>
         </section>
+      </div>
+      <div className="mt-16 border-t border-slate-800 pt-8">
+        <WipeAllDataButton />
       </div>
     </main>
   );
