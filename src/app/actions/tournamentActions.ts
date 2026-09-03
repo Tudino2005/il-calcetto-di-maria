@@ -347,3 +347,21 @@ export async function createQuickTournament(formData: FormData) {
   // 4. Go to Ceremony/Bracket
   redirect(`/tournaments/${tournament.id}?draw=true`);
 }
+
+
+export async function wipeTournamentData(pin: string) {
+  if (pin !== "MARIA2026") {
+    throw new Error("PIN errato!");
+  }
+  
+  // Wipe in correct order due to foreign keys
+  await prisma.match.deleteMany({});
+  await prisma.groupStanding.deleteMany({});
+  await prisma.tournamentGroup.deleteMany({});
+  await prisma.tournamentRegistration.deleteMany({});
+  await prisma.tournament.deleteMany({});
+  
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/tournaments");
+}
