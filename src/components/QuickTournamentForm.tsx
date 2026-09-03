@@ -31,7 +31,7 @@ export default function QuickTournamentForm({ players }: { players: any[] }) {
         const openPairIndex = fixedPairs.findIndex(pair => pair.length === 1);
         if (openPairIndex !== -1) {
           const newPairs = [...fixedPairs];
-          newPairs[openPairIndex].push(id);
+          newPairs[openPairIndex] = [...newPairs[openPairIndex], id];
           setFixedPairs(newPairs);
         } else {
           // Create new pair
