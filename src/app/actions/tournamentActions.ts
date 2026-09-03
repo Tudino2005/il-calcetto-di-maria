@@ -72,7 +72,7 @@ export async function removePlayerFromTournament(tournamentId: string, playerId:
   revalidatePath(`/tournaments/${tournamentId}`);
 }
 
-export async function startTournament(tournamentId: string, config?: { teamsPerGroup?: number }) {
+export async function startTournament(tournamentId: string, config?: { teamsPerGroup?: number, fixedPairs?: string[][] }) {
   const tournament = await prisma.tournament.findUnique({
     where: { id: tournamentId },
     include: { registrations: { include: { player: true } } }
@@ -85,12 +85,17 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
   let createdTeams: any[] = [];
 
   if (type === "coppie_fisse") {
-    // For fixed pairs, we assume players were added in pairs logically, but actually they are just a pool of players.
-    // Wait, if it's fixed pairs, they need to select which two players form a team.
-    // In our simplified lobby, if they use coppie fisse, they add players and we randomly pair them?
-    // The prompt requested a simple logic for now, we'll draw them randomly if they chose coppie fisse but used the lobby to add players.
-    // Ideally we should have a UI for pairing, but to unblock we use drawTeamsRandom.
-    const teamsToInsert = drawTeamsRandom(players);
+    let teamsToInsert: any[] = [];
+    if (config?.fixedPairs && config.fixedPairs.length > 0) {
+      teamsToInsert = config.fixedPairs.map(pair => {
+        return {
+          player1: players.find((p: any) => p.id === pair[0]),
+          player2: players.find((p: any) => p.id === pair[1])
+        };
+      });
+    } else {
+      teamsToInsert = drawTeamsRandom(players);
+    }
     createdTeams = await Promise.all(
       teamsToInsert.map(async (t) => {
         const ids = [t.player1.id, t.player2.id].sort();
@@ -330,8 +335,14 @@ export async function createQuickTournament(formData: FormData) {
     });
   }
 
+  const fixedPairsStr = formData.get("fixedPairs") as string;
+  let fixedPairs = undefined;
+  if (fixedPairsStr) {
+    try { fixedPairs = JSON.parse(fixedPairsStr); } catch(e) {}
+  }
+
   // 3. Generate Bracket & Start
-  await startTournament(tournament.id);
+  await startTournament(tournament.id, { fixedPairs });
 
   // 4. Go to Ceremony/Bracket
   redirect(`/tournaments/${tournament.id}?draw=true`);

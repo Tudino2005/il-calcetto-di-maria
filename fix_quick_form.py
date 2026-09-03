@@ -1,4 +1,12 @@
-"use client";
+import re
+
+with open("src/components/QuickTournamentForm.tsx", "r") as f:
+    content = f.read()
+
+# Replace the component content
+# We will use python's powerful string manipulation to insert the new logic
+
+new_content = """"use client";
 
 import { useState } from "react";
 import { createQuickTournament } from "@/app/actions/tournamentActions";
@@ -278,3 +286,7 @@ export default function QuickTournamentForm({ players }: { players: any[] }) {
     </form>
   );
 }
+"""
+
+with open("src/components/QuickTournamentForm.tsx", "w") as f:
+    f.write(new_content)
