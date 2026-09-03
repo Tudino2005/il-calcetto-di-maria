@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { getLeaderboardData } from "@/lib/leaderboardData";
 import TVSlideshow from "@/components/TVSlideshow";

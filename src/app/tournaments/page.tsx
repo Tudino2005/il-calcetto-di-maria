@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import TournamentForm from "@/components/TournamentForm";
 import { getTournaments } from "@/app/actions/tournamentActions";
 import Link from "next/link";

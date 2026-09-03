@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getTournament } from "@/app/actions/tournamentActions";
 import { notFound } from "next/navigation";
 import TournamentBracket from "@/components/TournamentBracket";

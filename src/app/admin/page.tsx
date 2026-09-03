@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Trophy, Users, Play, Swords, Zap } from "lucide-react";
 

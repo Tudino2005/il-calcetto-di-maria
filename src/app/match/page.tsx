@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getPlayers, createTeam, createMatch } from "@/app/actions/matchActions";
 import Link from "next/link";
 import { ArrowLeft, Play } from "lucide-react";

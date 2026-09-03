@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getPlayers, createPlayer } from "@/app/actions/matchActions";
 import Link from "next/link";
 import { ArrowLeft, UserPlus } from "lucide-react";
