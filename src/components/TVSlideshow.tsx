@@ -87,7 +87,13 @@ export default function TVSlideshow({ data }: { data: any }) {
               <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[3rem] border-2 border-yellow-500/20 shadow-2xl backdrop-blur-sm relative">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
-                  {playerStats[0] && (
+                  {playerStats[0] && (() => {
+                    const topPlayers = playerStats.filter((p: any) => 
+                      p.winRate === playerStats[0].winRate && 
+                      p.wins === playerStats[0].wins && 
+                      p.played === playerStats[0].played
+                    );
+                    return (
                     <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-yellow-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(234,179,8,0.15)] relative overflow-hidden">
                       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                         <Medal className="w-24 h-24 text-yellow-500" />
@@ -95,13 +101,17 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <div className="w-16 flex-shrink-0 text-center font-black text-6xl text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.6)]">
                         1
                       </div>
-                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10">
-                        <div className="text-3xl font-black text-white truncate leading-tight">{playerStats[0].name}</div>
-                        <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">
-                          {playerStats[0].preferredRole}
-                        </div>
+                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
+                        {topPlayers.map((tp: any, idx: number) => (
+                          <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
+                            <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
+                            <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">
+                              {tp.preferredRole}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <div className="flex flex-col items-end shrink-0 ml-4 z-10">
+                      <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
                         <div className="text-2xl font-black flex items-baseline gap-1">
                           <span className="text-emerald-400">{playerStats[0].wins} V</span>
                           <span className="text-blue-400">/ {playerStats[0].played} G</span>
@@ -111,7 +121,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                       </div>
                     </div>
-                  )}
+                  );
+                  })()}
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
                     <Medal className="w-10 h-10 text-yellow-500" /> Classifica Singoli
                   </h3>
@@ -119,8 +130,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000}s` }}>
-                    {playerStats.slice(1).map((p: any, i: number) => {
-                      const rank = i + 2;
+                    {playerStats.slice(playerStats.filter((p: any) => p.winRate === playerStats[0]?.winRate && p.wins === playerStats[0]?.wins && p.played === playerStats[0]?.played).length).map((p: any, i: number) => {
+                      const rank = i + 1 + playerStats.filter((ps: any) => ps.winRate === playerStats[0]?.winRate && ps.wins === playerStats[0]?.wins && ps.played === playerStats[0]?.played).length;
                       return (
                       <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0">
@@ -157,7 +168,13 @@ export default function TVSlideshow({ data }: { data: any }) {
               <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[3rem] border-2 border-blue-500/20 shadow-2xl backdrop-blur-sm relative">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
-                  {teamStats[0] && (
+                  {teamStats[0] && (() => {
+                    const topTeams = teamStats.filter((t: any) => 
+                      t.winRate === teamStats[0].winRate && 
+                      t.wins === teamStats[0].wins && 
+                      t.played === teamStats[0].played
+                    );
+                    return (
                     <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-yellow-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(234,179,8,0.15)] relative overflow-hidden">
                       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                         <Users className="w-24 h-24 text-blue-500" />
@@ -165,11 +182,15 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <div className="w-16 flex-shrink-0 text-center font-black text-6xl text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.6)]">
                         1
                       </div>
-                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10">
-                        <div className="text-3xl font-black text-white leading-tight">{teamStats[0].player1.name}</div>
-                        <div className="text-3xl font-black text-white leading-tight">{teamStats[0].player2.name}</div>
+                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
+                        {topTeams.map((tt: any, idx: number) => (
+                           <div key={tt.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
+                             <div className="text-3xl font-black text-white leading-tight">{tt.player1.name}</div>
+                             <div className="text-3xl font-black text-white leading-tight">{tt.player2.name}</div>
+                           </div>
+                        ))}
                       </div>
-                      <div className="flex flex-col items-end shrink-0 ml-4 z-10">
+                      <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
                         <div className="text-2xl font-black flex items-baseline gap-1">
                           <span className="text-emerald-400">{teamStats[0].wins} V</span>
                           <span className="text-blue-400">/ {teamStats[0].played} G</span>
@@ -179,7 +200,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                       </div>
                     </div>
-                  )}
+                  );
+                  })()}
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]">
                     <Users className="w-10 h-10 text-blue-400" /> Classifica Coppie
                   </h3>
@@ -187,8 +209,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000}s` }}>
-                    {teamStats.slice(1).map((t: any, i: number) => {
-                      const rank = i + 2;
+                    {teamStats.slice(teamStats.filter((t: any) => t.winRate === teamStats[0]?.winRate && t.wins === teamStats[0]?.wins && t.played === teamStats[0]?.played).length).map((t: any, i: number) => {
+                      const rank = i + 1 + playerStats.filter((ps: any) => ps.winRate === playerStats[0]?.winRate && ps.wins === playerStats[0]?.wins && ps.played === playerStats[0]?.played).length;
                       return (
                       <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0">
