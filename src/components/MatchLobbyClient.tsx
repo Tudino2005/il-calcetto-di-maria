@@ -5,6 +5,7 @@ import { startFreeMatch } from "@/app/actions/matchActions";
 import { PlayCircle, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import RoleIcon from "@/components/RoleIcon";
 
 export default function MatchLobbyClient({ players }: { players: any[] }) {
   const router = useRouter();
@@ -129,9 +130,7 @@ export default function MatchLobbyClient({ players }: { players: any[] }) {
                 >
                   {p.name}
                 </div>
-                <div className="text-xs uppercase tracking-wider text-slate-500 font-bold">
-                  {p.preferredRole}
-                </div>
+                <div className="mt-1 flex justify-center"><RoleIcon role={p.preferredRole} className="w-6 h-6" /></div>
                 {isSelected && (
                   <div className="text-[10px] font-black uppercase px-2 py-1 rounded bg-black/50 text-white mt-1">
                     {teamName}

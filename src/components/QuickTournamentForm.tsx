@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createQuickTournament } from "@/app/actions/tournamentActions";
 import { Users, Layout, Trophy, PlayCircle } from "lucide-react";
 import clsx from "clsx";
+import RoleIcon from "@/components/RoleIcon";
 
 const PAIR_COLORS = [
   "emerald", "blue", "orange", "pink", "purple", "cyan", "rose", "yellow",
@@ -254,9 +255,7 @@ export default function QuickTournamentForm({ players }: { players: any[] }) {
                 >
                   {p.name}
                 </div>
-                <div className="text-xs uppercase tracking-wider text-slate-500 font-bold">
-                  {p.preferredRole}
-                </div>
+                <div className="mt-1 flex justify-center"><RoleIcon role={p.preferredRole} className="w-6 h-6" /></div>
                 {type === "coppie_fisse" && pairColorValue && (
                   <div className="text-[10px] font-black uppercase px-2 py-1 rounded bg-black/50 text-white mt-1">
                     Squadra {fixedPairs.findIndex(pair => pair.includes(p.id)) + 1}

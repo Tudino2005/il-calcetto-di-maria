@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import RoleIcon from "@/components/RoleIcon";
 import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay } from "lucide-react";
 
 export default function TVSlideshow({ data }: { data: any }) {
@@ -105,9 +106,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                         {topPlayers.map((tp: any, idx: number) => (
                           <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
                             <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
-                            <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">
-                              {tp.preferredRole}
-                            </div>
+                            <div className="mt-2"><RoleIcon role={tp.preferredRole} className="w-8 h-8" /></div>
                           </div>
                         ))}
                       </div>
@@ -145,7 +144,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           </div>
                           <div className="flex flex-col min-w-0">
                             <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                            <div className="text-sm font-bold text-slate-500 uppercase tracking-widest">{p.preferredRole || "GIOCATORE"}</div>
+                            <div className="mt-1"><RoleIcon role={p.preferredRole || "GIOCATORE"} className="w-6 h-6" /></div>
                           </div>
                         </div>
                         

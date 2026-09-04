@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { getPlayers, createPlayer } from "@/app/actions/matchActions";
 import Link from "next/link";
 import { ArrowLeft, UserPlus } from "lucide-react";
+import RoleIcon from "@/components/RoleIcon";
 import WipeAllDataButton from "@/components/WipeAllDataButton";
 import { revalidatePath } from "next/cache";
 
@@ -50,20 +51,23 @@ export default async function PlayersPage() {
               <div className="grid grid-cols-3 gap-4">
                 <label className="cursor-pointer">
                   <input type="radio" name="preferredRole" value="attaccante" className="peer sr-only" defaultChecked />
-                  <div className="h-full flex items-center justify-center bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
-                    Attaccante
+                  <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
+                    <RoleIcon role="attaccante" className="w-12 h-12" />
+                    <span className="text-sm">Attaccante</span>
                   </div>
                 </label>
                 <label className="cursor-pointer">
                   <input type="radio" name="preferredRole" value="portiere" className="peer sr-only" />
-                  <div className="h-full flex items-center justify-center bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
-                    Portiere
+                  <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
+                    <RoleIcon role="portiere" className="w-12 h-12" />
+                    <span className="text-sm">Portiere</span>
                   </div>
                 </label>
                 <label className="cursor-pointer">
                   <input type="radio" name="preferredRole" value="entrambi" className="peer sr-only" />
-                  <div className="h-full flex items-center justify-center bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
-                    Entrambi
+                  <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
+                    <RoleIcon role="entrambi" className="w-12 h-12" />
+                    <span className="text-sm">Entrambi</span>
                   </div>
                 </label>
               </div>
@@ -82,15 +86,15 @@ export default async function PlayersPage() {
             <h2 className="text-xl font-bold text-white">Giocatori Registrati ({players.length})</h2>
             <div className="flex gap-3 mt-3">
               <div className="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-center">
-                <div className="text-xs text-slate-500 font-bold uppercase">Attaccanti</div>
+                <div className="text-xs text-slate-500 font-bold uppercase flex justify-center mb-1"><RoleIcon role="attaccante" className="w-6 h-6" /></div>
                 <div className="text-lg font-black text-white">{players.filter(p => p.preferredRole === 'attaccante').length}</div>
               </div>
               <div className="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-center">
-                <div className="text-xs text-slate-500 font-bold uppercase">Portieri</div>
+                <div className="text-xs text-slate-500 font-bold uppercase flex justify-center mb-1"><RoleIcon role="portiere" className="w-6 h-6" /></div>
                 <div className="text-lg font-black text-white">{players.filter(p => p.preferredRole === 'portiere').length}</div>
               </div>
               <div className="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-center">
-                <div className="text-xs text-slate-500 font-bold uppercase">Entrambi</div>
+                <div className="text-xs text-slate-500 font-bold uppercase flex justify-center mb-1"><RoleIcon role="entrambi" className="w-6 h-6" /></div>
                 <div className="text-lg font-black text-white">{players.filter(p => p.preferredRole === 'entrambi').length}</div>
               </div>
             </div>
@@ -102,8 +106,8 @@ export default async function PlayersPage() {
               players.map((p) => (
                 <Link href={`/players/${p.id}`} key={p.id} className="bg-slate-900 p-4 rounded-xl flex justify-between items-center border border-slate-700 hover:border-emerald-500 transition-colors">
                   <span className="font-bold text-lg text-white">{p.name}</span>
-                  <span className="px-3 py-1 bg-slate-700 text-slate-300 rounded-lg text-sm uppercase tracking-wider font-medium">
-                    {p.preferredRole}
+                  <span className="bg-slate-800 p-2 rounded-lg">
+                    <RoleIcon role={p.preferredRole} className="w-8 h-8" />
                   </span>
                 </Link>
               ))
