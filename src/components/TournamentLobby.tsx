@@ -6,6 +6,7 @@ import { createPlayer } from "@/app/actions/matchActions";
 import { Users, Swords, AlertTriangle, UserPlus, X, Calendar, Banknote, Trophy, ArrowLeft, CheckCircle2, Circle, Share2 } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
+import RoleIcon from "@/components/RoleIcon";
 
 export default function TournamentLobby({ tournament, allPlayers }: { tournament: any, allPlayers: any[] }) {
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
@@ -145,158 +146,148 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* ADD PLAYER COLUMN */}
-        <div className="lg:col-span-1 flex flex-col gap-4">
-          <div className="bg-slate-900 p-6 rounded-3xl border border-slate-700 sticky top-8">
-            {isReady ? (
-              <div className="text-center p-4 bg-purple-900/20 border border-purple-500 rounded-xl mb-4">
-                <h3 className="text-purple-400 font-bold mb-2">Iscrizioni Chiuse</h3>
-                <p className="text-sm text-slate-300">Il torneo è pronto per il sorteggio. I giocatori non possono più essere modificati.</p>
-              </div>
-            ) : (
-            <>
-            <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-2">
-              <UserPlus className="text-emerald-400" /> Aggiungi
-            </h2>
-            
-            <div className="flex flex-col gap-4">
-              <select 
-                value={selectedPlayerId} 
-                onChange={(e) => setSelectedPlayerId(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500"
-              >
-                <option value="">-- Seleziona Giocatore --</option>
-                {availablePlayers.map(p => (
-                  <option key={p.id} value={p.id}>{p.name} ({p.preferredRole})</option>
-                ))}
-              </select>
-              
+      
+      {/* CREA NUOVO GIOCATORE RAPIDO */}
+      {!isReady && (
+        <div className="mb-8 bg-slate-900 p-6 rounded-3xl border border-slate-700 shadow-xl flex flex-col md:flex-row items-center gap-4">
+          <h3 className="text-white font-bold whitespace-nowrap flex items-center gap-2">
+            <UserPlus className="w-5 h-5 text-emerald-400" /> Nuovo:
+          </h3>
+          <input
+            type="text"
+            placeholder="Nome (Es. Mario)"
+            value={newPlayerName}
+            onChange={(e) => setNewPlayerName(e.target.value)}
+            className="flex-1 bg-slate-800 border border-slate-600 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500"
+          />
+          <select 
+            value={newPlayerRole}
+            onChange={(e) => setNewPlayerRole(e.target.value)}
+            className="bg-slate-800 border border-slate-600 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500"
+          >
+            <option value="attaccante">Attaccante</option>
+            <option value="portiere">Portiere</option>
+            <option value="entrambi">Entrambi</option>
+          </select>
+          <button 
+            onClick={handleCreatePlayer}
+            disabled={!newPlayerName.trim()}
+            className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold py-3 px-6 rounded-xl transition-colors"
+          >
+            Salva & Aggiungi
+          </button>
+        </div>
+      )}
+
+      {/* APPELLO GRID */}
+      <div className="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-xl mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+            <Users className="w-6 h-6 text-emerald-400" /> Appello Giocatori Presenti
+          </h2>
+          {!isReady && (
+            <div className="flex gap-4">
               <button 
-                onClick={handleAdd}
-                disabled={!selectedPlayerId}
-                className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-colors"
+                type="button" 
+                onClick={async () => {
+                  // Aggiunge tutti i non iscritti
+                  for (const p of availablePlayers) {
+                    await addPlayerToTournament(tournament.id, p.id);
+                  }
+                }} 
+                className="text-sm font-bold text-slate-400 hover:text-white px-4 py-2 bg-slate-900 rounded-lg transition-colors"
               >
-                Iscrivi Giocatore
+                Seleziona Tutti
+              </button>
+              <button 
+                type="button" 
+                onClick={async () => {
+                  // Rimuove tutti
+                  for (const id of registeredIds) {
+                    await removePlayerFromTournament(tournament.id, id);
+                  }
+                }} 
+                className="text-sm font-bold text-slate-400 hover:text-white px-4 py-2 bg-slate-900 rounded-lg transition-colors"
+              >
+                Azzera
               </button>
             </div>
-
-            <div className="mt-4">
-              {!isCreatingPlayer ? (
-                <button 
-                  onClick={() => setIsCreatingPlayer(true)}
-                  className="w-full text-emerald-400 hover:text-emerald-300 text-sm font-bold transition-colors"
-                >
-                  + Crea Nuovo Giocatore
-                </button>
-              ) : (
-                <div className="flex flex-col gap-3 p-4 bg-slate-800 rounded-xl border border-slate-700 mt-2">
-                  <input
-                    type="text"
-                    placeholder="Nome"
-                    value={newPlayerName}
-                    onChange={(e) => setNewPlayerName(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-2 px-3 focus:outline-none focus:border-emerald-500"
-                  />
-                  <select 
-                    value={newPlayerRole} 
-                    onChange={(e) => setNewPlayerRole(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-2 px-3 focus:outline-none focus:border-emerald-500"
-                  >
-                    <option value="entrambi">Ruolo Libero</option>
-                    <option value="attaccante">Attaccante</option>
-                    <option value="portiere">Portiere</option>
-                  </select>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => setIsCreatingPlayer(false)}
-                      className="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded-lg"
-                    >
-                      Annulla
-                    </button>
-                    <button 
-                      onClick={handleCreatePlayer}
-                      disabled={!newPlayerName.trim()}
-                      className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white font-bold py-2 rounded-lg"
-                    >
-                      Salva & Iscrivi
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            <hr className="border-slate-700 my-6" />
-            
-            <div className="p-4 bg-purple-900/20 border border-purple-500/30 rounded-xl">
-              <h4 className="text-purple-400 font-bold mb-2">Requisiti Avvio</h4>
-              <ul className="text-sm text-slate-400 list-disc list-inside space-y-1">
-                <li>Almeno 4 giocatori (2 squadre)</li>
-                {tournament.format !== "gironi_eliminazione" && <li>Il numero di squadre create deve essere una potenza di 2 (2, 4, 8, 16...)</li>}
-              </ul>
-            </div>
-            </>
-            )}
-          </div>
+          )}
         </div>
 
-        {/* REGISTERED LIST */}
-        <div className="lg:col-span-2 flex flex-col gap-4">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-2xl font-bold text-white uppercase tracking-widest">
-              Giocatori Iscritti
-            </h2>
-            <span className="px-4 py-1 bg-slate-800 text-slate-300 font-bold rounded-full border border-slate-700">
-              Totale: {registeredCount}
-            </span>
-          </div>
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-700 mb-6 flex justify-between items-center">
+          <span className="text-slate-400 font-bold text-lg">
+            Giocatori Selezionati:
+          </span>
+          <span className="text-4xl font-black text-white">
+            {registeredCount}
+          </span>
+        </div>
 
-          <div className="bg-slate-900 rounded-3xl border border-slate-700 overflow-hidden shadow-lg">
-            {registrations.length === 0 ? (
-              <div className="p-12 text-center text-slate-500">
-                <Users className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p>Nessun giocatore ancora iscritto.</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[50vh] overflow-y-auto pr-4 custom-scrollbar">
+          {allPlayers.map(p => {
+            const registration = registrations.find((r: any) => r.playerId === p.id);
+            const isSelected = !!registration;
+            
+            let colorClass = "bg-slate-900 border-slate-700 hover:border-slate-500 text-slate-400";
+            let circleClass = "bg-slate-800 text-slate-400";
+            let nameClass = "text-slate-400";
+            
+            if (isSelected) {
+              colorClass = "bg-emerald-500/20 border-emerald-500";
+              circleClass = "bg-emerald-500 text-emerald-950";
+              nameClass = "text-white";
+            }
+
+            return (
+              <div 
+                key={p.id}
+                onClick={() => {
+                  if (isReady) return;
+                  if (isSelected) {
+                    handleRemove(p.id);
+                  } else {
+                    addPlayerToTournament(tournament.id, p.id);
+                  }
+                }}
+                className={clsx(
+                  "cursor-pointer border-2 rounded-xl p-4 transition-all flex flex-col items-center justify-center gap-2 text-center select-none",
+                  !isReady && "active:scale-95",
+                  isReady && !isSelected && "opacity-30 cursor-not-allowed",
+                  colorClass
+                )}
+              >
+                <div className={clsx("w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-colors", circleClass)}>
+                  {p.name.charAt(0).toUpperCase()}
+                </div>
+                <div className={clsx("font-bold", nameClass)}>
+                  {p.name}
+                </div>
+                <div className="mt-1 flex justify-center">
+                  <RoleIcon role={p.preferredRole} className="w-6 h-6" />
+                </div>
+                {isSelected && (
+                  <button 
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      handleTogglePayment(p.id, registration.hasPaid); 
+                    }}
+                    className={clsx(
+                      "mt-2 w-full flex justify-center items-center gap-1 py-1 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all border",
+                      registration.hasPaid 
+                        ? "bg-emerald-900/50 border-emerald-500/30 text-emerald-400 hover:bg-emerald-800/60" 
+                        : "bg-red-900/50 border-red-500/30 text-red-400 hover:bg-red-800/60"
+                    )}
+                  >
+                    {registration.hasPaid ? 'Pagato' : 'Non Pagato'}
+                  </button>
+                )}
               </div>
-            ) : (
-              <ul className="divide-y divide-slate-800">
-                {registrations.map((r: any) => (
-                  <li key={r.id} className="flex justify-between items-center p-4 hover:bg-slate-800/50 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-slate-400 border border-slate-700">
-                        {r.player.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <div className="font-bold text-white">{r.player.name}</div>
-                        <div className="text-xs text-slate-500 uppercase tracking-wider">{r.player.preferredRole}</div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                      <button 
-                        onClick={() => handleTogglePayment(r.player.id, r.hasPaid)}
-                        className={`flex items-center gap-2 px-3 py-1 rounded-full border text-sm font-bold transition-all ${r.hasPaid ? 'bg-emerald-900/30 border-emerald-500/50 text-emerald-400' : 'bg-slate-800 border-slate-600 text-slate-400 hover:border-slate-500'}`}
-                      >
-                        {r.hasPaid ? <CheckCircle2 className="w-4 h-4" /> : <Circle className="w-4 h-4" />}
-                        {r.hasPaid ? 'Pagato' : 'Non Pagato'}
-                      </button>
-                      
-                      {!isReady && (
-                        <button 
-                          onClick={() => handleRemove(r.player.id)}
-                          className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-                        >
-                          <X className="w-5 h-5" />
-                        </button>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-
-          {isReady && tournament.type === "coppie_fisse" && (
+            );
+          })}
+        </div>
+      </div>
+{isReady && tournament.type === "coppie_fisse" && (
             <div className="bg-slate-900 p-6 rounded-2xl border border-orange-500/50 mb-6 shadow-[0_0_20px_rgba(249,115,22,0.1)]">
               <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <Users className="text-orange-400" /> Forma le Squadre (Tocca 2 giocatori per accoppiarli)
@@ -392,8 +383,6 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
               Il numero di giocatori attuale ({registeredCount}) genererà {registeredCount / 2} squadre. Non rispetta i requisiti di formato.
             </p>
           )}
-        </div>
-      </div>
     </div>
   );
 }

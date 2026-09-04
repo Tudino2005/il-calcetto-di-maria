@@ -12,6 +12,13 @@ export default function MatchLobbyClient({ players }: { players: any[] }) {
   const [fixedPairs, setFixedPairs] = useState<string[][]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const getTeamNames = (pair: string[]) => {
+    if (!pair || pair.length === 0) return <span className="text-slate-500 italic">Nessun giocatore</span>;
+    const names = pair.map(id => players.find(p => p.id === id)?.name).filter(Boolean);
+    return names.join(" & ");
+  };
+
+
   const togglePlayer = (id: string) => {
     const pIdx = fixedPairs.findIndex(pair => pair.includes(id));
     if (pIdx !== -1) {
@@ -72,14 +79,14 @@ export default function MatchLobbyClient({ players }: { players: any[] }) {
           <div className="flex flex-col">
             <span className="text-red-400 font-bold uppercase tracking-wider text-sm mb-1">Squadra Rossa (1)</span>
             <span className="text-white font-black text-xl">
-              {fixedPairs[0]?.length === 2 ? "PRONTA" : fixedPairs[0]?.length === 1 ? "1 Giocatore..." : "Vuota"}
+              {getTeamNames(fixedPairs[0])}
             </span>
           </div>
           <div className="w-px h-12 bg-slate-700 mx-4"></div>
           <div className="flex flex-col text-right">
             <span className="text-blue-400 font-bold uppercase tracking-wider text-sm mb-1">Squadra Blu (2)</span>
             <span className="text-white font-black text-xl">
-              {fixedPairs[1]?.length === 2 ? "PRONTA" : fixedPairs[1]?.length === 1 ? "1 Giocatore..." : "Vuota"}
+              {getTeamNames(fixedPairs[1])}
             </span>
           </div>
         </div>
