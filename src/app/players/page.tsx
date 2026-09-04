@@ -78,7 +78,23 @@ export default async function PlayersPage() {
         </section>
 
         <section className="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-6">Giocatori Registrati ({players.length})</h2>
+          <div className="flex flex-col mb-6">
+            <h2 className="text-xl font-bold text-white">Giocatori Registrati ({players.length})</h2>
+            <div className="flex gap-3 mt-3">
+              <div className="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-center">
+                <div className="text-xs text-slate-500 font-bold uppercase">Attaccanti</div>
+                <div className="text-lg font-black text-white">{players.filter(p => p.preferredRole === 'attaccante').length}</div>
+              </div>
+              <div className="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-center">
+                <div className="text-xs text-slate-500 font-bold uppercase">Portieri</div>
+                <div className="text-lg font-black text-white">{players.filter(p => p.preferredRole === 'portiere').length}</div>
+              </div>
+              <div className="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-center">
+                <div className="text-xs text-slate-500 font-bold uppercase">Entrambi</div>
+                <div className="text-lg font-black text-white">{players.filter(p => p.preferredRole === 'entrambi').length}</div>
+              </div>
+            </div>
+          </div>
           <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-2">
             {players.length === 0 ? (
               <p className="text-slate-400 text-center py-8">Nessun giocatore registrato.</p>
