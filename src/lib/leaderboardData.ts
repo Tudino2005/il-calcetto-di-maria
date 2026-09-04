@@ -1,8 +1,8 @@
 import { prisma } from "./prisma";
 
 export async function getLeaderboardData() {
-  // Only include matches that are NOT part of a tournament (Partita Libera)
-  const matchFilter = { where: { tournamentId: null } };
+  // Include all completed matches (Free matches + Tournament matches)
+  const matchFilter = { where: { winnerTeamId: { not: null } } };
 
   const players = await prisma.player.findMany({
     include: {
