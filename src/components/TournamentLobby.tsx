@@ -106,6 +106,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
   };
 
   const registeredCount = registrations.length;
+  const maxPlayers = (tournament.maxTeams || 8) * 2;
   const isPowerOfTwo = (registeredCount / 2) > 0 && Math.log2(registeredCount / 2) % 1 === 0;
   const canStart = registeredCount >= 4 && (tournament.format === "gironi_eliminazione" || isPowerOfTwo);
 
@@ -219,9 +220,15 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                  <button onClick={() => respondToRegistrationRequest(req.id, "accepted", "Pagami alla cassa prima di iniziare.")} className="flex flex-col items-center justify-center gap-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl py-2 px-1 transition-colors">
+                  <button 
+                    onClick={() => respondToRegistrationRequest(req.id, "accepted", "Pagami alla cassa prima di iniziare.")} 
+                    disabled={registeredCount >= maxPlayers}
+                    className="flex flex-col items-center justify-center gap-1 bg-emerald-500/10 hover:bg-emerald-500/20 disabled:opacity-30 disabled:cursor-not-allowed text-emerald-400 border border-emerald-500/30 rounded-xl py-2 px-1 transition-colors"
+                  >
                     <Check className="w-5 h-5" />
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-center">Accetta<br/>(Ricorda Pagamento)</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-center">
+                      {registeredCount >= maxPlayers ? "Torneo Pieno" : "Accetta"}
+                    </span>
                   </button>
                   <button onClick={() => respondToRegistrationRequest(req.id, "rejected", "Mi spiace, torneo pieno!")} className="flex flex-col items-center justify-center gap-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl py-2 px-1 transition-colors">
                     <Ban className="w-5 h-5" />
@@ -435,7 +442,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
           {!isReady && !canStart && registeredCount > 0 && (
             <p className="text-right text-orange-400 text-sm mt-2 flex items-center justify-end gap-1">
               <AlertTriangle className="w-4 h-4" /> 
-              Il numero di giocatori attuale ({registeredCount}) genererà {registeredCount / 2} squadre. Non rispetta i requisiti di formato.
+              Devi raggiungere ESATTAMENTE {maxPlayers} iscritti ({maxPlayers/2} squadre) per poter avviare il torneo, in modo da creare un tabellone perfetto.
             </p>
           )}
     </div>

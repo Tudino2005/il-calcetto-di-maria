@@ -10,6 +10,7 @@ import { generateRoundRobinSchedule, generateDoubleEliminationStructure, compute
 export async function createTournament(formData: FormData) {
   const name = formData.get("name") as string;
   const format = formData.get("format") as string;
+  const maxTeams = Number(formData.get("maxTeams") || 8);
   const type = formData.get("type") as string;
   const startDateStr = formData.get("startDate") as string;
   const pricePerPlayerStr = formData.get("pricePerPlayer") as string;
@@ -307,6 +308,7 @@ export async function generatePlayoffSeeding(tournamentId: string, qualifiersPer
 export async function createQuickTournament(formData: FormData) {
   const name = formData.get("name") as string;
   const format = formData.get("format") as string;
+  const maxTeams = Number(formData.get("maxTeams") || 8);
   const type = formData.get("type") as string;
   const playerIdsStr = formData.get("playerIds") as string;
   

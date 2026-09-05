@@ -8,7 +8,7 @@ import GlobalInbox from "@/components/GlobalInbox";
 export default async function AdminHome() {
   const pendingRequests = await prisma.registrationRequest.findMany({
     where: { status: "pending" },
-    include: { tournament: true },
+    include: { tournament: { include: { _count: { select: { registrations: true } } } } },
     orderBy: { createdAt: "asc" }
   });
   return (

@@ -10,6 +10,7 @@ export default function TournamentForm() {
   const [format, setFormat] = useState<"eliminazione_diretta" | "doppia_eliminazione" | "gironi_eliminazione">("eliminazione_diretta");
   const [type, setType] = useState<"sorteggio_ruoli" | "sorteggio_integrale" | "coppie_fisse">("sorteggio_ruoli");
   const [teamsPerGroup, setTeamsPerGroup] = useState<number>(4);
+  const [maxTeams, setMaxTeams] = useState<number>(8);
   const [startDate, setStartDate] = useState("");
   const [pricePerPlayer, setPricePerPlayer] = useState("");
   const [prizes, setPrizes] = useState("");
@@ -24,6 +25,7 @@ export default function TournamentForm() {
     formData.append("format", format);
     formData.append("type", type);
     formData.append("teamsPerGroup", teamsPerGroup.toString());
+    formData.append("maxTeams", maxTeams.toString());
     if (startDate) formData.append("startDate", startDate);
     if (pricePerPlayer) formData.append("pricePerPlayer", pricePerPlayer);
     if (prizes) formData.append("prizes", prizes);
@@ -45,7 +47,17 @@ export default function TournamentForm() {
         />
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 mb-2">
+        <div>
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Numero Max Squadre</label>
+          <select value={maxTeams} onChange={(e) => setMaxTeams(Number(e.target.value))} className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500">
+            <option value={4}>4 Squadre (8 Giocatori)</option>
+            <option value={8}>8 Squadre (16 Giocatori)</option>
+            <option value={16}>16 Squadre (32 Giocatori)</option>
+            <option value={32}>32 Squadre (64 Giocatori)</option>
+            <option value={64}>64 Squadre (128 Giocatori)</option>
+          </select>
+        </div>
         <div>
           <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Inizio</label>
           <input
@@ -55,6 +67,8 @@ export default function TournamentForm() {
             className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
           />
         </div>
+      </div>
+      <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo Iscrizione (€)</label>
           <input
