@@ -2,8 +2,15 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Trophy, Users, Play, Swords, Zap } from "lucide-react";
 import WipeDataButton from "@/components/WipeDataButton";
+import { prisma } from "@/lib/prisma";
+import GlobalInbox from "@/components/GlobalInbox";
 
 export default async function AdminHome() {
+  const pendingRequests = await prisma.registrationRequest.findMany({
+    where: { status: "pending" },
+    include: { tournament: true },
+    orderBy: { createdAt: "asc" }
+  });
   return (
     <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full flex flex-col items-center justify-center min-h-screen">
       <header className="mb-16 text-center">
@@ -12,6 +19,8 @@ export default async function AdminHome() {
         </h1>
         <p className="text-slate-400 mt-4 text-2xl font-medium uppercase tracking-widest">Pannello di Controllo</p>
       </header>
+
+      <GlobalInbox requests={pendingRequests} />
 
       {/* MENU (4 PULSANTI) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
