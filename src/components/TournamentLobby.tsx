@@ -32,8 +32,12 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
 
   const handleCreatePlayer = async () => {
     if (!newPlayerName.trim()) return;
-    const player = await createPlayer(newPlayerName, newPlayerRole);
-    await addPlayerToTournament(tournament.id, player.id);
+    const res = await createPlayer(newPlayerName, newPlayerRole);
+    if ('error' in res) {
+      alert(res.error);
+      return;
+    }
+    await addPlayerToTournament(tournament.id, res.id);
     setNewPlayerName("");
     setNewPlayerRole("entrambi");
     setIsCreatingPlayer(false);

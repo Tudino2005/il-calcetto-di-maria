@@ -4,20 +4,12 @@ import Link from "next/link";
 import { ArrowLeft, UserPlus } from "lucide-react";
 import RoleIcon from "@/components/RoleIcon";
 import WipeAllDataButton from "@/components/WipeAllDataButton";
+import PlayerForm from "@/components/PlayerForm";
 import { revalidatePath } from "next/cache";
 
 export default async function PlayersPage() {
   const players = await getPlayers();
 
-  async function addPlayer(formData: FormData) {
-    "use server";
-    const name = formData.get("name") as string;
-    const preferredRole = formData.get("preferredRole") as string;
-    if (name && preferredRole) {
-      await createPlayer(name, preferredRole);
-      revalidatePath("/players");
-    }
-  }
 
   return (
     <main className="flex-1 p-8 max-w-4xl mx-auto w-full">
@@ -31,55 +23,7 @@ export default async function PlayersPage() {
       </header>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <section className="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
-          <h2 className="text-xl font-bold text-emerald-400 mb-6 flex items-center gap-2">
-            <UserPlus className="w-6 h-6" /> Aggiungi Giocatore
-          </h2>
-          <form action={addPlayer} className="flex flex-col gap-4">
-            <div>
-              <label className="block text-slate-400 mb-2 font-medium">Nome (Nickname)</label>
-              <input 
-                name="name" 
-                type="text" 
-                required 
-                className="w-full bg-slate-900 border border-slate-600 rounded-xl p-4 text-white text-lg focus:border-emerald-500 focus:outline-none"
-                placeholder="Es. Mario Rossi"
-              />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-4 font-medium">Ruolo Preferito</label>
-              <div className="grid grid-cols-3 gap-4">
-                <label className="cursor-pointer">
-                  <input type="radio" name="preferredRole" value="attaccante" className="peer sr-only" defaultChecked />
-                  <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
-                    <RoleIcon role="attaccante" className="w-12 h-12" />
-                    <span className="text-sm">Attaccante</span>
-                  </div>
-                </label>
-                <label className="cursor-pointer">
-                  <input type="radio" name="preferredRole" value="portiere" className="peer sr-only" />
-                  <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
-                    <RoleIcon role="portiere" className="w-12 h-12" />
-                    <span className="text-sm">Portiere</span>
-                  </div>
-                </label>
-                <label className="cursor-pointer">
-                  <input type="radio" name="preferredRole" value="entrambi" className="peer sr-only" />
-                  <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
-                    <RoleIcon role="entrambi" className="w-12 h-12" />
-                    <span className="text-sm">Entrambi</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-            <button 
-              type="submit" 
-              className="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl text-lg transition-colors"
-            >
-              Salva Giocatore
-            </button>
-          </form>
-        </section>
+        <PlayerForm />
 
         <section className="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
           <div className="flex flex-col mb-6">

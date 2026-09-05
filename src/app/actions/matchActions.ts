@@ -5,6 +5,11 @@ import { revalidatePath } from "next/cache";
 import { advanceDoubleElimination } from "@/lib/doubleEliminationEngine";
 
 export async function createPlayer(name: string, preferredRole: string) {
+  const allPlayers = await prisma.player.findMany();
+  const exists = allPlayers.some(p => p.name.toLowerCase() === name.trim().toLowerCase());
+  if (exists) {
+    return { error: "Un giocatore con questo nome esiste già!" };
+  }
   const player = await prisma.player.create({ data: { name, preferredRole } });
   revalidatePath("/");
   return player;
