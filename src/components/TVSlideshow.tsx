@@ -365,15 +365,21 @@ export default function TVSlideshow({ data }: { data: any }) {
               
               {/* LEFT COLUMN - INFO */}
               <div className="flex-1 flex flex-col h-full bg-slate-900/80 p-10 rounded-[3rem] border border-slate-700 shadow-2xl overflow-hidden">
-                <div className="inline-flex items-center gap-3 px-6 py-2 bg-purple-500/20 text-purple-400 rounded-full font-bold uppercase tracking-widest border border-purple-500/30 mb-6 w-fit animate-pulse">
-                  Iscrizioni Aperte
-                </div>
+                {iscritti < maxPlayers ? (
+                  <div className="inline-flex items-center gap-3 px-6 py-2 bg-purple-500/20 text-purple-400 rounded-full font-bold uppercase tracking-widest border border-purple-500/30 mb-6 w-fit animate-pulse">
+                    Iscrizioni Aperte
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-3 px-6 py-2 bg-red-500/20 text-red-400 rounded-full font-bold uppercase tracking-widest border border-red-500/30 mb-6 w-fit">
+                    Iscrizioni Chiuse (In Attesa)
+                  </div>
+                )}
                 
                 <h2 className="text-5xl font-black uppercase tracking-tight text-white mb-6 line-clamp-2">
                   {t.name}
                 </h2>
                 
-                {t.drawDate && t.type !== 'coppie_fisse' && (
+                {t.type !== 'coppie_fisse' && (
                   <div className="w-full bg-gradient-to-r from-purple-600 to-fuchsia-600 p-6 rounded-3xl shadow-[0_0_40px_rgba(147,51,234,0.4)] mb-8 border border-purple-400 flex items-center justify-between animate-pulse-slow">
                     <div className="flex items-center gap-4">
                       <div className="bg-white/20 p-4 rounded-2xl">
@@ -385,8 +391,14 @@ export default function TVSlideshow({ data }: { data: any }) {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-4xl font-black text-white">{new Date(t.drawDate).toLocaleDateString('it-IT')}</div>
-                      <div className="text-xl font-bold text-purple-200">alle {new Date(t.drawDate).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}</div>
+                      {t.drawDate ? (
+                        <>
+                          <div className="text-4xl font-black text-white">{new Date(t.drawDate).toLocaleDateString('it-IT')}</div>
+                          <div className="text-xl font-bold text-purple-200">alle {new Date(t.drawDate).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}</div>
+                        </>
+                      ) : (
+                        <div className="text-3xl font-black text-white">DA DEFINIRE</div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -449,9 +461,11 @@ export default function TVSlideshow({ data }: { data: any }) {
               <div className="w-[500px] shrink-0 flex flex-col gap-8 h-full">
                 
                 {/* QR CODE GIGANTE */}
-                <div className="bg-slate-900/80 p-8 rounded-[3rem] border border-slate-700 shadow-2xl flex flex-col items-center">
-                   <QRCodeDisplay tournamentId={t.id} />
-                </div>
+                {iscritti < maxPlayers && (
+                  <div className="bg-slate-900/80 p-8 rounded-[3rem] border border-slate-700 shadow-2xl flex flex-col items-center">
+                     <QRCodeDisplay tournamentId={t.id} />
+                  </div>
+                )}
                 
                 {/* LISTA NOMI */}
                 <div className="flex-1 bg-slate-900/80 p-8 rounded-[3rem] border border-slate-700 shadow-2xl flex flex-col overflow-hidden">
