@@ -324,8 +324,8 @@ export default function TVSlideshow({ data }: { data: any }) {
               let entCount = 0;
               
               registrations.forEach((r: any) => {
-                if(r.preferredRole === "attaccante") attCount++;
-                else if(r.preferredRole === "portiere") porCount++;
+                if(r.player?.preferredRole === "attaccante") attCount++;
+                else if(r.player?.preferredRole === "portiere") porCount++;
                 else entCount++;
               });
               
@@ -421,8 +421,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                     ) : (
                       registrations.slice(0, 48).map((r: any) => (
                         <div key={r.id} className="bg-slate-800 border border-slate-700 px-4 py-2 rounded-full text-white font-bold text-sm flex items-center gap-2 shadow-md">
-                          <RoleIcon role={r.preferredRole} className="w-4 h-4" />
-                          {r.playerName.split(" ")[0]}
+                          <RoleIcon role={r.player?.preferredRole} className="w-4 h-4" />
+                          {r.player?.name.split(" ")[0]}
                         </div>
                       ))
                     )}
