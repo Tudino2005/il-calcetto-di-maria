@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RoleIcon from "@/components/RoleIcon";
 import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay } from "lucide-react";
+import QRCodeDisplay from "@/components/QRCodeDisplay";
 
 export default function TVSlideshow({ data }: { data: any }) {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   }
   
   // Slides for Promo
-  promoTournaments.forEach((t: any) => slides.push({ type: "promo", tournament: t }));  // Slides for In Progress (Bracket & Agenda)
+  promoTournaments.forEach((t: any) => slides.push({ type: "promo", tournament: t, duration: 60000 }));  // Slides for In Progress (Bracket & Agenda)
   inProgressTournaments.forEach((t: any) => {
     slides.push({ type: "live_bracket", tournament: t });
     
@@ -335,8 +336,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
               </div>
 
-              <div className="text-3xl text-slate-300 bg-slate-900/80 px-12 py-8 rounded-[3rem] border border-slate-700 shadow-2xl">
-                Rivolgiti al bancone per iscriverti!
+              <div className="bg-slate-900/80 px-12 py-8 rounded-[3rem] border border-slate-700 shadow-2xl scale-125 origin-top mt-4">
+                <QRCodeDisplay tournamentId={currentSlide.tournament.id} />
               </div>
             </div>
           )}          {/* LIVE BRACKET / MATCHES SLIDE */}
