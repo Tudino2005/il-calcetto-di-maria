@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Calendar, Banknote, Trophy, Users, Swords, Info } from "lucide-react";
+import Link from "next/link";
 
 export default async function PromoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -85,6 +86,19 @@ export default async function PromoPage({ params }: { params: Promise<{ id: stri
             </div>
           )}
         </header>
+
+        
+        {/* CALL TO ACTION */}
+        {(tournament.status === "setup" || tournament.status === "ready_to_draw") && (
+          <div className="flex justify-center -mt-6 mb-6">
+            <Link 
+              href={`/tournaments/${tournament.id}/join`}
+              className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-2xl uppercase tracking-widest px-12 py-6 rounded-3xl shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)] transition-all hover:-translate-y-1"
+            >
+              Iscriviti Ora!
+            </Link>
+          </div>
+        )}
 
         {/* REGOLE E FORMATO */}
         <section className="grid md:grid-cols-2 gap-6">

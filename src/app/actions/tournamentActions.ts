@@ -237,6 +237,7 @@ export async function getTournament(id: string) {
     where: { id },
     include: {
       registrations: { include: { player: true } },
+      registrationRequests: { orderBy: { createdAt: "asc" } },
       matches: {
         include: {
           teamA: { include: { player1: true, player2: true } },
@@ -386,4 +387,55 @@ export async function wipeAllData(pin: string) {
   revalidatePath("/tournaments");
   revalidatePath("/players");
   revalidatePath("/match");
+}
+
+export async function createRegistrationRequest(tournamentId: string, playerName: string, preferredRole: string) {
+  const req = await prisma.registrationRequest.create({
+    data: {
+      tournamentId,
+      playerName,
+      preferredRole,
+    }
+  });
+  return req;
+}
+
+export async function getRegistrationRequest(id: string) {
+  return await prisma.registrationRequest.findUnique({
+    where: { id }
+  });
+}
+
+export async function respondToRegistrationRequest(requestId: string, status: string, adminReply: string | null = null) {
+  // status: 'accepted' or 'rejected'
+  const req = await prisma.registrationRequest.update({
+    where: { id: requestId },
+    data: { status, adminReply }
+  });
+  
+  // If accepted, auto-create player and enroll
+  if (status === "accepted") {
+    // find or create player
+    const allPlayers = await prisma.player.findMany();
+    let player = allPlayers.find(p => p.name.toLowerCase() === req.playerName.trim().toLowerCase());
+    if (!player) {
+      player = await prisma.player.create({
+        data: { name: req.playerName, preferredRole: req.preferredRole }
+      });
+    }
+    
+    // Add to tournament if not already
+    const existingReg = await prisma.tournamentRegistration.findUnique({
+      where: { tournamentId_playerId: { tournamentId: req.tournamentId, playerId: player.id } }
+    });
+    if (!existingReg) {
+      await prisma.tournamentRegistration.create({
+        data: { tournamentId: req.tournamentId, playerId: player.id }
+      });
+    }
+  }
+  
+  revalidatePath("/admin");
+  revalidatePath(`/tournaments/${req.tournamentId}`);
+  return req;
 }

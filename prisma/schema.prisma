@@ -100,6 +100,7 @@ model Tournament {
   winnerTeam Team?             @relation("TournamentWinner", fields: [winnerTeamId], references: [id])
   matches    Match[]
   groups     TournamentGroup[]
+  registrationRequests RegistrationRequest[]
 }
 
 model TournamentRegistration {
@@ -113,4 +114,16 @@ model TournamentRegistration {
   player     Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
   @@unique([tournamentId, playerId])
+}
+
+model RegistrationRequest {
+  id           String   @id @default(uuid())
+  tournamentId String
+  playerName   String
+  preferredRole String
+  status       String   @default("pending") // 'pending', 'accepted', 'rejected'
+  adminReply   String?
+  createdAt    DateTime @default(now())
+
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
 }

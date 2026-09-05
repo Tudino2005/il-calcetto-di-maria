@@ -3,15 +3,21 @@ import re
 with open("prisma/schema.prisma", "r") as f:
     content = f.read()
 
-content = content.replace(
-    "status         String   // 'setup', 'in_progress', 'completed'",
-    "status         String   // 'setup', 'in_progress', 'completed'\n  registeredPlayers Player[] @relation(\"TournamentRegisteredPlayers\")"
-)
+new_model = """
+model RegistrationRequest {
+  id           String   @id @default(uuid())
+  tournamentId String
+  playerName   String
+  preferredRole String
+  status       String   @default("pending") // 'pending', 'accepted', 'rejected'
+  adminReply   String?
+  createdAt    DateTime @default(now())
 
-content = content.replace(
-    "teamsAsPlayer2   Team[] @relation(\"TeamPlayer2\")",
-    "teamsAsPlayer2   Team[] @relation(\"TeamPlayer2\")\n  tournamentsAsRegistered Tournament[] @relation(\"TournamentRegisteredPlayers\")"
-)
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+}
+"""
+
+content += new_model
 
 with open("prisma/schema.prisma", "w") as f:
     f.write(content)
