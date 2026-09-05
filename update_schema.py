@@ -3,21 +3,17 @@ import re
 with open("prisma/schema.prisma", "r") as f:
     content = f.read()
 
-new_model = """
-model RegistrationRequest {
-  id           String   @id @default(uuid())
-  tournamentId String
-  playerName   String
-  preferredRole String
-  status       String   @default("pending") // 'pending', 'accepted', 'rejected'
-  adminReply   String?
-  createdAt    DateTime @default(now())
+# Add drawDate to Tournament
+old_tour = """  status         String // 'setup', 'ready_to_draw', 'in_progress', 'completed'
+  startDate      DateTime?
+  maxTeams       Int                      @default(8)"""
 
-  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-}
-"""
+new_tour = """  status         String // 'setup', 'ready_to_draw', 'in_progress', 'completed'
+  startDate      DateTime?
+  drawDate       DateTime?
+  maxTeams       Int                      @default(8)"""
 
-content += new_model
+content = content.replace(old_tour, new_tour)
 
 with open("prisma/schema.prisma", "w") as f:
     f.write(content)

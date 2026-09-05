@@ -90,6 +90,7 @@ model Tournament {
   format         String                   @default("eliminazione_diretta") // 'eliminazione_diretta', 'doppia_eliminazione', 'gironi_eliminazione'
   status         String // 'setup', 'ready_to_draw', 'in_progress', 'completed'
   startDate      DateTime?
+  drawDate       DateTime?
   maxTeams       Int                      @default(8)
   pricePerPlayer Float?
   prizes         String?

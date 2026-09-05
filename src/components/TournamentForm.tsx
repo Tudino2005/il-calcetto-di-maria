@@ -12,6 +12,7 @@ export default function TournamentForm() {
   const [teamsPerGroup, setTeamsPerGroup] = useState<number>(4);
   const [maxTeams, setMaxTeams] = useState<number>(8);
   const [startDate, setStartDate] = useState("");
+  const [drawDate, setDrawDate] = useState("");
   const [pricePerPlayer, setPricePerPlayer] = useState("");
   const [prizes, setPrizes] = useState("");
 
@@ -27,6 +28,7 @@ export default function TournamentForm() {
     formData.append("teamsPerGroup", teamsPerGroup.toString());
     formData.append("maxTeams", maxTeams.toString());
     if (startDate) formData.append("startDate", startDate);
+    if (drawDate && type !== "coppie_fisse") formData.append("drawDate", drawDate);
     if (pricePerPlayer) formData.append("pricePerPlayer", pricePerPlayer);
     if (prizes) formData.append("prizes", prizes);
 
@@ -68,7 +70,18 @@ export default function TournamentForm() {
           />
         </div>
       </div>
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
+        {type !== "coppie_fisse" && (
+          <div>
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data Sorteggio</label>
+            <input
+              type="datetime-local"
+              value={drawDate}
+              onChange={(e) => setDrawDate(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+            />
+          </div>
+        )}
         <div>
           <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo Iscrizione (€)</label>
           <input
