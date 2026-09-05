@@ -113,7 +113,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
       <div className="flex flex-col gap-4">
         {allMatches.length === 0 ? (
           <div className="bg-slate-800 p-8 rounded-3xl text-center text-slate-400">
-            Nessuna partita libera giocata finora.
+            Nessuna partita giocata finora.
           </div>
         ) : (
           allMatches.map((m: any) => {
