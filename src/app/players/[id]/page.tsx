@@ -15,14 +15,14 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     include: {
       teamsAsPlayer1: {
         include: {
-          matchesAsTeamA: { where: { tournamentId: null }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } },
-          matchesAsTeamB: { where: { tournamentId: null }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } }
+          matchesAsTeamA: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } },
+          matchesAsTeamB: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } }
         }
       },
       teamsAsPlayer2: {
         include: {
-          matchesAsTeamA: { where: { tournamentId: null }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } },
-          matchesAsTeamB: { where: { tournamentId: null }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } }
+          matchesAsTeamA: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } },
+          matchesAsTeamB: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } }
         }
       }
     }
@@ -32,7 +32,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     notFound();
   }
 
-  // Extract all free matches
+  // Extract all completed matches
   let allMatches: any[] = [];
   const addMatches = (teams: any[]) => {
     teams.forEach(t => {
@@ -91,7 +91,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           </div>
           <div className="flex gap-8 text-right">
             <div>
-              <div className="text-slate-400 font-bold mb-1">Partite Libere</div>
+              <div className="text-slate-400 font-bold mb-1">Partite Giocate</div>
               <div className="text-3xl font-black text-white">{totalPlayed}</div>
             </div>
             <div>
@@ -107,7 +107,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
       </div>
 
       <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-        <Calendar className="w-6 h-6 text-blue-400" /> Storico Partite Libere
+        <Calendar className="w-6 h-6 text-blue-400" /> Storico Partite Giocate
       </h3>
 
       <div className="flex flex-col gap-4">
