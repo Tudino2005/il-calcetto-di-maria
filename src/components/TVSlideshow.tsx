@@ -339,10 +339,18 @@ export default function TVSlideshow({ data }: { data: any }) {
             }
 
             const formatTitle = t.format === "eliminazione_diretta" ? "Eliminazione Diretta" : t.format === "doppia_eliminazione" ? "Doppia Eliminazione" : "Gironi + Eliminazione";
-            const formatDesc = t.format === "eliminazione_diretta" ? "Tabellone classico. Chi perde è fuori." : t.format === "doppia_eliminazione" ? "Tabellone Winners e Losers Bracket." : "Fase a gruppi seguita da playoff.";
+            const formatDesc = t.format === "eliminazione_diretta" 
+              ? "Tabellone classico a scontro diretto. Nessun appello: chi vince passa al turno successivo, chi perde viene eliminato definitivamente dal torneo." 
+              : t.format === "doppia_eliminazione" 
+              ? "Ogni squadra ha due vite! Chi perde la prima volta finisce nel 'Losers Bracket' e può ancora sperare di arrivare in finale vincendo tutte le partite di recupero." 
+              : "Ogni squadra affronterà tutte le altre del proprio girone. Solo le prime classificate accederanno alle fasi finali a eliminazione diretta.";
             
             const typeTitle = t.type === "sorteggio_ruoli" ? "Sorteggio per Ruoli" : t.type === "sorteggio_integrale" ? "Sorteggio Integrale" : "Coppie Fisse";
-            const typeDesc = t.type === "sorteggio_ruoli" ? "Un attaccante + un portiere." : t.type === "sorteggio_integrale" ? "Composizione puramente casuale." : "Squadre già formate a priori.";
+            const typeDesc = t.type === "sorteggio_ruoli" 
+              ? "L'algoritmo formerà le coppie in modo bilanciato, accoppiando obbligatoriamente un Attaccante con un Portiere. (Chi sceglie 'Entrambi' farà da jolly)." 
+              : t.type === "sorteggio_integrale" 
+              ? "Sorteggio totalmente cieco. La fortuna decide chi sarà il tuo compagno, indipendentemente dal ruolo preferito." 
+              : "Le coppie sono già decise. Ci si iscrive insieme al proprio compagno storico per sfidare le altre coppie.";
 
             return (
             <div className="flex w-full h-[85vh] gap-12 text-left items-start mt-8">
@@ -385,21 +393,27 @@ export default function TVSlideshow({ data }: { data: any }) {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-6 mb-8">
-                  <div className="bg-slate-950 p-6 rounded-3xl border border-slate-800">
-                    <h3 className="text-slate-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2 mb-2">
-                      <Trophy className="w-5 h-5 text-yellow-500" /> Formato Torneo
+                <div className="flex flex-col gap-5 mb-8">
+                  <div className="bg-gradient-to-r from-slate-950 to-slate-900 p-8 rounded-3xl border border-yellow-500/30 shadow-[0_0_20px_rgba(234,179,8,0.05)] relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                      <Trophy className="w-32 h-32 text-yellow-500" />
+                    </div>
+                    <h3 className="text-yellow-500 font-black uppercase tracking-widest text-sm flex items-center gap-3 mb-3">
+                      <Trophy className="w-5 h-5" /> Regolamento del Torneo
                     </h3>
-                    <div className="text-white font-bold text-xl">{formatTitle}</div>
-                    <div className="text-slate-500 text-sm mt-1">{formatDesc}</div>
+                    <div className="text-white font-black text-3xl mb-2">{formatTitle}</div>
+                    <div className="text-slate-300 text-lg leading-relaxed relative z-10">{formatDesc}</div>
                   </div>
                   
-                  <div className="bg-slate-950 p-6 rounded-3xl border border-slate-800">
-                    <h3 className="text-slate-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2 mb-2">
-                      <Users className="w-5 h-5 text-purple-400" /> Modalità Squadre
+                  <div className="bg-gradient-to-r from-slate-950 to-slate-900 p-8 rounded-3xl border border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.05)] relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                      <Users className="w-32 h-32 text-blue-500" />
+                    </div>
+                    <h3 className="text-blue-400 font-black uppercase tracking-widest text-sm flex items-center gap-3 mb-3">
+                      <Users className="w-5 h-5" /> Formazione Squadre
                     </h3>
-                    <div className="text-white font-bold text-xl">{typeTitle}</div>
-                    <div className="text-slate-500 text-sm mt-1">{typeDesc}</div>
+                    <div className="text-white font-black text-3xl mb-2">{typeTitle}</div>
+                    <div className="text-slate-300 text-lg leading-relaxed relative z-10">{typeDesc}</div>
                   </div>
                 </div>
                 
