@@ -16,6 +16,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [showConfetti, setShowConfetti] = useState(false);
   
   useEffect(() => {
+    if (teams.length > 0) return; // ONLY INIT ONCE, ignore router.refresh() updates
     const extracted = new Map();
     const playersMap = new Map();
     tournament.matches?.forEach((m: any) => {
@@ -34,7 +35,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     uniqueTeams.sort(() => Math.random() - 0.5);
     setTeams(uniqueTeams);
     setAllPlayers(Array.from(playersMap.values()));
-  }, [tournament]);
+  }, [tournament, teams.length]);
 
   useEffect(() => {
     if (teams.length === 0 || allPlayers.length === 0) return;
@@ -43,11 +44,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       setSpinning(true);
       setShowConfetti(false);
       
-      const spinDuration = 3500; // 3.5 seconds
+      const spinDuration = 2000; // 3.5 seconds
       const interval = setInterval(() => {
          setCurrentSlot1(allPlayers[Math.floor(Math.random() * allPlayers.length)]);
          setCurrentSlot2(allPlayers[Math.floor(Math.random() * allPlayers.length)]);
-      }, 70); 
+      }, 150); 
       
       const timeout = setTimeout(() => {
          clearInterval(interval);
@@ -62,7 +63,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
          // Wait 2 seconds before moving to next pair
          setTimeout(() => {
             setRevealedIndex(prev => prev + 1);
-         }, 2500);
+         }, 2000);
 
       }, spinDuration);
       
@@ -74,7 +75,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       }, 6000);
       return () => clearTimeout(finalTimeout);
     }
-  }, [revealedIndex, teams.length, allPlayers]);
+  }, [revealedIndex, teams.length, allPlayers.length]);
   
   if (teams.length === 0) return null;
 

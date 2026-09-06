@@ -57,11 +57,13 @@ export default function TVSlideshow({ data }: { data: any }) {
 
   // Fast polling to catch admin actions (like start draw) instantly
   useEffect(() => {
+    if (drawSlideIndex !== -1) return; // Do not poll while drawing!
+    
     const poll = setInterval(() => {
       router.refresh();
     }, 3000); // Check every 3 seconds
     return () => clearInterval(poll);
-  }, [router]);
+  }, [router, drawSlideIndex]);
 
   const [cycleCount, setCycleCount] = useState(0);
 
