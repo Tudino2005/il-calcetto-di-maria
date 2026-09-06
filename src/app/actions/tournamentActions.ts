@@ -16,6 +16,8 @@ export async function createTournament(formData: FormData) {
   const pricePerPlayerStr = formData.get("pricePerPlayer") as string;
   const prizes = formData.get("prizes") as string;
 
+  const drawDateStr = formData.get("drawDate") as string;
+  const drawDate = drawDateStr ? new Date(drawDateStr) : null;
   const startDate = startDateStr ? new Date(startDateStr) : null;
   const pricePerPlayer = pricePerPlayerStr ? parseFloat(pricePerPlayerStr) : null;
   
@@ -27,6 +29,8 @@ export async function createTournament(formData: FormData) {
       format, 
       status: "setup",
       startDate,
+      drawDate,
+      maxTeams,
       pricePerPlayer,
       prizes: prizes || null
     }
@@ -320,6 +324,7 @@ export async function createQuickTournament(formData: FormData) {
       name,
       type,
       format,
+      maxTeams,
       status: "ready_to_draw",
       pricePerPlayer: null,
       prizes: null,

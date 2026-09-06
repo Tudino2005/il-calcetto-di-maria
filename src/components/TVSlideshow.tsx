@@ -393,7 +393,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       </div>
                       <div className="flex flex-col text-left">
                         <span className="text-purple-100 font-bold uppercase tracking-widest text-sm">Evento Dal Vivo</span>
-                        <span className="text-3xl font-black text-white uppercase">Cerimonia Sorteggio Coppie</span>
+                        <span className="text-3xl font-black text-white uppercase">Cerimonia Sorteggio Coppie e Calendario</span>
                       </div>
                     </div>
                     <div className="text-right">
