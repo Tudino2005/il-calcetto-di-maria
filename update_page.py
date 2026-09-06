@@ -1,14 +1,18 @@
 import re
 
-with open("src/app/tournaments/[id]/page.tsx", "r") as f:
+with open("src/app/page.tsx", "r") as f:
     content = f.read()
 
-pattern = r'\) : tournament\.format === "doppia_eliminazione" \? \([\s\S]*?\) : \('
-replacement = """) : tournament.format === "doppia_eliminazione" ? (
-        <DoubleEliminationBracket tournament={tournament} />
-      ) : ("""
+# Make inProgressTournaments also include 'drawing'
+old_in = """  const inProgressTournaments = await prisma.tournament.findMany({
+    where: { status: "in_progress" },
+    orderBy: { createdAt: "desc" },"""
 
-content = re.sub(pattern, replacement, content)
+new_in = """  const inProgressTournaments = await prisma.tournament.findMany({
+    where: { status: { in: ["in_progress", "drawing"] } },
+    orderBy: { createdAt: "desc" },"""
 
-with open("src/app/tournaments/[id]/page.tsx", "w") as f:
+content = content.replace(old_in, new_in)
+
+with open("src/app/page.tsx", "w") as f:
     f.write(content)

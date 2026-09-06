@@ -1,0 +1,5 @@
+const fs = require('fs')
+const content = fs.readFileSync('src/app/actions/tournamentActions.ts', 'utf8')
+const lines = content.split('\n')
+const idx = lines.findIndex(l => l.includes('export async function startTournament'))
+if (idx !== -1) console.log(lines.slice(idx, idx+30).join('\n'))

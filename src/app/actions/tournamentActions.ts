@@ -177,7 +177,7 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
     await prisma.tournament.update({
       where: { id: tournament.id },
       data: { 
-        status: "in_progress",
+        status: type === "coppie_fisse" ? "in_progress" : "drawing",
         bracketData: JSON.stringify({ wbRounds: [createdMatchIds], lbRounds: [] }) 
       }
     });
@@ -201,7 +201,7 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
     await prisma.tournament.update({
       where: { id: tournament.id },
       data: { 
-        status: "in_progress",
+        status: type === "coppie_fisse" ? "in_progress" : "drawing",
         bracketData: JSON.stringify({ rounds: [createdMatchIds] }) 
       }
     });
@@ -215,7 +215,7 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
 
   await prisma.tournament.update({
     where: { id: tournament.id },
-    data: { status: "in_progress" }
+    data: { status: type === "coppie_fisse" ? "in_progress" : "drawing" }
   });
   
   if (type === "sorteggio_ruoli") {
@@ -440,4 +440,12 @@ export async function respondToRegistrationRequest(requestId: string, status: st
   revalidatePath("/admin");
   revalidatePath(`/tournaments/${req.tournamentId}`);
   return req;
+}
+
+
+export async function finishDrawAnimation(tournamentId: string) {
+  await prisma.tournament.update({
+    where: { id: tournamentId },
+    data: { status: "in_progress" }
+  });
 }
