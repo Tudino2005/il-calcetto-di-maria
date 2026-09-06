@@ -1,4 +1,10 @@
-"use client";
+import re
+
+with open("src/components/TournamentDrawCeremony.tsx", "r") as f:
+    content = f.read()
+
+# I will rewrite the entire TournamentDrawCeremony component
+new_content = """"use client";
 
 import { useRouter } from "next/navigation";
 import { MonitorPlay, FastForward } from "lucide-react";
@@ -56,3 +62,7 @@ export default function TournamentDrawCeremony({
     </div>
   );
 }
+"""
+
+with open("src/components/TournamentDrawCeremony.tsx", "w") as f:
+    f.write(new_content)
