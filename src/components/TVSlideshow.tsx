@@ -632,6 +632,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                   <div className="flex flex-col gap-4">
                     {currentSlide.tournament.matches
                       ?.filter((m: any) => !m.winnerTeamId && m.teamAId && m.teamBId)
+                      .sort((a: any, b: any) => new Date(a.playedAt || a.createdAt).getTime() - new Date(b.playedAt || b.createdAt).getTime())
                       .slice(0, 4)
                       .map((m: any) => (
                         <div key={m.id} className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 flex flex-col justify-center items-center text-lg font-bold gap-2">
