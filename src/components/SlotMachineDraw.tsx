@@ -8,7 +8,7 @@ import RoleIcon from "./RoleIcon";
 export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const router = useRouter();
   const [teams, setTeams] = useState<any[]>([]);
-  const [revealedIndex, setRevealedIndex] = useState(-1);
+  const [revealedIndex, setRevealedIndex] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [currentSlot1, setCurrentSlot1] = useState<any>(null);
   const [currentSlot2, setCurrentSlot2] = useState<any>(null);
@@ -79,7 +79,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   if (teams.length === 0) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full text-center p-8 bg-gradient-to-b from-slate-950 to-indigo-950 overflow-hidden relative">
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center w-full h-full text-center p-8 bg-gradient-to-b from-slate-950 to-indigo-950 overflow-hidden">
       
       <div className="absolute top-10 flex flex-col items-center animate-fade-in-down z-20">
         <div className="inline-flex items-center gap-3 px-8 py-3 bg-indigo-500/20 text-indigo-400 rounded-full font-bold uppercase tracking-widest border border-indigo-500/30 mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)] animate-pulse">
@@ -99,7 +99,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
            <p className="text-2xl text-slate-300">Preparazione delle sfide in corso...</p>
         </div>
       ) : (
-        <div className="flex flex-col items-center mt-32 z-20 w-full max-w-5xl">
+        <div className="flex flex-col items-center mt-12 z-20 w-full max-w-5xl">
            <div className="text-slate-400 font-bold uppercase tracking-widest mb-6 text-xl">
               Estrazione Coppia {revealedIndex + 1} di {teams.length}
            </div>
@@ -137,7 +137,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       )}
 
       {/* Lista delle squadre già estratte (in basso) */}
-      <div className="absolute bottom-0 w-full h-48 bg-slate-950/80 border-t border-slate-800 backdrop-blur-md p-6 flex flex-col items-center z-20">
+      <div className="absolute bottom-0 w-full bg-slate-950/80 border-t border-slate-800 backdrop-blur-md p-6 flex flex-col items-center z-20 max-h-48 overflow-y-auto">
          <div className="text-slate-500 font-bold uppercase tracking-widest text-sm mb-4">Coppie Formate</div>
          <div className="flex flex-wrap gap-4 justify-center w-full max-w-7xl overflow-hidden">
             {teams.slice(0, revealedIndex).map((t, i) => (
