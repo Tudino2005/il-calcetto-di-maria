@@ -86,6 +86,14 @@ export default function TVSlideshow({ data }: { data: any }) {
 
   const currentSlide = slides[currentIndex];
 
+  if (currentSlide?.type === "slot_machine") {
+      return (
+        <div className="w-full h-screen bg-slate-950 text-white">
+          <SlotMachineDraw tournament={currentSlide.tournament} />
+        </div>
+      );
+  }
+
   const formatName = (fmt: string) => fmt.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   return (
@@ -519,10 +527,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           
           
-          {/* SLOT MACHINE DRAW SLIDE */}
-          {currentSlide.type === "slot_machine" && (
-             <SlotMachineDraw tournament={currentSlide.tournament} />
-          )}
+
 
           {/* TABELLONE TURNI / BRACKET TREE */}
 
