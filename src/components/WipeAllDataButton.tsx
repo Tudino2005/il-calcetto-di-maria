@@ -8,7 +8,7 @@ export default function WipeAllDataButton() {
   const [isWiping, setIsWiping] = useState(false);
 
   const handleWipe = async () => {
-    const pin = prompt("ATTENZIONE DISTRUZIONE TOTALE! Questa azione cancellerà per sempre TUTTI i Giocatori, le Partite e i Tornei.\n\nPer confermare l'eliminazione dell'Anagrafica completa, scrivi il PIN di sicurezza (MARIA2026):");
+    const pin = prompt("ATTENZIONE DISTRUZIONE TOTALE! Questa azione cancellerà per sempre TUTTI i Giocatori, le Partite e i Tornei.\n\nPer confermare l'eliminazione dell'Anagrafica completa, scrivi il PIN di sicurezza:");
     
     if (pin === "MARIA2026") {
       setIsWiping(true);

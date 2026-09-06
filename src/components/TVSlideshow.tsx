@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import RoleIcon from "@/components/RoleIcon";
 import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay } from "lucide-react";
 import QRCodeDisplay from "@/components/QRCodeDisplay";
+import SlotMachineDraw from "@/components/SlotMachineDraw";
 
 export default function TVSlideshow({ data }: { data: any }) {
   const router = useRouter();
@@ -499,7 +500,14 @@ export default function TVSlideshow({ data }: { data: any }) {
           );})()}
 
           
+          
+          {/* SLOT MACHINE DRAW SLIDE */}
+          {currentSlide.type === "slot_machine" && (
+             <SlotMachineDraw tournament={currentSlide.tournament} />
+          )}
+
           {/* TABELLONE TURNI / BRACKET TREE */}
+
           {currentSlide.type === "bracket_tree" && (() => {
             const t = currentSlide.tournament;
             let rounds: any[][] = [];
