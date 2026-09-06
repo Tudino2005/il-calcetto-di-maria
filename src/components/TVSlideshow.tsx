@@ -44,7 +44,25 @@ export default function TVSlideshow({ data }: { data: any }) {
     slides.push({ type: "hall_of_fame" });
   }
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const drawSlideIndex = slides.findIndex(s => s.type === "slot_machine");
+  const [currentIndex, setCurrentIndex] = useState(drawSlideIndex !== -1 ? drawSlideIndex : 0);
+
+  // Jump to slot machine immediately if it appears
+  useEffect(() => {
+    if (drawSlideIndex !== -1 && currentIndex !== drawSlideIndex) {
+      setCurrentIndex(drawSlideIndex);
+    }
+  }, [drawSlideIndex]);
+
+  // Fast polling to catch admin actions (like start draw) instantly
+  useEffect(() => {
+    const poll = setInterval(() => {
+      router.refresh();
+    }, 3000); // Check every 3 seconds
+    return () => clearInterval(poll);
+  }, [router]);
+
   const [cycleCount, setCycleCount] = useState(0);
 
   useEffect(() => {
