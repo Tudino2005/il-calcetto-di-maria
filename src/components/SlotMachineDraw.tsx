@@ -44,7 +44,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       setSpinning(true);
       setShowConfetti(false);
       
-      const spinDuration = 2000; // 3.5 seconds
+      const spinDuration = 5000; // 3.5 seconds
       const interval = setInterval(() => {
          setCurrentSlot1(allPlayers[Math.floor(Math.random() * allPlayers.length)]);
          setCurrentSlot2(allPlayers[Math.floor(Math.random() * allPlayers.length)]);
