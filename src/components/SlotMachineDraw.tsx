@@ -72,7 +72,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       const finalTimeout = setTimeout(async () => {
          await finishDrawAnimation(tournament.id);
          router.refresh(); // Tells NextJS to reload the page data, updating TVSlideshow
-      }, 6000);
+      }, 60000);
       return () => clearTimeout(finalTimeout);
     }
   }, [revealedIndex, teams.length, allPlayers.length]);
