@@ -28,8 +28,8 @@ export default function TVSlideshow({ data }: { data: any }) {
     if (t.status === "drawing") {
       slides.push({ type: "slot_machine", tournament: t, duration: 600000 }); // 10 minutes max, the component will manually skip to next
     } else {
-      slides.push({ type: "live_bracket", tournament: t });
-      slides.push({ type: "bracket_tree", tournament: t, duration: 15000 });
+      slides.push({ type: "live_bracket", tournament: t, duration: 120000 });
+      slides.push({ type: "bracket_tree", tournament: t, duration: 120000 });
       
       // Check if there are scheduled matches
       const hasScheduled = t.matches?.some((m: any) => m.scheduledAt && !m.winnerTeamId);
@@ -570,6 +570,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                                   </span>
                                   <span className={`w-8 text-center rounded py-1 ${m.winnerTeamId === m.teamBId ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-950 text-white'}`}>{m.scoreTeamB}</span>
                                 </div>
+                                {!m.winnerTeamId && (
+                                  <div className="text-[10px] text-center font-bold uppercase tracking-wider mt-1 text-slate-500">
+                                    {m.scheduledAt ? `${new Date(m.scheduledAt).toLocaleDateString('it-IT')} - ${new Date(m.scheduledAt).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}` : (currentSlide.tournament.startDate ? new Date(currentSlide.tournament.startDate).toLocaleDateString('it-IT') : 'Da programmare')}
+                                  </div>
+                                )}
                              </div>
                            ))}
                          </div>
@@ -609,10 +614,21 @@ export default function TVSlideshow({ data }: { data: any }) {
                       ?.filter((m: any) => !m.winnerTeamId && m.teamAId && m.teamBId)
                       .slice(0, 4)
                       .map((m: any) => (
-                        <div key={m.id} className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 flex justify-between items-center text-lg font-bold">
-                          <span className="text-white flex-1 leading-tight">{m.teamA?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamA?.player2?.name}</span>
-                          <span className="text-slate-500 mx-4 shrink-0">VS</span>
-                          <span className="text-white flex-1 text-right leading-tight">{m.teamB?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamB?.player2?.name}</span>
+                        <div key={m.id} className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 flex flex-col justify-center items-center text-lg font-bold gap-2">
+                          <div className="flex justify-between w-full items-center">
+                            <span className="text-white flex-1 leading-tight">{m.teamA?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamA?.player2?.name}</span>
+                            <span className="text-slate-500 mx-4 shrink-0">VS</span>
+                            <span className="text-white flex-1 text-right leading-tight">{m.teamB?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamB?.player2?.name}</span>
+                          </div>
+                          {(() => {
+                            const dateToUse = m.scheduledAt || currentSlide.tournament.startDate;
+                            if (!dateToUse) return <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Data da definire</div>;
+                            return (
+                              <div className="text-xs font-black text-blue-400 bg-blue-500/20 px-3 py-1 rounded-lg mt-1">
+                                {new Date(dateToUse).toLocaleDateString('it-IT')} {m.scheduledAt ? `alle ${new Date(dateToUse).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}` : ''}
+                              </div>
+                            );
+                          })()}
                         </div>
                     ))}
                     {currentSlide.tournament.matches?.filter((m: any) => !m.winnerTeamId && m.teamAId && m.teamBId).length === 0 && (
