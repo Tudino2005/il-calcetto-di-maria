@@ -1,10 +1,11 @@
 export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, User, Trophy, Swords, Calendar, Trash2 } from "lucide-react";
+import { ArrowLeft, User, Trophy, Swords, Calendar, Trash2, Users } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
 import { deletePlayer } from "@/app/actions/matchActions";
+import RoleIcon from "@/components/RoleIcon";
 
 export default async function PlayerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -53,6 +54,36 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
   ).length;
   const winRate = totalPlayed > 0 ? ((totalWins / totalPlayed) * 100).toFixed(1) : "0.0";
 
+  // Group statistics by teammate / partner
+  const partnerMap = new Map<string, { partner: any; played: number; wins: number }>();
+
+  allMatches.forEach((m: any) => {
+    const isTeamA = m.teamA?.player1Id === id || m.teamA?.player2Id === id;
+    const myTeam = isTeamA ? m.teamA : m.teamB;
+    if (!myTeam) return;
+
+    const partner = myTeam.player1Id === id ? myTeam.player2 : myTeam.player1;
+    if (!partner) return;
+
+    const iWon = m.winnerTeamId === myTeam.id;
+
+    if (!partnerMap.has(partner.id)) {
+      partnerMap.set(partner.id, { partner, played: 0, wins: 0 });
+    }
+    const entry = partnerMap.get(partner.id)!;
+    entry.played += 1;
+    if (iWon) entry.wins += 1;
+  });
+
+  const partnerStats = Array.from(partnerMap.values())
+    .map(p => ({
+      ...p,
+      winRate: p.played > 0 ? ((p.wins / p.played) * 100).toFixed(1) : "0.0"
+    }))
+    .sort((a, b) => {
+      if (b.played !== a.played) return b.played - a.played;
+      return Number(b.winRate) - Number(a.winRate);
+    });
 
   async function handleDelete() {
     "use server";
@@ -105,6 +136,64 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           </div>
         </div>
       </div>
+
+      {/* RIEPILOGO PER COMPAGNO */}
+      <section className="mb-8">
+        <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+          <Users className="w-6 h-6 text-purple-400" /> Riepilogo per Compagno
+        </h3>
+
+        {partnerStats.length === 0 ? (
+          <div className="bg-slate-800 p-6 rounded-2xl text-center text-slate-400 border border-slate-700">
+            Nessuna coppia registrata finora.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {partnerStats.map(({ partner, played, wins, winRate }) => {
+              const winRateNum = Number(winRate);
+              const isHigh = winRateNum >= 60;
+              const isMid = winRateNum >= 40 && winRateNum < 60;
+
+              return (
+                <div key={partner.id} className="bg-slate-800/90 border border-slate-700 hover:border-purple-500/50 transition-all p-5 rounded-2xl shadow-lg flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-12 h-12 bg-slate-700/80 rounded-full flex items-center justify-center shrink-0">
+                      <RoleIcon role={partner.preferredRole || "entrambi"} className="w-6 h-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <Link href={`/players/${partner.id}`} className="text-lg font-black text-white hover:text-purple-400 transition-colors truncate block">
+                        {partner.name}
+                      </Link>
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        {partner.preferredRole || "Giocatore"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4 shrink-0 text-right">
+                    <div>
+                      <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Giocate</div>
+                      <div className="text-lg font-black text-white">{played}</div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
+                      <div className="text-lg font-black text-emerald-400">{wins}</div>
+                    </div>
+                    <div className="min-w-[70px]">
+                      <div className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">Win Rate</div>
+                      <div className={`text-lg font-black ${
+                        isHigh ? 'text-emerald-400' : isMid ? 'text-yellow-400' : 'text-slate-300'
+                      }`}>
+                        {winRate}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
 
       <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
         <Calendar className="w-6 h-6 text-blue-400" /> Storico Partite Giocate

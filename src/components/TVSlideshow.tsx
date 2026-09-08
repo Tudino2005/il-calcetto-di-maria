@@ -85,9 +85,17 @@ export default function TVSlideshow({ data }: { data: any }) {
     return () => clearTimeout(timeout);
   }, [currentIndex, slides.length, cycleCount, router]);
 
+  // Ensure currentIndex stays within bounds if slides length shrinks (e.g. tournament completes)
+  useEffect(() => {
+    if (currentIndex >= slides.length && slides.length > 0) {
+      setCurrentIndex(0);
+    }
+  }, [slides.length, currentIndex]);
+
   if (slides.length === 0) return <div className="flex h-screen items-center justify-center bg-slate-950 text-white text-3xl">Nessun dato disponibile</div>;
 
-  const currentSlide = slides[currentIndex];
+  const safeCurrentIndex = currentIndex < slides.length ? currentIndex : 0;
+  const currentSlide = slides[safeCurrentIndex] || slides[0];
 
   if (currentSlide?.type === "slot_machine") {
       return (
@@ -108,7 +116,7 @@ export default function TVSlideshow({ data }: { data: any }) {
         </h1>
         <div className="flex gap-2">
           {slides.map((_, i) => (
-            <div key={i} className={`h-2 rounded-full transition-all duration-1000 ${i === currentIndex ? 'w-12 bg-emerald-400' : 'w-3 bg-slate-700'}`} />
+            <div key={i} className={`h-2 rounded-full transition-all duration-1000 ${i === safeCurrentIndex ? 'w-12 bg-emerald-400' : 'w-3 bg-slate-700'}`} />
           ))}
         </div>
       </div>
@@ -810,7 +818,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     <div className="text-right">
                       <div className="text-sm text-yellow-500 font-bold uppercase tracking-widest mb-2">Campioni</div>
                       <div className="text-3xl font-black text-white">
-                        {t.winnerTeam?.player1.name} <span className="text-slate-500 mx-2">&</span> {t.winnerTeam?.player2.name}
+                        {t.winnerTeam?.player1?.name || "Campione 1"} <span className="text-slate-500 mx-2">&</span> {t.winnerTeam?.player2?.name || "Campione 2"}
                       </div>
                     </div>
                   </div>
