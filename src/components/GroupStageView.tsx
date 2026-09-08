@@ -3,6 +3,7 @@
 import { Trophy, Calendar } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
+import { formatSetScores } from "@/lib/scoreUtils";
 
 export default function GroupStageView({ groups, qualifiersPerGroup, tournamentId }: { groups: any[], qualifiersPerGroup: number, tournamentId: string }) {
   const allGroupsFinished = groups.every(g => g.matches.every((m: any) => m.winnerTeamId !== null));
@@ -80,8 +81,13 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                       <div className="flex-1 flex justify-end pr-4 text-sm font-bold text-white">
                         {teamA ? `${teamA.player1.name} & ${teamA.player2.name}` : "TBD"}
                       </div>
-                      <div className="px-4 py-1 bg-slate-950 rounded-lg font-black text-slate-300">
-                        {isFinished ? `${m.scoreTeamA} - ${m.scoreTeamB}` : "VS"}
+                      <div className="px-4 py-1 bg-slate-950 rounded-lg font-black text-slate-300 flex flex-col items-center">
+                        <span>{isFinished ? `${m.scoreTeamA} - ${m.scoreTeamB}` : "VS"}</span>
+                        {isFinished && m.setScores && formatSetScores(m.setScores) && (
+                          <span className="text-[10px] text-emerald-400 font-bold tracking-tight">
+                            ({formatSetScores(m.setScores)})
+                          </span>
+                        )}
                       </div>
                       <div className="flex-1 flex justify-start pl-4 text-sm font-bold text-white">
                         {teamB ? `${teamB.player1.name} & ${teamB.player2.name}` : "TBD"}

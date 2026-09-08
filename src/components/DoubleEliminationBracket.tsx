@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import { Calendar } from "lucide-react";
+import { formatSetScores } from "@/lib/scoreUtils";
 
 export default function DoubleEliminationBracket({ tournament }: { tournament: any }) {
   const bracket = JSON.parse(tournament.bracketData || "{}");
@@ -37,6 +38,11 @@ export default function DoubleEliminationBracket({ tournament }: { tournament: a
               <span className="truncate text-sm">{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
               <span className="font-black ml-2 text-sm">{m.scoreTeamB}</span>
             </div>
+            {m.setScores && formatSetScores(m.setScores) && (
+              <div className="text-[10px] font-black text-emerald-400 bg-slate-950/80 px-2 py-0.5 rounded text-center border border-slate-800 tracking-wider">
+                Set: {formatSetScores(m.setScores)}
+              </div>
+            )}
           </div>
         </div>
       </Link>

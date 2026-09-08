@@ -6,6 +6,7 @@ import RoleIcon from "@/components/RoleIcon";
 import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay } from "lucide-react";
 import QRCodeDisplay from "@/components/QRCodeDisplay";
 import SlotMachineDraw from "@/components/SlotMachineDraw";
+import { formatSetScores } from "@/lib/scoreUtils";
 
 export default function TVSlideshow({ data }: { data: any }) {
   const router = useRouter();
@@ -359,6 +360,13 @@ export default function TVSlideshow({ data }: { data: any }) {
                               </div>
                               <div className="font-black text-slate-600 bg-slate-950 px-4 py-1 rounded-xl border border-slate-800">{scoreL}</div>
                             </div>
+
+                            {m.setScores && formatSetScores(m.setScores) && (
+                              <div className="flex items-center justify-between text-sm font-bold bg-slate-950/60 px-4 py-1.5 rounded-xl border border-slate-800">
+                                <span className="text-xs text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
+                                <span className="text-emerald-400 font-black tracking-wider text-base">{formatSetScores(m.setScores)}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
@@ -598,6 +606,12 @@ export default function TVSlideshow({ data }: { data: any }) {
 </span>
                             <span className="font-black text-xl ml-3">{m.scoreTeamB}</span>
                           </div>
+                          {m.setScores && formatSetScores(m.setScores) && (
+                            <div className="bg-slate-950/80 border border-slate-700/60 rounded-xl px-3 py-1.5 flex items-center justify-between text-xs font-bold mt-1">
+                              <span className="text-[10px] text-purple-400 uppercase tracking-wider font-black">Gol Set:</span>
+                              <span className="text-emerald-400 font-black tracking-wider text-sm">{formatSetScores(m.setScores)}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
@@ -662,8 +676,13 @@ export default function TVSlideshow({ data }: { data: any }) {
                                   <span className={`text-sm font-bold flex-1 leading-tight ${m.winnerTeamId === m.teamAId ? 'text-emerald-400 font-black' : 'text-slate-300'}`}>
                                     {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
                                   </span>
-                                  <div className="shrink-0 bg-slate-950 px-2 py-0.5 rounded text-sm font-black text-white shadow-inner mx-2">
-                                    {m.winnerTeamId ? `${m.scoreTeamA} - ${m.scoreTeamB}` : 'VS'}
+                                  <div className="shrink-0 bg-slate-950 px-2.5 py-1 rounded-xl text-sm font-black text-white shadow-inner mx-2 flex flex-col items-center">
+                                    <span>{m.winnerTeamId ? `${m.scoreTeamA} - ${m.scoreTeamB}` : 'VS'}</span>
+                                    {m.winnerTeamId && m.setScores && formatSetScores(m.setScores) && (
+                                      <span className="text-[10px] text-emerald-400 font-bold tracking-tight mt-0.5">
+                                        ({formatSetScores(m.setScores)})
+                                      </span>
+                                    )}
                                   </div>
                                   <span className={`text-sm font-bold flex-1 text-right leading-tight ${m.winnerTeamId === m.teamBId ? 'text-emerald-400 font-black' : 'text-slate-300'}`}>
                                     {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}

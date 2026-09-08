@@ -215,8 +215,14 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         finalWinnerId = nextSetsA >= 2 ? match.teamA?.id || null : match.teamB?.id || null;
       }
 
+      const formattedSetsPayload = newCompletedList.map(s => ({
+        setNumber: s.setNumber,
+        scoreA: s.scoreA,
+        scoreB: s.scoreB
+      }));
+
       startTransition(() => {
-        updateExactMatchScore(match.id, nextSetsA, nextSetsB, finalWinnerId);
+        updateExactMatchScore(match.id, nextSetsA, nextSetsB, finalWinnerId, formattedSetsPayload);
       });
 
       if (!willMatchFinish) {
@@ -277,8 +283,14 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
     const prevSetsA = newCompleted.filter(s => s.winner === "A").length;
     const prevSetsB = newCompleted.filter(s => s.winner === "B").length;
 
+    const formattedSetsPayload = newCompleted.map(s => ({
+      setNumber: s.setNumber,
+      scoreA: s.scoreA,
+      scoreB: s.scoreB
+    }));
+
     startTransition(() => {
-      updateExactMatchScore(match.id, prevSetsA, prevSetsB, null);
+      updateExactMatchScore(match.id, prevSetsA, prevSetsB, null, formattedSetsPayload);
     });
   };
 
@@ -310,7 +322,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         localStorage.removeItem(sessionStorageKey);
       } catch {}
       startTransition(() => {
-        updateExactMatchScore(match.id, 0, 0, null);
+        updateExactMatchScore(match.id, 0, 0, null, null);
       });
     }
   };

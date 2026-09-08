@@ -7,6 +7,7 @@ import DeleteButton from "@/components/DeleteButton";
 import { deletePlayer } from "@/app/actions/matchActions";
 import RoleIcon from "@/components/RoleIcon";
 import { getLeaderboardData } from "@/lib/leaderboardData";
+import { formatSetScores } from "@/lib/scoreUtils";
 
 export default async function PlayerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -253,11 +254,16 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-4 text-xl font-bold">
+                  <div className="flex items-center gap-4 text-xl font-bold flex-wrap">
                     <span className="text-white">Con: {myTeam?.player1Id === player.id ? myTeam?.player2?.name : myTeam?.player1?.name}</span>
                     <span className="text-slate-500 text-sm mx-2">VS</span>
                     <span className="text-slate-400">{enemyTeam?.player1?.name} & {enemyTeam?.player2?.name}</span>
                   </div>
+                  {m.setScores && formatSetScores(m.setScores) && (
+                    <div className="text-xs font-black text-emerald-400 mt-1 tracking-wider">
+                      Dettaglio Set: {formatSetScores(m.setScores)}
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex items-center gap-6">

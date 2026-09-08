@@ -5,6 +5,7 @@ import { Trophy, Calendar, CalendarDays, Swords } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
 import { scheduleMatch } from "@/app/actions/matchActions";
+import { formatSetScores } from "@/lib/scoreUtils";
 
 type PlayerInfo = { id: string; name: string };
 type TeamInfo = { id: string; player1: PlayerInfo; player2: PlayerInfo };
@@ -12,6 +13,7 @@ type MatchInfo = {
   id: string;
   scoreTeamA: number;
   scoreTeamB: number;
+  setScores?: any;
   winnerTeamId: string | null;
   teamA: TeamInfo | null;
   teamB: TeamInfo | null;
@@ -153,6 +155,11 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
 </span>
                           <span className="font-black ml-2">{m.scoreTeamB}</span>
                         </div>
+                        {m.setScores && formatSetScores(m.setScores) && (
+                          <div className="text-[11px] font-black text-emerald-400 bg-slate-950/80 px-2 py-0.5 rounded text-center border border-slate-800 tracking-wider">
+                            Set: {formatSetScores(m.setScores)}
+                          </div>
+                        )}
                       </div>
                     </Link>
                   </div>
@@ -215,9 +222,16 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
                     
                     <div>
                       {isFinished ? (
-                        <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-sm font-bold uppercase tracking-wider border border-emerald-500/20">
-                          {m.scoreTeamA} - {m.scoreTeamB}
-                        </span>
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-sm font-bold uppercase tracking-wider border border-emerald-500/20">
+                            {m.scoreTeamA} - {m.scoreTeamB}
+                          </span>
+                          {m.setScores && formatSetScores(m.setScores) && (
+                            <span className="text-[11px] font-black text-emerald-400 tracking-wider">
+                              ({formatSetScores(m.setScores)})
+                            </span>
+                          )}
+                        </div>
                       ) : (
                         <Link href={`/match/${m.id}`}>
                           <button className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-lg transition-colors">

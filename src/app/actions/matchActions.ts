@@ -80,14 +80,20 @@ export async function updateExactMatchScore(
   matchId: string,
   scoreA: number,
   scoreB: number,
-  winnerTeamId: string | null = null
+  winnerTeamId: string | null = null,
+  setScores?: any
 ) {
   const match = await prisma.match.findUnique({ where: { id: matchId } });
   if (!match) return null;
 
+  const data: any = { scoreTeamA: scoreA, scoreTeamB: scoreB, winnerTeamId };
+  if (setScores !== undefined) {
+    data.setScores = setScores;
+  }
+
   const updatedMatch = await prisma.match.update({
     where: { id: matchId },
-    data: { scoreTeamA: scoreA, scoreTeamB: scoreB, winnerTeamId },
+    data,
     include: {
       teamA: { include: { player1: true, player2: true } },
       teamB: { include: { player1: true, player2: true } },
