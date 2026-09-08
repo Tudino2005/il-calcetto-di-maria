@@ -6,6 +6,7 @@ import { notFound, redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
 import { deletePlayer } from "@/app/actions/matchActions";
 import RoleIcon from "@/components/RoleIcon";
+import { getLeaderboardData } from "@/lib/leaderboardData";
 
 export default async function PlayerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -53,6 +54,14 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     (m.teamB?.player1Id === id || m.teamB?.player2Id === id) && m.winnerTeamId === m.teamBId
   ).length;
   const winRate = totalPlayed > 0 ? ((totalWins / totalPlayed) * 100).toFixed(1) : "0.0";
+
+  // Calculate current leaderboard ranking
+  const { playerStats } = await getLeaderboardData();
+  const playerRankMap = new Map<string, number>();
+  playerStats.forEach((p: any, idx: number) => {
+    playerRankMap.set(p.id, idx + 1);
+  });
+  const myRank = playerRankMap.get(id) || null;
 
   // Group statistics by teammate / partner
   const partnerMap = new Map<string, { partner: any; played: number; wins: number }>();
@@ -120,7 +129,11 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
               </div>
             </div>
           </div>
-          <div className="flex gap-8 text-right">
+          <div className="flex gap-6 md:gap-8 text-right flex-wrap justify-end">
+            <div>
+              <div className="text-purple-400 font-bold mb-1">Classifica</div>
+              <div className="text-3xl font-black text-purple-400">{myRank ? `${myRank}°` : "-"}</div>
+            </div>
             <div>
               <div className="text-slate-400 font-bold mb-1">Partite Giocate</div>
               <div className="text-3xl font-black text-white">{totalPlayed}</div>
@@ -150,6 +163,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {partnerStats.map(({ partner, played, wins, winRate }) => {
+              const partnerRank = playerRankMap.get(partner.id) || null;
               const winRateNum = Number(winRate);
               const isHigh = winRateNum >= 60;
               const isMid = winRateNum >= 40 && winRateNum < 60;
@@ -170,7 +184,11 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 shrink-0 text-right">
+                  <div className="flex items-center gap-3 md:gap-4 shrink-0 text-right">
+                    <div>
+                      <div className="text-[11px] text-purple-400 font-bold uppercase tracking-wider">Classifica</div>
+                      <div className="text-lg font-black text-purple-400">{partnerRank ? `${partnerRank}°` : "-"}</div>
+                    </div>
                     <div>
                       <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Giocate</div>
                       <div className="text-lg font-black text-white">{played}</div>
@@ -179,7 +197,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                       <div className="text-[11px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
                       <div className="text-lg font-black text-emerald-400">{wins}</div>
                     </div>
-                    <div className="min-w-[70px]">
+                    <div className="min-w-[65px]">
                       <div className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">Win Rate</div>
                       <div className={`text-lg font-black ${
                         isHigh ? 'text-emerald-400' : isMid ? 'text-yellow-400' : 'text-slate-300'
