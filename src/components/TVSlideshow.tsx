@@ -19,30 +19,30 @@ export default function TVSlideshow({ data }: { data: any }) {
   slides.push({ type: "leaderboard", duration: leaderboardDuration });
   
   if (data.recentFreeMatches && data.recentFreeMatches.length > 0) {
-    slides.push({ type: "recent_matches", duration: 12000 });
+    slides.push({ type: "recent_matches", duration: 30000 });
   }
   
   // Slides for Promo
-  promoTournaments.forEach((t: any) => slides.push({ type: "promo", tournament: t, duration: 60000 }));  // Slides for In Progress (Bracket & Agenda)
+  promoTournaments.forEach((t: any) => slides.push({ type: "promo", tournament: t, duration: 30000 }));  // Slides for In Progress (Bracket & Agenda)
   inProgressTournaments.forEach((t: any) => {
     if (t.status === "drawing") {
       slides.push({ type: "slot_machine", tournament: t, duration: 600000 }); // 10 minutes max, the component will manually skip to next
     } else {
-      slides.push({ type: "bracket_grid", tournament: t, duration: 120000 });
-      slides.push({ type: "live_bracket", tournament: t, duration: 120000 });
-      slides.push({ type: "bracket_tree", tournament: t, duration: 120000 });
+      slides.push({ type: "bracket_grid", tournament: t, duration: 30000 });
+      slides.push({ type: "live_bracket", tournament: t, duration: 30000 });
+      slides.push({ type: "bracket_tree", tournament: t, duration: 30000 });
       
       // Check if there are scheduled matches
       const hasScheduled = t.matches?.some((m: any) => m.scheduledAt && !m.winnerTeamId);
       if (hasScheduled) {
-        slides.push({ type: "live_agenda", tournament: t });
+        slides.push({ type: "live_agenda", tournament: t, duration: 30000 });
       }
     }
   });
   
   // Slide for Hall of Fame
   if (completedTournaments.length > 0) {
-    slides.push({ type: "hall_of_fame" });
+    slides.push({ type: "hall_of_fame", duration: 30000 });
   }
 
   
@@ -70,7 +70,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
   useEffect(() => {
     // Get duration of current slide (default 12s if not specified)
-    const currentDuration = slides[currentIndex]?.duration || 12000;
+    const currentDuration = slides[currentIndex]?.duration || 30000;
     
     const timeout = setTimeout(() => {
       const nextIndex = (currentIndex + 1) % slides.length;
