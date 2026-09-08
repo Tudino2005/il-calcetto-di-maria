@@ -97,7 +97,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       }, 60000);
       return () => clearTimeout(finalTimeout);
     }
-  }, [revealedIndex, teams.length, allPlayers.length]);
+  }, [revealedIndex, teams.length, allPlayers.length, introState]);
   
   // Handle Intro
   const startIntro = () => {
@@ -112,6 +112,9 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     // 10 second animation duration
     setTimeout(() => {
        setIntroState("slot_machine");
+       if (audioRef.current) {
+          audioRef.current.pause();
+       }
     }, 10000);
   };
 
@@ -128,6 +131,9 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
             setIntroState("playing_intro");
             setTimeout(() => {
                setIntroState("slot_machine");
+               if (audioRef.current) {
+                  audioRef.current.pause();
+               }
             }, 10000);
           } catch (err) {
             // Autoplay blocked, wait for user click
