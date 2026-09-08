@@ -83,7 +83,7 @@ export default function TournamentForm() {
           </div>
         )}
         <div>
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo Iscrizione (€)</label>
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo Iscrizione a Persona (€)</label>
           <input
             type="number"
             min="0"

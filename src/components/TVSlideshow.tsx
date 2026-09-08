@@ -450,8 +450,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                   <div className="bg-slate-950 p-6 rounded-3xl border border-slate-800 flex items-center gap-4">
                     <Banknote className="w-10 h-10 text-emerald-400 shrink-0" />
                     <div>
-                      <div className="text-slate-500 font-bold uppercase text-xs tracking-wider">Costo</div>
-                      <div className="text-xl font-bold">{t.pricePerPlayer || "Gratis"} €</div>
+                      <div className="text-slate-500 font-bold uppercase text-xs tracking-wider">Costo a persona</div>
+                      <div className="text-xl font-bold">{t.pricePerPlayer ? `${t.pricePerPlayer} €` : "Gratis"}</div>
                     </div>
                   </div>
                 </div>
