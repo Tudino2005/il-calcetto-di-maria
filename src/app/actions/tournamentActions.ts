@@ -77,6 +77,24 @@ export async function removePlayerFromTournament(tournamentId: string, playerId:
   revalidatePath(`/tournaments/${tournamentId}`);
 }
 
+const IRONIC_NAMES = [
+  "I Cinghiali Zoppi", "I Bradipi Sprint", "I Piedi Storti", "I Pali della Luce", 
+  "I Ferri da Stiro", "I Pinguini Sudati", "Le Aquile Cecate", "I Cani Sciolti", 
+  "Gli Imbucati", "I Bomber Mancati", "I Disperati", "I Fuoriclasse (a tavola)",
+  "I Caciocavalli", "I Tritacarne", "Gli Scappati di Casa", "I Birraioli",
+  "I Sempre Al Bar", "Quelli del Campetto", "I Panza e Presenza", "I Galattici (di periferia)",
+  "I Tiratori Scelti (bendati)", "I Maghi del Liscio", "Gli Irriducibili (al bar)"
+];
+
+function generateTeamNames(teams: any[]) {
+  const shuffledNames = [...IRONIC_NAMES].sort(() => Math.random() - 0.5);
+  const map: Record<string, string> = {};
+  teams.forEach((t, i) => {
+    map[t.id] = shuffledNames[i % shuffledNames.length];
+  });
+  return map;
+}
+
 export async function startTournament(tournamentId: string, config?: { teamsPerGroup?: number, fixedPairs?: string[][] }) {
   const tournament = await prisma.tournament.findUnique({
     where: { id: tournamentId },

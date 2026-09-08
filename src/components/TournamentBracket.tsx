@@ -23,6 +23,7 @@ type TournamentInfo = {
   status: string;
   matches: MatchInfo[];
   winnerTeam: TeamInfo | null;
+  teamNames?: any;
 };
 
 export default function TournamentBracket({ tournament }: { tournament: TournamentInfo }) {
@@ -134,12 +135,22 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
                     <Link href={`/match/${m.id}`}>
                       <div className="flex flex-col gap-2 cursor-pointer">
                         <div className={clsx("flex justify-between items-center p-2 rounded-lg", m.winnerTeamId === m.teamA?.id ? "bg-emerald-500/20 text-emerald-400 font-bold" : "bg-slate-900 text-slate-300")}>
-                          <span className="truncate">{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
+                          <span className="truncate flex flex-col">
+  {m.teamA && tournament.teamNames && tournament.teamNames[m.teamA.id] && (
+    <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-0.5">"{tournament.teamNames[m.teamA.id]}"</span>
+  )}
+  <span>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
+</span>
                           <span className="font-black ml-2">{m.scoreTeamA}</span>
                         </div>
                         
                         <div className={clsx("flex justify-between items-center p-2 rounded-lg", m.winnerTeamId === m.teamB?.id ? "bg-emerald-500/20 text-emerald-400 font-bold" : "bg-slate-900 text-slate-300")}>
-                          <span className="truncate">{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
+                          <span className="truncate flex flex-col">
+  {m.teamB && tournament.teamNames && tournament.teamNames[m.teamB.id] && (
+    <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-0.5">"{tournament.teamNames[m.teamB.id]}"</span>
+  )}
+  <span>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
+</span>
                           <span className="font-black ml-2">{m.scoreTeamB}</span>
                         </div>
                       </div>

@@ -229,6 +229,14 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
               Estrazione Coppia {revealedIndex + 1} di {teams.length}
            </div>
            
+           {!spinning && showConfetti && tournament.teamNames && teams[revealedIndex] && tournament.teamNames[teams[revealedIndex].id] && (
+              <div className="animate-in zoom-in slide-in-from-bottom-5 duration-500 mb-8 bg-emerald-500/20 border border-emerald-500/40 px-8 py-3 rounded-full shadow-[0_0_30px_rgba(52,211,153,0.3)]">
+                <span className="text-3xl font-black text-emerald-400 uppercase tracking-widest">
+                  "{tournament.teamNames[teams[revealedIndex].id]}"
+                </span>
+              </div>
+           )}
+           
            <div className="flex items-center gap-8 justify-center w-full">
               {/* SLOT 1 */}
               <div className={`flex-1 bg-slate-900 border-4 rounded-[3rem] h-80 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300 ${!spinning && showConfetti ? 'border-yellow-400 shadow-[0_0_50px_rgba(250,204,21,0.5)] scale-105' : 'border-slate-700 shadow-2xl'}`}>
@@ -267,9 +275,16 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
          <div className="flex flex-wrap gap-4 justify-center w-full max-w-7xl overflow-hidden">
             {teams.slice(0, revealedIndex).map((t, i) => (
               <div key={i} className="bg-slate-900 border border-slate-700 px-6 py-3 rounded-2xl flex items-center gap-3 shadow-lg animate-fade-in-up">
-                 <span className="text-white font-bold">{t.player1.name}</span>
-                 <span className="text-slate-500 text-xs">&</span>
-                 <span className="text-white font-bold">{t.player2.name}</span>
+                 <div className="flex flex-col">
+                   {tournament.teamNames && tournament.teamNames[t.id] && (
+                     <span className="text-emerald-400 font-black text-xs uppercase tracking-widest text-center mb-1">"{tournament.teamNames[t.id]}"</span>
+                   )}
+                   <div className="flex items-center gap-2">
+                     <span className="text-white font-bold">{t.player1.name}</span>
+                     <span className="text-slate-500 text-xs">&</span>
+                     <span className="text-white font-bold">{t.player2.name}</span>
+                   </div>
+                 </div>
               </div>
             ))}
          </div>

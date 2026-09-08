@@ -555,12 +555,22 @@ export default function TVSlideshow({ data }: { data: any }) {
                         
                         <div className="flex flex-col gap-3">
                           <div className={`flex justify-between items-center p-3 rounded-xl ${m.winnerTeamId === m.teamAId ? 'bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30' : 'bg-slate-800 text-slate-300'}`}>
-                            <span className="truncate text-lg">{m.teamAId ? `${m.teamA?.player1?.name} & ${m.teamA?.player2?.name}` : "TBD"}</span>
+                            <span className="truncate text-lg flex flex-col">
+  {m.teamAId && currentSlide.tournament.teamNames && currentSlide.tournament.teamNames[m.teamAId] && (
+    <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-1">"{currentSlide.tournament.teamNames[m.teamAId]}"</span>
+  )}
+  <span>{m.teamAId ? `${m.teamA?.player1?.name} & ${m.teamA?.player2?.name}` : "TBD"}</span>
+</span>
                             <span className="font-black text-xl ml-3">{m.scoreTeamA}</span>
                           </div>
                           
                           <div className={`flex justify-between items-center p-3 rounded-xl ${m.winnerTeamId === m.teamBId ? 'bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30' : 'bg-slate-800 text-slate-300'}`}>
-                            <span className="truncate text-lg">{m.teamBId ? `${m.teamB?.player1?.name} & ${m.teamB?.player2?.name}` : "TBD"}</span>
+                            <span className="truncate text-lg flex flex-col">
+  {m.teamBId && currentSlide.tournament.teamNames && currentSlide.tournament.teamNames[m.teamBId] && (
+    <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-1">"{currentSlide.tournament.teamNames[m.teamBId]}"</span>
+  )}
+  <span>{m.teamBId ? `${m.teamB?.player1?.name} & ${m.teamB?.player2?.name}` : "TBD"}</span>
+</span>
                             <span className="font-black text-xl ml-3">{m.scoreTeamB}</span>
                           </div>
                         </div>
