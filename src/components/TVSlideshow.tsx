@@ -21,8 +21,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   if (data.recentFreeMatches && data.recentFreeMatches.length > 0) {
     const matchCount = data.recentFreeMatches.length;
     const scrollNeeded = matchCount > 3;
-    // Slower than leaderboard (2.8s per match vs 1.5s per row), min 20s
-    const recentMatchesDuration = scrollNeeded ? Math.max(25000, matchCount * 2800) : 20000;
+    // 2.0s per match, min 20s
+    const recentMatchesDuration = scrollNeeded ? Math.max(20000, matchCount * 2000) : 20000;
     slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
   }
   
@@ -296,7 +296,7 @@ export default function TVSlideshow({ data }: { data: any }) {
           {/* RECENT MATCHES SLIDE */}
           {currentSlide.type === "recent_matches" && (() => {
             const scrollNeeded = currentSlide.scrollNeeded ?? (data.recentFreeMatches.length > 3);
-            const durationSec = (currentSlide.duration || 25000) / 1000;
+            const durationSec = (currentSlide.duration || 20000) / 1000;
 
             return (
               <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-12">
