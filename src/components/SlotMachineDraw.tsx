@@ -270,14 +270,14 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       )}
 
       {/* Lista delle squadre già estratte (in basso) */}
-      <div className="absolute bottom-0 w-full bg-slate-950/80 border-t border-slate-800 backdrop-blur-md p-6 flex flex-col items-center z-20 max-h-48 overflow-y-auto">
-         <div className="text-slate-500 font-bold uppercase tracking-widest text-sm mb-4">Coppie Formate</div>
-         <div className="flex flex-wrap gap-4 justify-center w-full max-w-7xl overflow-hidden">
+      <div className="absolute bottom-0 w-full bg-slate-950/90 border-t border-slate-800 backdrop-blur-md p-5 flex flex-col items-center z-20 max-h-72 md:max-h-80 overflow-y-auto">
+         <div className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-3">Coppie Formate</div>
+         <div className="flex flex-wrap gap-3 justify-center w-full max-w-7xl pb-2">
             {teams.slice(0, revealedIndex).map((t, i) => (
-              <div key={i} className="bg-slate-900 border border-slate-700 px-6 py-3 rounded-2xl flex items-center gap-3 shadow-lg animate-fade-in-up">
-                 <div className="flex flex-col">
+              <div key={i} className="bg-slate-900 border border-slate-700 px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-lg animate-fade-in-up">
+                 <div className="flex flex-col items-center text-center">
                    {tournament.teamNames && tournament.teamNames[t.id] && (
-                     <span className="text-emerald-400 font-black text-xs uppercase tracking-widest text-center mb-1">"{tournament.teamNames[t.id]}"</span>
+                     <span className="text-emerald-400 font-black text-xs uppercase tracking-widest mb-1">"{tournament.teamNames[t.id]}"</span>
                    )}
                    <div className="flex items-center gap-2">
                      <span className="text-white font-bold">{t.player1.name}</span>
