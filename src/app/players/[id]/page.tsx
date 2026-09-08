@@ -16,14 +16,14 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     include: {
       teamsAsPlayer1: {
         include: {
-          matchesAsTeamA: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } },
-          matchesAsTeamB: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } }
+          matchesAsTeamA: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } }, tournament: true } },
+          matchesAsTeamB: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } }, tournament: true } }
         }
       },
       teamsAsPlayer2: {
         include: {
-          matchesAsTeamA: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } },
-          matchesAsTeamB: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } } } }
+          matchesAsTeamA: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } }, tournament: true } },
+          matchesAsTeamB: { where: { winnerTeamId: { not: null } }, include: { teamA: { include: { player1: true, player2: true } }, teamB: { include: { player1: true, player2: true } }, tournament: true } }
         }
       }
     }
@@ -139,8 +139,8 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
 
       {/* RIEPILOGO PER COMPAGNO */}
       <section className="mb-8">
-        <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-          <Users className="w-6 h-6 text-purple-400" /> Riepilogo per Compagno
+        <h3 className="text-2xl font-black uppercase tracking-wider text-white mb-6 flex items-center gap-3">
+          <Users className="w-7 h-7 text-purple-400" /> RIEPILOGO PER COMPAGNO
         </h3>
 
         {partnerStats.length === 0 ? (
@@ -218,8 +218,22 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                 iWon ? 'border-emerald-500/30' : 'border-red-500/30'
               }`}>
                 <div className="flex-1">
-                  <div className="text-sm text-slate-400 font-bold mb-2">
-                    {new Date(m.playedAt).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                  <div className="flex items-center gap-3 text-sm text-slate-400 font-bold mb-2 flex-wrap">
+                    <span>
+                      {new Date(m.playedAt).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <span className="text-slate-600">•</span>
+                    {m.tournament ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                        <Trophy className="w-3.5 h-3.5 text-purple-400" />
+                        {m.tournament.name}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <Swords className="w-3.5 h-3.5 text-emerald-400" />
+                        Partita Libera
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-4 text-xl font-bold">
                     <span className="text-white">Con: {myTeam?.player1Id === player.id ? myTeam?.player2?.name : myTeam?.player1?.name}</span>
