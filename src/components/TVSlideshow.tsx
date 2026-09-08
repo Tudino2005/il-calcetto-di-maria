@@ -19,7 +19,11 @@ export default function TVSlideshow({ data }: { data: any }) {
   slides.push({ type: "leaderboard", duration: leaderboardDuration });
   
   if (data.recentFreeMatches && data.recentFreeMatches.length > 0) {
-    slides.push({ type: "recent_matches", duration: 30000 });
+    const matchCount = data.recentFreeMatches.length;
+    const scrollNeeded = matchCount > 3;
+    // Slower than leaderboard (2.8s per match vs 1.5s per row), min 20s
+    const recentMatchesDuration = scrollNeeded ? Math.max(25000, matchCount * 2800) : 20000;
+    slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
   }
   
   // Slides for Promo
@@ -290,67 +294,80 @@ export default function TVSlideshow({ data }: { data: any }) {
           )}
 
           {/* RECENT MATCHES SLIDE */}
-          {currentSlide.type === "recent_matches" && (
-            <div className="flex flex-col items-center justify-center w-full h-full relative z-10 px-12">
-              <h2 className="text-5xl font-black uppercase tracking-widest text-white mb-12 flex items-center gap-6 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)]">
-                <span className="relative flex h-6 w-6">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-6 w-6 bg-rose-600"></span>
-                </span>
-                Ultime Sfide
-              </h2>
-              
-              <div className="relative w-full max-w-5xl mx-auto flex flex-col gap-6 before:absolute before:inset-y-0 before:left-1/3 before:-ml-[1.5px] before:w-[3px] before:bg-slate-800/80">
-                {data.recentFreeMatches.map((m: any) => {
-                  const date = new Date(m.playedAt);
-                  const isToday = new Date().toDateString() === date.toDateString();
-                  const timeLabel = isToday 
-                    ? `Oggi, ${date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`
-                    : date.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+          {currentSlide.type === "recent_matches" && (() => {
+            const scrollNeeded = currentSlide.scrollNeeded ?? (data.recentFreeMatches.length > 3);
+            const durationSec = (currentSlide.duration || 25000) / 1000;
 
-                  const teamAWon = m.winnerTeamId === m.teamAId;
-                  const winner = teamAWon ? m.teamA : m.teamB;
-                  const loser = teamAWon ? m.teamB : m.teamA;
-                  const scoreW = teamAWon ? m.scoreTeamA : m.scoreTeamB;
-                  const scoreL = teamAWon ? m.scoreTeamB : m.scoreTeamA;
+            return (
+              <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-12">
+                <h2 className="text-5xl font-black uppercase tracking-widest text-white mb-8 flex items-center gap-6 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)] shrink-0">
+                  <span className="relative flex h-6 w-6">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-6 w-6 bg-rose-600"></span>
+                  </span>
+                  Ultime Sfide Libere
+                </h2>
+                
+                <div className="flex-1 w-full max-w-5xl mx-auto overflow-hidden relative mask-edges flex justify-center">
+                  <div 
+                    className={`w-full flex flex-col gap-6 relative before:absolute before:inset-y-0 before:left-1/3 before:-ml-[1.5px] before:w-[3px] before:bg-slate-800/80 ${
+                      scrollNeeded ? 'animate-scroll-matches' : 'my-auto'
+                    }`}
+                    style={scrollNeeded ? { animationDuration: `${durationSec}s` } : undefined}
+                  >
+                    {data.recentFreeMatches.map((m: any) => {
+                      const date = new Date(m.playedAt);
+                      const isToday = new Date().toDateString() === date.toDateString();
+                      const timeLabel = isToday 
+                        ? `Oggi, ${date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`
+                        : date.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-                  return (
-                  <div key={m.id} className="relative flex items-center gap-10 w-full">
-                    {/* LEFT: TIME */}
-                    <div className="w-1/3 text-right shrink-0 pr-10">
-                      <div className="text-2xl font-bold text-slate-300 uppercase tracking-widest">{timeLabel}</div>
-                      {isToday && <div className="text-emerald-500 text-sm font-black uppercase mt-1 tracking-widest">Recente</div>}
-                    </div>
-                    
-                    {/* CENTER: NODE */}
-                    <div className="absolute left-1/3 -ml-[10px] w-5 h-5 rounded-full bg-slate-950 border-[4px] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10" />
+                      const teamAWon = m.winnerTeamId === m.teamAId;
+                      const winner = teamAWon ? m.teamA : m.teamB;
+                      const loser = teamAWon ? m.teamB : m.teamA;
+                      const scoreW = teamAWon ? m.scoreTeamA : m.scoreTeamB;
+                      const scoreL = teamAWon ? m.scoreTeamB : m.scoreTeamA;
 
-                    {/* RIGHT: CARD */}
-                    <div className="flex-1 bg-slate-900/90 border border-slate-700 p-6 rounded-3xl shadow-xl backdrop-blur-sm flex flex-col gap-4">
-                      <div className="flex justify-between items-center text-3xl">
-                        <div className="font-bold text-white flex items-center gap-4 leading-tight">
-                          <Trophy className="w-8 h-8 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
-                          <span>
-                            {winner?.player1?.name} <span className="text-slate-500 text-xl mx-1">&</span> {winner?.player2?.name}
-                          </span>
+                      return (
+                        <div key={m.id} className="relative flex items-center gap-10 w-full shrink-0">
+                          {/* LEFT: TIME */}
+                          <div className="w-1/3 text-right shrink-0 pr-10">
+                            <div className="text-2xl font-bold text-slate-300 uppercase tracking-widest">{timeLabel}</div>
+                            {isToday && <div className="text-emerald-500 text-sm font-black uppercase mt-1 tracking-widest">Recente</div>}
+                          </div>
+                          
+                          {/* CENTER: NODE */}
+                          <div className="absolute left-1/3 -ml-[10px] w-5 h-5 rounded-full bg-slate-950 border-[4px] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10" />
+
+                          {/* RIGHT: CARD */}
+                          <div className="flex-1 bg-slate-900/90 border border-slate-700 p-6 rounded-3xl shadow-xl backdrop-blur-sm flex flex-col gap-4">
+                            <div className="flex justify-between items-center text-3xl">
+                              <div className="font-bold text-white flex items-center gap-4 leading-tight">
+                                <Trophy className="w-8 h-8 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
+                                <span>
+                                  {winner?.player1?.name} <span className="text-slate-500 text-xl mx-1">&</span> {winner?.player2?.name}
+                                </span>
+                              </div>
+                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-4 py-1 rounded-xl">{scoreW}</div>
+                            </div>
+                            
+                            <div className="flex justify-between items-center text-2xl">
+                              <div className="font-bold text-slate-500 flex items-center gap-4 pl-12 leading-tight">
+                                <span>
+                                  {loser?.player1?.name} <span className="text-slate-700 text-lg mx-1">&</span> {loser?.player2?.name}
+                                </span>
+                              </div>
+                              <div className="font-black text-slate-600 bg-slate-950 px-4 py-1 rounded-xl border border-slate-800">{scoreL}</div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="font-black text-emerald-400 bg-emerald-500/10 px-4 py-1 rounded-xl">{scoreW}</div>
-                      </div>
-                      
-                      <div className="flex justify-between items-center text-2xl">
-                        <div className="font-bold text-slate-500 flex items-center gap-4 pl-12 leading-tight">
-                          <span>
-                            {loser?.player1?.name} <span className="text-slate-700 text-lg mx-1">&</span> {loser?.player2?.name}
-                          </span>
-                        </div>
-                        <div className="font-black text-slate-600 bg-slate-950 px-4 py-1 rounded-xl border border-slate-800">{scoreL}</div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
-                )})}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* PROMO SLIDE */}
           {currentSlide.type === "promo" && (() => {
@@ -890,6 +907,17 @@ export default function TVSlideshow({ data }: { data: any }) {
         .mask-edges {
           mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
           -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+        }
+        @keyframes scrollMatches {
+          0% { transform: translateY(0); }
+          15% { transform: translateY(0); }
+          85% { transform: translateY(calc(-100% + 62vh)); }
+          100% { transform: translateY(calc(-100% + 62vh)); }
+        }
+        .animate-scroll-matches {
+          animation-name: scrollMatches;
+          animation-timing-function: linear;
+          animation-fill-mode: forwards;
         }
       `}} />
     </div>

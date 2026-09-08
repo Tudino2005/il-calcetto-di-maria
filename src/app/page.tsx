@@ -36,7 +36,7 @@ export default async function TVHomePage() {
   const recentFreeMatches = await prisma.match.findMany({
     where: { tournamentId: null, winnerTeamId: { not: null } },
     orderBy: { playedAt: 'desc' },
-    take: 6,
+    take: 15,
     include: {
       teamA: { include: { player1: true, player2: true } },
       teamB: { include: { player1: true, player2: true } }
