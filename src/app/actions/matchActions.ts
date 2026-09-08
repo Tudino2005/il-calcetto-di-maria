@@ -76,6 +76,36 @@ export async function updateMatchScore(matchId: string, team: "A" | "B", action:
   return updatedMatch;
 }
 
+export async function updateExactMatchScore(
+  matchId: string,
+  scoreA: number,
+  scoreB: number,
+  winnerTeamId: string | null = null
+) {
+  const match = await prisma.match.findUnique({ where: { id: matchId } });
+  if (!match) return null;
+
+  const updatedMatch = await prisma.match.update({
+    where: { id: matchId },
+    data: { scoreTeamA: scoreA, scoreTeamB: scoreB, winnerTeamId },
+    include: {
+      teamA: { include: { player1: true, player2: true } },
+      teamB: { include: { player1: true, player2: true } },
+    }
+  });
+
+  if (winnerTeamId && updatedMatch.tournamentId) {
+    await advanceTournament(updatedMatch.tournamentId, updatedMatch.id, winnerTeamId, updatedMatch.bracketType);
+  }
+
+  revalidatePath("/");
+  revalidatePath(`/match/${matchId}`);
+  if (updatedMatch.tournamentId) {
+    revalidatePath(`/tournaments/${updatedMatch.tournamentId}`);
+  }
+  return updatedMatch;
+}
+
 export async function scheduleMatch(matchId: string, scheduledAt: Date) {
   const match = await prisma.match.update({
     where: { id: matchId },
