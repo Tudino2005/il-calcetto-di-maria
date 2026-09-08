@@ -169,36 +169,36 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
               const isMid = winRateNum >= 40 && winRateNum < 60;
 
               return (
-                <div key={partner.id} className="bg-slate-800/90 border border-slate-700 hover:border-purple-500/50 transition-all p-5 rounded-2xl shadow-lg flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
+                <div key={partner.id} className="bg-slate-800/90 border border-slate-700 hover:border-purple-500/50 transition-all p-5 rounded-2xl shadow-lg flex flex-col justify-between gap-4">
+                  <div className="flex items-center gap-3.5">
                     <div className="w-12 h-12 bg-slate-700/80 rounded-full flex items-center justify-center shrink-0">
                       <RoleIcon role={partner.preferredRole || "entrambi"} className="w-6 h-6" />
                     </div>
-                    <div className="min-w-0">
-                      <Link href={`/players/${partner.id}`} className="text-lg font-black text-white hover:text-purple-400 transition-colors truncate block">
+                    <div className="min-w-0 flex-1">
+                      <Link href={`/players/${partner.id}`} className="text-xl font-black text-white hover:text-purple-400 transition-colors block leading-snug">
                         {partner.name}
                       </Link>
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mt-0.5">
                         {partner.preferredRole || "Giocatore"}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 md:gap-4 shrink-0 text-right">
+                  <div className="grid grid-cols-4 gap-2 pt-3 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
                     <div>
-                      <div className="text-[11px] text-purple-400 font-bold uppercase tracking-wider">Classifica</div>
+                      <div className="text-[10px] sm:text-[11px] text-purple-400 font-bold uppercase tracking-wider">Classifica</div>
                       <div className="text-lg font-black text-purple-400">{partnerRank ? `${partnerRank}°` : "-"}</div>
                     </div>
                     <div>
-                      <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Giocate</div>
+                      <div className="text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">Giocate</div>
                       <div className="text-lg font-black text-white">{played}</div>
                     </div>
                     <div>
-                      <div className="text-[11px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
+                      <div className="text-[10px] sm:text-[11px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
                       <div className="text-lg font-black text-emerald-400">{wins}</div>
                     </div>
-                    <div className="min-w-[65px]">
-                      <div className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">Win Rate</div>
+                    <div>
+                      <div className="text-[10px] sm:text-[11px] text-yellow-500 font-bold uppercase tracking-wider">Win Rate</div>
                       <div className={`text-lg font-black ${
                         isHigh ? 'text-emerald-400' : isMid ? 'text-yellow-400' : 'text-slate-300'
                       }`}>

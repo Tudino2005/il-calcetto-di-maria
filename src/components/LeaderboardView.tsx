@@ -71,8 +71,8 @@ export default function LeaderboardView({ playerStats, teamStats }: { playerStat
                     {teamStats.findIndex(orig => orig.id === t.id) + 1}
                   </span>
                   <div>
-                    <h3 className="font-bold text-lg text-white truncate max-w-[150px]">{t.player1.name}</h3>
-                    <h3 className="font-bold text-lg text-white truncate max-w-[150px]">{t.player2.name}</h3>
+                    <h3 className="font-bold text-lg text-white">{t.player1.name}</h3>
+                    <h3 className="font-bold text-lg text-white">{t.player2.name}</h3>
                   </div>
                 </div>
                 <div className="text-right">
