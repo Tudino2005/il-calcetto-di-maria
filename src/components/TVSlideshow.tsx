@@ -800,29 +800,68 @@ export default function TVSlideshow({ data }: { data: any }) {
           {/* HALL OF FAME SLIDE */}
           {currentSlide.type === "hall_of_fame" && (
             <div className="flex flex-col items-center w-full">
-              <Crown className="w-20 h-20 text-yellow-500 mb-8 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]" />
-              <h2 className="text-6xl font-black uppercase tracking-widest text-yellow-400 mb-16">
-                Albo d'Oro
+              <Crown className="w-20 h-20 text-yellow-500 mb-6 drop-shadow-[0_0_20px_rgba(250,204,21,0.6)] animate-pulse" />
+              <h2 className="text-6xl font-black uppercase tracking-widest text-yellow-400 mb-14 drop-shadow-lg">
+                Albo d'Oro Tornei
               </h2>
               
-              <div className="flex flex-col gap-6 w-full max-w-5xl">
-                {completedTournaments.slice(0, 5).map((t: any) => (
-                  <div key={t.id} className="flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-800 border-2 border-yellow-500/20 p-8 rounded-3xl shadow-xl">
-                    <div className="flex items-center gap-6">
-                      <Trophy className="w-12 h-12 text-yellow-500" />
-                      <div className="text-left">
-                        <div className="text-3xl font-bold text-white mb-2">{t.name}</div>
-                        <div className="text-lg text-slate-400">{new Date(t.createdAt).toLocaleDateString('it-IT')}</div>
+              <div className="flex flex-col gap-6 w-full max-w-6xl">
+                {completedTournaments.slice(0, 5).map((t: any) => {
+                  const formatLabel = t.format === "eliminazione_diretta" 
+                    ? "Eliminazione Diretta" 
+                    : t.format === "doppia_eliminazione" 
+                    ? "Doppia Eliminazione" 
+                    : "Gironi + Playoff";
+                  
+                  const typeLabel = t.type === "sorteggio_ruoli" 
+                    ? "Sorteggio Ruoli" 
+                    : t.type === "sorteggio_integrale" 
+                    ? "Sorteggio Integrale" 
+                    : "Coppie Fisse";
+
+                  const winnerTeamName = t.teamNames && t.winnerTeamId && t.teamNames[t.winnerTeamId] 
+                    ? t.teamNames[t.winnerTeamId] 
+                    : null;
+
+                  return (
+                    <div key={t.id} className="flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 border-2 border-yellow-500/30 p-7 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                      <div className="flex items-center gap-6">
+                        <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-2xl shrink-0">
+                          <Trophy className="w-12 h-12 text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
+                        </div>
+                        <div className="text-left">
+                          <div className="text-3xl font-black text-white mb-2">{t.name}</div>
+                          <div className="flex items-center gap-3 text-sm font-bold flex-wrap">
+                            <span className="text-slate-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                              <Calendar className="w-4 h-4 text-slate-500" />
+                              {new Date(t.createdAt).toLocaleDateString('it-IT')}
+                            </span>
+                            <span className="px-3 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-lg text-xs uppercase tracking-wider">
+                              {formatLabel}
+                            </span>
+                            <span className="px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-lg text-xs uppercase tracking-wider">
+                              {typeLabel}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-right shrink-0">
+                        <div className="text-xs text-yellow-500 font-bold uppercase tracking-widest mb-1 flex items-center justify-end gap-1.5">
+                          <Crown className="w-4 h-4 text-yellow-500" /> Campioni
+                        </div>
+                        {winnerTeamName && (
+                          <div className="text-base font-black text-emerald-400 uppercase tracking-widest mb-1">
+                            "{winnerTeamName}"
+                          </div>
+                        )}
+                        <div className="text-3xl font-black text-white">
+                          {t.winnerTeam?.player1?.name || "Campione 1"} <span className="text-slate-500 mx-2">&</span> {t.winnerTeam?.player2?.name || "Campione 2"}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm text-yellow-500 font-bold uppercase tracking-widest mb-2">Campioni</div>
-                      <div className="text-3xl font-black text-white">
-                        {t.winnerTeam?.player1?.name || "Campione 1"} <span className="text-slate-500 mx-2">&</span> {t.winnerTeam?.player2?.name || "Campione 2"}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
