@@ -6,6 +6,24 @@ import { finishDrawAnimation } from "@/app/actions/tournamentActions";
 import { useRouter } from "next/navigation";
 import RoleIcon from "./RoleIcon";
 
+const fadeOutAudio = (audio: HTMLAudioElement, duration: number = 2000) => {
+  const steps = 20;
+  const stepTime = duration / steps;
+  let currentVolume = audio.volume;
+  const volumeStep = currentVolume / steps;
+  
+  const fadeInterval = setInterval(() => {
+    if (currentVolume > volumeStep) {
+      currentVolume -= volumeStep;
+      audio.volume = currentVolume;
+    } else {
+      audio.volume = 0;
+      audio.pause();
+      clearInterval(fadeInterval);
+    }
+  }, stepTime);
+};
+
 export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const router = useRouter();
   const [teams, setTeams] = useState<any[]>([]);
@@ -103,18 +121,19 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const startIntro = () => {
     setIntroState("playing_intro");
     if (audioRef.current) {
-       // Assuming the chorus starts at 55 seconds as an example.
-       // The user didn't specify, so we start at 0 or let them adjust it.
+       audioRef.current.volume = 1; // Reset volume
        audioRef.current.currentTime = 55; // Change this to the exact second the chorus starts
        audioRef.current.play().catch(e => console.error("Audio autoplay failed:", e));
+       
+       // Start fade out at 8 seconds
+       setTimeout(() => {
+          if (audioRef.current) fadeOutAudio(audioRef.current, 2000);
+       }, 8000);
     }
     
     // 10 second animation duration
     setTimeout(() => {
        setIntroState("slot_machine");
-       if (audioRef.current) {
-          audioRef.current.pause();
-       }
     }, 10000);
   };
 
@@ -124,16 +143,20 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       // Browsers will likely block this unless user interacted with the page earlier
       const attemptPlay = async () => {
         if (audioRef.current) {
+          audioRef.current.volume = 1;
           audioRef.current.currentTime = 55; // default start time
           try {
             await audioRef.current.play();
             // Autoplay succeeded!
             setIntroState("playing_intro");
+            
+            // Start fade out at 8 seconds
+            setTimeout(() => {
+              if (audioRef.current) fadeOutAudio(audioRef.current, 2000);
+            }, 8000);
+            
             setTimeout(() => {
                setIntroState("slot_machine");
-               if (audioRef.current) {
-                  audioRef.current.pause();
-               }
             }, 10000);
           } catch (err) {
             // Autoplay blocked, wait for user click
