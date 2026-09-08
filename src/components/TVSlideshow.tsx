@@ -21,8 +21,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   if (data.recentFreeMatches && data.recentFreeMatches.length > 0) {
     const matchCount = data.recentFreeMatches.length;
     const scrollNeeded = matchCount > 3;
-    // 1.5s per match, min 15s
-    const recentMatchesDuration = scrollNeeded ? Math.max(15000, matchCount * 1500) : 15000;
+    // 1.1s per match, min 12s
+    const recentMatchesDuration = scrollNeeded ? Math.max(12000, matchCount * 1100) : 12000;
     slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
   }
   
@@ -296,7 +296,7 @@ export default function TVSlideshow({ data }: { data: any }) {
           {/* RECENT MATCHES SLIDE */}
           {currentSlide.type === "recent_matches" && (() => {
             const scrollNeeded = currentSlide.scrollNeeded ?? (data.recentFreeMatches.length > 3);
-            const durationSec = (currentSlide.duration || 15000) / 1000;
+            const durationSec = (currentSlide.duration || 12000) / 1000;
 
             return (
               <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-12">
