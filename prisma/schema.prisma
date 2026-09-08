@@ -97,6 +97,7 @@ model Tournament {
   registrations  TournamentRegistration[]
   winnerTeamId   String?
   bracketData    String?
+  teamNames      Json?
   createdAt      DateTime                 @default(now())
 
   winnerTeam Team?             @relation("TournamentWinner", fields: [winnerTeamId], references: [id])

@@ -151,6 +151,8 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
     );
   }
 
+  const teamNamesMap = generateTeamNames(createdTeams);
+
   if (format === "gironi_eliminazione") {
     const teamsPerGroup = config?.teamsPerGroup || 4;
     const shuffled = [...createdTeams].sort(() => Math.random() - 0.5);
@@ -200,7 +202,8 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
       where: { id: tournament.id },
       data: { 
         status: type === "coppie_fisse" ? "in_progress" : "drawing",
-        bracketData: JSON.stringify({ wbRounds: [createdMatchIds], lbRounds: [] }) 
+        bracketData: JSON.stringify({ wbRounds: [createdMatchIds], lbRounds: [] }),
+        teamNames: teamNamesMap
       }
     });
     if (type === "sorteggio_ruoli") {
@@ -224,7 +227,8 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
       where: { id: tournament.id },
       data: { 
         status: type === "coppie_fisse" ? "in_progress" : "drawing",
-        bracketData: JSON.stringify({ rounds: [createdMatchIds] }) 
+        bracketData: JSON.stringify({ rounds: [createdMatchIds] }),
+        teamNames: teamNamesMap
       }
     });
     if (type === "sorteggio_ruoli") {
@@ -237,7 +241,10 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
 
   await prisma.tournament.update({
     where: { id: tournament.id },
-    data: { status: type === "coppie_fisse" ? "in_progress" : "drawing" }
+    data: { 
+      status: type === "coppie_fisse" ? "in_progress" : "drawing",
+      teamNames: teamNamesMap 
+    }
   });
   
   if (type === "sorteggio_ruoli") {
