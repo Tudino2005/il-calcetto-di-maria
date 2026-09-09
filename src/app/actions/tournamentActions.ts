@@ -77,14 +77,71 @@ export async function removePlayerFromTournament(tournamentId: string, playerId:
   revalidatePath(`/tournaments/${tournamentId}`);
 }
 
-const IRONIC_NAMES = [
-  "I Cinghiali Zoppi", "I Bradipi Sprint", "I Piedi Storti", "I Pali della Luce", 
-  "I Ferri da Stiro", "I Pinguini Sudati", "Le Aquile Cecate", "I Cani Sciolti", 
-  "Gli Imbucati", "I Bomber Mancati", "I Disperati", "I Fuoriclasse (a tavola)",
-  "I Caciocavalli", "I Tritacarne", "Gli Scappati di Casa", "I Birraioli",
-  "I Sempre Al Bar", "Quelli del Campetto", "I Panza e Presenza", "I Galattici (di periferia)",
-  "I Tiratori Scelti (bendati)", "I Maghi del Liscio", "Gli Irriducibili (al bar)"
+const COCKTAIL_AND_BEER_NAMES = [
+  // Cocktail Classici & Pestati
+  "I Negroni Sbagliati",
+  "I Mojito Pestati",
+  "I Gin Tonic",
+  "Gli Spritz Aperol",
+  "Gli Spritz Campari",
+  "I Campari Soda",
+  "I Cuba Libre",
+  "I Moscow Mule",
+  "I Long Island",
+  "I Margarita col Sale",
+  "I Daiquiri Ghiacciati",
+  "I Caipirinha Tropicali",
+  "I Bloody Mary",
+  "I Black Russian",
+  "I White Russian",
+  "Gli Old Fashioned",
+  "I Manhattan Decisi",
+  "I Piña Colada",
+  "I Sex on the Beach",
+  "I Tequila Sunrise",
+  "I Bellini Frizzanti",
+  "Gli Hugo Freschi",
+  "I Gin Lemon",
+  "I Vodka RedBull",
+  "I B-52 Incendiari",
+
+  // Birre & Mastri Birrai
+  "Le Bionde Doppio Malto",
+  "Le IPA Luppolate",
+  "Le Weizen Torbide",
+  "Le Stout Cariche",
+  "Le Pilsner Ghiacciate",
+  "Le Blanche Speziate",
+  "Le Bock Rosse",
+  "I Mastri Birrai",
+  "Le Trappiste d'Abbazia",
+  "I Boccali Spumeggianti",
+  "Le Bionde Senza Filtro",
+  "I Fusti a Caduta",
+  "Le Rosse d'Irlanda",
+  "Le Lager alla Spina",
+
+  // Amari, Liquori & Shot
+  "Gli Amari del Capo",
+  "I Grappini Corretti",
+  "I Sambuca con la Mosca",
+  "I Montenegro & Ghiaccio",
+  "Gli Jägermeister Ghiacciati",
+  "I Rum & Pera",
+  "I Limoncelli Fatti in Casa",
+  "I Tequila & Sale",
+  "I Chupito Assassini",
+  "I Whiskey Torbati",
+  "Gli Assenzio Maledetti",
+  "I Cynar da Bar",
+  "I Braulio Alpini",
+  "I Fernet della Notte",
+  "I Mirto di Sardegna",
+  "I Sambuca Flambé",
+  "Gli Amari Lucani"
 ];
+
+const IRONIC_NAMES = COCKTAIL_AND_BEER_NAMES;
 
 function generateTeamNames(teams: any[]) {
   const shuffledNames = [...IRONIC_NAMES].sort(() => Math.random() - 0.5);
