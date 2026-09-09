@@ -126,33 +126,49 @@ export async function updateExactMatchScore(
   winnerTeamId: string | null = null,
   setScores?: any
 ) {
-  const match = await prisma.match.findUnique({ where: { id: matchId } });
-  if (!match) return null;
+  try {
+    console.log("UPDATE_EXACT_MATCH_SCORE CALLED:", { matchId, scoreA, scoreB, winnerTeamId, setScores });
+    const match = await prisma.match.findUnique({ where: { id: matchId } });
+    if (!match) return null;
 
-  const data: any = { scoreTeamA: scoreA, scoreTeamB: scoreB, winnerTeamId };
-  if (setScores !== undefined) {
-    data.setScores = setScores;
-  }
-
-  const updatedMatch = await prisma.match.update({
-    where: { id: matchId },
-    data,
-    include: {
-      teamA: { include: { player1: true, player2: true } },
-      teamB: { include: { player1: true, player2: true } },
+    const data: any = { scoreTeamA: scoreA, scoreTeamB: scoreB, winnerTeamId };
+    if (setScores !== undefined) {
+      // Stringify to ensure absolute safety with Prisma Json fields 
+      // over Next.js Server Action boundaries.
+      data.setScores = setScores !== null ? JSON.stringify(setScores) : null; 
     }
-  });
 
-  if (winnerTeamId && updatedMatch.tournamentId) {
-    await advanceTournament(updatedMatch.tournamentId, updatedMatch.id, winnerTeamId, updatedMatch.bracketType);
-  }
+    console.log("UPDATING MATCH WITH DATA:", data);
 
-  revalidatePath("/");
-  revalidatePath(`/match/${matchId}`);
-  if (updatedMatch.tournamentId) {
-    revalidatePath(`/tournaments/${updatedMatch.tournamentId}`);
+    const updatedMatch = await prisma.match.update({
+      where: { id: matchId },
+      data,
+      include: {
+        teamA: { include: { player1: true, player2: true } },
+        teamB: { include: { player1: true, player2: true } },
+      }
+    });
+
+    console.log("MATCH UPDATED SUCESSFULLY", updatedMatch.id);
+
+    if (winnerTeamId && updatedMatch.tournamentId) {
+      console.log("ADVANCING TOURNAMENT...");
+      await advanceTournament(updatedMatch.tournamentId, updatedMatch.id, winnerTeamId, updatedMatch.bracketType);
+    }
+
+    console.log("REVALIDATING PATHS...");
+    revalidatePath("/");
+    revalidatePath(`/match/${matchId}`);
+    if (updatedMatch.tournamentId) {
+      revalidatePath(`/tournaments/${updatedMatch.tournamentId}`);
+    }
+    
+    console.log("UPDATE_EXACT_MATCH_SCORE SUCCESS");
+    return updatedMatch;
+  } catch (err: any) {
+    console.error("🔥 ERROR IN updateExactMatchScore:", err);
+    throw err; // Re-throw so the error boundary catches it, but now we have logs
   }
-  return updatedMatch;
 }
 
 export async function scheduleMatch(matchId: string, scheduledAt: Date) {
