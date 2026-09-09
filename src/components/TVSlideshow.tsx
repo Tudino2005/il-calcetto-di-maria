@@ -233,8 +233,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
                         {topTeams.map((tt: any, idx: number) => (
                            <div key={tt.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
-                             <div className="text-3xl font-black text-white leading-tight">{tt.player1.name}</div>
-                             <div className="text-3xl font-black text-white leading-tight">{tt.player2.name}</div>
+                             <div className="text-3xl font-black text-white leading-tight">{tt.player1?.name || "Giocatore 1"}</div>
+                             <div className="text-3xl font-black text-white leading-tight">{tt.player2?.name || "Giocatore 2"}</div>
                            </div>
                         ))}
                       </div>
@@ -258,7 +258,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000}s` }}>
                     {teamStats.slice(teamStats.filter((t: any) => t.winRate === teamStats[0]?.winRate && t.wins === teamStats[0]?.wins && t.played === teamStats[0]?.played).length).map((t: any, i: number) => {
-                      const rank = i + 1 + playerStats.filter((ps: any) => ps.winRate === playerStats[0]?.winRate && ps.wins === playerStats[0]?.wins && ps.played === playerStats[0]?.played).length;
+                      const rank = i + 1 + teamStats.filter((ts: any) => ts.winRate === teamStats[0]?.winRate && ts.wins === teamStats[0]?.wins && ts.played === teamStats[0]?.played).length;
                       return (
                       <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0">
@@ -271,8 +271,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                             {rank}
                           </div>
                           <div className="flex flex-col min-w-0">
-                            <div className="text-xl font-bold text-white truncate leading-tight">{t.player1.name}</div>
-                            <div className="text-xl font-bold text-white truncate leading-tight">{t.player2.name}</div>
+                            <div className="text-xl font-bold text-white truncate leading-tight">{t.player1?.name || "Giocatore 1"}</div>
+                            <div className="text-xl font-bold text-white truncate leading-tight">{t.player2?.name || "Giocatore 2"}</div>
                           </div>
                         </div>
                         
@@ -317,11 +317,14 @@ export default function TVSlideshow({ data }: { data: any }) {
                     style={scrollNeeded ? { animationDuration: `${durationSec}s` } : undefined}
                   >
                     {data.recentFreeMatches.map((m: any) => {
-                      const date = new Date(m.playedAt);
-                      const isToday = new Date().toDateString() === date.toDateString();
-                      const timeLabel = isToday 
-                        ? `Oggi, ${date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`
-                        : date.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                      const date = m.playedAt ? new Date(m.playedAt) : new Date();
+                      const isValidDate = !isNaN(date.getTime());
+                      const isToday = isValidDate && new Date().toDateString() === date.toDateString();
+                      const timeLabel = isValidDate 
+                        ? (isToday 
+                            ? `Oggi, ${date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`
+                            : date.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }))
+                        : "Recente";
 
                       const teamAWon = m.winnerTeamId === m.teamAId;
                       const winner = teamAWon ? m.teamA : m.teamB;
@@ -346,7 +349,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="font-bold text-white flex items-center gap-4 leading-tight">
                                 <Trophy className="w-8 h-8 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
                                 <span>
-                                  {winner?.player1?.name} <span className="text-slate-500 text-xl mx-1">&</span> {winner?.player2?.name}
+                                  {winner?.player1?.name || "G1"} <span className="text-slate-500 text-xl mx-1">&</span> {winner?.player2?.name || "G2"}
                                 </span>
                               </div>
                               <div className="font-black text-emerald-400 bg-emerald-500/10 px-4 py-1 rounded-xl">{scoreW}</div>
@@ -355,7 +358,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                             <div className="flex justify-between items-center text-2xl">
                               <div className="font-bold text-slate-500 flex items-center gap-4 pl-12 leading-tight">
                                 <span>
-                                  {loser?.player1?.name} <span className="text-slate-700 text-lg mx-1">&</span> {loser?.player2?.name}
+                                  {loser?.player1?.name || "G1"} <span className="text-slate-700 text-lg mx-1">&</span> {loser?.player2?.name || "G2"}
                                 </span>
                               </div>
                               <div className="font-black text-slate-600 bg-slate-950 px-4 py-1 rounded-xl border border-slate-800">{scoreL}</div>

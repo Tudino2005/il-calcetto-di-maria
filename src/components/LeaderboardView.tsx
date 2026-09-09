@@ -12,8 +12,8 @@ export default function LeaderboardView({ playerStats, teamStats }: { playerStat
   const filteredPlayers = playerStats.filter(p => p.name.toLowerCase().includes(query));
   
   const filteredTeams = teamStats.filter(t => 
-    t.player1.name.toLowerCase().includes(query) || 
-    t.player2.name.toLowerCase().includes(query)
+    (t.player1?.name?.toLowerCase() || "").includes(query) || 
+    (t.player2?.name?.toLowerCase() || "").includes(query)
   );
 
   return (
@@ -71,8 +71,8 @@ export default function LeaderboardView({ playerStats, teamStats }: { playerStat
                     {teamStats.findIndex(orig => orig.id === t.id) + 1}
                   </span>
                   <div>
-                    <h3 className="font-bold text-lg text-white">{t.player1.name}</h3>
-                    <h3 className="font-bold text-lg text-white">{t.player2.name}</h3>
+                    <h3 className="font-bold text-lg text-white leading-tight">{t.player1?.name || "Giocatore 1"}</h3>
+                    <h3 className="font-bold text-lg text-white leading-tight">{t.player2?.name || "Giocatore 2"}</h3>
                   </div>
                 </div>
                 <div className="text-right">

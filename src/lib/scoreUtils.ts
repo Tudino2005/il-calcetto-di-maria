@@ -14,11 +14,23 @@ export function formatSetScores(setScores: any): string | null {
     try {
       const parsed = JSON.parse(setScores);
       if (Array.isArray(parsed)) arr = parsed;
-      else return setScores;
+      else return String(setScores);
     } catch {
-      return setScores;
+      return String(setScores);
     }
+  } else if (typeof setScores === "object") {
+    if (Array.isArray((setScores as any).rounds)) return null;
+    return null;
   }
-  if (arr.length === 0) return null;
-  return arr.map(s => `${s.scoreA}-${s.scoreB}`).join(", ");
+  if (!arr || arr.length === 0) return null;
+  const formatted = arr
+    .map(s => {
+      if (!s) return null;
+      if (typeof s === "object" && ("scoreA" in s || "scoreB" in s)) {
+        return `${s.scoreA ?? 0}-${s.scoreB ?? 0}`;
+      }
+      return String(s);
+    })
+    .filter(Boolean);
+  return formatted.length > 0 ? formatted.join(", ") : null;
 }

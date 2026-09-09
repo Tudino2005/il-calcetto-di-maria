@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Trophy, Zap, RotateCcw, Settings, Check, ChevronRight, Play, ArrowLeftRight } from "lucide-react";
 import clsx from "clsx";
 import { resolveTeamRoles } from "@/lib/roleUtils";
+import { formatSetScores } from "@/lib/scoreUtils";
 
 type PlayerInfo = { id: string; name: string; preferredRole?: string };
 type TeamInfo = { id: string; player1: PlayerInfo; player2: PlayerInfo };
@@ -17,6 +18,7 @@ type MatchInfo = {
   tournamentId: string | null;
   teamA: TeamInfo | null;
   teamB: TeamInfo | null;
+  setScores?: any;
   teamA_goalkeeperId?: string | null;
   teamA_strikerId?: string | null;
   teamB_goalkeeperId?: string | null;
@@ -738,8 +740,8 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             teamAWon ? "text-red-500" : "text-blue-500"
           )}>
             {teamAWon 
-              ? `${match.teamA.player1.name} & ${match.teamA.player2.name}` 
-              : `${match.teamB.player1.name} & ${match.teamB.player2.name}`}
+              ? `${match.teamA?.player1?.name || "Giocatore 1"} & ${match.teamA?.player2?.name || "Giocatore 2"}` 
+              : `${match.teamB?.player1?.name || "Giocatore 1"} & ${match.teamB?.player2?.name || "Giocatore 2"}`}
           </div>
 
           <div className="bg-slate-900 border border-slate-700 px-8 py-5 rounded-3xl mb-8 text-center shadow-2xl max-w-md w-full">
@@ -747,27 +749,37 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
               Risultato Finale Set
             </span>
             <div className="text-5xl font-black text-white tracking-wider mb-4">
-              <span className={teamAWon ? "text-red-400" : "text-slate-400"}>{mode === "goals" ? setsWonA : match.scoreTeamA}</span>
+              <span className={teamAWon ? "text-red-400" : "text-slate-400"}>
+                {mode === "goals" ? (setsWonA || match.scoreTeamA) : match.scoreTeamA}
+              </span>
               <span className="text-slate-600 mx-3">-</span>
-              <span className={teamBWon ? "text-blue-400" : "text-slate-400"}>{mode === "goals" ? setsWonB : match.scoreTeamB}</span>
+              <span className={teamBWon ? "text-blue-400" : "text-slate-400"}>
+                {mode === "goals" ? (setsWonB || match.scoreTeamB) : match.scoreTeamB}
+              </span>
             </div>
 
             {/* Recap dei singoli set */}
-            {completedSets.length > 0 && (
+            {(completedSets.length > 0 || (match.setScores && formatSetScores(match.setScores))) && (
               <div className="border-t border-slate-800 pt-3 flex flex-col gap-2">
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Dettaglio Set Giocati:</span>
                 <div className="flex justify-center gap-2 flex-wrap">
-                  {completedSets.map((s) => (
-                    <span key={s.setNumber} className="px-3 py-1 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-slate-300">
-                      Set {s.setNumber}: <b className="text-white">{s.scoreA}-{s.scoreB}</b> {s.inAdvantages && "(Vantaggi)"}
+                  {completedSets.length > 0 ? (
+                    completedSets.map((s) => (
+                      <span key={s.setNumber} className="px-3 py-1 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-slate-300">
+                        Set {s.setNumber}: <b className="text-white">{s.scoreA}-{s.scoreB}</b> {s.inAdvantages && "(Vantaggi)"}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-emerald-400 font-black tracking-wider text-sm bg-slate-950 border border-slate-800 px-3 py-1 rounded-xl">
+                      {formatSetScores(match.setScores)}
                     </span>
-                  ))}
+                  )}
                 </div>
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap justify-center">
             <Link
               href={backLink}
               onClick={() => {
@@ -777,6 +789,17 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             >
               {backText}
             </Link>
+            {!match.tournamentId && (
+              <Link
+                href="/match"
+                onClick={() => {
+                  try { localStorage.removeItem(sessionStorageKey); } catch {}
+                }}
+                className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-black text-lg hover:scale-105 transition-transform shadow-xl"
+              >
+                Nuova Partita Libera
+              </Link>
+            )}
           </div>
         </div>
       )}
