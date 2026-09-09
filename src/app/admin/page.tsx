@@ -12,26 +12,26 @@ export default async function AdminHome() {
     orderBy: { createdAt: "asc" }
   });
   return (
-    <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full flex flex-col items-center justify-center min-h-screen">
-      <header className="mb-16 text-center">
+    <main className="flex-1 p-4 sm:p-8 xl:p-12 w-full flex flex-col items-center min-h-screen">
+      <header className="mb-12 text-center">
         <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-tight">
           IL CALCETTO DI MARIA
         </h1>
-        <p className="text-slate-400 mt-4 text-2xl font-medium uppercase tracking-widest">Pannello di Controllo</p>
+        <p className="text-slate-400 mt-3 text-2xl font-medium uppercase tracking-widest">Pannello di Controllo</p>
       </header>
 
       <GlobalInbox requests={pendingRequests} />
 
-      {/* MENU (4 PULSANTI) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+      {/* MENU */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mb-8">
         
-        <Link href="/tournaments/quick" className="group md:col-span-2 bg-slate-900 border-2 border-slate-700 hover:border-orange-500 hover:bg-slate-800 rounded-3xl p-8 flex flex-col items-center gap-4 transition-all shadow-xl text-center mb-4">
-          <div className="bg-orange-500/20 p-6 rounded-full group-hover:scale-110 transition-transform">
-            <Zap className="w-12 h-12 text-orange-500" />
+        <Link href="/tournaments/quick" className="group col-span-1 md:col-span-2 lg:col-span-4 bg-gradient-to-r from-slate-900 via-orange-950/20 to-slate-900 border-2 border-slate-700 hover:border-orange-500 hover:bg-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-center gap-6 transition-all shadow-xl text-center sm:text-left">
+          <div className="bg-orange-500/20 p-5 rounded-2xl group-hover:scale-110 transition-transform shrink-0">
+            <Zap className="w-10 h-10 text-orange-500" />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">Torneo Volante</h2>
-            <p className="text-slate-400 font-bold">Crea un torneo lampo in 1 click (Senza attesa)</p>
+            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-wider mb-1">Torneo Volante</h2>
+            <p className="text-slate-400 font-bold text-base sm:text-lg">Crea un torneo lampo in 1 click (Senza attesa)</p>
           </div>
         </Link>
 <Link href="/match" className="group bg-slate-900 border-2 border-slate-700 hover:border-blue-500 hover:bg-slate-800 rounded-3xl p-8 flex flex-col items-center gap-4 transition-all shadow-xl text-center">

@@ -8,11 +8,11 @@ export default function GlobalInbox({ requests }: { requests: any[] }) {
   if (!requests || requests.length === 0) return null;
 
   return (
-    <div className="mb-12 w-full max-w-4xl bg-purple-900/30 p-8 rounded-3xl border border-purple-500/50 shadow-xl shadow-purple-500/10">
+    <div className="mb-12 w-full bg-purple-900/30 p-8 rounded-3xl border border-purple-500/50 shadow-xl shadow-purple-500/10">
       <h2 className="text-2xl font-black text-white flex items-center justify-center gap-3 mb-6 uppercase tracking-widest">
         <Inbox className="w-8 h-8 text-purple-400" /> Inbox Iscrizioni ({requests.length})
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {requests.map((req: any) => (
           <div key={req.id} className="bg-slate-900 border border-slate-700 p-5 rounded-2xl flex flex-col justify-between gap-4">
             <div className="flex items-center gap-4">

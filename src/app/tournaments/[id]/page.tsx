@@ -35,7 +35,7 @@ export default async function TournamentPage({ params, searchParams }: { params:
   }
 
   return (
-    <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+    <main className="flex-1 p-4 sm:p-8 xl:p-12 w-full">
       <header className="flex items-center justify-between mb-8 bg-slate-900 p-6 rounded-3xl border border-slate-700">
         <div className="flex items-center gap-4">
           <Link href="/tournaments" className="p-3 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors">

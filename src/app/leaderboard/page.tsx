@@ -8,7 +8,7 @@ export default async function LeaderboardPage() {
   const { playerStats, teamStats } = await getLeaderboardData();
 
   return (
-    <main className="flex-1 p-8 max-w-6xl mx-auto w-full">
+    <main className="flex-1 p-4 sm:p-8 xl:p-12 w-full">
       <header className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <Link href="/admin" className="p-3 bg-slate-800 rounded-xl hover:bg-slate-700 transition">

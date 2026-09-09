@@ -106,7 +106,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
   }
 
   return (
-    <main className="flex-1 p-8 max-w-4xl mx-auto w-full">
+    <main className="flex-1 p-4 sm:p-8 xl:p-12 w-full">
       <header className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <Link href="/players" className="p-3 bg-slate-800 rounded-xl hover:bg-slate-700 transition">
@@ -294,7 +294,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
             Nessuna coppia registrata finora.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {partnerStats.map(({ partner, played, wins, winRate }) => {
               const partnerRank = playerRankMap.get(partner.id) || null;
               const winRateNum = Number(winRate);
@@ -350,7 +350,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         <Calendar className="w-6 h-6 text-blue-400" /> Storico Partite Giocate
       </h3>
 
-      <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {allMatches.length === 0 ? (
           <div className="bg-slate-800 p-8 rounded-3xl text-center text-slate-400">
             Nessuna partita giocata finora.

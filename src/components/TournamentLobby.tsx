@@ -111,7 +111,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
   const canStart = registeredCount >= 4 && (tournament.format === "gironi_eliminazione" || isPowerOfTwo);
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-5xl mx-auto">
+    <div className="flex flex-col gap-8 w-full">
       {/* BACK & PROMO BUTTONS */}
       <div className="flex justify-between items-center">
         <Link href="/tournaments" className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors font-bold">

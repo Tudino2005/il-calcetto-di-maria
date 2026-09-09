@@ -126,8 +126,8 @@ export default function TVSlideshow({ data }: { data: any }) {
         </div>
       </div>
 
-      <div key={cycleCount} className="flex-1 flex items-center justify-center pt-24 pb-8 px-12 relative z-10 w-full h-full">
-        <div className="w-full max-w-7xl animate-fade-in-up">
+      <div key={cycleCount} className="flex-1 flex items-center justify-center pt-24 pb-8 px-6 sm:px-10 xl:px-16 relative z-10 w-full h-full">
+        <div className="w-full h-full flex flex-col justify-center animate-fade-in-up">
           
           {/* LEADERBOARD SLIDE */}
           {currentSlide.type === "leaderboard" && (
@@ -567,16 +567,16 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* BRACKET GRID SLIDE */}
           {currentSlide.type === "bracket_grid" && (
-            <div className="flex flex-col items-center w-full h-full max-h-[80vh]">
-              <div className="inline-flex items-center gap-3 px-6 py-2 bg-purple-500/20 text-purple-400 rounded-full font-bold uppercase tracking-widest border border-purple-500/30 mb-8">
+            <div className="flex flex-col items-center w-full h-full max-h-[85vh]">
+              <div className="inline-flex items-center gap-3 px-6 py-2 bg-purple-500/20 text-purple-400 rounded-full font-bold uppercase tracking-widest border border-purple-500/30 mb-6">
                 <Swords className="w-5 h-5" /> Partite del Tabellone
               </div>
-              <h2 className="text-5xl font-black uppercase tracking-tight text-white mb-12">
+              <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tight text-white mb-8 text-center">
                 {currentSlide.tournament.name}
               </h2>
               
-              <div className="w-full max-w-7xl overflow-y-auto pr-4 custom-scrollbar pb-12">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="w-full overflow-y-auto px-2 custom-scrollbar pb-12">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 w-full">
                   {currentSlide.tournament.matches?.map((m: any) => {
                     const isFinished = !!m.winnerTeamId;
                     return (
@@ -655,7 +655,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 Turni {t.name}
               </h2>
               
-              <div className="flex gap-6 w-full max-w-7xl h-[65vh] overflow-x-auto overflow-y-hidden hidden-scrollbar items-start justify-center">
+              <div className="flex gap-6 w-full h-[65vh] overflow-x-auto overflow-y-hidden hidden-scrollbar items-start justify-center">
                  {rounds.map((round, rIndex) => {
                     let roundName = `Turno ${rIndex + 1}`;
                     if (t.format === 'eliminazione_diretta') {
@@ -725,7 +725,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 {formatName(currentSlide.tournament.format)}
               </p>
               
-              <div className="grid grid-cols-2 gap-8 w-full max-w-6xl">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                 {/* MATCHES IN CORSO O DA GIOCARE */}
                 <div className="bg-slate-900/80 p-8 rounded-[2rem] border-2 border-slate-800 shadow-2xl backdrop-blur-sm">
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
@@ -801,7 +801,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 Agenda {currentSlide.tournament.name}
               </h2>
               
-              <div className="bg-slate-900/80 p-8 rounded-[3rem] border-2 border-indigo-500/20 shadow-2xl backdrop-blur-sm w-full max-w-4xl">
+              <div className="bg-slate-900/80 p-8 rounded-[3rem] border-2 border-indigo-500/20 shadow-2xl backdrop-blur-sm w-full max-w-6xl">
                 <div className="flex flex-col gap-6">
                   {currentSlide.tournament.matches
                     ?.filter((m: any) => m.scheduledAt && !m.winnerTeamId)
@@ -841,7 +841,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 Albo d'Oro Tornei
               </h2>
               
-              <div className="flex flex-col gap-6 w-full max-w-6xl">
+              <div className="flex flex-col gap-6 w-full">
                 {completedTournaments.slice(0, 5).map((t: any) => {
                   const formatLabel = t.format === "eliminazione_diretta" 
                     ? "Eliminazione Diretta" 

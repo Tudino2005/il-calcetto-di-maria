@@ -110,7 +110,7 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
           <div className="flex flex-col gap-6">
             <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest mb-4">Partite del Tabellone - {tournament.name}</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
               {tournament.matches.map((m, idx) => {
                 const isFinished = !!m.winnerTeamId;
                 return (

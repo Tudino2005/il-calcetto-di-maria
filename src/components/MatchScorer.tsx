@@ -404,7 +404,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
   }
 
   return (
-    <div className="flex-1 flex flex-col p-3 md:p-6 relative max-w-7xl mx-auto w-full min-h-screen">
+    <div className="flex-1 flex flex-col p-3 sm:p-6 xl:p-8 relative w-full min-h-screen">
       {/* HEADER & NAV */}
       <header className="flex flex-wrap justify-between items-center gap-4 mb-4 pb-3 border-b border-slate-800">
         <div className="flex items-center gap-3">
