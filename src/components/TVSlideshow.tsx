@@ -647,15 +647,15 @@ export default function TVSlideshow({ data }: { data: any }) {
             }
 
             return (
-            <div className="flex flex-col items-center justify-center w-full h-full p-12">
+            <div className="flex flex-col items-center justify-center w-full h-full px-2 sm:px-6">
               <div className="inline-flex items-center gap-3 px-6 py-2 bg-pink-500/20 text-pink-400 rounded-full font-bold uppercase tracking-widest border border-pink-500/30 mb-4 animate-pulse">
                 Svolgimento Torneo
               </div>
-              <h2 className="text-5xl font-black uppercase tracking-tight text-white mb-10">
+              <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tight text-white mb-8 text-center">
                 Turni {t.name}
               </h2>
               
-              <div className="flex gap-6 w-full h-[65vh] overflow-x-auto overflow-y-hidden hidden-scrollbar items-start justify-center">
+              <div className="flex gap-6 lg:gap-8 w-full h-[72vh] items-stretch justify-center">
                  {rounds.map((round, rIndex) => {
                     let roundName = `Turno ${rIndex + 1}`;
                     if (t.format === 'eliminazione_diretta') {
@@ -665,18 +665,26 @@ export default function TVSlideshow({ data }: { data: any }) {
                     }
                     
                     return (
-                      <div key={rIndex} className="flex flex-col gap-4 min-w-[300px] h-full overflow-y-auto hidden-scrollbar pb-10">
+                      <div key={rIndex} className="flex-1 flex flex-col gap-4 min-w-[320px] max-w-5xl h-full overflow-y-auto custom-scrollbar pb-10">
                          <div className="bg-slate-900/90 p-4 text-center rounded-2xl border-2 border-pink-500/30 shadow-xl sticky top-0 z-10 backdrop-blur-md">
                            <h3 className="text-xl font-black text-pink-400 uppercase tracking-widest">{roundName}</h3>
                          </div>
-                         <div className="flex flex-col gap-4">
+                         <div className={`grid grid-cols-1 ${round.length > 4 ? 'xl:grid-cols-2' : ''} gap-4 w-full`}>
                            {round.map((m: any, mIndex: number) => (
-                             <div key={m.id || mIndex} className={`p-4 rounded-xl border flex flex-col justify-center items-center gap-2 relative shadow-md transition-all ${m.winnerTeamId ? 'bg-slate-900/80 border-slate-700' : 'bg-slate-800 border-slate-600'}`}>
+                             <div key={m.id || mIndex} className={`p-4 rounded-2xl border-2 flex flex-col justify-center items-center gap-3 relative shadow-lg transition-all ${m.winnerTeamId ? 'bg-slate-900/90 border-slate-700' : 'bg-slate-850 border-slate-600 hover:border-pink-500/60'}`}>
                                 <div className="flex justify-between items-center w-full">
-                                  <span className={`text-sm font-bold flex-1 leading-tight ${m.winnerTeamId === m.teamAId ? 'text-emerald-400 font-black' : 'text-slate-300'}`}>
-                                    {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
-                                  </span>
-                                  <div className="shrink-0 bg-slate-950 px-2.5 py-1 rounded-xl text-sm font-black text-white shadow-inner mx-2 flex flex-col items-center">
+                                  <div className="flex-1 flex flex-col min-w-0 pr-2">
+                                    {m.teamAId && t.teamNames && t.teamNames[m.teamAId] && (
+                                      <span className="text-[11px] text-purple-400 font-bold uppercase tracking-wider truncate mb-0.5">
+                                        "{t.teamNames[m.teamAId]}"
+                                      </span>
+                                    )}
+                                    <span className={`text-base font-bold truncate leading-tight ${m.winnerTeamId === m.teamAId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
+                                      {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
+                                    </span>
+                                  </div>
+
+                                  <div className="shrink-0 bg-slate-950 px-3 py-1.5 rounded-xl text-base font-black text-white shadow-inner mx-2 flex flex-col items-center border border-slate-800">
                                     <span>{m.winnerTeamId ? `${m.scoreTeamA} - ${m.scoreTeamB}` : 'VS'}</span>
                                     {m.winnerTeamId && m.setScores && formatSetScores(m.setScores) && (
                                       <span className="text-[10px] text-emerald-400 font-bold tracking-tight mt-0.5">
@@ -684,15 +692,23 @@ export default function TVSlideshow({ data }: { data: any }) {
                                       </span>
                                     )}
                                   </div>
-                                  <span className={`text-sm font-bold flex-1 text-right leading-tight ${m.winnerTeamId === m.teamBId ? 'text-emerald-400 font-black' : 'text-slate-300'}`}>
-                                    {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}
-                                  </span>
+
+                                  <div className="flex-1 flex flex-col min-w-0 pl-2 text-right">
+                                    {m.teamBId && t.teamNames && t.teamNames[m.teamBId] && (
+                                      <span className="text-[11px] text-purple-400 font-bold uppercase tracking-wider truncate mb-0.5">
+                                        "{t.teamNames[m.teamBId]}"
+                                      </span>
+                                    )}
+                                    <span className={`text-base font-bold truncate leading-tight ${m.winnerTeamId === m.teamBId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
+                                      {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}
+                                    </span>
+                                  </div>
                                 </div>
                                 {(() => {
                                   const dateToUse = m.scheduledAt || currentSlide.tournament.startDate;
                                   if (!dateToUse) return <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Data da definire</div>;
                                   return (
-                                    <div className="text-[10px] font-black text-blue-400 bg-blue-500/20 px-2 py-0.5 rounded mt-1">
+                                    <div className="text-[10px] font-black text-blue-400 bg-blue-500/20 px-2.5 py-0.5 rounded-md mt-0.5">
                                       {new Date(dateToUse).toLocaleDateString('it-IT')} {m.scheduledAt ? `alle ${new Date(dateToUse).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}` : ''}
                                     </div>
                                   );
