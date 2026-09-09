@@ -46,8 +46,7 @@ Si considerano **soltanto le partite giocate effettivamente in attacco**:
 $$\text{Indice Offensivo (Media Gol Fatti)} = \frac{\text{Gol Fatti in Attacco}}{\text{Partite Giocate da Attaccante}}$$
 *Classifica: "Il Cannoniere del Mese" (vince chi ha la media più alta).*
 
-### 3. Statistica Goliardica / Gamification
-- 🎖️ **Badge "Spirito di Sacrificio"**: Assegnato a chi gioca e vince partite sacrificandosi fuori dal proprio ruolo anagrafico per fare spazio al compagno.
+### 3. Statistica / Gamification
 - 🔄 **Verdetto Alchimia nel Fascicolo Giocatore**:  
   *"Quando giochi in Porta hai il 68% Win Rate, in Attacco il 45%: il tuo ruolo naturale è la DIFESA!"*
 

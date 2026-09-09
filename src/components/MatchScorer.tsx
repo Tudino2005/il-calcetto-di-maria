@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useTransition, useMemo } from "react";
-import { updateMatchScore, updateExactMatchScore } from "@/app/actions/matchActions";
+import { updateMatchScore, updateExactMatchScore, updateMatchRoles } from "@/app/actions/matchActions";
 import Link from "next/link";
-import { ArrowLeft, Trophy, Zap, RotateCcw, Settings, Check, ChevronRight, Play } from "lucide-react";
+import { ArrowLeft, Trophy, Zap, RotateCcw, Settings, Check, ChevronRight, Play, ArrowLeftRight } from "lucide-react";
 import clsx from "clsx";
+import { resolveTeamRoles } from "@/lib/roleUtils";
 
-type PlayerInfo = { id: string; name: string };
+type PlayerInfo = { id: string; name: string; preferredRole?: string };
 type TeamInfo = { id: string; player1: PlayerInfo; player2: PlayerInfo };
 type MatchInfo = {
   id: string;
@@ -16,6 +17,10 @@ type MatchInfo = {
   tournamentId: string | null;
   teamA: TeamInfo | null;
   teamB: TeamInfo | null;
+  teamA_goalkeeperId?: string | null;
+  teamA_strikerId?: string | null;
+  teamB_goalkeeperId?: string | null;
+  teamB_strikerId?: string | null;
 };
 
 type ScorerMode = "goals" | "sets";
@@ -30,6 +35,65 @@ type CompletedSet = {
 
 export default function MatchScorer({ match }: { match: MatchInfo }) {
   const [isPending, startTransition] = useTransition();
+
+  // Role specialization state
+  const [teamARoles, setTeamARoles] = useState(() => {
+    if (match.teamA?.player1 && match.teamA?.player2) {
+      const override = match.teamA_goalkeeperId && match.teamA_strikerId
+        ? { goalkeeperId: match.teamA_goalkeeperId, strikerId: match.teamA_strikerId }
+        : null;
+      return resolveTeamRoles(match.teamA.player1, match.teamA.player2, override);
+    }
+    return null;
+  });
+
+  const [teamBRoles, setTeamBRoles] = useState(() => {
+    if (match.teamB?.player1 && match.teamB?.player2) {
+      const override = match.teamB_goalkeeperId && match.teamB_strikerId
+        ? { goalkeeperId: match.teamB_goalkeeperId, strikerId: match.teamB_strikerId }
+        : null;
+      return resolveTeamRoles(match.teamB.player1, match.teamB.player2, override);
+    }
+    return null;
+  });
+
+  const handleSwapTeamA = () => {
+    if (!teamARoles || !match.teamA) return;
+    const newGK = teamARoles.strikerId;
+    const newST = teamARoles.goalkeeperId;
+    const newRoles = resolveTeamRoles(match.teamA.player1, match.teamA.player2, {
+      goalkeeperId: newGK,
+      strikerId: newST,
+    });
+    setTeamARoles(newRoles);
+    startTransition(async () => {
+      await updateMatchRoles(match.id, {
+        teamA_goalkeeperId: newGK,
+        teamA_strikerId: newST,
+        teamB_goalkeeperId: teamBRoles?.goalkeeperId,
+        teamB_strikerId: teamBRoles?.strikerId,
+      });
+    });
+  };
+
+  const handleSwapTeamB = () => {
+    if (!teamBRoles || !match.teamB) return;
+    const newGK = teamBRoles.strikerId;
+    const newST = teamBRoles.goalkeeperId;
+    const newRoles = resolveTeamRoles(match.teamB.player1, match.teamB.player2, {
+      goalkeeperId: newGK,
+      strikerId: newST,
+    });
+    setTeamBRoles(newRoles);
+    startTransition(async () => {
+      await updateMatchRoles(match.id, {
+        teamA_goalkeeperId: teamARoles?.goalkeeperId,
+        teamA_strikerId: teamARoles?.strikerId,
+        teamB_goalkeeperId: newGK,
+        teamB_strikerId: newST,
+      });
+    });
+  };
 
   // Settings with LocalStorage persistence
   const [mode, setMode] = useState<ScorerMode>("goals");
@@ -588,6 +652,61 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
               </p>
             </div>
 
+            {/* Cambio tattico ruoli tra set */}
+            {(teamARoles || teamBRoles) && (
+              <div className="bg-slate-950/60 border border-slate-800 rounded-2xl p-3 mb-6 text-left">
+                <span className="text-[11px] font-black uppercase text-slate-400 block mb-2 text-center">
+                  🔄 Cambio Tattico di Posizione per il Set {currentSetNumber}?
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {teamARoles && match.teamA && (
+                    <div className="bg-slate-900/80 border border-red-500/30 p-2.5 rounded-xl flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-red-400 uppercase">Squadra Rossa</span>
+                        <span className="text-white font-semibold text-xs">
+                          🛡️ {match.teamA.player1.id === teamARoles.goalkeeperId ? match.teamA.player1.name : match.teamA.player2.name}
+                        </span>
+                        <span className="text-slate-300 font-semibold text-xs">
+                          ⚔️ {match.teamA.player1.id === teamARoles.strikerId ? match.teamA.player1.name : match.teamA.player2.name}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleSwapTeamA}
+                        title="Inverti ruoli"
+                        className="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg text-amber-300 font-bold flex items-center gap-1 transition text-xs"
+                      >
+                        <ArrowLeftRight className="w-3.5 h-3.5" />
+                        <span>Inverti</span>
+                      </button>
+                    </div>
+                  )}
+                  {teamBRoles && match.teamB && (
+                    <div className="bg-slate-900/80 border border-blue-500/30 p-2.5 rounded-xl flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-blue-400 uppercase">Squadra Blu</span>
+                        <span className="text-white font-semibold text-xs">
+                          🛡️ {match.teamB.player1.id === teamBRoles.goalkeeperId ? match.teamB.player1.name : match.teamB.player2.name}
+                        </span>
+                        <span className="text-slate-300 font-semibold text-xs">
+                          ⚔️ {match.teamB.player1.id === teamBRoles.strikerId ? match.teamB.player1.name : match.teamB.player2.name}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleSwapTeamB}
+                        title="Inverti ruoli"
+                        className="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg text-amber-300 font-bold flex items-center gap-1 transition text-xs"
+                      >
+                        <ArrowLeftRight className="w-3.5 h-3.5" />
+                        <span>Inverti</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 onClick={() => setSetFinishedModal(null)}
@@ -695,6 +814,40 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
               {match.teamA.player1.name} <span className="text-slate-600">&</span> {match.teamA.player2.name}
             </h2>
+            {teamARoles && (
+              <div className="mt-2 flex items-center gap-2 flex-wrap">
+                <span className="text-xs bg-slate-950/70 border border-red-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
+                  <span>🛡️</span>
+                  <span className="text-slate-400 font-bold">Porta:</span>
+                  <strong className="text-white">
+                    {match.teamA.player1.id === teamARoles.goalkeeperId ? match.teamA.player1.name : match.teamA.player2.name}
+                  </strong>
+                </span>
+                {!isMatchFinished && (
+                  <button
+                    type="button"
+                    onClick={handleSwapTeamA}
+                    title="Inverti ruoli"
+                    className="px-2 py-1 hover:bg-red-950 bg-slate-900 border border-red-500/40 rounded-lg text-amber-300 hover:text-amber-200 transition active:scale-95 flex items-center gap-1 text-xs font-bold"
+                  >
+                    <ArrowLeftRight className="w-3.5 h-3.5" />
+                    <span>Inverti</span>
+                  </button>
+                )}
+                <span className="text-xs bg-slate-950/70 border border-red-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
+                  <span>⚔️</span>
+                  <span className="text-slate-400 font-bold">Attacco:</span>
+                  <strong className="text-white">
+                    {match.teamA.player1.id === teamARoles.strikerId ? match.teamA.player1.name : match.teamA.player2.name}
+                  </strong>
+                </span>
+                {teamARoles.isAdapted && teamARoles.adaptationNote && (
+                  <span className="text-[10px] text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
+                    ⚠️ {teamARoles.adaptationNote}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* CENTER DISPLAY */}
@@ -831,6 +984,40 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
               {match.teamB.player1.name} <span className="text-slate-600">&</span> {match.teamB.player2.name}
             </h2>
+            {teamBRoles && (
+              <div className="mt-2 flex items-center gap-2 flex-wrap">
+                <span className="text-xs bg-slate-950/70 border border-blue-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
+                  <span>🛡️</span>
+                  <span className="text-slate-400 font-bold">Porta:</span>
+                  <strong className="text-white">
+                    {match.teamB.player1.id === teamBRoles.goalkeeperId ? match.teamB.player1.name : match.teamB.player2.name}
+                  </strong>
+                </span>
+                {!isMatchFinished && (
+                  <button
+                    type="button"
+                    onClick={handleSwapTeamB}
+                    title="Inverti ruoli"
+                    className="px-2 py-1 hover:bg-blue-950 bg-slate-900 border border-blue-500/40 rounded-lg text-amber-300 hover:text-amber-200 transition active:scale-95 flex items-center gap-1 text-xs font-bold"
+                  >
+                    <ArrowLeftRight className="w-3.5 h-3.5" />
+                    <span>Inverti</span>
+                  </button>
+                )}
+                <span className="text-xs bg-slate-950/70 border border-blue-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
+                  <span>⚔️</span>
+                  <span className="text-slate-400 font-bold">Attacco:</span>
+                  <strong className="text-white">
+                    {match.teamB.player1.id === teamBRoles.strikerId ? match.teamB.player1.name : match.teamB.player2.name}
+                  </strong>
+                </span>
+                {teamBRoles.isAdapted && teamBRoles.adaptationNote && (
+                  <span className="text-[10px] text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
+                    ⚠️ {teamBRoles.adaptationNote}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* CENTER DISPLAY */}

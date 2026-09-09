@@ -71,6 +71,10 @@ model Match {
   scoreTeamA   Int       @default(0)
   scoreTeamB   Int       @default(0)
   setScores    Json?
+  teamA_goalkeeperId String?
+  teamA_strikerId    String?
+  teamB_goalkeeperId String?
+  teamB_strikerId    String?
   tournamentId String?
   groupId      String?
   bracketType  String    @default("winners") // 'winners', 'losers', 'grand_final', 'group_stage', 'playoff'

@@ -33,9 +33,25 @@ export async function createTeam(player1Id: string, player2Id: string) {
   return team;
 }
 
-export async function createMatch(teamAId: string, teamBId: string) {
+export async function createMatch(
+  teamAId: string,
+  teamBId: string,
+  roles?: {
+    teamA_goalkeeperId?: string | null;
+    teamA_strikerId?: string | null;
+    teamB_goalkeeperId?: string | null;
+    teamB_strikerId?: string | null;
+  }
+) {
   const match = await prisma.match.create({
-    data: { teamAId, teamBId },
+    data: {
+      teamAId,
+      teamBId,
+      teamA_goalkeeperId: roles?.teamA_goalkeeperId,
+      teamA_strikerId: roles?.teamA_strikerId,
+      teamB_goalkeeperId: roles?.teamB_goalkeeperId,
+      teamB_strikerId: roles?.teamB_strikerId,
+    },
     include: {
       teamA: { include: { player1: true, player2: true } },
       teamB: { include: { player1: true, player2: true } },
@@ -43,6 +59,33 @@ export async function createMatch(teamAId: string, teamBId: string) {
   });
   revalidatePath("/");
   return match;
+}
+
+export async function updateMatchRoles(
+  matchId: string,
+  roles: {
+    teamA_goalkeeperId?: string | null;
+    teamA_strikerId?: string | null;
+    teamB_goalkeeperId?: string | null;
+    teamB_strikerId?: string | null;
+  }
+) {
+  const updated = await prisma.match.update({
+    where: { id: matchId },
+    data: {
+      teamA_goalkeeperId: roles.teamA_goalkeeperId,
+      teamA_strikerId: roles.teamA_strikerId,
+      teamB_goalkeeperId: roles.teamB_goalkeeperId,
+      teamB_strikerId: roles.teamB_strikerId,
+    },
+    include: {
+      teamA: { include: { player1: true, player2: true } },
+      teamB: { include: { player1: true, player2: true } },
+    }
+  });
+  revalidatePath(`/match/${matchId}`);
+  revalidatePath("/");
+  return updated;
 }
 
 export async function updateMatchScore(matchId: string, team: "A" | "B", action: "add" | "remove") {
@@ -246,7 +289,13 @@ export async function deletePlayer(playerId: string) {
 }
 
 
-export async function startFreeMatch(pairs: string[][]) {
+export async function startFreeMatch(
+  pairs: string[][],
+  roles?: {
+    teamA?: { goalkeeperId?: string; strikerId?: string };
+    teamB?: { goalkeeperId?: string; strikerId?: string };
+  }
+) {
   if (pairs.length !== 2 || pairs[0].length !== 2 || pairs[1].length !== 2) {
     throw new Error("Devi formare esattamente 2 squadre da 2 giocatori.");
   }
@@ -254,7 +303,12 @@ export async function startFreeMatch(pairs: string[][]) {
   const teamA = await createTeam(pairs[0][0], pairs[0][1]);
   const teamB = await createTeam(pairs[1][0], pairs[1][1]);
   
-  const match = await createMatch(teamA.id, teamB.id);
+  const match = await createMatch(teamA.id, teamB.id, {
+    teamA_goalkeeperId: roles?.teamA?.goalkeeperId,
+    teamA_strikerId: roles?.teamA?.strikerId,
+    teamB_goalkeeperId: roles?.teamB?.goalkeeperId,
+    teamB_strikerId: roles?.teamB?.strikerId,
+  });
   
   return match.id;
 }

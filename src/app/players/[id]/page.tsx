@@ -1,13 +1,14 @@
 export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, User, Trophy, Swords, Calendar, Trash2, Users } from "lucide-react";
+import { ArrowLeft, User, Trophy, Swords, Calendar, Trash2, Users, Shield } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
 import { deletePlayer } from "@/app/actions/matchActions";
 import RoleIcon from "@/components/RoleIcon";
 import { getLeaderboardData } from "@/lib/leaderboardData";
 import { formatSetScores } from "@/lib/scoreUtils";
+import { calculatePlayerRoleStats, getEffectiveMatchRole } from "@/lib/roleUtils";
 
 export default async function PlayerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -55,6 +56,9 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     (m.teamB?.player1Id === id || m.teamB?.player2Id === id) && m.winnerTeamId === m.teamBId
   ).length;
   const winRate = totalPlayed > 0 ? ((totalWins / totalPlayed) * 100).toFixed(1) : "0.0";
+
+  // Calculate role statistics & indices
+  const roleStats = calculatePlayerRoleStats(id, allMatches);
 
   // Calculate current leaderboard ranking
   const { playerStats } = await getLeaderboardData();
@@ -151,6 +155,134 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         </div>
       </div>
 
+      {/* SPECIALIZZAZIONE PER RUOLO & INDICI DI RENDIMENTO */}
+      <section className="mb-8">
+        <h3 className="text-2xl font-black uppercase tracking-wider text-white mb-6 flex items-center gap-3">
+          <Shield className="w-7 h-7 text-emerald-400" /> SPECIALIZZAZIONE PER RUOLO & RENDIMENTO
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          {/* SCHEDA PORTIERE */}
+          <div className="bg-slate-800/95 border border-blue-500/30 p-6 rounded-3xl shadow-xl flex flex-col justify-between gap-4">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center font-black text-2xl border border-blue-500/30">
+                    🛡️
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-black text-white">Rendimento in Porta</h4>
+                    <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Ruolo Difensivo</span>
+                  </div>
+                </div>
+                <span className="px-3 py-1 bg-blue-500/15 border border-blue-500/30 text-blue-300 font-black text-xs rounded-full uppercase">
+                  {roleStats.gkMatches} {roleStats.gkMatches === 1 ? "Partita" : "Partite"}
+                </span>
+              </div>
+
+              <div className="bg-slate-900/70 border border-slate-700/60 p-4 rounded-2xl mb-4 text-center">
+                <div className="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">
+                  Indice Difensivo (Media Gol Subiti)
+                </div>
+                <div className="text-4xl font-black text-blue-400">
+                  {roleStats.defensiveIndex !== null ? roleStats.defensiveIndex : "-"}
+                </div>
+                <div className="text-[11px] text-slate-400 mt-1">
+                  {roleStats.defensiveIndex !== null ? "Minore è la media, maggiore è la solidità difensiva" : "Nessuna partita giocata tra i pali"}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
+              <div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Gol Subiti</div>
+                <div className="text-lg font-black text-white">{roleStats.gkGoalsConceded}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
+                <div className="text-lg font-black text-emerald-400">{roleStats.gkWins}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider">Win Rate</div>
+                <div className="text-lg font-black text-yellow-400">
+                  {roleStats.gkWinRate ? `${roleStats.gkWinRate}%` : "-"}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SCHEDA ATTACCANTE */}
+          <div className="bg-slate-800/95 border border-red-500/30 p-6 rounded-3xl shadow-xl flex flex-col justify-between gap-4">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-red-500/20 text-red-400 rounded-2xl flex items-center justify-center font-black text-2xl border border-red-500/30">
+                    ⚔️
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-black text-white">Rendimento in Attacco</h4>
+                    <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Ruolo Offensivo</span>
+                  </div>
+                </div>
+                <span className="px-3 py-1 bg-red-500/15 border border-red-500/30 text-red-300 font-black text-xs rounded-full uppercase">
+                  {roleStats.stMatches} {roleStats.stMatches === 1 ? "Partita" : "Partite"}
+                </span>
+              </div>
+
+              <div className="bg-slate-900/70 border border-slate-700/60 p-4 rounded-2xl mb-4 text-center">
+                <div className="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">
+                  Indice Offensivo (Media Gol Fatti)
+                </div>
+                <div className="text-4xl font-black text-red-400">
+                  {roleStats.offensiveIndex !== null ? roleStats.offensiveIndex : "-"}
+                </div>
+                <div className="text-[11px] text-slate-400 mt-1">
+                  {roleStats.offensiveIndex !== null ? "Maggiore è la media, più è prolifico l'attaccante" : "Nessuna partita giocata in attacco"}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
+              <div>
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Gol Fatti</div>
+                <div className="text-lg font-black text-white">{roleStats.stGoalsScored}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
+                <div className="text-lg font-black text-emerald-400">{roleStats.stWins}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider">Win Rate</div>
+                <div className="text-lg font-black text-yellow-400">
+                  {roleStats.stWinRate ? `${roleStats.stWinRate}%` : "-"}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* VERDETTO ALCHIMIA */}
+        <div className="bg-gradient-to-r from-purple-950/40 via-slate-850 to-indigo-950/40 border border-purple-500/40 rounded-3xl p-6 shadow-xl flex items-start gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center shrink-0 text-2xl">
+            🔄
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-black uppercase tracking-widest text-purple-400">Verdetto Alchimia Tattica</span>
+            </div>
+            <h4 className="text-xl font-black text-white mb-1.5">
+              {roleStats.verdettoAlchimia.titolo}
+            </h4>
+            <p className="text-sm text-slate-300 mb-2 leading-relaxed">
+              {roleStats.verdettoAlchimia.descrizione}
+            </p>
+            <p className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl inline-block">
+              💡 {roleStats.verdettoAlchimia.consiglio}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* RIEPILOGO PER COMPAGNO */}
       <section className="mb-8">
         <h3 className="text-2xl font-black uppercase tracking-wider text-white mb-6 flex items-center gap-3">
@@ -231,6 +363,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
             const myScore = isTeamA ? m.scoreTeamA : m.scoreTeamB;
             const enemyScore = isTeamA ? m.scoreTeamB : m.scoreTeamA;
             const iWon = m.winnerTeamId === myTeam?.id;
+            const roleInMatch = getEffectiveMatchRole(m, player.id);
 
             return (
               <div key={m.id} className={`p-6 rounded-2xl flex items-center justify-between border-2 bg-slate-900 ${
@@ -251,6 +384,16 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <Swords className="w-3.5 h-3.5 text-emerald-400" />
                         Partita Libera
+                      </span>
+                    )}
+                    {roleInMatch === "portiere" && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                        🛡️ In Porta
+                      </span>
+                    )}
+                    {roleInMatch === "attaccante" && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-500/20 text-red-300 border border-red-500/30">
+                        ⚔️ In Attacco
                       </span>
                     )}
                   </div>
