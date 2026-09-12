@@ -123,7 +123,12 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
               <User className="w-10 h-10 text-slate-400" />
             </div>
             <div>
-              <h2 className="text-4xl font-black text-white mb-2">{player.name}</h2>
+              <div className="flex items-center gap-4 mb-2">
+                <h2 className="text-4xl font-black text-white">{player.name}</h2>
+                {myRank && (
+                  <span className="text-3xl font-black text-purple-400">{myRank}°</span>
+                )}
+              </div>
               <div className="flex items-center gap-4">
                 <span className="px-4 py-2 bg-slate-900 text-slate-300 rounded-lg text-sm uppercase tracking-wider font-bold border border-slate-700">
                   {player.preferredRole}
@@ -135,10 +140,6 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
             </div>
           </div>
           <div className="flex gap-6 md:gap-8 text-right flex-wrap justify-end">
-            <div>
-              <div className="text-purple-400 font-bold mb-1">Classifica</div>
-              <div className="text-3xl font-black text-purple-400">{myRank ? `${myRank}°` : "-"}</div>
-            </div>
             <div>
               <div className="text-slate-400 font-bold mb-1">Partite Giocate</div>
               <div className="text-3xl font-black text-white">{totalPlayed}</div>
@@ -308,20 +309,21 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                       <RoleIcon role={partner.preferredRole || "entrambi"} className="w-6 h-6" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <Link href={`/players/${partner.id}`} className="text-xl font-black text-white hover:text-purple-400 transition-colors block leading-snug">
-                        {partner.name}
-                      </Link>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <Link href={`/players/${partner.id}`} className="text-xl font-black text-white hover:text-purple-400 transition-colors block leading-snug truncate">
+                          {partner.name}
+                        </Link>
+                        {partnerRank && (
+                          <span className="text-lg font-black text-purple-400 shrink-0">{partnerRank}°</span>
+                        )}
+                      </div>
                       <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mt-0.5">
                         {partner.preferredRole || "Giocatore"}
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-2 pt-3 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
-                    <div>
-                      <div className="text-[10px] sm:text-[11px] text-purple-400 font-bold uppercase tracking-wider">Classifica</div>
-                      <div className="text-lg font-black text-purple-400">{partnerRank ? `${partnerRank}°` : "-"}</div>
-                    </div>
+                  <div className="grid grid-cols-3 gap-2 pt-3 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
                     <div>
                       <div className="text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">Giocate</div>
                       <div className="text-lg font-black text-white">{played}</div>
