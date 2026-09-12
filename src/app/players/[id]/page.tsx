@@ -61,15 +61,20 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
   const roleStats = calculatePlayerRoleStats(id, allMatches);
 
   // Calculate current leaderboard ranking
-  const { playerStats } = await getLeaderboardData();
+  const { playerStats, teamStats } = await getLeaderboardData();
   const playerRankMap = new Map<string, number>();
   playerStats.forEach((p: any, idx: number) => {
     playerRankMap.set(p.id, idx + 1);
   });
   const myRank = playerRankMap.get(id) || null;
 
+  const teamRankMap = new Map<string, number>();
+  teamStats.forEach((t: any, idx: number) => {
+    teamRankMap.set(t.id, idx + 1);
+  });
+
   // Group statistics by teammate / partner
-  const partnerMap = new Map<string, { partner: any; played: number; wins: number }>();
+  const partnerMap = new Map<string, { partner: any; played: number; wins: number; teamId: string }>();
 
   allMatches.forEach((m: any) => {
     const isTeamA = m.teamA?.player1Id === id || m.teamA?.player2Id === id;
@@ -82,7 +87,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     const iWon = m.winnerTeamId === myTeam.id;
 
     if (!partnerMap.has(partner.id)) {
-      partnerMap.set(partner.id, { partner, played: 0, wins: 0 });
+      partnerMap.set(partner.id, { partner, played: 0, wins: 0, teamId: myTeam.id });
     }
     const entry = partnerMap.get(partner.id)!;
     entry.played += 1;
@@ -296,8 +301,9 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-            {partnerStats.map(({ partner, played, wins, winRate }) => {
+            {partnerStats.map(({ partner, played, wins, winRate, teamId }) => {
               const partnerRank = playerRankMap.get(partner.id) || null;
+              const teamRank = teamRankMap.get(teamId) || null;
               const winRateNum = Number(winRate);
               const isHigh = winRateNum >= 60;
               const isMid = winRateNum >= 40 && winRateNum < 60;
@@ -323,7 +329,11 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2 pt-3 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
+                  <div className="grid grid-cols-4 gap-2 pt-3 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
+                    <div>
+                      <div className="text-[10px] sm:text-[11px] text-purple-400 font-bold uppercase tracking-wider">Classifica</div>
+                      <div className="text-lg font-black text-purple-400">{teamRank ? `${teamRank}°` : "-"}</div>
+                    </div>
                     <div>
                       <div className="text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">Giocate</div>
                       <div className="text-lg font-black text-white">{played}</div>
