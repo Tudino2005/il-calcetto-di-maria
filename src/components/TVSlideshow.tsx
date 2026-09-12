@@ -311,7 +311,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 w-full max-w-5xl mx-auto overflow-hidden relative mask-edges flex justify-center">
                   <div 
-                    className={`w-full flex flex-col gap-6 relative before:absolute before:inset-y-0 before:left-1/3 before:-ml-[1.5px] before:w-[3px] before:bg-slate-800/80 ${
+                    className={`w-full flex flex-col gap-4 relative before:absolute before:inset-y-0 before:left-1/3 before:-ml-[1.5px] before:w-[3px] before:bg-slate-800/80 ${
                       scrollNeeded ? 'animate-scroll-matches' : 'my-auto'
                     }`}
                     style={scrollNeeded ? { animationDuration: `${durationSec}s` } : undefined}
@@ -333,41 +333,41 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const scoreL = teamAWon ? m.scoreTeamB : m.scoreTeamA;
 
                       return (
-                        <div key={m.id} className="relative flex items-center gap-10 w-full shrink-0">
+                        <div key={m.id} className="relative flex items-center gap-6 w-full shrink-0">
                           {/* LEFT: TIME */}
-                          <div className="w-1/3 text-right shrink-0 pr-10">
-                            <div className="text-2xl font-bold text-slate-300 uppercase tracking-widest">{timeLabel}</div>
-                            {isToday && <div className="text-emerald-500 text-sm font-black uppercase mt-1 tracking-widest">Recente</div>}
+                          <div className="w-1/3 text-right shrink-0 pr-6">
+                            <div className="text-xl font-bold text-slate-300 uppercase tracking-widest">{timeLabel}</div>
+                            {isToday && <div className="text-emerald-500 text-xs font-black uppercase mt-1 tracking-widest">Recente</div>}
                           </div>
                           
                           {/* CENTER: NODE */}
                           <div className="absolute left-1/3 -ml-[10px] w-5 h-5 rounded-full bg-slate-950 border-[4px] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10" />
 
                           {/* RIGHT: CARD */}
-                          <div className="flex-1 bg-slate-900/90 border border-slate-700 p-6 rounded-3xl shadow-xl backdrop-blur-sm flex flex-col gap-4">
-                            <div className="flex justify-between items-center text-3xl">
-                              <div className="font-bold text-white flex items-center gap-4 leading-tight">
-                                <Trophy className="w-8 h-8 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
+                          <div className="flex-1 bg-slate-900/90 border border-slate-700 p-3 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col gap-2">
+                            <div className="flex justify-between items-center text-2xl">
+                              <div className="font-bold text-white flex items-center gap-3 leading-tight">
+                                <Trophy className="w-6 h-6 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
                                 <span>
-                                  {winner?.player1?.name || "G1"} <span className="text-slate-500 text-xl mx-1">&</span> {winner?.player2?.name || "G2"}
+                                  {winner?.player1?.name || "G1"} <span className="text-slate-500 text-lg mx-1">&</span> {winner?.player2?.name || "G2"}
                                 </span>
                               </div>
-                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-4 py-1 rounded-xl">{scoreW}</div>
+                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg">{scoreW}</div>
                             </div>
                             
-                            <div className="flex justify-between items-center text-2xl">
-                              <div className="font-bold text-slate-500 flex items-center gap-4 pl-12 leading-tight">
+                            <div className="flex justify-between items-center text-xl">
+                              <div className="font-bold text-slate-500 flex items-center gap-3 pl-9 leading-tight">
                                 <span>
-                                  {loser?.player1?.name || "G1"} <span className="text-slate-700 text-lg mx-1">&</span> {loser?.player2?.name || "G2"}
+                                  {loser?.player1?.name || "G1"} <span className="text-slate-700 text-base mx-1">&</span> {loser?.player2?.name || "G2"}
                                 </span>
                               </div>
-                              <div className="font-black text-slate-600 bg-slate-950 px-4 py-1 rounded-xl border border-slate-800">{scoreL}</div>
+                              <div className="font-black text-slate-600 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">{scoreL}</div>
                             </div>
 
                             {m.setScores && formatSetScores(m.setScores) && (
-                              <div className="flex items-center justify-between text-sm font-bold bg-slate-950/60 px-4 py-1.5 rounded-xl border border-slate-800">
-                                <span className="text-xs text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
-                                <span className="text-emerald-400 font-black tracking-wider text-base">{formatSetScores(m.setScores)}</span>
+                              <div className="flex items-center justify-between text-xs font-bold bg-slate-950/60 px-3 py-1 rounded-lg border border-slate-800 mt-1">
+                                <span className="text-[10px] text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
+                                <span className="text-emerald-400 font-black tracking-wider text-sm">{formatSetScores(m.setScores)}</span>
                               </div>
                             )}
                           </div>
