@@ -344,28 +344,33 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div className="absolute left-1/3 -ml-[10px] w-5 h-5 rounded-full bg-slate-950 border-[4px] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10" />
 
                           {/* RIGHT: CARD */}
-                          <div className="flex-1 bg-slate-900/90 border border-slate-700 p-3 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col gap-2">
-                            <div className="flex justify-between items-center text-2xl">
-                              <div className="font-bold text-white flex items-center gap-3 leading-tight">
-                                <Trophy className="w-6 h-6 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
+                          <div className="flex-1 bg-slate-900/90 border border-slate-700 p-2.5 rounded-xl shadow-xl backdrop-blur-sm flex flex-col gap-2">
+                            <div className="flex items-center text-xl overflow-hidden whitespace-nowrap">
+                              {/* WINNER */}
+                              <div className="font-bold text-white flex items-center gap-2 leading-tight mr-4 shrink-0">
+                                <Trophy className="w-5 h-5 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
                                 <span>
-                                  {winner?.player1?.name || "G1"} <span className="text-slate-500 text-lg mx-1">&</span> {winner?.player2?.name || "G2"}
+                                  {winner?.player1?.name || "G1"} <span className="text-slate-500 text-base mx-1">&</span> {winner?.player2?.name || "G2"}
                                 </span>
                               </div>
-                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg">{scoreW}</div>
-                            </div>
-                            
-                            <div className="flex justify-between items-center text-xl">
-                              <div className="font-bold text-slate-500 flex items-center gap-3 pl-9 leading-tight">
-                                <span>
+                              
+                              {/* SCORE SEPARATOR */}
+                              <div className="flex items-center gap-2 mr-4 shrink-0">
+                                <div className="font-black text-emerald-400 bg-emerald-500/10 px-3 py-0.5 rounded-lg">{scoreW}</div>
+                                <span className="text-slate-600 font-black text-base">-</span>
+                                <div className="font-black text-slate-400 bg-slate-950 px-3 py-0.5 rounded-lg border border-slate-800">{scoreL}</div>
+                              </div>
+
+                              {/* LOSER */}
+                              <div className="font-bold text-slate-500 flex items-center leading-tight truncate">
+                                <span className="truncate">
                                   {loser?.player1?.name || "G1"} <span className="text-slate-700 text-base mx-1">&</span> {loser?.player2?.name || "G2"}
                                 </span>
                               </div>
-                              <div className="font-black text-slate-600 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">{scoreL}</div>
                             </div>
 
                             {m.setScores && formatSetScores(m.setScores) && (
-                              <div className="flex items-center justify-between text-xs font-bold bg-slate-950/60 px-3 py-1 rounded-lg border border-slate-800 mt-1">
+                              <div className="flex items-center gap-3 text-xs font-bold bg-slate-950/60 px-3 py-1 rounded-lg border border-slate-800 self-start">
                                 <span className="text-[10px] text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
                                 <span className="text-emerald-400 font-black tracking-wider text-sm">{formatSetScores(m.setScores)}</span>
                               </div>
