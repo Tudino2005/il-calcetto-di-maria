@@ -301,11 +301,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
             return (
               <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-12">
-                <h2 className="text-5xl font-black uppercase tracking-widest text-white mb-8 flex items-center gap-6 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)] shrink-0">
-                  <span className="relative flex h-6 w-6">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-6 w-6 bg-rose-600"></span>
-                  </span>
+                <h2 className="text-3xl font-black uppercase tracking-widest text-slate-300 mb-6 shrink-0">
                   Ultime Sfide Libere
                 </h2>
                 
