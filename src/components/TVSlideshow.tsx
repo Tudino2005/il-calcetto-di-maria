@@ -331,8 +331,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       return (
                         <div key={m.id} className="bg-slate-900/90 border border-slate-700 p-4 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col justify-between shrink-0 h-full">
                           {/* HEADER WITH TIME */}
-                          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-widest border-b border-slate-700/50 pb-2 mb-3">
-                            <span>Sfida Libera</span>
+                          <div className="flex items-center justify-center text-xs text-slate-400 font-bold uppercase tracking-widest border-b border-slate-700/50 pb-2 mb-3">
                             <span className="flex items-center gap-2">
                               {timeLabel}
                               {isToday && <span className="text-emerald-500">Recente</span>}
