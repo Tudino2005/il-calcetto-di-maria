@@ -23,9 +23,9 @@ export default async function AdminHome() {
       <GlobalInbox requests={pendingRequests} />
 
       {/* MENU */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-8">
         
-        <Link href="/tournaments/quick" className="group col-span-1 md:col-span-2 lg:col-span-4 bg-gradient-to-r from-slate-900 via-orange-950/20 to-slate-900 border-2 border-slate-700 hover:border-orange-500 hover:bg-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-center gap-6 transition-all shadow-xl text-center sm:text-left">
+        <Link href="/tournaments/quick" className="group col-span-1 md:col-span-2 lg:col-span-3 bg-gradient-to-r from-slate-900 via-orange-950/20 to-slate-900 border-2 border-slate-700 hover:border-orange-500 hover:bg-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-center gap-6 transition-all shadow-xl text-center sm:text-left">
           <div className="bg-orange-500/20 p-5 rounded-2xl group-hover:scale-110 transition-transform shrink-0">
             <Zap className="w-10 h-10 text-orange-500" />
           </div>
@@ -71,6 +71,15 @@ export default async function AdminHome() {
           <div>
             <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">Anagrafica</h2>
             <p className="text-slate-400 font-bold">Iscrizione e Storico Giocatori</p>
+          </div>
+        </Link>
+        <Link href="/hall-of-fame" className="group bg-slate-900 border-2 border-slate-700 hover:border-orange-400 hover:bg-slate-800 rounded-3xl p-8 flex flex-col items-center gap-4 transition-all shadow-xl text-center">
+          <div className="bg-orange-500/20 p-6 rounded-full group-hover:scale-110 transition-transform">
+            <Trophy className="w-12 h-12 text-orange-400" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">Albo D'Oro</h2>
+            <p className="text-slate-400 font-bold">La storia dei campioni</p>
           </div>
         </Link>
       </div>

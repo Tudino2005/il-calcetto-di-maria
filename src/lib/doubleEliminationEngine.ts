@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { finalizeTournamentAwards } from "./tournamentAwards";
 
 export async function advanceDoubleElimination(
   tournament: any,
@@ -135,6 +136,7 @@ export async function advanceDoubleElimination(
           where: { id: tournament.id },
           data: { status: "completed", winnerTeamId: winnerTeamId }
         });
+        await finalizeTournamentAwards(tournament.id, winnerTeamId);
       } else {
         // Bracket reset! Create GF Match 2
         const resetMatchId = await ensureMatchExists('gfMatches', 0, 1, 'grand_final_reset');
@@ -146,7 +148,8 @@ export async function advanceDoubleElimination(
       await prisma.tournament.update({
         where: { id: tournament.id },
         data: { status: "completed", winnerTeamId: winnerTeamId }
-      });
+        });
+        await finalizeTournamentAwards(tournament.id, winnerTeamId);
     }
   }
 

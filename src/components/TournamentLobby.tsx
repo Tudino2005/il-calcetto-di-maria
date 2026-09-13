@@ -20,6 +20,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
   const [newPlayerName, setNewPlayerName] = useState("");
   const [newPlayerRole, setNewPlayerRole] = useState("entrambi");
   const [isCreatingPlayer, setIsCreatingPlayer] = useState(false);
+  const [showDebtorsModal, setShowDebtorsModal] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
@@ -57,9 +58,17 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
     setIsCreatingPlayer(false);
   };
 
+
   const handleCloseRegistrations = async () => {
+    const unpaidCount = registrations.filter((r: any) => !r.hasPaid).length;
+    if (unpaidCount > 0) {
+      const missingAmount = unpaidCount * (tournament.pricePerPlayer || 0);
+      const confirm = window.confirm(`ATTENZIONE: Mancano ${missingAmount}€ nella cassa (ci sono ${unpaidCount} giocatori che non hanno pagato).\n\nSei sicuro di voler chiudere le iscrizioni comunque?`);
+      if (!confirm) return;
+    }
     await closeRegistrations(tournament.id);
   };
+
 
   const handleStart = async () => {
     if (tournament.type === "coppie_fisse") {
@@ -144,6 +153,10 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
               <span className="font-medium">{tournament.pricePerPlayer} € <span className="text-slate-500 text-sm">/ gioc.</span></span>
             </div>
           )}
+                    <div className="flex items-center gap-2 bg-slate-800 px-4 py-2 rounded-xl border border-slate-700">
+            <Users className="w-5 h-5 text-blue-400" />
+            <span className="font-medium">{tournament.maxTeams} Squadre <span className="text-slate-500 text-sm">({tournament.maxTeams * 2} gioc.)</span></span>
+          </div>
           {tournament.prizes && (
             <div className="flex items-center gap-2 bg-slate-800 px-4 py-2 rounded-xl border border-slate-700">
               <Trophy className="w-5 h-5 text-yellow-400" />
@@ -277,14 +290,68 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
           )}
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-700 mb-6 flex justify-between items-center">
-          <span className="text-slate-400 font-bold text-lg">
-            Giocatori Selezionati:
-          </span>
-          <span className="text-4xl font-black text-white">
-            {registeredCount}
-          </span>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          
+          <div className="bg-slate-900 p-6 rounded-2xl border border-slate-700 flex flex-col justify-center h-full">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <div className="text-slate-400 font-bold uppercase tracking-wider text-xs mb-1">Stato Iscrizioni</div>
+                <span className="text-slate-200 font-bold text-lg">Giocatori Presenti</span>
+              </div>
+              <div className="text-5xl font-black text-white leading-none">
+                {registeredCount}
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3 pt-4 border-t border-slate-700/50 mt-auto">
+              <div className="flex-1 bg-blue-500/10 rounded-lg p-2 flex flex-col items-center justify-center border border-blue-500/20">
+                <span className="text-[10px] text-blue-400/70 font-bold uppercase tracking-widest mb-0.5">Portieri</span>
+                <span className="text-blue-400 font-black text-lg">
+                  {registrations.filter((r: any) => allPlayers.find(p => p.id === r.playerId)?.preferredRole === "portiere").length}
+                </span>
+              </div>
+              <div className="flex-1 bg-red-500/10 rounded-lg p-2 flex flex-col items-center justify-center border border-red-500/20">
+                <span className="text-[10px] text-red-400/70 font-bold uppercase tracking-widest mb-0.5">Attaccanti</span>
+                <span className="text-red-400 font-black text-lg">
+                  {registrations.filter((r: any) => allPlayers.find(p => p.id === r.playerId)?.preferredRole === "attaccante").length}
+                </span>
+              </div>
+              <div className="flex-1 bg-purple-500/10 rounded-lg p-2 flex flex-col items-center justify-center border border-purple-500/20">
+                <span className="text-[10px] text-purple-400/70 font-bold uppercase tracking-widest mb-0.5">Entrambi</span>
+                <span className="text-purple-400 font-black text-lg">
+                  {registrations.filter((r: any) => allPlayers.find(p => p.id === r.playerId)?.preferredRole === "entrambi").length}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-900 p-6 rounded-2xl border border-slate-700 flex flex-col justify-center">
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-slate-400 font-bold uppercase tracking-wider text-xs flex items-center gap-2">
+                <Banknote className="w-4 h-4 text-emerald-400" /> Cassa Torneo
+              </div>
+              <div className="text-emerald-400 font-black text-2xl">{tournament.pricePerPlayer || 0}€ <span className="text-xs text-slate-500">/cad</span></div>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-slate-800 p-3 rounded-xl border border-slate-700 flex flex-col items-center justify-center text-center">
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Attesi</span>
+                <span className="text-white font-black text-xl">{((tournament.maxTeams * 2) * (tournament.pricePerPlayer || 0))}€</span>
+              </div>
+              <div className="bg-emerald-950/40 p-3 rounded-xl border border-emerald-900/50 flex flex-col items-center justify-center text-center">
+                <span className="text-[10px] text-emerald-500/70 font-bold uppercase tracking-widest mb-1">Incassati</span>
+                <span className="text-emerald-400 font-black text-xl">{(registrations.filter((r: any) => r.hasPaid).length * (tournament.pricePerPlayer || 0))}€</span>
+              </div>
+              <div className="bg-red-950/40 p-3 rounded-xl border border-red-900/50 flex flex-col items-center justify-center text-center">
+                <span className="text-[10px] text-red-500/70 font-bold uppercase tracking-widest mb-1">Mancanti</span>
+                <span className="text-red-400 font-black text-xl">{(((tournament.maxTeams * 2) - registrations.filter((r: any) => r.hasPaid).length) * (tournament.pricePerPlayer || 0))}€</span>
+                <button onClick={() => setShowDebtorsModal(true)} className="mt-1 text-[9px] bg-red-500/20 hover:bg-red-500/40 text-red-300 px-2 py-0.5 rounded border border-red-500/30 uppercase font-bold transition">Vedi chi manca</button>
+              </div>
+            </div>
+          </div>
         </div>
+
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[50vh] overflow-y-auto pr-4 custom-scrollbar">
           {allPlayers.map(p => {
@@ -445,6 +512,41 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
               Devi raggiungere ESATTAMENTE {maxPlayers} iscritti ({maxPlayers/2} squadre) per poter avviare il torneo, in modo da creare un tabellone perfetto.
             </p>
           )}
+
+      {/* DEBTORS MODAL */}
+      {showDebtorsModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 w-full max-w-lg shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-red-400 flex items-center gap-2"><AlertTriangle className="w-5 h-5"/> Lista Debitori</h3>
+              <button onClick={() => setShowDebtorsModal(false)} className="p-2 hover:bg-slate-800 rounded-xl text-slate-400"><X className="w-5 h-5"/></button>
+            </div>
+            
+            <div className="max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-2">
+              {registrations.filter((r: any) => !r.hasPaid).length === 0 ? (
+                <p className="text-emerald-400 text-center py-8 font-bold">Tutti gli iscritti attuali hanno pagato!</p>
+              ) : (
+                registrations.filter((r: any) => !r.hasPaid).map((r: any) => {
+                  const p = allPlayers.find(player => player.id === r.playerId);
+                  if (!p) return null;
+                  return (
+                    <div key={r.playerId} className="flex items-center justify-between p-3 bg-slate-800 rounded-xl border border-slate-700">
+                      <div className="font-bold text-slate-300">{p.name}</div>
+                      <button 
+                        onClick={() => handleTogglePayment(p.id, false)}
+                        className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold text-xs uppercase tracking-wider rounded-lg transition"
+                      >
+                        Segna Pagato
+                      </button>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

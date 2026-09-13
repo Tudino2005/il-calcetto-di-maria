@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { advanceDoubleElimination } from "@/lib/doubleEliminationEngine";
+import { finalizeTournamentAwards } from "@/lib/tournamentAwards";
 
 export async function createPlayer(name: string, preferredRole: string) {
   const allPlayers = await prisma.player.findMany();
@@ -225,6 +226,7 @@ async function advanceTournament(tournamentId: string, matchId: string, winnerTe
           where: { id: tournament.id },
           data: { status: "completed", winnerTeamId }
         });
+        await finalizeTournamentAwards(tournament.id, winnerTeamId);
       } else {
         const nextRoundIndex = currentRoundIndex + 1;
         const nextMatchIndex = Math.floor(matchIndexInRound / 2);

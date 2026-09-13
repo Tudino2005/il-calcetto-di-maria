@@ -103,6 +103,7 @@ model Tournament {
   winnerTeamId   String?
   bracketData    String?
   teamNames      Json?
+  awardsData     Json?
   createdAt      DateTime                 @default(now())
 
   winnerTeam Team?             @relation("TournamentWinner", fields: [winnerTeamId], references: [id])
