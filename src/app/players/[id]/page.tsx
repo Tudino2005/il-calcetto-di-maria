@@ -364,7 +364,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                 L'algoritmo consiglia: per il prossimo torneo iscriviti con <Link href={`/players/${suggestedPartner.partner.id}`} className="font-black text-white hover:text-purple-400 transition-colors underline decoration-purple-500/50 underline-offset-4">{suggestedPartner.partner.name}</Link>! 
                 I numeri non mentono: insieme avete un formidabile <span className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">{suggestedPartner.winRate}%</span> di vittorie su <span className="font-bold text-white">{suggestedPartner.played}</span> incontri giocati 
                 (con un bilancio di <span className="font-bold text-white">{suggestedPartner.setsWon}</span> set vinti e <span className="font-bold text-white">{suggestedPartner.setsLost}</span> persi).<br/>
-                Avete segnato un totale di <span className="font-bold text-emerald-400">{suggestedPartner.goalsScored}</span> gol fatti e solo <span className="font-bold text-rose-400">{suggestedPartner.goalsConceded}</span> subiti.
+                Avete un totale di <span className="font-bold text-emerald-400">{suggestedPartner.goalsScored}</span> gol fatti e <span className="font-bold text-rose-400">{suggestedPartner.goalsConceded}</span> gol subiti.
               </p>
             ) : (
               <p className="text-slate-400 italic text-base">
