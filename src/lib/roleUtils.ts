@@ -183,17 +183,30 @@ export function calculatePlayerRoleStats(
     let teamGoals = 0;
     let opponentGoals = 0;
 
-    if (m.setScores && Array.isArray(m.setScores) && m.setScores.length > 0) {
-      for (const set of m.setScores) {
-        const scoreA = Number(set.scoreA) || 0;
-        const scoreB = Number(set.scoreB) || 0;
-        if (isTeamA) {
-          teamGoals += scoreA;
-          opponentGoals += scoreB;
+    if (m.setScores) {
+      try {
+        const parsedSets = typeof m.setScores === 'string' ? JSON.parse(m.setScores) : m.setScores;
+        if (Array.isArray(parsedSets) && parsedSets.length > 0) {
+          for (const set of parsedSets) {
+            const scoreA = Number(set.scoreA) || 0;
+            const scoreB = Number(set.scoreB) || 0;
+            if (isTeamA) {
+              teamGoals += scoreA;
+              opponentGoals += scoreB;
+            } else {
+              teamGoals += scoreB;
+              opponentGoals += scoreA;
+            }
+          }
         } else {
-          teamGoals += scoreB;
-          opponentGoals += scoreA;
+          // Fallback array vuoto
+          teamGoals = isTeamA ? (Number(m.scoreTeamA) || 0) : (Number(m.scoreTeamB) || 0);
+          opponentGoals = isTeamA ? (Number(m.scoreTeamB) || 0) : (Number(m.scoreTeamA) || 0);
         }
+      } catch (e) {
+        // Fallback errore di parsing
+        teamGoals = isTeamA ? (Number(m.scoreTeamA) || 0) : (Number(m.scoreTeamB) || 0);
+        opponentGoals = isTeamA ? (Number(m.scoreTeamB) || 0) : (Number(m.scoreTeamA) || 0);
       }
     } else {
       // Fallback sui set o punteggi totali
