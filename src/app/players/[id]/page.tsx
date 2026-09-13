@@ -360,8 +360,8 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                     <span className="uppercase text-white">
                       PARTNER IDEALE:
                     </span>
-                    <span className="text-yellow-400 normal-case lowercase drop-shadow-md text-3xl ml-1">
-                      {suggestedPartner.partner.name.toLowerCase()}
+                    <span className="text-yellow-400 normal-case drop-shadow-md text-3xl ml-1 capitalize">
+                      {suggestedPartner.partner.name}
                     </span>
                   </h3>
                 </div>
