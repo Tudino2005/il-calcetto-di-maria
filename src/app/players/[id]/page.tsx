@@ -356,8 +356,13 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                   <div className="bg-purple-500/20 p-2 rounded-xl">
                     <Sparkles className="w-6 h-6 text-purple-400" />
                   </div>
-                  <h3 className="text-xl font-black text-white tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-                    IL PARTNER IDEALE E' {suggestedPartner.partner.name.toUpperCase()}
+                  <h3 className="text-xl font-black tracking-widest flex items-center gap-2 flex-wrap">
+                    <span className="uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                      IL PARTNER IDEALE E'
+                    </span>
+                    <span className="text-yellow-400 normal-case lowercase drop-shadow-md">
+                      {suggestedPartner.partner.name.toLowerCase()}
+                    </span>
                   </h3>
                 </div>
                 
