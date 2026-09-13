@@ -97,7 +97,7 @@ export default function DoubleEliminationBracket({ tournament }: { tournament: a
               <h2 className="text-2xl font-black text-purple-400 uppercase tracking-widest mb-6 sticky left-0">Winners Bracket</h2>
         <div className="flex gap-12 items-center">
           {wbRounds.map((round: string[], rIndex: number) => (
-            <div key={`wb-${rIndex}`} className="flex flex-col justify-around min-w-[16rem]" style={{ height: `${wbRounds[0].length * 100}px` }}>
+            <div key={`wb-${rIndex}`} className="flex flex-col justify-around min-w-[16rem]" style={{ height: `${wbRounds[0].length * 160}px` }}>
               <div className="text-center text-slate-500 font-bold mb-4 uppercase tracking-widest text-xs">WB Round {rIndex + 1}</div>
               {round.map((matchId: string, mIndex: number) => (
                 <div key={`wb-m-${mIndex}`} className="my-auto">
@@ -119,7 +119,7 @@ export default function DoubleEliminationBracket({ tournament }: { tournament: a
         ) : (
           <div className="flex gap-12 items-center">
             {lbRounds.map((round: string[], rIndex: number) => (
-              <div key={`lb-${rIndex}`} className="flex flex-col justify-around min-w-[16rem]" style={{ height: `${Math.max(4, lbRounds[0]?.length || 1) * 100}px` }}>
+              <div key={`lb-${rIndex}`} className="flex flex-col justify-around min-w-[16rem]" style={{ height: `${Math.max(4, lbRounds[0]?.length || 1) * 160}px` }}>
                 <div className="text-center text-slate-500 font-bold mb-4 uppercase tracking-widest text-xs">LB Round {rIndex + 1}</div>
                 {round.map((matchId: string, mIndex: number) => (
                   <div key={`lb-m-${mIndex}`} className="my-auto">
