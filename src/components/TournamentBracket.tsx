@@ -4,8 +4,9 @@ import Link from "next/link";
 import { Trophy, Calendar, CalendarDays, Swords } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
-import { scheduleMatch } from "@/app/actions/matchActions";
+import TournamentAgenda from "./TournamentAgenda";
 import { formatSetScores } from "@/lib/scoreUtils";
+import { scheduleMatch } from "@/app/actions/matchActions";
 
 type PlayerInfo = { id: string; name: string };
 type TeamInfo = { id: string; player1: PlayerInfo; player2: PlayerInfo };
@@ -49,20 +50,8 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
     }
   };
 
-  // Sort matches for agenda
-  const agendaMatches = [...tournament.matches].sort((a, b) => {
-    if (a.winnerTeamId && !b.winnerTeamId) return 1;
-    if (!a.winnerTeamId && b.winnerTeamId) return -1;
-    if (a.scheduledAt && b.scheduledAt) {
-      return new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime();
-    }
-    if (a.scheduledAt) return -1;
-    if (b.scheduledAt) return 1;
-    return 0;
-  });
-
-  // Extract all unique teams for the "Squadre" tab
-  const allTeams: TeamInfo[] = [];
+  // Group teams to show them in the Teams tab
+  const allTeams: any[] = [];
   tournament.matches.forEach(m => {
     if (m.teamA && !allTeams.find(t => t.id === m.teamA!.id)) allTeams.push(m.teamA);
     if (m.teamB && !allTeams.find(t => t.id === m.teamB!.id)) allTeams.push(m.teamB);
@@ -170,81 +159,7 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
         )}
 
         {activeTab === "agenda" && (
-          <div className="flex flex-col gap-4">
-            <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest mb-4">Agenda e Programmazione - {tournament.name}</h3>
-            <div className="flex flex-col gap-3">
-              {agendaMatches.map((m, i) => {
-                const isFinished = !!m.winnerTeamId;
-                return (
-                  <div key={m.id} className={clsx("flex items-center justify-between p-4 rounded-xl border", isFinished ? "bg-slate-800 border-slate-700 opacity-60" : "bg-slate-800 border-purple-500/50")}>
-                    <div className="flex items-center gap-6">
-                      <div className="flex flex-col">
-                        <span className="text-slate-400 text-sm font-bold uppercase">Data</span>
-                        {m.scheduledAt ? (
-                          <div className="flex items-center gap-2">
-                            <span className="text-purple-300 font-medium">{formatDate(m.scheduledAt)}</span>
-                            <div className="relative overflow-hidden w-5 h-5 flex items-center justify-center">
-                              <input 
-                                type="datetime-local" 
-                                onClick={(e) => { try { e.currentTarget.showPicker() } catch(err){} }}
-                                onChange={(e) => handleScheduleDirect(m.id, e.target.value)}
-                                value={new Date(new Date(m.scheduledAt).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
-                                className="absolute opacity-0 inset-0 cursor-pointer w-full h-full"
-                              />
-                              <Calendar className="w-3 h-3 text-slate-500 hover:text-purple-400 pointer-events-none" />
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="relative">
-                            <input 
-                              type="datetime-local" 
-                              onClick={(e) => { try { e.currentTarget.showPicker() } catch(err){} }}
-                              onChange={(e) => handleScheduleDirect(m.id, e.target.value)}
-                              className="absolute opacity-0 inset-0 cursor-pointer w-full h-full"
-                            />
-                            <button className="text-purple-500 hover:text-purple-400 flex items-center gap-1 text-sm font-bold mt-1 pointer-events-none">
-                              <Calendar className="w-4 h-4" /> Fissa Data
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex items-center gap-4">
-                        <span className={clsx("font-bold text-lg", m.winnerTeamId === m.teamA?.id ? "text-emerald-400" : "text-white")}>
-                          {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
-                        </span>
-                        <span className="text-slate-500 font-bold">VS</span>
-                        <span className={clsx("font-bold text-lg", m.winnerTeamId === m.teamB?.id ? "text-emerald-400" : "text-white")}>
-                          {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      {isFinished ? (
-                        <div className="flex flex-col items-end gap-1">
-                          <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-sm font-bold uppercase tracking-wider border border-emerald-500/20">
-                            {m.scoreTeamA} - {m.scoreTeamB}
-                          </span>
-                          {m.setScores && formatSetScores(m.setScores) && (
-                            <span className="text-[11px] font-black text-emerald-400 tracking-wider">
-                              ({formatSetScores(m.setScores)})
-                            </span>
-                          )}
-                        </div>
-                      ) : (
-                        <Link href={`/match/${m.id}`}>
-                          <button className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-lg transition-colors">
-                            Gioca
-                          </button>
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <TournamentAgenda tournament={tournament} />
         )}
 
         {activeTab === "squadre" && (

@@ -55,7 +55,8 @@ export default async function TournamentPage({ params, searchParams }: { params:
         <GroupStageView 
           groups={tournament.groups} 
           qualifiersPerGroup={2} // Assumed default, could be dynamic
-          tournamentId={tournament.id} 
+          tournamentId={tournament.id}
+          tournament={tournament}
         />
       ) : tournament.format === "doppia_eliminazione" ? (
         <DoubleEliminationBracket tournament={tournament} />

@@ -1,16 +1,51 @@
 "use client";
 
-import { Trophy, Calendar } from "lucide-react";
+import { useState } from "react";
+import { Trophy, Calendar, Swords, CalendarDays } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
 import { formatSetScores } from "@/lib/scoreUtils";
+import TournamentAgenda from "./TournamentAgenda";
 
-export default function GroupStageView({ groups, qualifiersPerGroup, tournamentId }: { groups: any[], qualifiersPerGroup: number, tournamentId: string }) {
+export default function GroupStageView({ groups, qualifiersPerGroup, tournamentId, tournament }: { groups: any[], qualifiersPerGroup: number, tournamentId: string, tournament: any }) {
+  const [activeTab, setActiveTab] = useState<"bracket" | "agenda">("bracket");
   const allGroupsFinished = groups.every(g => g.matches.every((m: any) => m.winnerTeamId !== null));
 
+  // Helper to format date for match cards
+  const formatDate = (dateInput: Date | string | null) => {
+    if (!dateInput) return null;
+    const d = new Date(dateInput);
+    return d.toLocaleString("it-IT", { 
+      day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
+    });
+  };
+
   return (
-    <div className="flex flex-col gap-8">
-      {allGroupsFinished && (
+    <div className="flex flex-col gap-6">
+      {/* Tabs */}
+      <div className="flex flex-wrap gap-4 mb-4">
+        <button 
+          onClick={() => setActiveTab("bracket")}
+          className={clsx("flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all", activeTab === "bracket" ? "bg-purple-500 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700")}
+        >
+          <Swords className="w-5 h-5" /> Gironi
+        </button>
+        <button 
+          onClick={() => setActiveTab("agenda")}
+          className={clsx("flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all", activeTab === "agenda" ? "bg-purple-500 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700")}
+        >
+          <CalendarDays className="w-5 h-5" /> Agenda Partite
+        </button>
+      </div>
+
+      <div className="bg-slate-900 p-8 rounded-3xl border border-slate-700">
+        {activeTab === "agenda" && (
+          <TournamentAgenda tournament={tournament} />
+        )}
+
+        {activeTab === "bracket" && (
+          <div className="flex flex-col gap-8">
+            {allGroupsFinished && (
         <div className="bg-emerald-900/50 border border-emerald-500 rounded-xl p-6 flex flex-col items-center justify-center gap-4 text-center">
           <Trophy className="w-12 h-12 text-emerald-400" />
           <h2 className="text-xl font-bold text-white">Tutti i gironi sono terminati!</h2>
@@ -82,6 +117,11 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                         {teamA ? `${teamA.player1.name} & ${teamA.player2.name}` : "TBD"}
                       </div>
                       <div className="px-4 py-1 bg-slate-950 rounded-lg font-black text-slate-300 flex flex-col items-center">
+                        {m.scheduledAt && !m.winnerTeamId && (
+                          <div className="text-[10px] text-purple-400 font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
+                            <Calendar className="w-3 h-3" /> {formatDate(m.scheduledAt)}
+                          </div>
+                        )}
                         <span>{isFinished ? `${m.scoreTeamA} - ${m.scoreTeamB}` : "VS"}</span>
                         {isFinished && m.setScores && formatSetScores(m.setScores) && (
                           <span className="text-[10px] text-emerald-400 font-bold tracking-tight">
@@ -99,6 +139,9 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
             </div>
           </div>
         ))}
+      </div>
+          </div>
+        )}
       </div>
     </div>
   );
