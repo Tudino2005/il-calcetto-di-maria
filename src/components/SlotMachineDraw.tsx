@@ -33,27 +33,51 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [currentSlot2, setCurrentSlot2] = useState<any>(null);
   const [allPlayers, setAllPlayers] = useState<any[]>([]);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [countdown, setCountdown] = useState(60);
   
+  // Showcase states (replaces countdown)
+  const [showcaseIndex, setShowcaseIndex] = useState(-1); // -1 = not started
+  const [showcasePhase, setShowcasePhase] = useState<"fly-in" | "hold" | "fly-out">("fly-in");
+
   // Intro states
   const [introState, setIntroState] = useState<"pending" | "playing_intro" | "slot_machine">("pending");
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // When all teams are revealed, start showcase
   useEffect(() => {
-    if (revealedIndex >= teams.length && teams.length > 0) {
-      const interval = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(interval);
+    if (revealedIndex >= teams.length && teams.length > 0 && showcaseIndex === -1) {
+      // Small pause, then start showcase
+      const t = setTimeout(() => setShowcaseIndex(0), 1000);
+      return () => clearTimeout(t);
     }
-  }, [revealedIndex, teams.length]);
-  
+  }, [revealedIndex, teams.length, showcaseIndex]);
+
+  // Showcase sequencer
+  useEffect(() => {
+    if (showcaseIndex < 0 || showcaseIndex >= teams.length) return;
+
+    // Phase 1: fly-in (600ms)
+    setShowcasePhase("fly-in");
+    const holdTimer = setTimeout(() => {
+      // Phase 2: hold (3 seconds)
+      setShowcasePhase("hold");
+      const outTimer = setTimeout(() => {
+        // Phase 3: fly-out (600ms)
+        setShowcasePhase("fly-out");
+        const nextTimer = setTimeout(() => {
+          if (showcaseIndex + 1 >= teams.length) {
+            // All teams shown → finish
+            finishDrawAnimation(tournament.id).then(() => router.refresh());
+          } else {
+            setShowcaseIndex(prev => prev + 1);
+          }
+        }, 600);
+        return () => clearTimeout(nextTimer);
+      }, 3000);
+      return () => clearTimeout(outTimer);
+    }, 600);
+    return () => clearTimeout(holdTimer);
+  }, [showcaseIndex]);
+
   useEffect(() => {
     if (teams.length > 0) return; // ONLY INIT ONCE, ignore router.refresh() updates
     const extracted = new Map();
@@ -100,10 +124,10 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
             setShowConfetti(true);
          }
          
-         // Wait 2 seconds before moving to next pair
+         // Wait 5 seconds before moving to next pair
          setTimeout(() => {
             setRevealedIndex(prev => prev + 1);
-         }, 2000);
+         }, 5000);
 
       }, spinDuration);
       
@@ -214,14 +238,79 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         </h2>
       </div>
 
-      {revealedIndex >= teams.length ? (
-        <div className="flex flex-col items-center justify-center animate-bounce-in z-20 mt-20">
-           <div className="text-[12rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500 mb-4 tabular-nums leading-none drop-shadow-2xl">
-             {countdown}
-           </div>
-           <h1 className="text-5xl font-black text-emerald-400 uppercase tracking-widest mb-6 text-center max-w-4xl drop-shadow-lg">
-             Elaborazione del tabellone degli incontri
-           </h1>
+      {showcaseIndex >= 0 ? (
+        // TEAM SHOWCASE PHASE
+        <div className="flex flex-col items-center justify-center animate-in fade-in duration-500 z-20 mt-20 w-full max-w-5xl">
+          <div className="text-slate-400 font-bold uppercase tracking-widest mb-8 text-xl animate-pulse">
+            Presentazione Squadre
+          </div>
+
+          {/* Flying card */}
+          {teams[showcaseIndex] && (() => {
+            const t = teams[showcaseIndex];
+            const teamName = tournament.teamNames?.[t.id];
+            const isFlyIn = showcasePhase === "fly-in";
+            const isHold = showcasePhase === "hold";
+            const isFlyOut = showcasePhase === "fly-out";
+
+            return (
+              <div
+                className="w-full max-w-xl"
+                style={{
+                  transform: isFlyIn
+                    ? "translateY(40vh) scale(0.4)"
+                    : isHold
+                    ? "translateY(0) scale(1)"
+                    : "translateY(-10vh) scale(0.7)",
+                  opacity: isFlyIn ? 0 : isHold ? 1 : 0,
+                  transition: "transform 600ms cubic-bezier(0.34,1.56,0.64,1), opacity 400ms ease",
+                }}
+              >
+                <div className="bg-slate-900 border-4 border-yellow-400 rounded-[3rem] p-10 flex flex-col items-center gap-6 shadow-[0_0_80px_rgba(250,204,21,0.4)]">
+                  {teamName && (
+                    <span className="text-2xl font-black text-yellow-400 uppercase tracking-widest">
+                      "{teamName}"
+                    </span>
+                  )}
+                  <div className="flex items-center gap-6 w-full justify-center">
+                    <div className="flex flex-col items-center gap-2 flex-1">
+                      <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-14 h-14 text-yellow-400" />
+                      <span className="text-4xl font-black text-white text-center leading-tight">{t.player1?.name}</span>
+                    </div>
+                    <span className="text-4xl font-black text-slate-500">&</span>
+                    <div className="flex flex-col items-center gap-2 flex-1">
+                      <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-14 h-14 text-emerald-400" />
+                      <span className="text-4xl font-black text-white text-center leading-tight">{t.player2?.name}</span>
+                    </div>
+                  </div>
+                  <div className="text-slate-500 font-bold text-sm uppercase tracking-widest">
+                    Squadra {showcaseIndex + 1} di {teams.length}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Already shown teams stacking below */}
+          <div className="mt-10 flex flex-wrap gap-3 justify-center max-w-4xl">
+            {teams.slice(0, showcaseIndex).map((t, i) => (
+              <div key={i} className="bg-slate-900 border border-emerald-500/40 px-4 py-2 rounded-xl flex items-center gap-2 shadow animate-in fade-in duration-300">
+                {tournament.teamNames?.[t.id] && (
+                  <span className="text-emerald-400 font-black text-xs uppercase tracking-widest">"{tournament.teamNames[t.id]}"</span>
+                )}
+                <span className="text-white font-bold text-sm">{t.player1?.name} & {t.player2?.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : revealedIndex >= teams.length ? (
+        <div className="flex flex-col items-center justify-center z-20 mt-20 gap-6 animate-in fade-in duration-700">
+          <div className="text-5xl font-black text-emerald-400 uppercase tracking-widest animate-pulse text-center">
+            Sorteggio Completato!
+          </div>
+          <div className="text-slate-400 font-bold uppercase tracking-widest">
+            Preparazione presentazione squadre...
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center mt-12 z-20 w-full max-w-5xl">
@@ -242,7 +331,6 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
               <div className={`flex-1 bg-slate-900 border-4 rounded-[3rem] h-80 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300 ${!spinning && showConfetti ? 'border-yellow-400 shadow-[0_0_50px_rgba(250,204,21,0.5)] scale-105' : 'border-slate-700 shadow-2xl'}`}>
                  <div className="absolute top-0 w-full h-1/3 bg-gradient-to-b from-slate-900 to-transparent z-10 pointer-events-none"></div>
                  <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-slate-900 to-transparent z-10 pointer-events-none"></div>
-                 
                  <div className={`flex flex-col items-center gap-4 ${spinning ? 'animate-slot-spin blur-[2px]' : 'animate-bounce-in'}`}>
                     <RoleIcon role={currentSlot1?.preferredRole || "entrambi"} className={`w-16 h-16 ${!spinning && showConfetti ? 'text-yellow-400' : 'text-slate-500'}`} />
                     <h3 className={`text-5xl font-black uppercase tracking-tight truncate w-full px-8 ${!spinning && showConfetti ? 'text-white' : 'text-slate-400'}`}>
@@ -250,14 +338,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                     </h3>
                  </div>
               </div>
-
               <div className="shrink-0 text-5xl font-black text-slate-600">&</div>
-
               {/* SLOT 2 */}
               <div className={`flex-1 bg-slate-900 border-4 rounded-[3rem] h-80 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300 ${!spinning && showConfetti ? 'border-emerald-400 shadow-[0_0_50px_rgba(52,211,153,0.5)] scale-105' : 'border-slate-700 shadow-2xl'}`}>
                  <div className="absolute top-0 w-full h-1/3 bg-gradient-to-b from-slate-900 to-transparent z-10 pointer-events-none"></div>
                  <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-slate-900 to-transparent z-10 pointer-events-none"></div>
-                 
                  <div className={`flex flex-col items-center gap-4 ${spinning ? 'animate-slot-spin blur-[2px]' : 'animate-bounce-in'}`}>
                     <RoleIcon role={currentSlot2?.preferredRole || "entrambi"} className={`w-16 h-16 ${!spinning && showConfetti ? 'text-emerald-400' : 'text-slate-500'}`} />
                     <h3 className={`text-5xl font-black uppercase tracking-tight truncate w-full px-8 ${!spinning && showConfetti ? 'text-white' : 'text-slate-400'}`}>
@@ -269,26 +354,28 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         </div>
       )}
 
-      {/* Lista delle squadre già estratte (in basso) */}
-      <div className="absolute bottom-0 w-full bg-slate-950/90 border-t border-slate-800 backdrop-blur-md p-5 flex flex-col items-center z-20 max-h-72 md:max-h-80 overflow-y-auto">
-         <div className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-3">Coppie Formate</div>
-         <div className="flex flex-wrap gap-3 justify-center w-full max-w-7xl pb-2">
-            {teams.slice(0, revealedIndex).map((t, i) => (
-              <div key={i} className="bg-slate-900 border border-slate-700 px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-lg animate-fade-in-up">
-                 <div className="flex flex-col items-center text-center">
-                   {tournament.teamNames && tournament.teamNames[t.id] && (
-                     <span className="text-emerald-400 font-black text-xs uppercase tracking-widest mb-1">"{tournament.teamNames[t.id]}"</span>
-                   )}
-                   <div className="flex items-center gap-2">
-                     <span className="text-white font-bold">{t.player1.name}</span>
-                     <span className="text-slate-500 text-xs">&</span>
-                     <span className="text-white font-bold">{t.player2.name}</span>
+      {/* Lista delle squadre già estratte (in basso) — visibile solo durante il sorteggio */}
+      {showcaseIndex < 0 && (
+        <div className="absolute bottom-0 w-full bg-slate-950/90 border-t border-slate-800 backdrop-blur-md p-5 flex flex-col items-center z-20 max-h-72 md:max-h-80 overflow-y-auto">
+           <div className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-3">Coppie Formate</div>
+           <div className="flex flex-wrap gap-3 justify-center w-full max-w-7xl pb-2">
+              {teams.slice(0, revealedIndex).map((t, i) => (
+                <div key={i} className="bg-slate-900 border border-slate-700 px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-lg animate-fade-in-up">
+                   <div className="flex flex-col items-center text-center">
+                     {tournament.teamNames && tournament.teamNames[t.id] && (
+                       <span className="text-emerald-400 font-black text-xs uppercase tracking-widest mb-1">"{tournament.teamNames[t.id]}"</span>
+                     )}
+                     <div className="flex items-center gap-2">
+                       <span className="text-white font-bold">{t.player1.name}</span>
+                       <span className="text-slate-500 text-xs">&</span>
+                       <span className="text-white font-bold">{t.player2.name}</span>
+                     </div>
                    </div>
-                 </div>
-              </div>
-            ))}
-         </div>
-      </div>
+                </div>
+              ))}
+           </div>
+        </div>
+      )}
     </div>
   );
 }

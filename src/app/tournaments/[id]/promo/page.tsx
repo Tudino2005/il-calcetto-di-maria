@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Calendar, Banknote, Trophy, Users, Swords, Info } from "lucide-react";
 import Link from "next/link";
 import QRCodeDisplay from "@/components/QRCodeDisplay";
+import RoleIcon from "@/components/RoleIcon";
 
 export default async function PromoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -136,15 +137,15 @@ export default async function PromoPage({ params }: { params: Promise<{ id: stri
               <p className="text-slate-500 text-lg font-medium">Nessuno si è ancora iscritto. Sii il primo!</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {registeredPlayers.map((p: any) => (
-                <div key={p.id} className="flex items-center gap-4 bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
-                  <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-xl font-black text-slate-300 border border-slate-700 shadow-inner">
-                    {p.name.charAt(0).toUpperCase()}
+                <div key={p.id} className="flex items-center gap-4 bg-slate-950/50 px-6 py-5 rounded-xl border border-slate-800/50 hover:bg-slate-800/50 transition-colors">
+                  <div className="shrink-0">
+                    <RoleIcon role={p.preferredRole || "entrambi"} className="w-8 h-8 text-slate-400" />
                   </div>
-                  <div>
-                    <div className="font-bold text-lg text-white">{p.name}</div>
-                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">{p.preferredRole}</div>
+                  <div className="min-w-0">
+                    <div className="font-black text-2xl text-white leading-tight truncate">{p.name}</div>
+                    <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-0.5">{p.preferredRole || "—"}</div>
                   </div>
                 </div>
               ))}
