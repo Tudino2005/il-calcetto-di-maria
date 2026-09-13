@@ -355,7 +355,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
                 <Sparkles className="w-6 h-6 text-purple-400" />
               </div>
               <h3 className="text-xl font-black text-white tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-                Il Partner Ideale 🏆
+                Il Partner Ideale 🤝
               </h3>
             </div>
             
