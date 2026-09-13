@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, User, Trophy, Swords, Calendar, Trash2, Users, Shield } from "lucide-react";
+import { ArrowLeft, User, Trophy, Swords, Calendar, Trash2, Users, Shield, Sparkles } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
 import { deletePlayer } from "@/app/actions/matchActions";
@@ -103,6 +103,18 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
       if (b.played !== a.played) return b.played - a.played;
       return Number(b.winRate) - Number(a.winRate);
     });
+
+  // --- ALGORITMO PARTNER IDEALE ---
+  // Trova i compagni con almeno 3 partite, ordinati per winRate decrescente
+  let idealPartner = partnerStats.filter(p => p.played >= 3);
+  if (idealPartner.length > 0) {
+    idealPartner = idealPartner.sort((a, b) => {
+      const wrDiff = Number(b.winRate) - Number(a.winRate);
+      if (wrDiff !== 0) return wrDiff;
+      return b.played - a.played;
+    });
+  }
+  const suggestedPartner = idealPartner.length > 0 ? idealPartner[0] : null;
 
   async function handleDelete() {
     "use server";
@@ -285,6 +297,37 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
             <p className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl inline-block">
               💡 {roleStats.verdettoAlchimia.consiglio}
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* IL PARTNER IDEALE */}
+      <section className="mb-8">
+        <div className="bg-gradient-to-r from-purple-900/40 to-slate-800/40 border border-purple-500/30 rounded-3xl p-6 relative overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+          <div className="absolute -right-10 -top-10 text-purple-500/10 pointer-events-none">
+            <Sparkles className="w-48 h-48" />
+          </div>
+          
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-purple-500/20 p-2 rounded-xl">
+                <Sparkles className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-xl font-black text-white tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                Il Partner Ideale 🏆
+              </h3>
+            </div>
+            
+            {suggestedPartner ? (
+              <p className="text-slate-300 leading-relaxed text-lg">
+                L'algoritmo consiglia: per il prossimo torneo iscriviti con <Link href={`/players/${suggestedPartner.partner.id}`} className="font-black text-white hover:text-purple-400 transition-colors underline decoration-purple-500/50 underline-offset-4">{suggestedPartner.partner.name}</Link>! 
+                I numeri non mentono: insieme avete un formidabile <span className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">{suggestedPartner.winRate}%</span> di vittorie su <span className="font-bold text-white">{suggestedPartner.played}</span> partite giocate.
+              </p>
+            ) : (
+              <p className="text-slate-400 italic text-base">
+                Dati ancora insufficienti per consigliare un partner preciso (richieste almeno 3 partite giocate in coppia).
+              </p>
+            )}
           </div>
         </div>
       </section>
