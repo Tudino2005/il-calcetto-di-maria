@@ -301,17 +301,13 @@ export default function TVSlideshow({ data }: { data: any }) {
 
             return (
               <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-12">
-                <h2 className="text-5xl font-black uppercase tracking-widest text-white mb-8 flex items-center gap-6 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)] shrink-0">
-                  <span className="relative flex h-6 w-6">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-6 w-6 bg-rose-600"></span>
-                  </span>
+                <h2 className="text-3xl font-black uppercase tracking-widest text-slate-300 mb-6 shrink-0">
                   Ultime Sfide Libere
                 </h2>
                 
-                <div className="flex-1 w-full max-w-5xl mx-auto overflow-hidden relative mask-edges flex justify-center">
+                <div className="flex-1 w-full max-w-7xl mx-auto overflow-hidden relative mask-edges flex justify-center px-4">
                   <div 
-                    className={`w-full flex flex-col gap-6 relative before:absolute before:inset-y-0 before:left-1/3 before:-ml-[1.5px] before:w-[3px] before:bg-slate-800/80 ${
+                    className={`w-full grid grid-cols-2 gap-4 pb-12 ${
                       scrollNeeded ? 'animate-scroll-matches' : 'my-auto'
                     }`}
                     style={scrollNeeded ? { animationDuration: `${durationSec}s` } : undefined}
@@ -333,44 +329,47 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const scoreL = teamAWon ? m.scoreTeamB : m.scoreTeamA;
 
                       return (
-                        <div key={m.id} className="relative flex items-center gap-10 w-full shrink-0">
-                          {/* LEFT: TIME */}
-                          <div className="w-1/3 text-right shrink-0 pr-10">
-                            <div className="text-2xl font-bold text-slate-300 uppercase tracking-widest">{timeLabel}</div>
-                            {isToday && <div className="text-emerald-500 text-sm font-black uppercase mt-1 tracking-widest">Recente</div>}
+                        <div key={m.id} className="bg-slate-900/90 border border-slate-700 p-4 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col justify-between shrink-0 h-full">
+                          {/* HEADER WITH TIME */}
+                          <div className="flex items-center justify-center text-xs text-slate-400 font-bold uppercase tracking-widest border-b border-slate-700/50 pb-2 mb-3">
+                            <span className="flex items-center gap-2">
+                              {timeLabel}
+                              {isToday && <span className="text-emerald-500">Recente</span>}
+                            </span>
                           </div>
-                          
-                          {/* CENTER: NODE */}
-                          <div className="absolute left-1/3 -ml-[10px] w-5 h-5 rounded-full bg-slate-950 border-[4px] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)] z-10" />
 
-                          {/* RIGHT: CARD */}
-                          <div className="flex-1 bg-slate-900/90 border border-slate-700 p-6 rounded-3xl shadow-xl backdrop-blur-sm flex flex-col gap-4">
-                            <div className="flex justify-between items-center text-3xl">
-                              <div className="font-bold text-white flex items-center gap-4 leading-tight">
-                                <Trophy className="w-8 h-8 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
-                                <span>
-                                  {winner?.player1?.name || "G1"} <span className="text-slate-500 text-xl mx-1">&</span> {winner?.player2?.name || "G2"}
-                                </span>
-                              </div>
-                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-4 py-1 rounded-xl">{scoreW}</div>
+                          {/* TEAMS & SCORES */}
+                          <div className="flex items-center justify-between text-lg overflow-hidden whitespace-nowrap">
+                            {/* WINNER */}
+                            <div className="font-bold text-white flex items-center gap-2 leading-tight truncate flex-1 min-w-0">
+                              <Trophy className="w-5 h-5 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
+                              <span className="truncate">
+                                {winner?.player1?.name || "G1"} <span className="text-slate-500 text-sm mx-1">&</span> {winner?.player2?.name || "G2"}
+                              </span>
                             </div>
                             
-                            <div className="flex justify-between items-center text-2xl">
-                              <div className="font-bold text-slate-500 flex items-center gap-4 pl-12 leading-tight">
-                                <span>
-                                  {loser?.player1?.name || "G1"} <span className="text-slate-700 text-lg mx-1">&</span> {loser?.player2?.name || "G2"}
-                                </span>
-                              </div>
-                              <div className="font-black text-slate-600 bg-slate-950 px-4 py-1 rounded-xl border border-slate-800">{scoreL}</div>
+                            {/* SCORE SEPARATOR */}
+                            <div className="flex items-center gap-2 mx-3 shrink-0">
+                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg text-lg">{scoreW}</div>
+                              <span className="text-slate-600 font-black text-base">-</span>
+                              <div className="font-black text-slate-400 bg-slate-950 px-2 py-0.5 rounded-lg border border-slate-800 text-lg">{scoreL}</div>
                             </div>
 
-                            {m.setScores && formatSetScores(m.setScores) && (
-                              <div className="flex items-center justify-between text-sm font-bold bg-slate-950/60 px-4 py-1.5 rounded-xl border border-slate-800">
-                                <span className="text-xs text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
-                                <span className="text-emerald-400 font-black tracking-wider text-base">{formatSetScores(m.setScores)}</span>
-                              </div>
-                            )}
+                            {/* LOSER */}
+                            <div className="font-bold text-slate-500 flex items-center leading-tight truncate flex-1 justify-end min-w-0 text-right">
+                              <span className="truncate">
+                                {loser?.player1?.name || "G1"} <span className="text-slate-700 text-sm mx-1">&</span> {loser?.player2?.name || "G2"}
+                              </span>
+                            </div>
                           </div>
+
+                          {/* SET SCORES */}
+                          {m.setScores && formatSetScores(m.setScores) && (
+                            <div className="flex items-center justify-center gap-3 text-xs font-bold bg-slate-950/60 px-3 py-1.5 rounded-lg border border-slate-800 mt-4 mx-auto w-fit">
+                              <span className="text-[10px] text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
+                              <span className="text-emerald-400 font-black tracking-wider text-sm">{formatSetScores(m.setScores)}</span>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
