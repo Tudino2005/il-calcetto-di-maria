@@ -350,26 +350,38 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           </div>
           
           <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-purple-500/20 p-2 rounded-xl">
-                <Sparkles className="w-6 h-6 text-purple-400" />
-              </div>
-              <h3 className="text-xl font-black text-white tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-                Il Partner Ideale 👤
-              </h3>
-            </div>
-            
             {suggestedPartner ? (
-              <p className="text-slate-300 leading-relaxed text-lg">
-                L'algoritmo consiglia: per il prossimo torneo iscriviti con <Link href={`/players/${suggestedPartner.partner.id}`} className="font-black text-white hover:text-purple-400 transition-colors underline decoration-purple-500/50 underline-offset-4">{suggestedPartner.partner.name}</Link>! 
-                I numeri non mentono: insieme avete un formidabile <span className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">{suggestedPartner.winRate}%</span> di vittorie su <span className="font-bold text-white">{suggestedPartner.played}</span> incontri giocati 
-                (con un bilancio di <span className="font-bold text-white">{suggestedPartner.setsWon}</span> set vinti e <span className="font-bold text-white">{suggestedPartner.setsLost}</span> persi).<br/>
-                Avete un totale di <span className="font-bold text-emerald-400">{suggestedPartner.goalsScored}</span> gol fatti e <span className="font-bold text-rose-400">{suggestedPartner.goalsConceded}</span> gol subiti.
-              </p>
+              <>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="bg-purple-500/20 p-2 rounded-xl">
+                    <Sparkles className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-black text-white tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                    IL PARTNER IDEALE E' {suggestedPartner.partner.name.toUpperCase()}
+                  </h3>
+                </div>
+                
+                <p className="text-slate-300 leading-relaxed text-lg">
+                  Maria consiglia: per il prossimo torneo iscriviti con <Link href={`/players/${suggestedPartner.partner.id}`} className="font-black text-white hover:text-purple-400 transition-colors underline decoration-purple-500/50 underline-offset-4">{suggestedPartner.partner.name}</Link>! 
+                  I numeri non mentono: insieme avete un formidabile <span className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">{suggestedPartner.winRate}%</span> di vittorie su <span className="font-bold text-white">{suggestedPartner.played}</span> incontri giocati 
+                  (con un bilancio di <span className="font-bold text-white">{suggestedPartner.setsWon}</span> set vinti e <span className="font-bold text-white">{suggestedPartner.setsLost}</span> persi).<br/>
+                  Avete un totale di <span className="font-bold text-emerald-400">{suggestedPartner.goalsScored}</span> gol fatti e <span className="font-bold text-rose-400">{suggestedPartner.goalsConceded}</span> gol subiti.
+                </p>
+              </>
             ) : (
-              <p className="text-slate-400 italic text-base">
-                Dati ancora insufficienti per consigliare un partner preciso (richieste almeno 3 partite giocate in coppia).
-              </p>
+              <>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="bg-purple-500/20 p-2 rounded-xl">
+                    <Sparkles className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-black text-white tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                    IL PARTNER IDEALE
+                  </h3>
+                </div>
+                <p className="text-slate-400 italic text-base">
+                  Dati ancora insufficienti per consigliare un partner preciso (richieste almeno 3 partite giocate in coppia).
+                </p>
+              </>
             )}
           </div>
         </div>
