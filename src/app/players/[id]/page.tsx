@@ -85,8 +85,28 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     if (!partner) return;
 
     const iWon = m.winnerTeamId === myTeam.id;
-    const goalsAgainst = isTeamA ? (m.scoreTeamB || 0) : (m.scoreTeamA || 0);
-    const goalsFor = isTeamA ? (m.scoreTeamA || 0) : (m.scoreTeamB || 0);
+    
+    let goalsAgainst = 0;
+    let goalsFor = 0;
+    
+    if (m.setScores) {
+      try {
+        const parsedSets = typeof m.setScores === 'string' ? JSON.parse(m.setScores) : m.setScores;
+        if (Array.isArray(parsedSets)) {
+          parsedSets.forEach((set: any) => {
+            if (isTeamA) {
+              goalsFor += Number(set.teamA || 0);
+              goalsAgainst += Number(set.teamB || 0);
+            } else {
+              goalsFor += Number(set.teamB || 0);
+              goalsAgainst += Number(set.teamA || 0);
+            }
+          });
+        }
+      } catch (e) {
+        console.error("Error parsing setScores:", e);
+      }
+    }
 
     if (!partnerMap.has(partner.id)) {
       partnerMap.set(partner.id, { partner, played: 0, wins: 0, teamId: myTeam.id, goalsConceded: 0, goalsScored: 0 });
