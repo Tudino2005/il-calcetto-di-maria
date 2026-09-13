@@ -74,7 +74,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
   });
 
   // Group statistics by teammate / partner
-  const partnerMap = new Map<string, { partner: any; played: number; wins: number; teamId: string }>();
+  const partnerMap = new Map<string, { partner: any; played: number; wins: number; teamId: string; goalsConceded: number }>();
 
   allMatches.forEach((m: any) => {
     const isTeamA = m.teamA?.player1Id === id || m.teamA?.player2Id === id;
@@ -85,13 +85,15 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     if (!partner) return;
 
     const iWon = m.winnerTeamId === myTeam.id;
+    const goalsAgainst = isTeamA ? (m.scoreTeamB || 0) : (m.scoreTeamA || 0);
 
     if (!partnerMap.has(partner.id)) {
-      partnerMap.set(partner.id, { partner, played: 0, wins: 0, teamId: myTeam.id });
+      partnerMap.set(partner.id, { partner, played: 0, wins: 0, teamId: myTeam.id, goalsConceded: 0 });
     }
     const entry = partnerMap.get(partner.id)!;
     entry.played += 1;
     if (iWon) entry.wins += 1;
+    entry.goalsConceded += goalsAgainst;
   });
 
   const partnerStats = Array.from(partnerMap.values())
@@ -105,13 +107,24 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     });
 
   // --- ALGORITMO PARTNER IDEALE ---
-  // Trova i compagni con almeno 3 partite, ordinati per winRate decrescente
+  // Trova i compagni con almeno 3 partite, ordinati con le nuove regole
   let idealPartner = partnerStats.filter(p => p.played >= 3);
   if (idealPartner.length > 0) {
     idealPartner = idealPartner.sort((a, b) => {
+      // Regola 1: Win Rate più alto
       const wrDiff = Number(b.winRate) - Number(a.winRate);
       if (wrDiff !== 0) return wrDiff;
-      return b.played - a.played;
+      
+      // Regola 2: Più partite giocate
+      if (b.played !== a.played) return b.played - a.played;
+      
+      // Regola 3: Meno gol subiti
+      if (a.goalsConceded !== b.goalsConceded) return a.goalsConceded - b.goalsConceded;
+      
+      // Regola 4: Posizione in classifica generale (rank numerico più basso = migliore)
+      const rankA = playerRankMap.get(a.partner.id) || 999;
+      const rankB = playerRankMap.get(b.partner.id) || 999;
+      return rankA - rankB;
     });
   }
   const suggestedPartner = idealPartner.length > 0 ? idealPartner[0] : null;
