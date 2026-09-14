@@ -1026,37 +1026,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                       </div>
 
-                      {/* CENTER: INDIVIDUAL AWARDS */}
-                      {(() => {
-                        if (!t.awardsData) return null;
-                        const awards = typeof t.awardsData === 'string' ? JSON.parse(t.awardsData) : t.awardsData;
-                        const gkNames = awards.goldenGloves?.map((g: any) => g.player?.name).filter(Boolean).join(' & ');
-                        const stNames = awards.goldenBoots?.map((g: any) => g.player?.name).filter(Boolean).join(' & ');
-                        if (!gkNames && !stNames) return null;
-                        return (
-                          <div className="flex flex-col items-center gap-3 mx-6 shrink-0">
-                            {gkNames && (
-                              <div className="flex flex-col items-center">
-                                <div className="text-lg font-black text-blue-400 uppercase tracking-widest mb-0.5 flex items-center gap-2">
-                                  🧤 Guantoni d'Oro
-                                </div>
-                                <div className="text-lg font-black text-blue-200 uppercase tracking-wider text-center">{gkNames}</div>
-                              </div>
-                            )}
-                            {stNames && (
-                              <div className="flex flex-col items-center">
-                                <div className="text-lg font-black text-red-400 uppercase tracking-widest mb-0.5 flex items-center gap-2">
-                                  👟 Scarpa d'Oro
-                                </div>
-                                <div className="text-lg font-black text-red-200 uppercase tracking-wider text-center">{stNames}</div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })()}
-
-                      <div className="text-right shrink-0">
-                        <div className="text-xs text-yellow-500 font-bold uppercase tracking-widest mb-1 flex items-center justify-end gap-1.5">
+                      {/* CENTER: CHAMPIONS (more important) */}
+                      <div className="text-center shrink-0 self-center mx-6">
+                        <div className="text-xs text-yellow-500 font-bold uppercase tracking-widest mb-1 flex items-center justify-center gap-1.5">
                           <Crown className="w-4 h-4 text-yellow-500" /> Campioni
                         </div>
                         {winnerTeamName && (
@@ -1068,6 +1040,40 @@ export default function TVSlideshow({ data }: { data: any }) {
                           {t.winnerTeam?.player1?.name || "Campione 1"} <span className="text-slate-500 mx-2">&</span> {t.winnerTeam?.player2?.name || "Campione 2"}
                         </div>
                       </div>
+
+                      {/* RIGHT: INDIVIDUAL AWARDS */}
+                      {(() => {
+                        if (!t.awardsData) return null;
+                        const awards = typeof t.awardsData === 'string' ? JSON.parse(t.awardsData) : t.awardsData;
+                        const gkNames = awards.goldenGloves?.map((g: any) => g.player?.name).filter(Boolean).join(' & ');
+                        const stNames = awards.goldenBoots?.map((g: any) => g.player?.name).filter(Boolean).join(' & ');
+                        if (!gkNames && !stNames) return null;
+                        return (
+                          <div className="flex flex-row items-center gap-10 mx-8 shrink-0 self-center">
+                            {gkNames && (
+                              <div className="flex items-center gap-3">
+                                <span className="text-5xl">🧤</span>
+                                <div className="flex flex-col">
+                                  <span className="text-sm text-blue-400 font-black uppercase tracking-widest mb-0.5">Guantoni d'Oro</span>
+                                  <span className="text-3xl font-black text-blue-200 uppercase tracking-wider leading-tight">{gkNames}</span>
+                                </div>
+                              </div>
+                            )}
+                            {gkNames && stNames && (
+                              <div className="w-px h-16 bg-slate-600/60 shrink-0" />
+                            )}
+                            {stNames && (
+                              <div className="flex items-center gap-3">
+                                <span className="text-5xl">👟</span>
+                                <div className="flex flex-col">
+                                  <span className="text-sm text-red-400 font-black uppercase tracking-widest mb-0.5">Scarpa d'Oro</span>
+                                  <span className="text-3xl font-black text-red-200 uppercase tracking-wider leading-tight">{stNames}</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                   );
                 })}
