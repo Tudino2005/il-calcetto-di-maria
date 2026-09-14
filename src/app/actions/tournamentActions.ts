@@ -536,3 +536,18 @@ export async function finishDrawAnimation(tournamentId: string) {
     data: { status: "in_progress" }
   });
 }
+
+export async function recalculateTournamentAwards(tournamentId: string) {
+  "use server";
+  const { finalizeTournamentAwards } = await import("@/lib/tournamentAwards");
+  const tournament = await prisma.tournament.findUnique({
+    where: { id: tournamentId }
+  });
+  if (!tournament || tournament.status !== "completed" || !tournament.winnerTeamId) {
+    return { error: "Torneo non completato o senza vincitore" };
+  }
+  const result = await finalizeTournamentAwards(tournamentId, tournament.winnerTeamId);
+  revalidatePath("/hall-of-fame");
+  revalidatePath(`/tournaments/${tournamentId}`);
+  return { ok: true, result };
+}
