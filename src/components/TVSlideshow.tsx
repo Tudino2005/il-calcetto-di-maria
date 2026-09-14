@@ -1037,18 +1037,18 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div className="flex flex-col items-center gap-3 mx-6 shrink-0">
                             {gkNames && (
                               <div className="flex flex-col items-center">
-                                <div className="text-[10px] text-blue-400/70 font-bold uppercase tracking-widest mb-0.5 flex items-center gap-1">
+                                <div className="text-lg font-black text-blue-400 uppercase tracking-widest mb-0.5 flex items-center gap-2">
                                   🧤 Guantoni d'Oro
                                 </div>
-                                <div className="text-lg font-black text-blue-300 uppercase tracking-wider text-center">{gkNames}</div>
+                                <div className="text-lg font-black text-blue-200 uppercase tracking-wider text-center">{gkNames}</div>
                               </div>
                             )}
                             {stNames && (
                               <div className="flex flex-col items-center">
-                                <div className="text-[10px] text-red-400/70 font-bold uppercase tracking-widest mb-0.5 flex items-center gap-1">
+                                <div className="text-lg font-black text-red-400 uppercase tracking-widest mb-0.5 flex items-center gap-2">
                                   👟 Scarpa d'Oro
                                 </div>
-                                <div className="text-lg font-black text-red-300 uppercase tracking-wider text-center">{stNames}</div>
+                                <div className="text-lg font-black text-red-200 uppercase tracking-wider text-center">{stNames}</div>
                               </div>
                             )}
                           </div>

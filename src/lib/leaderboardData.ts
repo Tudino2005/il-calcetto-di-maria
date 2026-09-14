@@ -51,7 +51,7 @@ export async function getLeaderboardData() {
       played,
       winRate: Number(winRate)
     };
-  }).filter(p => p.played > 0).sort((a, b) => { if (b.wins !== a.wins) return b.wins - a.wins; return b.winRate - a.winRate; });
+  }).filter(p => p.played > 0 && p.wins > 0).sort((a, b) => { if (b.wins !== a.wins) return b.wins - a.wins; return b.winRate - a.winRate; });
 
   const teamStats = teams.map(t => {
     const wins = t.matchesAsWinner.length;
@@ -64,7 +64,7 @@ export async function getLeaderboardData() {
       played,
       winRate: Number(winRate)
     };
-  }).filter(t => t.played > 0).sort((a, b) => { if (b.wins !== a.wins) return b.wins - a.wins; return b.winRate - a.winRate; });
+  }).filter(t => t.played > 0 && t.wins > 0).sort((a, b) => { if (b.wins !== a.wins) return b.wins - a.wins; return b.winRate - a.winRate; });
 
   return { playerStats, teamStats };
 }
@@ -163,8 +163,8 @@ export async function getFreeMatchesLeaderboard() {
 
       return { ...stats, ds, wr, wilsonScore };
     })
-    // Only include players with at least 1 match played
-    .filter(stats => stats.sg > 0)
+    // Only include players with at least 1 win (excludes WR 0%)
+    .filter(stats => stats.sg > 0 && stats.v > 0)
     // Sort by Wilson Score desc (statistically fair), then WR% as tiebreaker, then DS
     .sort((a, b) => {
       if (b.wilsonScore !== a.wilsonScore) return b.wilsonScore - a.wilsonScore;
