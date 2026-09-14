@@ -309,12 +309,18 @@ export default function TVSlideshow({ data }: { data: any }) {
           {/* LEADERBOARD FREE MATCHES (SERIE A STYLE) */}
           {currentSlide.type === "leaderboard_free" && (
             <div className="flex flex-col items-center w-full max-w-7xl h-[85vh] relative z-10 mx-auto px-4">
-              <div className="flex items-center gap-4 mb-8 shrink-0">
-                <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
-                <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg">
-                  Sfide Libere
-                </h2>
-                <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
+              <div className="flex flex-col items-center gap-2 mb-8 shrink-0">
+                <div className="flex items-center gap-4">
+                  <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
+                  <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg">
+                    Sfide Libere
+                  </h2>
+                  <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
+                </div>
+                <p className="text-slate-400 text-sm font-medium italic tracking-wide text-center max-w-3xl">
+                  Classifica calcolata con l'algoritmo <span className="text-emerald-400 font-bold not-italic">Wilson Score Confidence Interval</span> — lo stesso usato da molti siti sportivi. Premia chi vince con continuità nel tempo, non chi ha giocato poche partite.
+                  <span className="text-slate-500 ml-1">(Andate su Google se volete approfondire)</span>
+                </p>
               </div>
               
               <div className="w-full bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1">
@@ -1019,6 +1025,35 @@ export default function TVSlideshow({ data }: { data: any }) {
                           </div>
                         </div>
                       </div>
+
+                      {/* CENTER: INDIVIDUAL AWARDS */}
+                      {(() => {
+                        if (!t.awardsData) return null;
+                        const awards = typeof t.awardsData === 'string' ? JSON.parse(t.awardsData) : t.awardsData;
+                        const gkNames = awards.goldenGloves?.map((g: any) => g.player?.name).filter(Boolean).join(' & ');
+                        const stNames = awards.goldenBoots?.map((g: any) => g.player?.name).filter(Boolean).join(' & ');
+                        if (!gkNames && !stNames) return null;
+                        return (
+                          <div className="flex flex-col items-center gap-3 mx-6 shrink-0">
+                            {gkNames && (
+                              <div className="flex flex-col items-center">
+                                <div className="text-[10px] text-blue-400/70 font-bold uppercase tracking-widest mb-0.5 flex items-center gap-1">
+                                  🧤 Guantoni d'Oro
+                                </div>
+                                <div className="text-lg font-black text-blue-300 uppercase tracking-wider text-center">{gkNames}</div>
+                              </div>
+                            )}
+                            {stNames && (
+                              <div className="flex flex-col items-center">
+                                <div className="text-[10px] text-red-400/70 font-bold uppercase tracking-widest mb-0.5 flex items-center gap-1">
+                                  👟 Scarpa d'Oro
+                                </div>
+                                <div className="text-lg font-black text-red-300 uppercase tracking-wider text-center">{stNames}</div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
 
                       <div className="text-right shrink-0">
                         <div className="text-xs text-yellow-500 font-bold uppercase tracking-widest mb-1 flex items-center justify-end gap-1.5">
