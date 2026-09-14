@@ -1,9 +1,10 @@
 export const dynamic = "force-dynamic";
 import Link from "next/link";
-import { Trophy, Users, Play, Swords, Zap } from "lucide-react";
+import { Trophy, Users, Play, Swords, Zap, LogOut } from "lucide-react";
 import WipeDataButton from "@/components/WipeDataButton";
 import { prisma } from "@/lib/prisma";
 import GlobalInbox from "@/components/GlobalInbox";
+import { logoutAction } from "@/app/actions/authActions";
 
 export default async function AdminHome() {
   const pendingRequests = await prisma.registrationRequest.findMany({
@@ -12,7 +13,15 @@ export default async function AdminHome() {
     orderBy: { createdAt: "asc" }
   });
   return (
-    <main className="flex-1 p-4 sm:p-8 xl:p-12 w-full flex flex-col items-center min-h-screen">
+    <main className="flex-1 p-4 sm:p-8 xl:p-12 w-full flex flex-col items-center min-h-screen relative">
+      <div className="absolute top-8 right-8">
+        <form action={logoutAction}>
+          <button type="submit" className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white rounded-xl transition-all font-bold text-sm uppercase tracking-wider">
+            <LogOut className="w-4 h-4" /> Esci
+          </button>
+        </form>
+      </div>
+
       <header className="mb-12 text-center">
         <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-tight">
           IL CALCETTO DI MARIA
