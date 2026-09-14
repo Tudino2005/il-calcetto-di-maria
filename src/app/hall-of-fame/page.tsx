@@ -5,6 +5,11 @@ import { recalculateTournamentAwards } from "@/app/actions/tournamentActions";
 
 export const dynamic = "force-dynamic";
 
+async function handleRecalculate(tournamentId: string): Promise<void> {
+  "use server";
+  await recalculateTournamentAwards(tournamentId);
+}
+
 export default async function HallOfFamePage() {
   const completedTournaments = await prisma.tournament.findMany({
     where: { status: "completed" },
@@ -106,7 +111,7 @@ export default async function HallOfFamePage() {
                 {/* Recalculate button – only shows when awardsData is missing */}
                 {!hasAwards && t.winnerTeamId && (
                   <form
-                    action={recalculateTournamentAwards.bind(null, t.id)}
+                    action={handleRecalculate.bind(null, t.id)}
                     className="absolute bottom-[5.5rem] left-6 z-10"
                   >
                     <button
