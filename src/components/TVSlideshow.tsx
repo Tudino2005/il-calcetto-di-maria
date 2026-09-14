@@ -308,7 +308,7 @@ export default function TVSlideshow({ data }: { data: any }) {
           
           {/* LEADERBOARD FREE MATCHES (SERIE A STYLE) */}
           {currentSlide.type === "leaderboard_free" && (
-            <div className="flex flex-col items-center w-full max-w-7xl h-[85vh] relative z-10 mx-auto px-4">
+            <div className="flex flex-col items-center w-full max-w-7xl h-full justify-start relative z-10 mx-auto px-4 pt-4">
               <div className="flex flex-col items-center gap-2 mb-8 shrink-0">
                 <div className="flex items-center gap-4">
                   <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
@@ -323,7 +323,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </p>
               </div>
               
-              <div className="w-full bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1">
+              <div className="w-full bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
                 {/* TABLE HEADER */}
                 <div className="grid grid-cols-12 gap-2 bg-slate-950/80 p-4 border-b border-slate-700/50 text-slate-400 font-bold uppercase tracking-widest text-xs">
                   <div className="col-span-1 text-center">Pos</div>
@@ -340,9 +340,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
 
                 {/* ROWS */}
-                <div className="flex flex-col flex-1">
+                <div className="flex flex-col">
                   {(!data.freeMatchesStats || data.freeMatchesStats.length === 0) ? (
-                    <div className="flex-1 flex flex-col items-center justify-center text-slate-500">
+                    <div className="flex flex-col items-center justify-center text-slate-500 py-16">
                       <Swords className="w-16 h-16 mb-4 opacity-50" />
                       <p className="text-xl font-bold uppercase tracking-widest">Nessuna Sfida Libera Giocata</p>
                     </div>
@@ -355,7 +355,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     return (
                       <div 
                         key={stats.id} 
-                        className={`grid grid-cols-12 gap-2 p-4 items-center border-b border-slate-800/30 transition-colors flex-1 ${
+                        className={`grid grid-cols-12 gap-2 p-4 items-center border-b border-slate-800/30 transition-colors ${
                           isFirst ? 'bg-yellow-500/10 border-yellow-500/20' : 'even:bg-slate-800/30 hover:bg-slate-800/50'
                         }`}
                       >
