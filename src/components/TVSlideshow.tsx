@@ -183,8 +183,10 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
                         {topPlayers.map((tp: any, idx: number) => (
                           <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
-                            <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
-                            <div className="mt-2"><RoleIcon role={tp.preferredRole} className="w-8 h-8" /></div>
+                            <div className="flex items-center gap-3">
+                              <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
+                              <RoleIcon role={tp.preferredRole} className="w-8 h-8 shrink-0 text-slate-300" />
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -220,9 +222,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                          <div className="flex flex-col min-w-0">
-                            <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                            <div className="mt-1"><RoleIcon role={p.preferredRole || "GIOCATORE"} className="w-6 h-6" /></div>
+                          <div className="flex flex-col min-w-0 justify-center">
+                            <div className="flex items-center gap-3">
+                              <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
+                              <RoleIcon role={p.preferredRole || "GIOCATORE"} className="w-6 h-6 shrink-0 text-slate-400" />
+                            </div>
                           </div>
                         </div>
                         
