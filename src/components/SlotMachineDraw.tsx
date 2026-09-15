@@ -218,12 +218,12 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
               <div className="w-48 h-48 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-[0_0_100px_rgba(79,70,229,0.8)] mb-12 animate-bounce">
                  <Trophy className="w-24 h-24 text-white" />
               </div>
-              <h1 className="text-[8rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 uppercase tracking-tighter leading-none text-center mix-blend-screen" style={{ textShadow: '0 0 50px rgba(255,255,255,0.3)' }}>
-                IL CALCETTO
-              </h1>
-              <h1 className="text-[10rem] font-black text-emerald-400 uppercase tracking-tighter leading-none text-center animate-pulse" style={{ textShadow: '0 0 80px rgba(52,211,153,0.6)', animationDuration: '0.8s' }}>
-                DI MARIA
-              </h1>
+              <img 
+                src="/images/red-player-table-football.png" 
+                alt="Il Calcetto di Maria" 
+                className="w-full max-w-2xl h-auto drop-shadow-[0_0_50px_rgba(255,255,255,0.3)] animate-pulse" 
+                style={{ animationDuration: '0.8s' }} 
+              />
            </div>
         </div>
       )}
