@@ -142,9 +142,12 @@ export default function TVSlideshow({ data }: { data: any }) {
     <div className="w-full h-screen bg-slate-950 text-white overflow-hidden relative flex flex-col">
       {/* GLOBAL HEADER */}
       <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-50 bg-gradient-to-b from-slate-950 to-transparent">
-        <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-widest uppercase">
-          IL CALCETTO DI MARIA
-        </h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-widest uppercase">
+            IL CALCETTO DI MARIA
+          </h1>
+          <img src="/images/red-player-table-football.png" alt="Logo" className="h-10 w-auto object-contain drop-shadow-md" />
+        </div>
         <div className="flex gap-2">
           {slides.map((_, i) => (
             <div key={i} className={`h-2 rounded-full transition-all duration-1000 ${i === safeCurrentIndex ? 'w-12 bg-emerald-400' : 'w-3 bg-slate-700'}`} />
