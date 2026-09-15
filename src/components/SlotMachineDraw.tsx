@@ -201,7 +201,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   useEffect(() => {
     if (introState === "player_lineup" && allPlayers.length > 0) {
       if (lineupIndex < allPlayers.length) {
-        const timer = setTimeout(() => setLineupIndex(prev => prev + 1), 4000); // 4s per player
+        const timer = setTimeout(() => setLineupIndex(prev => prev + 1), 10000); // 10s per player
         return () => clearTimeout(timer);
       } else {
         setIntroState("countdown");
