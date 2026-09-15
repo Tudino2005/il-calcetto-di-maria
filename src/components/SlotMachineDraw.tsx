@@ -292,13 +292,25 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
           })()}
 
           {/* Already shown teams stacking below */}
-          <div className="mt-10 flex flex-wrap gap-3 justify-center max-w-4xl">
+          <div className="mt-10 flex flex-wrap gap-4 justify-center w-full max-w-7xl px-4">
             {teams.slice(0, showcaseIndex).map((t, i) => (
-              <div key={i} className="bg-slate-900 border border-emerald-500/40 px-4 py-2 rounded-xl flex items-center gap-2 shadow animate-in fade-in duration-300">
+              <div key={i} className="bg-slate-900 border-2 border-emerald-500/50 rounded-3xl p-5 flex flex-col items-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.15)] animate-in fade-in zoom-in duration-300 min-w-[240px]">
                 {tournament.teamNames?.[t.id] && (
-                  <span className="text-emerald-400 font-black text-xs uppercase tracking-widest">"{tournament.teamNames[t.id]}"</span>
+                  <span className="text-sm font-black text-emerald-400 uppercase tracking-widest">
+                    "{tournament.teamNames[t.id]}"
+                  </span>
                 )}
-                <span className="text-white font-bold text-sm">{t.player1?.name} & {t.player2?.name}</span>
+                <div className="flex items-center gap-4 w-full justify-center">
+                  <div className="flex flex-col items-center gap-1 flex-1">
+                    <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-8 h-8 text-yellow-400" />
+                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap">{t.player1?.name}</span>
+                  </div>
+                  <span className="text-xl font-black text-slate-500">&</span>
+                  <div className="flex flex-col items-center gap-1 flex-1">
+                    <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-8 h-8 text-emerald-400" />
+                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap">{t.player2?.name}</span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
