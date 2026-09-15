@@ -177,9 +177,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
       <div className="bg-slate-800 rounded-3xl p-8 mb-8 border border-slate-700 shadow-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <div className="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center">
-              <User className="w-10 h-10 text-slate-400" />
-            </div>
+
             <div>
               <div className="flex items-center gap-4 mb-2">
                 <h2 className="text-4xl font-black text-white">{player.name}</h2>
