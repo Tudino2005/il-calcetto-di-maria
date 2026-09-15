@@ -39,7 +39,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [showcasePhase, setShowcasePhase] = useState<"fly-in" | "hold" | "fly-out">("fly-in");
 
   // Intro states
-  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "countdown" | "slot_machine">("pending");
+  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "player_lineup" | "countdown" | "slot_machine">("pending");
+  const [lineupIndex, setLineupIndex] = useState(0);
   const [countdownValue, setCountdownValue] = useState(3);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -161,7 +162,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     
     // 10 second animation duration
     setTimeout(() => {
-       setIntroState("countdown");
+       setIntroState("player_lineup");
     }, 10000);
   };
 
@@ -184,7 +185,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
             }, 8000);
             
             setTimeout(() => {
-               setIntroState("countdown");
+               setIntroState("player_lineup");
             }, 10000);
           } catch (err) {
             // Autoplay blocked, wait for user click
@@ -195,6 +196,18 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       attemptPlay();
     }
   }, [teams.length, introState]);
+
+  // Lineup logic
+  useEffect(() => {
+    if (introState === "player_lineup" && allPlayers.length > 0) {
+      if (lineupIndex < allPlayers.length) {
+        const timer = setTimeout(() => setLineupIndex(prev => prev + 1), 4000); // 4s per player
+        return () => clearTimeout(timer);
+      } else {
+        setIntroState("countdown");
+      }
+    }
+  }, [introState, lineupIndex, allPlayers.length]);
 
   // Countdown logic
   useEffect(() => {
@@ -243,6 +256,61 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
            </div>
         </div>
       )}
+
+      {introState === "player_lineup" && allPlayers[lineupIndex] && (() => {
+        const p = allPlayers[lineupIndex];
+        const hasMedia = !!p.mediaUrl;
+        const isVideo = hasMedia && p.mediaUrl.toLowerCase().endsWith('.mp4');
+        return (
+          <div key={p.id} className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
+             {/* Dynamic Stadium BG */}
+             <div className="absolute inset-0 bg-slate-900 opacity-80 mix-blend-luminosity pointer-events-none"></div>
+             <div className="absolute top-1/4 left-1/4 w-[40rem] h-[40rem] bg-indigo-600/20 blur-[120px] rounded-full animate-pulse"></div>
+             <div className="absolute bottom-1/4 right-1/4 w-[40rem] h-[40rem] bg-emerald-600/20 blur-[120px] rounded-full animate-pulse"></div>
+             
+             {/* Giant Name Background */}
+             <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
+               <h1 className="text-[20rem] font-black text-white/5 uppercase tracking-tighter whitespace-nowrap animate-pulse drop-shadow-2xl">
+                 {p.name} {p.name}
+               </h1>
+             </div>
+             
+             {/* Player Image/Video or Fallback */}
+             <div className="relative z-10 flex flex-col items-center h-full justify-end pb-24 animate-in slide-in-from-bottom-20 fade-in duration-700">
+                {hasMedia ? (
+                  isVideo ? (
+                    <video src={`/players/${p.mediaUrl}`} autoPlay muted playsInline className="h-[80vh] object-contain drop-shadow-2xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }} />
+                  ) : (
+                    <img src={`/players/${p.mediaUrl}`} className="h-[80vh] object-contain drop-shadow-2xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }} />
+                  )
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-[60vh]">
+                    <div className="w-64 h-64 bg-slate-800 rounded-full flex items-center justify-center mb-8 border-4 border-slate-700 shadow-2xl">
+                       <Users className="w-32 h-32 text-slate-500" />
+                    </div>
+                  </div>
+                )}
+             </div>
+             
+             {/* Lower Third */}
+             <div className="absolute bottom-16 left-0 w-full flex justify-center z-20 animate-in slide-in-from-bottom-10 fade-in duration-700 delay-300 fill-mode-both">
+               <div className="flex items-center bg-gradient-to-r from-transparent via-slate-900/95 to-transparent px-48 py-6 border-y border-slate-700/50 backdrop-blur-md">
+                 <div className="flex flex-col items-center gap-1">
+                   <h2 className="text-7xl font-black text-white uppercase tracking-wider drop-shadow-lg">
+                     {p.name}
+                   </h2>
+                   <div className="flex items-center gap-3">
+                     <RoleIcon role={p.preferredRole} className="w-8 h-8 text-emerald-400" />
+                     <span className="text-2xl font-bold text-emerald-400 uppercase tracking-widest">
+                       {p.preferredRole === 'entrambi' ? 'GIOCATORE' : p.preferredRole}
+                     </span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+          </div>
+        );
+      })()}
 
       {introState === "countdown" && (
         <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden">

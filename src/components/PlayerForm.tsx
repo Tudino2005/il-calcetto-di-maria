@@ -10,6 +10,7 @@ export default function PlayerForm() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [preferredRole, setPreferredRole] = useState("attaccante");
+  const [mediaUrl, setMediaUrl] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,7 +18,7 @@ export default function PlayerForm() {
     if (!name.trim()) return;
     setError("");
 
-    const res = await createPlayer(name, preferredRole);
+    const res = await createPlayer(name, preferredRole, mediaUrl.trim() || undefined);
     if ('error' in res) {
       setError(res.error);
       return;
@@ -25,6 +26,7 @@ export default function PlayerForm() {
 
     setName("");
     setPreferredRole("attaccante");
+    setMediaUrl("");
     router.refresh();
   };
 
@@ -49,6 +51,17 @@ export default function PlayerForm() {
             className="w-full bg-slate-900 border border-slate-600 rounded-xl p-4 text-white text-lg focus:border-emerald-500 focus:outline-none"
             placeholder="Es. Mario Rossi"
           />
+        </div>
+        <div>
+          <label className="block text-slate-400 mb-2 font-medium">File Video/Foto (Opzionale)</label>
+          <input 
+            type="text" 
+            value={mediaUrl}
+            onChange={e => setMediaUrl(e.target.value)}
+            className="w-full bg-slate-900 border border-slate-600 rounded-xl p-4 text-white text-lg focus:border-emerald-500 focus:outline-none"
+            placeholder="es. enzo.mp4 o luis.png"
+          />
+          <p className="text-slate-500 text-xs mt-1">Carica il file nella cartella public/players/ e scrivi qui il nome.</p>
         </div>
         <div>
           <label className="block text-slate-400 mb-4 font-medium">Ruolo Preferito</label>

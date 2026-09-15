@@ -5,13 +5,22 @@ import { revalidatePath } from "next/cache";
 import { advanceDoubleElimination } from "@/lib/doubleEliminationEngine";
 import { finalizeTournamentAwards } from "@/lib/tournamentAwards";
 
-export async function createPlayer(name: string, preferredRole: string) {
+export async function createPlayer(name: string, preferredRole: string, mediaUrl?: string) {
   const allPlayers = await prisma.player.findMany();
   const exists = allPlayers.some(p => p.name.toLowerCase() === name.trim().toLowerCase());
   if (exists) {
     return { error: "Un giocatore con questo nome esiste già!" };
   }
-  const player = await prisma.player.create({ data: { name, preferredRole } });
+  const player = await prisma.player.create({ data: { name, preferredRole, mediaUrl } });
+  revalidatePath("/");
+  return player;
+}
+
+export async function updatePlayer(id: string, name: string, preferredRole: string, mediaUrl?: string) {
+  const player = await prisma.player.update({
+    where: { id },
+    data: { name, preferredRole, mediaUrl }
+  });
   revalidatePath("/");
   return player;
 }
