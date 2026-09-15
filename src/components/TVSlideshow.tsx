@@ -71,17 +71,32 @@ export default function TVSlideshow({ data }: { data: any }) {
       setCurrentIndex(drawSlideIndex);
     }
   }, [drawSlideIndex]);
-
-  // Fast polling to catch admin actions (like start draw) instantly
+  // Smart polling to catch admin actions instantly without burning DB quota
   useEffect(() => {
     if (drawSlideIndex !== -1) return; // Do not poll while drawing!
     
-    const poll = setInterval(() => {
-      router.refresh();
-    }, 3000); // Check every 3 seconds
+    let lastFingerprint = "";
+
+    const poll = setInterval(async () => {
+      try {
+        const res = await fetch('/api/ping-db');
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        if (lastFingerprint === "") {
+          lastFingerprint = data.fingerprint; // First load
+        } else if (lastFingerprint !== data.fingerprint) {
+          // Database changed! Let's download the heavy data
+          lastFingerprint = data.fingerprint;
+          router.refresh();
+        }
+      } catch (err) {
+        console.error("Polling error", err);
+      }
+    }, 10000); // Check every 10 seconds
+
     return () => clearInterval(poll);
   }, [router, drawSlideIndex]);
-
   const [cycleCount, setCycleCount] = useState(0);
 
   useEffect(() => {
