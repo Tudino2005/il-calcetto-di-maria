@@ -39,7 +39,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [showcasePhase, setShowcasePhase] = useState<"fly-in" | "hold" | "fly-out">("fly-in");
 
   // Intro states
-  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "slot_machine">("pending");
+  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "countdown" | "slot_machine">("pending");
+  const [countdownValue, setCountdownValue] = useState(3);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // When all teams are revealed, start showcase
@@ -65,8 +66,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         setShowcasePhase("fly-out");
         const nextTimer = setTimeout(() => {
           if (showcaseIndex + 1 >= teams.length) {
-            // All teams shown → finish
-            finishDrawAnimation(tournament.id).then(() => router.refresh());
+            // All teams shown → wait to admire the final grid
+            setShowcaseIndex(prev => prev + 1); // Pushes the last team into the grid
+            setTimeout(() => {
+              finishDrawAnimation(tournament.id).then(() => router.refresh());
+            }, 8000); // 8 seconds to admire the final grid
           } else {
             setShowcaseIndex(prev => prev + 1);
           }
@@ -157,7 +161,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     
     // 10 second animation duration
     setTimeout(() => {
-       setIntroState("slot_machine");
+       setIntroState("countdown");
     }, 10000);
   };
 
@@ -180,7 +184,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
             }, 8000);
             
             setTimeout(() => {
-               setIntroState("slot_machine");
+               setIntroState("countdown");
             }, 10000);
           } catch (err) {
             // Autoplay blocked, wait for user click
@@ -191,6 +195,18 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       attemptPlay();
     }
   }, [teams.length, introState]);
+
+  // Countdown logic
+  useEffect(() => {
+    if (introState === "countdown") {
+      if (countdownValue > 0) {
+        const timer = setTimeout(() => setCountdownValue(prev => prev - 1), 1000);
+        return () => clearTimeout(timer);
+      } else {
+        setIntroState("slot_machine");
+      }
+    }
+  }, [introState, countdownValue]);
   if (teams.length === 0) return null;
 
   return (
@@ -225,6 +241,16 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                 style={{ animationDuration: '0.8s' }} 
               />
            </div>
+        </div>
+      )}
+
+      {introState === "countdown" && (
+        <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
+          <div key={countdownValue} className="animate-in zoom-in fade-in duration-500 flex flex-col items-center">
+            <h1 className="text-[15rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 drop-shadow-[0_0_100px_rgba(250,204,21,0.8)] leading-none">
+              {countdownValue}
+            </h1>
+          </div>
         </div>
       )}
 
@@ -294,9 +320,9 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
           {/* Already shown teams stacking below */}
           <div className="mt-10 flex flex-wrap gap-4 justify-center w-full max-w-7xl px-4">
             {teams.slice(0, showcaseIndex).map((t, i) => (
-              <div key={i} className="bg-slate-900 border-2 border-emerald-500/50 rounded-3xl p-5 flex flex-col items-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.15)] animate-in fade-in zoom-in duration-300 min-w-[240px]">
+              <div key={i} className="bg-slate-900 border-2 border-yellow-400/50 rounded-3xl p-5 flex flex-col items-center gap-3 shadow-[0_0_20px_rgba(250,204,21,0.15)] animate-in fade-in zoom-in duration-300 min-w-[240px]">
                 {tournament.teamNames?.[t.id] && (
-                  <span className="text-sm font-black text-emerald-400 uppercase tracking-widest">
+                  <span className="text-sm font-black text-yellow-400 uppercase tracking-widest">
                     "{tournament.teamNames[t.id]}"
                   </span>
                 )}
