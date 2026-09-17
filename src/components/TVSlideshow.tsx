@@ -853,6 +853,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                   </div>
                                 </div>
                                 {(() => {
+                                  if (m.winnerTeamId) return null;
                                   const dateToUse = m.scheduledAt || currentSlide.tournament.startDate;
                                   if (!dateToUse) return <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2">Data da definire</div>;
                                   return (
