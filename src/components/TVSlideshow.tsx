@@ -832,10 +832,10 @@ export default function TVSlideshow({ data }: { data: any }) {
                                     </span>
                                   </div>
 
-                                  <div className="shrink-0 bg-slate-950 px-3 py-1.5 rounded-xl text-base font-black text-white shadow-inner mx-2 flex flex-col items-center border border-slate-800">
+                                  <div className="shrink-0 bg-slate-950 px-5 py-2.5 rounded-2xl text-2xl font-black text-white shadow-inner mx-3 flex flex-col items-center border border-slate-800">
                                     <span>{m.winnerTeamId ? `${m.scoreTeamA} - ${m.scoreTeamB}` : 'VS'}</span>
                                     {m.winnerTeamId && m.setScores && formatSetScores(m.setScores) && (
-                                      <span className="text-[10px] text-emerald-400 font-bold tracking-tight mt-0.5">
+                                      <span className="text-[15px] text-emerald-400 font-bold tracking-tight mt-1">
                                         ({formatSetScores(m.setScores)})
                                       </span>
                                     )}
@@ -854,9 +854,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 </div>
                                 {(() => {
                                   const dateToUse = m.scheduledAt || currentSlide.tournament.startDate;
-                                  if (!dateToUse) return <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Data da definire</div>;
+                                  if (!dateToUse) return <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2">Data da definire</div>;
                                   return (
-                                    <div className="text-[10px] font-black text-blue-400 bg-blue-500/20 px-2.5 py-0.5 rounded-md mt-0.5">
+                                    <div className="text-sm font-black text-blue-400 bg-blue-500/20 px-4 py-1 rounded-lg mt-2">
                                       {new Date(dateToUse).toLocaleDateString('it-IT')} {m.scheduledAt ? `alle ${new Date(dateToUse).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}` : ''}
                                     </div>
                                   );
