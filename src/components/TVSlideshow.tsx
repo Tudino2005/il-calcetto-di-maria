@@ -450,7 +450,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 w-full max-w-7xl mx-auto overflow-hidden relative mask-edges flex justify-center px-4">
                   <div 
-                    className={`w-full grid grid-cols-2 gap-4 pb-12 ${
+                    className={`w-full grid grid-cols-2 gap-4 content-start pb-12 ${
                       scrollNeeded ? 'animate-scroll-matches' : 'my-auto'
                     }`}
                     style={scrollNeeded ? { animationDuration: `${durationSec}s` } : undefined}
