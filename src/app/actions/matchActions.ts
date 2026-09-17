@@ -10,10 +10,14 @@ export async function createPlayer(name: string, preferredRole: string, mediaUrl
   const existingPlayer = allPlayers.find(p => p.name.toLowerCase() === name.trim().toLowerCase());
   
   if (existingPlayer) {
-    // Se esiste già, aggiorniamo il video, foto e il ruolo
+    // Se esiste già, aggiorniamo il video, foto e il ruolo solo se forniti
+    const updateData: any = { preferredRole };
+    if (mediaUrl) updateData.mediaUrl = mediaUrl;
+    if (avatarUrl) updateData.avatarUrl = avatarUrl;
+    
     const updated = await prisma.player.update({
       where: { id: existingPlayer.id },
-      data: { mediaUrl, avatarUrl, preferredRole }
+      data: updateData
     });
     revalidatePath("/");
     return updated;
