@@ -183,7 +183,6 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
                             <div className="flex items-center gap-3">
                               <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
-                              <RoleIcon role={tp.preferredRole} className="w-8 h-8 shrink-0 text-slate-300" />
                             </div>
                           </div>
                         ))}
@@ -223,7 +222,6 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div className="flex flex-col min-w-0 justify-center">
                             <div className="flex items-center gap-3">
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                              <RoleIcon role={p.preferredRole || "GIOCATORE"} className="w-6 h-6 shrink-0 text-slate-400" />
                             </div>
                           </div>
                         </div>
@@ -387,7 +385,6 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                         {/* Giocatore */}
                         <div className="col-span-3 flex items-center gap-3">
-                          <RoleIcon role={stats.role} className={`w-5 h-5 ${isFirst ? 'text-yellow-400' : 'text-slate-400'}`} />
                           <span className={`text-lg font-bold uppercase tracking-wider truncate ${isFirst ? 'text-yellow-400' : 'text-white'}`}>
                             {stats.name}
                           </span>
@@ -692,7 +689,6 @@ export default function TVSlideshow({ data }: { data: any }) {
                     ) : (
                       registrations.slice(0, 48).map((r: any) => (
                         <div key={r.id} className="bg-slate-800 border border-slate-700 px-4 py-2 rounded-full text-white font-bold text-sm flex items-center gap-2 shadow-md">
-                          <RoleIcon role={r.player?.preferredRole} className="w-4 h-4" />
                           {r.player?.name.split(" ")[0]}
                         </div>
                       ))
