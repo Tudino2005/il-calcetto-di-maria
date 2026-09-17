@@ -44,7 +44,7 @@ export default function TVSlideshow({ data }: { data: any }) {
     if (t.status === "drawing") {
       slides.push({ type: "slot_machine", tournament: t, duration: 600000 }); // 10 minutes max, the component will manually skip to next
     } else {
-      slides.push({ type: "live_bracket", tournament: t, duration: 30000 });
+      slides.push({ type: "bracket_tree", tournament: t, duration: 30000 });
       
       // Check if there are scheduled matches
       const hasScheduled = t.matches?.some((m: any) => m.scheduledAt && !m.winnerTeamId);
@@ -920,6 +920,34 @@ export default function TVSlideshow({ data }: { data: any }) {
                     ))}
                     {currentSlide.tournament.matches?.filter((m: any) => !m.winnerTeamId && m.teamAId && m.teamBId).length === 0 && (
                        <p className="text-slate-500 text-center py-4">In attesa del prossimo turno...</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* ULTIMI RISULTATI */}
+                <div className="bg-slate-900/80 p-8 rounded-[2rem] border-2 border-slate-800 shadow-2xl backdrop-blur-sm">
+                  <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <Swords className="w-6 h-6 text-emerald-400" /> Ultimi Risultati
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {currentSlide.tournament.matches
+                      ?.filter((m: any) => m.winnerTeamId)
+                      .slice(0, 4)
+                      .map((m: any) => (
+                        <div key={m.id} className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700 flex justify-between items-center">
+                          <span className={`text-lg font-bold flex-1 leading-tight ${m.winnerTeamId === m.teamAId ? 'text-emerald-400' : 'text-slate-400'}`}>
+                            {m.teamA?.player1?.name} & {m.teamA?.player2?.name}
+                          </span>
+                          <div className="shrink-0 bg-slate-950 px-4 py-1 rounded-xl text-xl font-black text-white shadow-inner mx-4">
+                            {m.scoreTeamA} - {m.scoreTeamB}
+                          </div>
+                          <span className={`text-lg font-bold flex-1 text-right leading-tight ${m.winnerTeamId === m.teamBId ? 'text-emerald-400' : 'text-slate-400'}`}>
+                            {m.teamB?.player1?.name} & {m.teamB?.player2?.name}
+                          </span>
+                        </div>
+                    ))}
+                    {currentSlide.tournament.matches?.filter((m: any) => m.winnerTeamId).length === 0 && (
+                       <p className="text-slate-500 text-center py-4">Nessun match ancora terminato.</p>
                     )}
                   </div>
                 </div>
