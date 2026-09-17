@@ -11,6 +11,7 @@ export default function PlayerForm() {
   const [name, setName] = useState("");
   const [preferredRole, setPreferredRole] = useState("attaccante");
   const [mediaUrl, setMediaUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,7 +19,7 @@ export default function PlayerForm() {
     if (!name.trim()) return;
     setError("");
 
-    const res = await createPlayer(name, preferredRole, mediaUrl.trim() || undefined);
+    const res = await createPlayer(name, preferredRole, mediaUrl.trim() || undefined, avatarUrl.trim() || undefined);
     if ('error' in res) {
       setError(res.error);
       return;
@@ -27,13 +28,14 @@ export default function PlayerForm() {
     setName("");
     setPreferredRole("attaccante");
     setMediaUrl("");
+    setAvatarUrl("");
     router.refresh();
   };
 
   return (
     <section className="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg">
       <h2 className="text-xl font-bold text-emerald-400 mb-6 flex items-center gap-2">
-        <UserPlus className="w-6 h-6" /> Aggiungi Giocatore
+        <UserPlus className="w-6 h-6" /> Aggiungi o Modifica Giocatore
       </h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
@@ -49,19 +51,30 @@ export default function PlayerForm() {
             onChange={e => setName(e.target.value)}
             required 
             className="w-full bg-slate-900 border border-slate-600 rounded-xl p-4 text-white text-lg focus:border-emerald-500 focus:outline-none"
-            placeholder="Es. Mario Rossi"
+            placeholder="Es. Mario Rossi (se esiste, verrà aggiornato)"
           />
         </div>
-        <div>
-          <label className="block text-slate-400 mb-2 font-medium">File Video/Foto (Opzionale)</label>
-          <input 
-            type="text" 
-            value={mediaUrl}
-            onChange={e => setMediaUrl(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-600 rounded-xl p-4 text-white text-lg focus:border-emerald-500 focus:outline-none"
-            placeholder="es. enzo.mp4 o luis.png"
-          />
-          <p className="text-slate-500 text-xs mt-1">Carica il file nella cartella public/players/ e scrivi qui il nome.</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-slate-400 mb-2 font-medium">Video Sigla (.mp4)</label>
+            <input 
+              type="text" 
+              value={mediaUrl}
+              onChange={e => setMediaUrl(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-600 rounded-xl p-4 text-white text-base focus:border-emerald-500 focus:outline-none"
+              placeholder="es. enzo.mp4"
+            />
+          </div>
+          <div>
+            <label className="block text-slate-400 mb-2 font-medium">Foto Card (.jpeg)</label>
+            <input 
+              type="text" 
+              value={avatarUrl}
+              onChange={e => setAvatarUrl(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-600 rounded-xl p-4 text-white text-base focus:border-emerald-500 focus:outline-none"
+              placeholder="es. Enzo.jpeg"
+            />
+          </div>
         </div>
         <div>
           <label className="block text-slate-400 mb-4 font-medium">Ruolo Preferito</label>
@@ -93,7 +106,7 @@ export default function PlayerForm() {
           type="submit" 
           className="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl text-lg transition-colors"
         >
-          Salva Giocatore
+          Salva / Aggiorna Giocatore
         </button>
       </form>
     </section>

@@ -291,23 +291,6 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                   </div>
                 )}
              </div>
-             
-             {/* Lower Third */}
-             <div className="absolute bottom-16 left-0 w-full flex justify-center z-20 animate-in slide-in-from-bottom-10 fade-in duration-700 delay-300 fill-mode-both">
-               <div className="flex items-center bg-gradient-to-r from-transparent via-slate-900/95 to-transparent px-48 py-6 border-y border-slate-700/50 backdrop-blur-md">
-                 <div className="flex flex-col items-center gap-1">
-                   <h2 className="text-7xl font-black text-white uppercase tracking-wider drop-shadow-lg">
-                     {p.name}
-                   </h2>
-                   <div className="flex items-center gap-3">
-                     <RoleIcon role={p.preferredRole} className="w-8 h-8 text-emerald-400" />
-                     <span className="text-2xl font-bold text-emerald-400 uppercase tracking-widest">
-                       {p.preferredRole === 'entrambi' ? 'GIOCATORE' : p.preferredRole}
-                     </span>
-                   </div>
-                 </div>
-               </div>
-             </div>
           </div>
         );
       })()}
@@ -367,14 +350,42 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                     </span>
                   )}
                   <div className="flex items-center gap-6 w-full justify-center">
-                    <div className="flex flex-col items-center gap-2 flex-1">
-                      <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-14 h-14 text-yellow-400" />
-                      <span className="text-4xl font-black text-white text-center leading-tight">{t.player1?.name}</span>
+                    <div className="flex flex-col items-center flex-1 relative">
+                      {t.player1?.avatarUrl ? (
+                        <div className="relative w-48 h-56 -mb-4 flex justify-center items-end">
+                           <img 
+                             src={`/players/${t.player1.avatarUrl}`} 
+                             className="absolute bottom-0 w-full h-full object-cover object-top" 
+                             style={{ 
+                               WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', 
+                               maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' 
+                             }} 
+                           />
+                        </div>
+                      ) : (
+                        <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-16 h-16 text-yellow-400 mb-2" />
+                      )}
+                      <span className="text-4xl font-black text-white text-center leading-tight relative z-10 drop-shadow-lg">{t.player1?.name}</span>
                     </div>
-                    <span className="text-4xl font-black text-slate-500">&</span>
-                    <div className="flex flex-col items-center gap-2 flex-1">
-                      <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-14 h-14 text-emerald-400" />
-                      <span className="text-4xl font-black text-white text-center leading-tight">{t.player2?.name}</span>
+                    
+                    <span className="text-4xl font-black text-slate-500 relative z-10">&</span>
+                    
+                    <div className="flex flex-col items-center flex-1 relative">
+                      {t.player2?.avatarUrl ? (
+                        <div className="relative w-48 h-56 -mb-4 flex justify-center items-end">
+                           <img 
+                             src={`/players/${t.player2.avatarUrl}`} 
+                             className="absolute bottom-0 w-full h-full object-cover object-top" 
+                             style={{ 
+                               WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', 
+                               maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' 
+                             }} 
+                           />
+                        </div>
+                      ) : (
+                        <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-16 h-16 text-emerald-400 mb-2" />
+                      )}
+                      <span className="text-4xl font-black text-white text-center leading-tight relative z-10 drop-shadow-lg">{t.player2?.name}</span>
                     </div>
                   </div>
                   <div className="text-slate-500 font-bold text-sm uppercase tracking-widest">
@@ -395,14 +406,42 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                   </span>
                 )}
                 <div className="flex items-center gap-4 w-full justify-center">
-                  <div className="flex flex-col items-center gap-1 flex-1">
-                    <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-8 h-8 text-yellow-400" />
-                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap">{t.player1?.name}</span>
+                  <div className="flex flex-col items-center flex-1 relative">
+                    {t.player1?.avatarUrl ? (
+                      <div className="relative w-24 h-28 -mb-2 flex justify-center items-end">
+                         <img 
+                           src={`/players/${t.player1.avatarUrl}`} 
+                           className="absolute bottom-0 w-full h-full object-cover object-top" 
+                           style={{ 
+                             WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', 
+                             maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' 
+                           }} 
+                         />
+                      </div>
+                    ) : (
+                      <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-10 h-10 text-yellow-400 mb-1" />
+                    )}
+                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap relative z-10 drop-shadow-md">{t.player1?.name}</span>
                   </div>
-                  <span className="text-xl font-black text-slate-500">&</span>
-                  <div className="flex flex-col items-center gap-1 flex-1">
-                    <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-8 h-8 text-emerald-400" />
-                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap">{t.player2?.name}</span>
+                  
+                  <span className="text-xl font-black text-slate-500 relative z-10">&</span>
+                  
+                  <div className="flex flex-col items-center flex-1 relative">
+                    {t.player2?.avatarUrl ? (
+                      <div className="relative w-24 h-28 -mb-2 flex justify-center items-end">
+                         <img 
+                           src={`/players/${t.player2.avatarUrl}`} 
+                           className="absolute bottom-0 w-full h-full object-cover object-top" 
+                           style={{ 
+                             WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', 
+                             maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' 
+                           }} 
+                         />
+                      </div>
+                    ) : (
+                      <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-10 h-10 text-emerald-400 mb-1" />
+                    )}
+                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap relative z-10 drop-shadow-md">{t.player2?.name}</span>
                   </div>
                 </div>
               </div>

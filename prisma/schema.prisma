@@ -12,7 +12,8 @@ model Player {
   id            String   @id @default(uuid())
   name          String   @unique
   preferredRole String // 'attaccante', 'portiere', 'entrambi'
-  mediaUrl      String? // e.g. "enzo.mp4" or "luis.png"
+  mediaUrl      String? // e.g. "enzo.mp4" or "luis.png" per la sigla
+  avatarUrl     String? // e.g. "Luis.jpeg" per la figurina statica
   createdAt     DateTime @default(now())
 
   teamsAsPlayer1 Team[]                   @relation("Player1")

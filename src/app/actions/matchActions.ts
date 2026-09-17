@@ -5,21 +5,29 @@ import { revalidatePath } from "next/cache";
 import { advanceDoubleElimination } from "@/lib/doubleEliminationEngine";
 import { finalizeTournamentAwards } from "@/lib/tournamentAwards";
 
-export async function createPlayer(name: string, preferredRole: string, mediaUrl?: string) {
+export async function createPlayer(name: string, preferredRole: string, mediaUrl?: string, avatarUrl?: string) {
   const allPlayers = await prisma.player.findMany();
-  const exists = allPlayers.some(p => p.name.toLowerCase() === name.trim().toLowerCase());
-  if (exists) {
-    return { error: "Un giocatore con questo nome esiste già!" };
+  const existingPlayer = allPlayers.find(p => p.name.toLowerCase() === name.trim().toLowerCase());
+  
+  if (existingPlayer) {
+    // Se esiste già, aggiorniamo il video, foto e il ruolo
+    const updated = await prisma.player.update({
+      where: { id: existingPlayer.id },
+      data: { mediaUrl, avatarUrl, preferredRole }
+    });
+    revalidatePath("/");
+    return updated;
   }
-  const player = await prisma.player.create({ data: { name, preferredRole, mediaUrl } });
+  
+  const player = await prisma.player.create({ data: { name, preferredRole, mediaUrl, avatarUrl } });
   revalidatePath("/");
   return player;
 }
 
-export async function updatePlayer(id: string, name: string, preferredRole: string, mediaUrl?: string) {
+export async function updatePlayer(id: string, name: string, preferredRole: string, mediaUrl?: string, avatarUrl?: string) {
   const player = await prisma.player.update({
     where: { id },
-    data: { name, preferredRole, mediaUrl }
+    data: { name, preferredRole, mediaUrl, avatarUrl }
   });
   revalidatePath("/");
   return player;
