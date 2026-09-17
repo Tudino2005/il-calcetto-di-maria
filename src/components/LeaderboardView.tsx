@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Search } from "lucide-react";
-import RoleIcon from "@/components/RoleIcon";
 
 export default function LeaderboardView({ playerStats, teamStats }: { playerStats: any[], teamStats: any[] }) {
   const [searchTerm, setSearchTerm] = useState("");
