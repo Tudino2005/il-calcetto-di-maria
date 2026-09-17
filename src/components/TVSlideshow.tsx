@@ -45,7 +45,6 @@ export default function TVSlideshow({ data }: { data: any }) {
       slides.push({ type: "slot_machine", tournament: t, duration: 600000 }); // 10 minutes max, the component will manually skip to next
     } else {
       slides.push({ type: "live_bracket", tournament: t, duration: 30000 });
-      slides.push({ type: "bracket_tree", tournament: t, duration: 30000 });
       
       // Check if there are scheduled matches
       const hasScheduled = t.matches?.some((m: any) => m.scheduledAt && !m.winnerTeamId);
