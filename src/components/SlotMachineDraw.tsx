@@ -38,7 +38,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [showcaseIndex, setShowcaseIndex] = useState(-1); // -1 = not started
   const [showcasePhase, setShowcasePhase] = useState<"fly-in" | "hold" | "fly-out">("fly-in");
 
-  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "lineup_intro_text" | "player_lineup" | "countdown" | "slot_machine">("pending");
+  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "lineup_intro_text" | "player_lineup" | "draw_intro_text" | "countdown" | "slot_machine">("pending");
   const [lineupIndex, setLineupIndex] = useState(0);
   const [showLineupVideo, setShowLineupVideo] = useState(false);
   const [countdownValue, setCountdownValue] = useState(3);
@@ -81,7 +81,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       return () => clearTimeout(outTimer);
     }, 600);
     return () => clearTimeout(holdTimer);
-  }, [showcaseIndex]);
+  }, [showcaseIndex, teams.length, tournament.id, router]);
 
   useEffect(() => {
     if (teams.length > 0) return; // ONLY INIT ONCE, ignore router.refresh() updates
@@ -105,6 +105,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     setAllPlayers(Array.from(playersMap.values()));
   }, [tournament, teams.length]);
 
+  // Handle spin for a pair
   useEffect(() => {
     if (introState !== "slot_machine") return;
     if (teams.length === 0 || allPlayers.length === 0) return;
@@ -190,7 +191,10 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
             }, 8000);
             
             setTimeout(() => {
-               setIntroState("player_lineup");
+               setIntroState("lineup_intro_text");
+               setTimeout(() => {
+                 setIntroState("player_lineup");
+               }, 3500);
             }, 10000);
           } catch (err) {
             // Autoplay blocked, wait for user click
@@ -213,10 +217,20 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         const timer = setTimeout(() => setLineupIndex(prev => prev + 1), 12000);
         return () => { clearTimeout(timer); clearTimeout(videoTimer); };
       } else {
-        setIntroState("countdown");
+        setIntroState("draw_intro_text");
       }
     }
   }, [introState, lineupIndex, allPlayers.length]);
+
+  // Draw Intro Logic
+  useEffect(() => {
+    if (introState === "draw_intro_text") {
+      const timer = setTimeout(() => {
+        setIntroState("countdown");
+      }, 5000); // Wait 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [introState]);
 
   // Countdown logic
   useEffect(() => {
@@ -334,6 +348,31 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
           </div>
         );
       })()}
+
+      {introState === "draw_intro_text" && (
+        <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
+           {/* Dark Dramatic Navy background */}
+           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/40 via-slate-950 to-slate-950"></div>
+           
+           <div className="z-10 animate-in fade-in zoom-in slide-in-from-bottom-10 duration-1000 animate-out fade-out zoom-out slide-out-to-top-10 flex flex-col items-center text-center px-8">
+              <h2 className="text-3xl md:text-5xl font-bold text-slate-400 tracking-[0.3em] uppercase mb-12">
+                {tournament.type === "coppie_fisse" ? "La presentazione delle squadre" : "Signore e Signori, ha inizio il sorteggio"}
+              </h2>
+              
+              <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500 uppercase tracking-widest drop-shadow-[0_0_30px_rgba(250,204,21,0.5)] mb-8">
+                {tournament.type === "sorteggio_ruoli" && "Sorteggio per Ruoli"}
+                {tournament.type === "sorteggio_integrale" && "Sorteggio Integrale"}
+                {tournament.type === "coppie_fisse" && "Coppie Fisse"}
+              </h1>
+              
+              <p className="text-2xl md:text-4xl font-medium text-slate-300 max-w-4xl leading-relaxed italic">
+                {tournament.type === "sorteggio_ruoli" && "L'equilibrio perfetto. L'urna unirà casualmente un Attaccante e un Portiere."}
+                {tournament.type === "sorteggio_integrale" && "Il caos puro. Nessuna regola di ruolo, chiunque può finire in coppia con chiunque. Lasciate fare al destino."}
+                {tournament.type === "coppie_fisse" && "Il destino è già scritto. I team sono stati scelti, è arrivato il momento di svelarli al mondo."}
+              </p>
+           </div>
+        </div>
+      )}
 
       {introState === "countdown" && (
         <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
