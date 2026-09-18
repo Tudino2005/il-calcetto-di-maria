@@ -40,6 +40,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
 
   const [introState, setIntroState] = useState<"pending" | "playing_intro" | "lineup_intro_text" | "player_lineup" | "countdown" | "slot_machine">("pending");
   const [lineupIndex, setLineupIndex] = useState(0);
+  const [showLineupVideo, setShowLineupVideo] = useState(false);
   const [countdownValue, setCountdownValue] = useState(3);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -205,8 +206,12 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   useEffect(() => {
     if (introState === "player_lineup" && allPlayers.length > 0) {
       if (lineupIndex < allPlayers.length) {
-        const timer = setTimeout(() => setLineupIndex(prev => prev + 1), 10000); // 10s per player
-        return () => clearTimeout(timer);
+        setShowLineupVideo(false);
+        const videoTimer = setTimeout(() => setShowLineupVideo(true), 2000); // 2s delay for the name
+        
+        // 12s total (2s name + 10s video)
+        const timer = setTimeout(() => setLineupIndex(prev => prev + 1), 12000);
+        return () => { clearTimeout(timer); clearTimeout(videoTimer); };
       } else {
         setIntroState("countdown");
       }
@@ -289,29 +294,31 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
              <div className="absolute top-1/4 left-1/4 w-[40rem] h-[40rem] bg-indigo-600/20 blur-[120px] rounded-full animate-pulse"></div>
              <div className="absolute bottom-1/4 right-1/4 w-[40rem] h-[40rem] bg-emerald-600/20 blur-[120px] rounded-full animate-pulse"></div>
              
-             {/* Giant Name Background */}
+             {/* Giant Name Background - Starts prominent, then fades to background */}
              <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
-               <h1 className="text-[20rem] font-black text-white/5 uppercase tracking-tighter whitespace-nowrap animate-pulse drop-shadow-2xl">
+               <h1 className={`text-[20rem] font-black uppercase tracking-tighter whitespace-nowrap animate-pulse drop-shadow-2xl transition-all duration-1000 ${showLineupVideo ? 'text-white/5' : 'text-white/80 scale-110'}`}>
                  {p.name} {p.name}
                </h1>
              </div>
              
              {/* Player Image/Video or Fallback */}
-             <div className="relative z-10 flex flex-col items-center h-full justify-end pb-24 animate-in slide-in-from-bottom-20 fade-in duration-700">
-                {hasMedia ? (
-                  isVideo ? (
-                    <video src={`/players/${p.mediaUrl}`} autoPlay muted playsInline className="h-[80vh] object-contain drop-shadow-2xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }} />
+             {showLineupVideo && (
+               <div className="relative z-10 flex flex-col items-center h-full justify-end pb-24 animate-in slide-in-from-bottom-20 fade-in duration-700">
+                  {hasMedia ? (
+                    isVideo ? (
+                      <video src={`/players/${p.mediaUrl}`} autoPlay muted playsInline className="h-[80vh] object-contain drop-shadow-2xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }} />
+                    ) : (
+                      <img src={`/players/${p.mediaUrl}`} className="h-[80vh] object-contain drop-shadow-2xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }} />
+                    )
                   ) : (
-                    <img src={`/players/${p.mediaUrl}`} className="h-[80vh] object-contain drop-shadow-2xl" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }} />
-                  )
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-[60vh]">
-                    <div className="w-64 h-64 bg-slate-800 rounded-full flex items-center justify-center mb-8 border-4 border-slate-700 shadow-2xl">
-                       <Users className="w-32 h-32 text-slate-500" />
+                    <div className="flex flex-col items-center justify-center h-[60vh]">
+                      <div className="w-64 h-64 bg-slate-800 rounded-full flex items-center justify-center mb-8 border-4 border-slate-700 shadow-2xl">
+                         <Users className="w-32 h-32 text-slate-500" />
+                      </div>
                     </div>
-                  </div>
-                )}
-             </div>
+                  )}
+               </div>
+             )}
           </div>
         );
       })()}
