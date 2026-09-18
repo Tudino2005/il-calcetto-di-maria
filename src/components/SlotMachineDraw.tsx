@@ -227,7 +227,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     if (introState === "draw_intro_text") {
       const timer = setTimeout(() => {
         setIntroState("countdown");
-      }, 5000); // Wait 5 seconds
+      }, 8000); // Wait 8 seconds
       return () => clearTimeout(timer);
     }
   }, [introState]);
@@ -526,6 +526,33 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
               </div>
             ))}
           </div>
+
+          {/* TESTO FINALE SOTTO LA GRIGLIA (Format, Titolo, Data) */}
+          {showcaseIndex >= teams.length && (
+            <div className="mt-16 text-center animate-in slide-in-from-bottom-10 fade-in duration-1000 delay-500 fill-mode-both">
+              <h3 className="text-3xl font-black text-indigo-400 uppercase tracking-widest mb-3 drop-shadow-md">
+                Modalità: {tournament.format === "eliminazione_diretta" ? "Eliminazione Diretta" : tournament.format === "doppia_eliminazione" ? "Doppia Eliminazione" : "Gironi + Eliminazione"}
+              </h3>
+              <p className="text-2xl text-slate-300 italic mb-8 max-w-4xl mx-auto font-medium">
+                {tournament.format === "eliminazione_diretta" && "Tutto in una notte: chi perde è fuori. Verso la gloria senza paracadute."}
+                {tournament.format === "doppia_eliminazione" && "Due vite a disposizione. Chi perde cade nel tabellone dei perdenti, ma può ancora arrivare in finale e vincere."}
+                {tournament.format === "gironi_eliminazione" && "Fase a gironi iniziale seguita dalla fase a eliminazione. Ogni singola partita conta per i punti."}
+              </p>
+              
+              <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-12 py-6 rounded-3xl border border-slate-700 shadow-[0_0_50px_rgba(0,0,0,0.5)] inline-flex flex-col items-center">
+                 <h2 className="text-5xl md:text-6xl font-black text-white uppercase tracking-widest mb-2 drop-shadow-lg">{tournament.name}</h2>
+                 {tournament.startDate ? (
+                   <p className="text-emerald-400 font-black text-2xl md:text-3xl tracking-widest uppercase drop-shadow-md">
+                     Inizio Torneo: {new Date(tournament.startDate).toLocaleDateString("it-IT", { day: '2-digit', month: 'long', year: 'numeric' })}
+                   </p>
+                 ) : (
+                   <p className="text-emerald-400 font-black text-2xl md:text-3xl tracking-widest uppercase drop-shadow-md">
+                     Che la sfida abbia inizio
+                   </p>
+                 )}
+              </div>
+            </div>
+          )}
         </div>
       ) : revealedIndex >= teams.length ? (
         <div className="flex flex-col items-center justify-center z-20 mt-20 gap-6 animate-in fade-in duration-700">
