@@ -38,8 +38,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [showcaseIndex, setShowcaseIndex] = useState(-1); // -1 = not started
   const [showcasePhase, setShowcasePhase] = useState<"fly-in" | "hold" | "fly-out">("fly-in");
 
-  // Intro states
-  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "player_lineup" | "countdown" | "slot_machine">("pending");
+  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "lineup_intro_text" | "player_lineup" | "countdown" | "slot_machine">("pending");
   const [lineupIndex, setLineupIndex] = useState(0);
   const [countdownValue, setCountdownValue] = useState(3);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -162,7 +161,12 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     
     // 10 second animation duration
     setTimeout(() => {
-       setIntroState("player_lineup");
+       setIntroState("lineup_intro_text");
+       
+       // Hold the text for 3 seconds, then move to player lineup
+       setTimeout(() => {
+         setIntroState("player_lineup");
+       }, 3500); // 3.5 seconds total to allow for fade animations
     }, 10000);
   };
 
@@ -243,7 +247,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
            <div className="absolute top-0 left-1/4 w-32 h-[150vh] bg-white/10 blur-3xl rotate-45 animate-pulse" style={{ animationDuration: '0.5s' }}></div>
            <div className="absolute top-0 right-1/4 w-32 h-[150vh] bg-white/10 blur-3xl -rotate-45 animate-pulse" style={{ animationDuration: '0.7s' }}></div>
            
-           <div className="animate-in zoom-in duration-1000 flex flex-col items-center z-10">
+           <div className="animate-in fade-in zoom-in duration-1000 flex flex-col items-center z-10 animate-out fade-out zoom-out">
               <div className="w-48 h-48 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-[0_0_100px_rgba(79,70,229,0.8)] mb-12 animate-bounce">
                  <Trophy className="w-24 h-24 text-white" />
               </div>
@@ -253,6 +257,23 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                 className="w-full max-w-2xl h-auto drop-shadow-[0_0_50px_rgba(255,255,255,0.3)] animate-pulse" 
                 style={{ animationDuration: '0.8s' }} 
               />
+           </div>
+        </div>
+      )}
+
+      {introState === "lineup_intro_text" && (
+        <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
+           {/* Cinematic Ambient Lights */}
+           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"></div>
+           <div className="absolute top-1/2 left-0 w-full h-[2px] bg-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.8)] animate-pulse"></div>
+           
+           <div className="z-10 animate-in fade-in zoom-in slide-in-from-bottom-10 duration-1000 animate-out fade-out zoom-out slide-out-to-top-10">
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-emerald-400 to-blue-400 uppercase tracking-[0.2em] text-center leading-tight drop-shadow-2xl px-12">
+                Signore e Signori<br/>
+                <span className="text-white text-3xl sm:text-5xl md:text-7xl tracking-widest mt-6 block opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                  I giocatori partecipanti
+                </span>
+              </h1>
            </div>
         </div>
       )}
