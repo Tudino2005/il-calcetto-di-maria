@@ -295,9 +295,9 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
              <div className="absolute bottom-1/4 right-1/4 w-[40rem] h-[40rem] bg-emerald-600/20 blur-[120px] rounded-full animate-pulse"></div>
              
              {/* Giant Name Background - Starts prominent, then fades to background */}
-             <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
-               <h1 className={`text-[20rem] font-black uppercase tracking-tighter whitespace-nowrap animate-pulse drop-shadow-2xl transition-all duration-1000 ${showLineupVideo ? 'text-white/5' : 'text-white/80 scale-110'}`}>
-                 {p.name} {p.name}
+             <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0 px-8">
+               <h1 className={`text-[8rem] md:text-[12rem] font-black uppercase tracking-tighter text-center leading-none animate-pulse drop-shadow-2xl transition-all duration-1000 ${showLineupVideo ? 'text-white/5' : 'text-white/80 scale-110'}`}>
+                 {p.name}
                </h1>
              </div>
              
