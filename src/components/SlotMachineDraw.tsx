@@ -248,19 +248,31 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
 
       {introState === "playing_intro" && (
         <div className="absolute inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden">
+           <style>{`
+             @keyframes cinematicZoom {
+               0% { transform: scale(0.85); opacity: 0; filter: blur(10px); }
+               10% { opacity: 1; filter: blur(0px); }
+               90% { opacity: 1; filter: blur(0px); }
+               100% { transform: scale(1.15); opacity: 0; filter: blur(10px); }
+             }
+             @keyframes epicGlow {
+               0%, 100% { filter: drop-shadow(0 0 30px rgba(255,255,255,0.2)); }
+               50% { filter: drop-shadow(0 0 80px rgba(255,255,255,0.6)); }
+             }
+           `}</style>
+           {/* Cinematic Ambient Lights */}
+           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-black to-black"></div>
+
            {/* Stadium Lights Effect */}
-           <div className="absolute top-0 left-1/4 w-32 h-[150vh] bg-white/10 blur-3xl rotate-45 animate-pulse" style={{ animationDuration: '0.5s' }}></div>
-           <div className="absolute top-0 right-1/4 w-32 h-[150vh] bg-white/10 blur-3xl -rotate-45 animate-pulse" style={{ animationDuration: '0.7s' }}></div>
+           <div className="absolute top-0 left-1/4 w-32 h-[150vh] bg-white/5 blur-[100px] rotate-45 animate-pulse" style={{ animationDuration: '4s' }}></div>
+           <div className="absolute top-0 right-1/4 w-32 h-[150vh] bg-white/5 blur-[100px] -rotate-45 animate-pulse" style={{ animationDuration: '5s' }}></div>
            
-           <div className="animate-in fade-in zoom-in duration-1000 flex flex-col items-center z-10 animate-out fade-out zoom-out">
-              <div className="w-48 h-48 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-[0_0_100px_rgba(79,70,229,0.8)] mb-12 animate-bounce">
-                 <Trophy className="w-24 h-24 text-white" />
-              </div>
+           <div className="flex flex-col items-center justify-center z-10 w-full max-w-4xl px-8" style={{ animation: 'cinematicZoom 10s cubic-bezier(0.25, 1, 0.5, 1) forwards' }}>
               <img 
                 src="/images/red-player-table-football.png" 
                 alt="Il Calcetto di Maria" 
-                className="w-full max-w-2xl h-auto drop-shadow-[0_0_50px_rgba(255,255,255,0.3)] animate-pulse" 
-                style={{ animationDuration: '0.8s' }} 
+                className="w-full h-auto object-contain" 
+                style={{ animation: 'epicGlow 4s ease-in-out infinite' }} 
               />
            </div>
         </div>
