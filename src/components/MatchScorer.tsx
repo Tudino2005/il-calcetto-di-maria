@@ -101,7 +101,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
   const [mode, setMode] = useState<ScorerMode>("goals");
   const [targetGoals, setTargetGoals] = useState<number>(7);
   const [advantageThreshold, setAdvantageThreshold] = useState<number>(5);
-  const [showSettings, setShowSettings] = useState<boolean>(false);
+
 
   // Load saved general settings
   useEffect(() => {
@@ -452,27 +452,12 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             </button>
           </div>
 
-          {/* Settings panel trigger */}
-          {mode === "goals" && (
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              className={clsx(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition",
-                showSettings 
-                  ? "bg-slate-700 border-slate-500 text-white" 
-                  : "bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700"
-              )}
-            >
-              <Settings className="w-4 h-4 text-purple-400" />
-              <span>{targetGoals} Gol (Vantaggi a {advantageThreshold})</span>
-            </button>
-          )}
         </div>
       </header>
 
-      {/* EXPANDABLE SETTINGS PANEL */}
-      {mode === "goals" && showSettings && (
-        <div className="bg-slate-900/95 border border-purple-500/30 rounded-2xl p-4 mb-4 shadow-xl flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2">
+      {/* ALWAYS VISIBLE SETTINGS PANEL */}
+      {mode === "goals" && (
+        <div className="bg-slate-900/95 border border-purple-500/30 rounded-2xl p-4 mb-4 shadow-xl flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2 w-full md:w-1/2">
           <div className="flex items-center gap-4 flex-wrap">
             <div>
               <label className="text-[11px] font-black uppercase tracking-wider text-purple-300 block mb-1">
@@ -517,12 +502,6 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             </div>
           </div>
 
-          <button
-            onClick={() => setShowSettings(false)}
-            className="text-xs bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg font-bold transition ml-auto"
-          >
-            Chiudi
-          </button>
         </div>
       )}
 
