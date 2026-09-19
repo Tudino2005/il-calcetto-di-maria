@@ -44,18 +44,19 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [countdownValue, setCountdownValue] = useState(3);
   const audioRef1 = useRef<HTMLAudioElement | null>(null);
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
+  const audioRef3 = useRef<HTMLAudioElement | null>(null);
 
   // When all teams are revealed, start showcase
   useEffect(() => {
     if (revealedIndex >= teams.length && teams.length > 0 && showcaseIndex === -1) {
-      if (audioRef1.current) fadeOutAudio(audioRef1.current, 1000); // Sfuma traccia 1
+      if (audioRef2.current) fadeOutAudio(audioRef2.current, 1000); // Sfuma traccia 2
       
-      // Small pause, then start showcase and Track 2
+      // Small pause, then start showcase and Track 3
       const t = setTimeout(() => {
-        if (audioRef2.current) {
-          audioRef2.current.volume = 1;
-          audioRef2.current.currentTime = 0;
-          audioRef2.current.play().catch(e => console.error("Track 2 failed:", e));
+        if (audioRef3.current) {
+          audioRef3.current.volume = 1;
+          audioRef3.current.currentTime = 0;
+          audioRef3.current.play().catch(e => console.error("Track 3 failed:", e));
         }
         setShowcaseIndex(0);
       }, 1000);
@@ -67,13 +68,13 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   useEffect(() => {
     if (showcaseIndex < 0 || showcaseIndex >= teams.length) return;
 
-    // Phase 1: fly-in (600ms)
+    // Phase 1: fly-in (1500ms)
     setShowcasePhase("fly-in");
     const holdTimer = setTimeout(() => {
-      // Phase 2: hold (3 seconds)
+      // Phase 2: hold (6 seconds)
       setShowcasePhase("hold");
       const outTimer = setTimeout(() => {
-        // Phase 3: fly-out (600ms)
+        // Phase 3: fly-out (1000ms)
         setShowcasePhase("fly-out");
         const nextTimer = setTimeout(() => {
           if (showcaseIndex + 1 >= teams.length) {
@@ -87,11 +88,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
           } else {
             setShowcaseIndex(prev => prev + 1);
           }
-        }, 600);
+        }, 1000);
         return () => clearTimeout(nextTimer);
-      }, 3000);
+      }, 6000);
       return () => clearTimeout(outTimer);
-    }, 600);
+    }, 1500);
     return () => clearTimeout(holdTimer);
   }, [showcaseIndex, teams.length, tournament.id, router]);
 
@@ -239,11 +240,19 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   // Countdown logic
   useEffect(() => {
     if (introState === "countdown") {
+      if (countdownValue === 3) {
+        if (audioRef1.current) fadeOutAudio(audioRef1.current, 2500);
+      }
       if (countdownValue > 0) {
         const timer = setTimeout(() => setCountdownValue(prev => prev - 1), 1000);
         return () => clearTimeout(timer);
       } else {
         setIntroState("slot_machine");
+        if (audioRef2.current) {
+          audioRef2.current.volume = 1;
+          audioRef2.current.currentTime = 0;
+          audioRef2.current.play().catch(e => console.error("Track 2 failed:", e));
+        }
       }
     }
   }, [introState, countdownValue]);
@@ -252,7 +261,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full text-center p-8 bg-gradient-to-b from-slate-950 to-indigo-950 overflow-hidden relative">
       <audio ref={audioRef1} src="/seven-nation-army.mp3" preload="auto" loop />
-      <audio ref={audioRef2} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => router.refresh())} />
+      <audio ref={audioRef2} src="/song2.mp3" preload="auto" loop />
+      <audio ref={audioRef3} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => router.refresh())} />
 
       {introState === "pending" && (
         <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center">
@@ -424,7 +434,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                     ? "translateY(0) scale(1)"
                     : "translateY(-10vh) scale(0.7)",
                   opacity: isFlyIn ? 0 : isHold ? 1 : 0,
-                  transition: "transform 600ms cubic-bezier(0.34,1.56,0.64,1), opacity 400ms ease",
+                  transition: "transform 1500ms cubic-bezier(0.34,1.56,0.64,1), opacity 1500ms ease",
                 }}
               >
                 <div className="bg-slate-900 border-4 border-yellow-400 rounded-[3rem] p-10 flex flex-col items-center gap-6 shadow-[0_0_80px_rgba(250,204,21,0.4)]">
