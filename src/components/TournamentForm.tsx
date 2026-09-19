@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Swords } from "lucide-react";
 import { createTournament } from "@/app/actions/tournamentActions";
 import clsx from "clsx";
@@ -15,6 +16,36 @@ export default function TournamentForm() {
   const [drawDate, setDrawDate] = useState("");
   const [pricePerPlayer, setPricePerPlayer] = useState("");
   const [prizes, setPrizes] = useState("");
+
+  const [targetGoals, setTargetGoals] = useState<number>(7);
+  const [advantageThreshold, setAdvantageThreshold] = useState<number>(5);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("foosball_scorer_settings");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.targetGoals) setTargetGoals(parsed.targetGoals);
+        if (parsed.advantageThreshold) setAdvantageThreshold(parsed.advantageThreshold);
+      }
+    } catch {}
+  }, []);
+
+  const updateGoalSettings = (goals: number, threshold: number) => {
+    setTargetGoals(goals);
+    setAdvantageThreshold(threshold);
+    try {
+      const saved = localStorage.getItem("foosball_scorer_settings");
+      const parsed = saved ? JSON.parse(saved) : {};
+      localStorage.setItem("foosball_scorer_settings", JSON.stringify({
+        ...parsed,
+        targetGoals: goals,
+        advantageThreshold: threshold
+      }));
+    } catch {}
+  };
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,7 +138,55 @@ export default function TournamentForm() {
       </div>
 
       <div>
-        <label className="block text-slate-400 font-bold mb-4 uppercase tracking-wider text-sm">Formato Torneo</label>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-4">
+          <label className="block text-slate-400 font-bold uppercase tracking-wider text-sm">Formato Torneo</label>
+          
+          <div className="flex items-center gap-4 flex-wrap">
+            <div>
+              <label className="text-[10px] font-black uppercase tracking-wider text-purple-300 block mb-1">
+                Gol per vincere ogni Set
+              </label>
+              <div className="flex gap-1.5">
+                {[5, 6, 7, 8, 10].map(val => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => updateGoalSettings(val, Math.min(advantageThreshold, val - 1))}
+                    className={clsx(
+                      "px-3 py-1 rounded-lg text-sm font-black transition",
+                      targetGoals === val ? "bg-purple-600 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white"
+                    )}
+                  >
+                    {val}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="h-8 w-px bg-slate-700 hidden sm:block"></div>
+
+            <div>
+              <label className="text-[10px] font-black uppercase tracking-wider text-yellow-400 block mb-1">
+                Soglia Vantaggi (Pari a cui scattano)
+              </label>
+              <div className="flex gap-1.5">
+                {[4, 5, 6, 7, 8].filter(val => val < targetGoals).map(val => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => updateGoalSettings(targetGoals, val)}
+                    className={clsx(
+                      "px-3 py-1 rounded-lg text-sm font-black transition",
+                      advantageThreshold === val ? "bg-yellow-500 text-slate-950" : "bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white"
+                    )}
+                  >
+                    {val}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="flex flex-col gap-3 lg:w-1/2">
           <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", format === "eliminazione_diretta" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
             <input type="radio" name="formatRadio" value="eliminazione_diretta" checked={format === "eliminazione_diretta"} onChange={() => setFormat("eliminazione_diretta")} className="w-5 h-5 accent-purple-500" />
