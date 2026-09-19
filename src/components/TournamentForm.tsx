@@ -108,7 +108,7 @@ export default function TournamentForm() {
 
       <div>
         <label className="block text-slate-400 font-bold mb-4 uppercase tracking-wider text-sm">Formato Torneo</label>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:w-1/2">
           <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", format === "eliminazione_diretta" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
             <input type="radio" name="formatRadio" value="eliminazione_diretta" checked={format === "eliminazione_diretta"} onChange={() => setFormat("eliminazione_diretta")} className="w-5 h-5 accent-purple-500" />
             <div>
@@ -134,7 +134,7 @@ export default function TournamentForm() {
       </div>
 
       {format === "gironi_eliminazione" && (
-        <div>
+        <div className="lg:w-1/2">
           <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Squadre per Girone</label>
           <select value={teamsPerGroup} onChange={(e) => setTeamsPerGroup(Number(e.target.value))} className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500">
             <option value={3}>3 Squadre (Sconsigliato)</option>
@@ -147,7 +147,7 @@ export default function TournamentForm() {
 
       <div>
         <label className="block text-slate-400 font-bold mb-4 uppercase tracking-wider text-sm">Modalità Composizione Squadre</label>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:w-1/2">
           <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", type === "sorteggio_ruoli" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
             <input type="radio" name="typeRadio" value="sorteggio_ruoli" checked={type === "sorteggio_ruoli"} onChange={() => setType("sorteggio_ruoli")} className="w-5 h-5 accent-purple-500" />
             <div>
