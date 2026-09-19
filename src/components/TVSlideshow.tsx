@@ -14,8 +14,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   // Build slides array
   const slides: any[] = [];  // Leaderboard Slide (Auto-scrolling)
   const maxRows = Math.max(playerStats.length, teamStats.length);
-  // Calculate dynamic duration based on rows (approx 1.5s per row), minimum 12 seconds
-  const leaderboardDuration = Math.max(12000, maxRows * 1500);
+  // Calculate dynamic duration based on rows (approx 3.5s per row), minimum 20 seconds
+  const leaderboardDuration = Math.max(20000, maxRows * 3500);
   slides.push({ type: "leaderboard", duration: leaderboardDuration });
 
   if (data.freeMatchesStats && data.freeMatchesStats.length > 0) {
@@ -157,10 +157,35 @@ export default function TVSlideshow({ data }: { data: any }) {
           
           {/* LEADERBOARD SLIDE */}
           {currentSlide.type === "leaderboard" && (
-            <div className="flex w-full h-[85vh] gap-16">
+            <div className="flex flex-col w-full h-[85vh] gap-6">
+              
+              {/* HEADER LEGEND */}
+              <div className="flex justify-center shrink-0 w-full">
+                <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl flex items-center justify-between w-full backdrop-blur-md gap-4">
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Cosa si intende per "Sfida"</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni singola partita (Libera o Torneo) è sempre calcolata al meglio delle 3 partite.</span>
+                  </div>
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali partite contano</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Assolutamente tutte le partite giocate (Sia Tornei che Sfide Libere).</span>
+                  </div>
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Come sono calcolate</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ordinamento per numero di Vittorie Totali. A parità di vittorie, decide il Win Rate %.</span>
+                  </div>
+                  <div className="flex flex-col flex-1 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore (o coppia) che abbia vinto almeno una volta.</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* TWO COLUMNS */}
+              <div className="flex w-full flex-1 min-h-0 gap-8 lg:gap-16">
               
               {/* TOP SINGLES FIXED CARD */}
-              <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[3rem] border-2 border-yellow-500/20 shadow-2xl backdrop-blur-sm relative">
+              <div className="flex-1 flex flex-col bg-slate-900/80 p-6 md:p-8 rounded-[3rem] border-2 border-yellow-500/20 shadow-2xl backdrop-blur-sm relative min-h-0">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   {playerStats[0] && (() => {
@@ -318,6 +343,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                   </div>
                 </div>
               </div>
+              
+              </div> {/* chiusura flex w-full flex-1 */}
 
             </div>
           )}
