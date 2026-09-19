@@ -41,7 +41,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   promoTournaments.forEach((t: any) => slides.push({ type: "promo", tournament: t, duration: 30000 }));  // Slides for In Progress (Bracket & Agenda)
   inProgressTournaments.forEach((t: any) => {
     if (t.status === "drawing") {
-      slides.push({ type: "slot_machine", tournament: t, duration: 600000 }); // 10 minutes max, the component will manually skip to next
+      slides.push({ type: "slot_machine", tournament: t, duration: 1200000 }); // 20 minutes max, the component will manually skip to next
     } else {
       slides.push({ type: "bracket_tree", tournament: t, duration: 30000 });
       

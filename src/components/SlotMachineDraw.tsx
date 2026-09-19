@@ -151,14 +151,6 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       }, spinDuration);
       
       return () => { clearInterval(interval); clearTimeout(timeout); };
-    } else {
-      const finalTimeout = setTimeout(async () => {
-         if (audioRef1.current) fadeOutAudio(audioRef1.current, 5000);
-         if (audioRef2.current) fadeOutAudio(audioRef2.current, 5000);
-         await finishDrawAnimation(tournament.id);
-         router.refresh(); // Tells NextJS to reload the page data, updating TVSlideshow
-      }, 60000);
-      return () => clearTimeout(finalTimeout);
     }
   }, [revealedIndex, teams.length, allPlayers.length, introState]);
   
