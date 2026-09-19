@@ -163,8 +163,8 @@ export async function getFreeMatchesLeaderboard() {
 
       return { ...stats, ds, wr, wilsonScore };
     })
-    // Only include players with at least 1 win (excludes WR 0%)
-    .filter(stats => stats.sg > 0 && stats.v > 0)
+    // Only include players who have played at least 1 free match
+    .filter(stats => stats.sg > 0)
     // Sort by Wilson Score desc (statistically fair), then WR% as tiebreaker, then DS
     .sort((a, b) => {
       if (b.wilsonScore !== a.wilsonScore) return b.wilsonScore - a.wilsonScore;
