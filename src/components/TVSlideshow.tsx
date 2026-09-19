@@ -22,10 +22,10 @@ export default function TVSlideshow({ data }: { data: any }) {
     const playersPerPage = 10;
     const pages = Math.ceil(data.freeMatchesStats.length / playersPerPage);
     for (let p = 0; p < pages; p++) {
-      slides.push({ type: "leaderboard_free", duration: 15000, page: p });
+      slides.push({ type: "leaderboard_free", duration: 25000, page: p });
     }
   } else {
-    slides.push({ type: "leaderboard_free", duration: 10000, page: 0 });
+    slides.push({ type: "leaderboard_free", duration: 20000, page: 0 });
   }
 
   
@@ -352,22 +352,40 @@ export default function TVSlideshow({ data }: { data: any }) {
           
           {/* LEADERBOARD FREE MATCHES (SERIE A STYLE) */}
           {currentSlide.type === "leaderboard_free" && (
-            <div className="flex flex-col items-center w-full max-w-7xl h-full justify-start relative z-10 mx-auto px-4 pt-4">
-              <div className="flex flex-col items-center gap-2 mb-8 shrink-0">
-                <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center w-full max-w-7xl h-[85vh] justify-start relative z-10 mx-auto px-4">
+              <div className="flex flex-col items-center gap-2 mb-4 shrink-0 w-full">
+                <div className="flex items-center gap-4 mb-2">
                   <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
                   <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg">
                     Sfide Libere
                   </h2>
                   <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
                 </div>
-                <p className="text-slate-400 text-sm font-medium italic tracking-wide text-center max-w-3xl">
-                  Classifica calcolata con l'algoritmo <span className="text-emerald-400 font-bold not-italic">Wilson Score Confidence Interval</span> — lo stesso usato da molti siti sportivi. Premia chi vince con continuità nel tempo, non chi ha giocato poche partite.
-                  <span className="text-slate-500 ml-1">(Andate su Google se volete approfondire)</span>
-                </p>
+
+                {/* HEADER LEGEND */}
+                <div className="flex justify-center shrink-0 w-full mb-2">
+                  <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl flex items-center justify-between w-full backdrop-blur-md gap-4">
+                    <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Cosa si intende per "Sfida"</span>
+                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni sfida amichevole è sempre calcolata al meglio delle 3 partite.</span>
+                    </div>
+                    <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali partite contano</span>
+                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Esclusivamente le Sfide Libere (Le partite dei Tornei non influiscono).</span>
+                    </div>
+                    <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Come sono calcolate</span>
+                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Tramite algoritmo Wilson Score. Premia chi vince con costanza nel tempo.</span>
+                    </div>
+                    <div className="flex flex-col flex-1 px-4">
+                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
+                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore che abbia giocato almeno una sfida libera.</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              <div className="w-full bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+              <div className="w-full bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 min-h-0">
                 {/* TABLE HEADER */}
                 <div className="grid grid-cols-12 gap-2 bg-slate-950/80 p-4 border-b border-slate-700/50 text-slate-400 font-bold uppercase tracking-widest text-xs">
                   <div className="col-span-1 text-center">Pos</div>
