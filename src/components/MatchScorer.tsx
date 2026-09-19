@@ -506,11 +506,11 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
       )}
 
       {/* BEST OF 3 SETS SCOREBOARD HEADER */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3 mb-4 shadow-lg flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3 mb-4 shadow-lg flex flex-col items-center justify-center gap-3 w-full md:w-1/2 ml-auto">
+        <div className="flex items-center gap-6 w-full justify-center">
           {/* Sets summary team A */}
           <div className="flex items-center gap-3">
-            <span className="w-3 h-3 rounded-full bg-red-500"></span>
+            <span className="w-3 h-3 rounded-full bg-red-500 shrink-0"></span>
             <span className="font-black text-white text-base md:text-lg truncate max-w-[130px] sm:max-w-none">
               {match.teamA.player1.name} & {match.teamA.player2.name}
             </span>
@@ -519,7 +519,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             </span>
           </div>
 
-          <span className="text-slate-600 font-black text-xl">VS</span>
+          <span className="text-slate-600 font-black text-xl shrink-0">VS</span>
 
           {/* Sets summary team B */}
           <div className="flex items-center gap-3">
@@ -529,44 +529,8 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             <span className="font-black text-white text-base md:text-lg truncate max-w-[130px] sm:max-w-none">
               {match.teamB.player1.name} & {match.teamB.player2.name}
             </span>
-            <span className="w-3 h-3 rounded-full bg-blue-500"></span>
+            <span className="w-3 h-3 rounded-full bg-blue-500 shrink-0"></span>
           </div>
-        </div>
-
-        {/* Set History Badges */}
-        <div className="flex items-center gap-2 flex-wrap justify-center">
-          {[1, 2, 3].map(num => {
-            const setFinished = completedSets.find(s => s.setNumber === num);
-            const isCurrent = !isMatchFinished && currentSetNumber === num;
-            return (
-              <div
-                key={num}
-                className={clsx(
-                  "px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5",
-                  setFinished
-                    ? setFinished.winner === "A"
-                      ? "bg-red-950/40 border-red-500/50 text-red-300"
-                      : "bg-blue-950/40 border-blue-500/50 text-blue-300"
-                    : isCurrent
-                    ? "bg-purple-950/40 border-purple-500 text-purple-300 ring-2 ring-purple-500/40 animate-pulse"
-                    : "bg-slate-950/40 border-slate-800 text-slate-600"
-                )}
-              >
-                <span>Set {num}:</span>
-                {setFinished ? (
-                  <span className="font-black text-white">
-                    {setFinished.scoreA} - {setFinished.scoreB}
-                  </span>
-                ) : isCurrent ? (
-                  <span className="font-black text-purple-300">
-                    {num === 3 ? "La Bella 🔥" : "In corso"}
-                  </span>
-                ) : (
-                  <span>-</span>
-                )}
-              </div>
-            );
-          })}
         </div>
       </div>
 
@@ -803,23 +767,17 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         )}>
           {/* Header Team */}
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-black uppercase tracking-widest text-red-400">
-                Squadra Rossa • Set Vinti: {mode === "goals" ? setsWonA : match.scoreTeamA}/2
-              </span>
+            <div className="flex items-center justify-end mb-2 min-h-[24px]">
               {mode === "goals" && currentSetState.inAdvantages && currentSetState.advA === 1 && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-500 text-white animate-pulse">
                   Set Point Rosso (+1)
                 </span>
               )}
             </div>
-            <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
-              {match.teamA.player1.name} <span className="text-slate-600">&</span> {match.teamA.player2.name}
-            </h2>
             {teamARoles && (
-              <div className="mt-2 flex items-center gap-2 flex-wrap">
-                <span className="text-xs bg-slate-950/70 border border-red-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
-                  <span>🛡️</span>
+              <div className="mt-0 flex items-center gap-3 flex-wrap">
+                <span className="text-sm sm:text-base bg-slate-950/70 border border-red-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                  <span className="text-lg">🛡️</span>
                   <span className="text-slate-400 font-bold">Porta:</span>
                   <strong className="text-white">
                     {match.teamA.player1.id === teamARoles.goalkeeperId ? match.teamA.player1.name : match.teamA.player2.name}
@@ -830,14 +788,14 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                     type="button"
                     onClick={handleSwapTeamA}
                     title="Inverti ruoli"
-                    className="px-2 py-1 hover:bg-red-950 bg-slate-900 border border-red-500/40 rounded-lg text-amber-300 hover:text-amber-200 transition active:scale-95 flex items-center gap-1 text-xs font-bold"
+                    className="px-4 py-2 hover:bg-red-950 bg-slate-900 border border-red-500/40 rounded-xl text-amber-300 hover:text-amber-200 transition active:scale-95 flex items-center gap-2 text-sm font-bold shadow-sm"
                   >
-                    <ArrowLeftRight className="w-3.5 h-3.5" />
+                    <ArrowLeftRight className="w-5 h-5" />
                     <span>Inverti</span>
                   </button>
                 )}
-                <span className="text-xs bg-slate-950/70 border border-red-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
-                  <span>⚔️</span>
+                <span className="text-sm sm:text-base bg-slate-950/70 border border-red-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                  <span className="text-lg">⚔️</span>
                   <span className="text-slate-400 font-bold">Attacco:</span>
                   <strong className="text-white">
                     {match.teamA.player1.id === teamARoles.strikerId ? match.teamA.player1.name : match.teamA.player2.name}
@@ -973,23 +931,17 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         )}>
           {/* Header Team */}
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-black uppercase tracking-widest text-blue-400">
-                Squadra Blu • Set Vinti: {mode === "goals" ? setsWonB : match.scoreTeamB}/2
-              </span>
+            <div className="flex items-center justify-end mb-2 min-h-[24px]">
               {mode === "goals" && currentSetState.inAdvantages && currentSetState.advB === 1 && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-500 text-white animate-pulse">
                   Set Point Blu (+1)
                 </span>
               )}
             </div>
-            <h2 className="text-xl md:text-2xl font-black text-white leading-tight">
-              {match.teamB.player1.name} <span className="text-slate-600">&</span> {match.teamB.player2.name}
-            </h2>
             {teamBRoles && (
-              <div className="mt-2 flex items-center gap-2 flex-wrap">
-                <span className="text-xs bg-slate-950/70 border border-blue-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
-                  <span>🛡️</span>
+              <div className="mt-0 flex items-center gap-3 flex-wrap">
+                <span className="text-sm sm:text-base bg-slate-950/70 border border-blue-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                  <span className="text-lg">🛡️</span>
                   <span className="text-slate-400 font-bold">Porta:</span>
                   <strong className="text-white">
                     {match.teamB.player1.id === teamBRoles.goalkeeperId ? match.teamB.player1.name : match.teamB.player2.name}
@@ -1000,14 +952,14 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                     type="button"
                     onClick={handleSwapTeamB}
                     title="Inverti ruoli"
-                    className="px-2 py-1 hover:bg-blue-950 bg-slate-900 border border-blue-500/40 rounded-lg text-amber-300 hover:text-amber-200 transition active:scale-95 flex items-center gap-1 text-xs font-bold"
+                    className="px-4 py-2 hover:bg-blue-950 bg-slate-900 border border-blue-500/40 rounded-xl text-amber-300 hover:text-amber-200 transition active:scale-95 flex items-center gap-2 text-sm font-bold shadow-sm"
                   >
-                    <ArrowLeftRight className="w-3.5 h-3.5" />
+                    <ArrowLeftRight className="w-5 h-5" />
                     <span>Inverti</span>
                   </button>
                 )}
-                <span className="text-xs bg-slate-950/70 border border-blue-500/30 px-2.5 py-1 rounded-lg text-slate-200 flex items-center gap-1.5 shadow-sm">
-                  <span>⚔️</span>
+                <span className="text-sm sm:text-base bg-slate-950/70 border border-blue-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                  <span className="text-lg">⚔️</span>
                   <span className="text-slate-400 font-bold">Attacco:</span>
                   <strong className="text-white">
                     {match.teamB.player1.id === teamBRoles.strikerId ? match.teamB.player1.name : match.teamB.player2.name}
