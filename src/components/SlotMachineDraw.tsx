@@ -423,6 +423,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         </div>
       )}
 
+      {introState === "slot_machine" && (<>
+
       
       <div className="absolute top-10 flex flex-col items-center animate-fade-in-down z-20">
         <div className="inline-flex items-center gap-3 px-8 py-3 bg-indigo-500/20 text-indigo-400 rounded-full font-bold uppercase tracking-widest border border-indigo-500/30 mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)] animate-pulse">
@@ -666,6 +668,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
            </div>
         </div>
       )}
+      </>)}
+
     </div>
   );
 }
