@@ -531,10 +531,14 @@ export async function respondToRegistrationRequest(requestId: string, status: st
 
 
 export async function finishDrawAnimation(tournamentId: string) {
-  await prisma.tournament.update({
-    where: { id: tournamentId },
-    data: { status: "in_progress" }
-  });
+  try {
+    await prisma.tournament.update({
+      where: { id: tournamentId },
+      data: { status: "in_progress" }
+    });
+  } catch (error) {
+    console.warn("finishDrawAnimation: Impossibile aggiornare il torneo (forse è stato eliminato nel frattempo?)", error);
+  }
 }
 
 export async function recalculateTournamentAwards(tournamentId: string) {
