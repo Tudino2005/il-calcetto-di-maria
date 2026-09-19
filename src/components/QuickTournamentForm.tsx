@@ -242,12 +242,16 @@ export default function QuickTournamentForm({ players }: { players: any[] }) {
               >
                 <div 
                   className={clsx(
-                    "w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-colors",
+                    "w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-colors overflow-hidden",
                     !pairColorValue && circleClass
                   )}
                   style={pairColorValue ? { backgroundColor: pairColorValue, color: "#fff" } : {}}
                 >
-                  {p.name.charAt(0).toUpperCase()}
+                  {p.avatarUrl ? (
+                    <img src={`/players/${p.avatarUrl}`} alt={p.name} className="w-full h-full object-cover" />
+                  ) : (
+                    p.name.charAt(0).toUpperCase()
+                  )}
                 </div>
                 <div 
                    className={clsx("font-bold", !pairColorValue && nameClass)}

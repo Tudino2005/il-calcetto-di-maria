@@ -235,12 +235,16 @@ export default function MatchLobbyClient({ players }: { players: any[] }) {
               >
                 <div 
                   className={clsx(
-                    "w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-colors",
+                    "w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-colors overflow-hidden",
                     !isSelected && "bg-slate-800 text-slate-400"
                   )}
                   style={isSelected ? { backgroundColor: pairColorValue, color: "#fff" } : {}}
                 >
-                  {p.name.charAt(0).toUpperCase()}
+                  {p.avatarUrl ? (
+                    <img src={`/players/${p.avatarUrl}`} alt={p.name} className="w-full h-full object-cover" />
+                  ) : (
+                    p.name.charAt(0).toUpperCase()
+                  )}
                 </div>
                 <div 
                    className={clsx("font-bold", !isSelected && "text-slate-400")}
