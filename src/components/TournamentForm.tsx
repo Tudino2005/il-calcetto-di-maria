@@ -13,6 +13,7 @@ export default function TournamentForm() {
   const [teamsPerGroup, setTeamsPerGroup] = useState<number>(4);
   const [maxTeams, setMaxTeams] = useState<number>(8);
   const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [drawDate, setDrawDate] = useState("");
   const [pricePerPlayer, setPricePerPlayer] = useState("");
   const [prizes, setPrizes] = useState("");
@@ -59,6 +60,7 @@ export default function TournamentForm() {
     formData.append("teamsPerGroup", teamsPerGroup.toString());
     formData.append("maxTeams", maxTeams.toString());
     if (startDate) formData.append("startDate", startDate);
+    if (endDate) formData.append("endDate", endDate);
     if (drawDate && type !== "coppie_fisse") formData.append("drawDate", drawDate);
     if (pricePerPlayer) formData.append("pricePerPlayer", pricePerPlayer);
     if (prizes) formData.append("prizes", prizes);
@@ -80,7 +82,7 @@ export default function TournamentForm() {
         />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 mb-2">
+      <div className="flex flex-col gap-6 mb-2 lg:w-1/2">
         <div>
           <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Numero Max Squadre</label>
           <select value={maxTeams} onChange={(e) => setMaxTeams(Number(e.target.value))} className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500">
@@ -91,14 +93,25 @@ export default function TournamentForm() {
             <option value={64}>64 Squadre (128 Giocatori)</option>
           </select>
         </div>
-        <div>
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Inizio</label>
-          <input
-            type="datetime-local"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Inizio</label>
+            <input
+              type="datetime-local"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+            />
+          </div>
+          <div>
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Fine</label>
+            <input
+              type="datetime-local"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+            />
+          </div>
         </div>
       </div>
       <div className="grid md:grid-cols-3 gap-6">

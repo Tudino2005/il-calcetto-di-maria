@@ -13,12 +13,14 @@ export async function createTournament(formData: FormData) {
   const maxTeams = Number(formData.get("maxTeams") || 8);
   const type = formData.get("type") as string;
   const startDateStr = formData.get("startDate") as string;
+  const endDateStr = formData.get("endDate") as string;
   const pricePerPlayerStr = formData.get("pricePerPlayer") as string;
   const prizes = formData.get("prizes") as string;
 
   const drawDateStr = formData.get("drawDate") as string;
   const drawDate = drawDateStr ? new Date(drawDateStr) : null;
   const startDate = startDateStr ? new Date(startDateStr) : null;
+  const endDate = endDateStr ? new Date(endDateStr) : null;
   const pricePerPlayer = pricePerPlayerStr ? parseFloat(pricePerPlayerStr) : null;
   
   // Create tournament in setup mode
@@ -29,6 +31,7 @@ export async function createTournament(formData: FormData) {
       format, 
       status: "setup",
       startDate,
+      endDate,
       drawDate,
       maxTeams,
       pricePerPlayer,
