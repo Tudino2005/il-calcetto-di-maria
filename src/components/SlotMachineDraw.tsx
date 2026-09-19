@@ -42,25 +42,39 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [lineupIndex, setLineupIndex] = useState(0);
   const [showLineupVideo, setShowLineupVideo] = useState(false);
   const [countdownValue, setCountdownValue] = useState(3);
+  const [isFadingOutPlayer, setIsFadingOutPlayer] = useState(false);
+  const [flipState, setFlipState] = useState<"none" | "out" | "in">("none");
   const audioRef1 = useRef<HTMLAudioElement | null>(null);
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
   const audioRef3 = useRef<HTMLAudioElement | null>(null);
+
+  const triggerPhaseChange = (nextPhaseOrFn: string | (() => void)) => {
+     setFlipState("out");
+     setTimeout(() => {
+        if (typeof nextPhaseOrFn === "string") {
+           setIntroState(nextPhaseOrFn as any);
+        } else {
+           nextPhaseOrFn();
+        }
+        setFlipState("in");
+        setTimeout(() => setFlipState("none"), 600);
+     }, 600);
+  };
 
   // When all teams are revealed, start showcase
   useEffect(() => {
     if (revealedIndex >= teams.length && teams.length > 0 && showcaseIndex === -1) {
       if (audioRef2.current) fadeOutAudio(audioRef2.current, 1000); // Sfuma traccia 2
       
-      // Small pause, then start showcase and Track 3
-      const t = setTimeout(() => {
-        if (audioRef3.current) {
-          audioRef3.current.volume = 1;
-          audioRef3.current.currentTime = 0;
-          audioRef3.current.play().catch(e => console.error("Track 3 failed:", e));
-        }
-        setShowcaseIndex(0);
-      }, 1000);
-      return () => clearTimeout(t);
+      // Esegue la transizione 3D e fa partire la traccia 3
+      triggerPhaseChange(() => {
+         setShowcaseIndex(0);
+         if (audioRef3.current) {
+           audioRef3.current.volume = 1;
+           audioRef3.current.currentTime = 0;
+           audioRef3.current.play().catch(e => console.error("Track 3 failed:", e));
+         }
+      });
     }
   }, [revealedIndex, teams.length, showcaseIndex]);
 
@@ -165,11 +179,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     
     // 10 second animation duration
     setTimeout(() => {
-       setIntroState("lineup_intro_text");
+       triggerPhaseChange("lineup_intro_text");
        
        // Hold the text for 3 seconds, then move to player lineup
        setTimeout(() => {
-         setIntroState("player_lineup");
+         triggerPhaseChange("player_lineup");
        }, 3500); // 3.5 seconds total to allow for fade animations
     }, 10000);
   };
@@ -188,9 +202,9 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
             setIntroState("playing_intro");
             
             setTimeout(() => {
-               setIntroState("lineup_intro_text");
+               triggerPhaseChange("lineup_intro_text");
                setTimeout(() => {
-                 setIntroState("player_lineup");
+                 triggerPhaseChange("player_lineup");
                }, 3500);
             }, 10000);
           } catch (err) {
@@ -208,13 +222,18 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     if (introState === "player_lineup" && allPlayers.length > 0) {
       if (lineupIndex < allPlayers.length) {
         setShowLineupVideo(false);
+        setIsFadingOutPlayer(false);
         const videoTimer = setTimeout(() => setShowLineupVideo(true), 2000); // 2s delay for the name
         
-        // 12s total (2s name + 10s video)
+        const fadeTimer = setTimeout(() => {
+           setIsFadingOutPlayer(true);
+        }, 10500); // Start fade-out at 10.5s
+
+        // 12s total
         const timer = setTimeout(() => setLineupIndex(prev => prev + 1), 12000);
-        return () => { clearTimeout(timer); clearTimeout(videoTimer); };
+        return () => { clearTimeout(timer); clearTimeout(videoTimer); clearTimeout(fadeTimer); };
       } else {
-        setIntroState("draw_intro_text");
+        triggerPhaseChange("draw_intro_text");
       }
     }
   }, [introState, lineupIndex, allPlayers.length]);
@@ -223,7 +242,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   useEffect(() => {
     if (introState === "draw_intro_text") {
       const timer = setTimeout(() => {
-        setIntroState("countdown");
+        triggerPhaseChange("countdown");
       }, 8000); // Wait 8 seconds
       return () => clearTimeout(timer);
     }
@@ -239,7 +258,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         const timer = setTimeout(() => setCountdownValue(prev => prev - 1), 1000);
         return () => clearTimeout(timer);
       } else {
-        setIntroState("slot_machine");
+        triggerPhaseChange("slot_machine");
         if (audioRef2.current) {
           audioRef2.current.volume = 1;
           audioRef2.current.currentTime = 0;
@@ -251,7 +270,20 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   if (teams.length === 0) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full text-center p-8 bg-gradient-to-b from-slate-950 to-indigo-950 overflow-hidden relative">
+    <div className={`flex flex-col items-center justify-center w-full h-full text-center p-8 bg-gradient-to-b from-slate-950 to-indigo-950 overflow-hidden relative ${flipState === "out" ? "flip-out" : flipState === "in" ? "flip-in" : ""}`}>
+      <style>{`
+        @keyframes flipOut {
+          from { transform: perspective(1200px) rotateY(0deg); opacity: 1; }
+          to { transform: perspective(1200px) rotateY(90deg); opacity: 0; }
+        }
+        @keyframes flipIn {
+          from { transform: perspective(1200px) rotateY(-90deg); opacity: 0; }
+          to { transform: perspective(1200px) rotateY(0deg); opacity: 1; }
+        }
+        .flip-out { animation: flipOut 0.6s ease-in forwards; }
+        .flip-in { animation: flipIn 0.6s ease-out forwards; }
+      `}</style>
+
       <audio ref={audioRef1} src="/seven-nation-army.mp3" preload="auto" loop />
       <audio ref={audioRef2} src="/song2.mp3" preload="auto" loop />
       <audio ref={audioRef3} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => router.refresh())} />
@@ -321,7 +353,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         const hasMedia = !!p.mediaUrl;
         const isVideo = hasMedia && p.mediaUrl.toLowerCase().endsWith('.mp4');
         return (
-          <div key={p.id} className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
+          <div key={p.id} className={`absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center overflow-hidden animate-in fade-in duration-1000 transition-opacity ease-in-out ${isFadingOutPlayer ? 'opacity-0 duration-[1500ms]' : 'opacity-100'}`}>
              {/* Dynamic Stadium BG */}
              <div className="absolute inset-0 bg-slate-900 opacity-80 mix-blend-luminosity pointer-events-none"></div>
              <div className="absolute top-1/4 left-1/4 w-[40rem] h-[40rem] bg-indigo-600/20 blur-[120px] rounded-full animate-pulse"></div>
