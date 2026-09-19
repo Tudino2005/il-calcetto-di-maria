@@ -69,6 +69,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
           if (showcaseIndex + 1 >= teams.length) {
             // All teams shown → wait to admire the final grid
             setShowcaseIndex(prev => prev + 1); // Pushes the last team into the grid
+            if (audioRef.current) fadeOutAudio(audioRef.current, 7000); // Sfuma la musica negli ultimi 7 secondi
             setTimeout(() => {
               finishDrawAnimation(tournament.id).then(() => router.refresh());
             }, 8000); // 8 seconds to admire the final grid
@@ -140,6 +141,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       return () => { clearInterval(interval); clearTimeout(timeout); };
     } else {
       const finalTimeout = setTimeout(async () => {
+         if (audioRef.current) fadeOutAudio(audioRef.current, 5000);
          await finishDrawAnimation(tournament.id);
          router.refresh(); // Tells NextJS to reload the page data, updating TVSlideshow
       }, 60000);
@@ -152,13 +154,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     setIntroState("playing_intro");
     if (audioRef.current) {
        audioRef.current.volume = 1; // Reset volume
-       audioRef.current.currentTime = 55; // Change this to the exact second the chorus starts
+       audioRef.current.currentTime = 0; // Play from the beginning
        audioRef.current.play().catch(e => console.error("Audio autoplay failed:", e));
-       
-       // Start fade out at 8 seconds
-       setTimeout(() => {
-          if (audioRef.current) fadeOutAudio(audioRef.current, 2000);
-       }, 8000);
     }
     
     // 10 second animation duration
@@ -179,16 +176,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       const attemptPlay = async () => {
         if (audioRef.current) {
           audioRef.current.volume = 1;
-          audioRef.current.currentTime = 55; // default start time
+          audioRef.current.currentTime = 0; // default start time
           try {
             await audioRef.current.play();
             // Autoplay succeeded!
             setIntroState("playing_intro");
-            
-            // Start fade out at 8 seconds
-            setTimeout(() => {
-              if (audioRef.current) fadeOutAudio(audioRef.current, 2000);
-            }, 8000);
             
             setTimeout(() => {
                setIntroState("lineup_intro_text");
@@ -247,7 +239,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full text-center p-8 bg-gradient-to-b from-slate-950 to-indigo-950 overflow-hidden relative">
-      <audio ref={audioRef} src="/intro.mp3" preload="auto" />
+      <audio ref={audioRef} src="/seven-nation-army.mp3" preload="auto" loop />
 
       {introState === "pending" && (
         <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center">
