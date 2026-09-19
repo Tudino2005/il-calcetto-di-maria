@@ -42,13 +42,23 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [lineupIndex, setLineupIndex] = useState(0);
   const [showLineupVideo, setShowLineupVideo] = useState(false);
   const [countdownValue, setCountdownValue] = useState(3);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef1 = useRef<HTMLAudioElement | null>(null);
+  const audioRef2 = useRef<HTMLAudioElement | null>(null);
 
   // When all teams are revealed, start showcase
   useEffect(() => {
     if (revealedIndex >= teams.length && teams.length > 0 && showcaseIndex === -1) {
-      // Small pause, then start showcase
-      const t = setTimeout(() => setShowcaseIndex(0), 1000);
+      if (audioRef1.current) fadeOutAudio(audioRef1.current, 1000); // Sfuma traccia 1
+      
+      // Small pause, then start showcase and Track 2
+      const t = setTimeout(() => {
+        if (audioRef2.current) {
+          audioRef2.current.volume = 1;
+          audioRef2.current.currentTime = 0;
+          audioRef2.current.play().catch(e => console.error("Track 2 failed:", e));
+        }
+        setShowcaseIndex(0);
+      }, 1000);
       return () => clearTimeout(t);
     }
   }, [revealedIndex, teams.length, showcaseIndex]);
@@ -69,10 +79,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
           if (showcaseIndex + 1 >= teams.length) {
             // All teams shown → wait to admire the final grid
             setShowcaseIndex(prev => prev + 1); // Pushes the last team into the grid
-            if (audioRef.current) fadeOutAudio(audioRef.current, 7000); // Sfuma la musica negli ultimi 7 secondi
+            
+            // Fallback timer (180s) in case the audio onEnded event doesn't fire
             setTimeout(() => {
               finishDrawAnimation(tournament.id).then(() => router.refresh());
-            }, 8000); // 8 seconds to admire the final grid
+            }, 180000); 
           } else {
             setShowcaseIndex(prev => prev + 1);
           }
@@ -141,7 +152,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       return () => { clearInterval(interval); clearTimeout(timeout); };
     } else {
       const finalTimeout = setTimeout(async () => {
-         if (audioRef.current) fadeOutAudio(audioRef.current, 5000);
+         if (audioRef1.current) fadeOutAudio(audioRef1.current, 5000);
+         if (audioRef2.current) fadeOutAudio(audioRef2.current, 5000);
          await finishDrawAnimation(tournament.id);
          router.refresh(); // Tells NextJS to reload the page data, updating TVSlideshow
       }, 60000);
@@ -152,10 +164,10 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   // Handle Intro
   const startIntro = () => {
     setIntroState("playing_intro");
-    if (audioRef.current) {
-       audioRef.current.volume = 1; // Reset volume
-       audioRef.current.currentTime = 0; // Play from the beginning
-       audioRef.current.play().catch(e => console.error("Audio autoplay failed:", e));
+    if (audioRef1.current) {
+       audioRef1.current.volume = 1; // Reset volume
+       audioRef1.current.currentTime = 0; // Play from the beginning
+       audioRef1.current.play().catch(e => console.error("Audio autoplay failed:", e));
     }
     
     // 10 second animation duration
@@ -174,11 +186,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
     if (teams.length > 0 && introState === "pending") {
       // Browsers will likely block this unless user interacted with the page earlier
       const attemptPlay = async () => {
-        if (audioRef.current) {
-          audioRef.current.volume = 1;
-          audioRef.current.currentTime = 0; // default start time
+        if (audioRef1.current) {
+          audioRef1.current.volume = 1;
+          audioRef1.current.currentTime = 0; // default start time
           try {
-            await audioRef.current.play();
+            await audioRef1.current.play();
             // Autoplay succeeded!
             setIntroState("playing_intro");
             
@@ -239,7 +251,8 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full text-center p-8 bg-gradient-to-b from-slate-950 to-indigo-950 overflow-hidden relative">
-      <audio ref={audioRef} src="/seven-nation-army.mp3" preload="auto" loop />
+      <audio ref={audioRef1} src="/seven-nation-army.mp3" preload="auto" loop />
+      <audio ref={audioRef2} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => router.refresh())} />
 
       {introState === "pending" && (
         <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center">
