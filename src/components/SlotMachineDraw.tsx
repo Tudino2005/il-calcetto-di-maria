@@ -289,7 +289,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
       `}</style>
 
       <audio ref={audioRef1} src="/seven-nation-army.mp3" preload="auto" loop />
-      <audio ref={audioRef2} src="/song2.mp3" preload="auto" loop />
+      <audio ref={audioRef2} src="/song2-blur.mp3" preload="auto" loop />
       <audio ref={audioRef3} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => router.refresh())} />
 
       {introState === "pending" && (
