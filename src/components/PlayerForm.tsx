@@ -90,7 +90,7 @@ export default function PlayerForm() {
               <input type="radio" name="role" value="portiere" checked={preferredRole === "portiere"} onChange={() => setPreferredRole("portiere")} className="peer sr-only" />
               <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-900 border-2 border-slate-700 text-center text-slate-400 p-4 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white hover:border-slate-500 transition-all font-bold">
                 <RoleIcon role="portiere" className="w-12 h-12" />
-                <span className="text-sm">Portiere</span>
+                <span className="text-sm">Difensore</span>
               </div>
             </label>
             <label className="cursor-pointer">

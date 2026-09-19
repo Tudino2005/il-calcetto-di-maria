@@ -38,7 +38,7 @@ export default async function PromoPage({ params }: { params: Promise<{ id: stri
   const getTypeDescription = () => {
     switch (tournament.type) {
       case "sorteggio_ruoli":
-        return "Sorteggio per Ruoli. Le coppie saranno estratte bilanciando un attaccante e un portiere.";
+        return "Sorteggio per Ruoli. Le coppie saranno estratte bilanciando un attaccante e un difensore.";
       case "sorteggio_integrale":
         return "Sorteggio Integrale. Composizione puramente casuale senza limiti di ruolo.";
       case "coppie_fisse":

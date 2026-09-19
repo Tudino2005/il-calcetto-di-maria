@@ -409,7 +409,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
               </h1>
               
               <p className="text-2xl md:text-4xl font-medium text-slate-300 max-w-4xl leading-relaxed italic">
-                {tournament.type === "sorteggio_ruoli" && "L'equilibrio perfetto. L'urna unirà casualmente un Attaccante e un Portiere."}
+                {tournament.type === "sorteggio_ruoli" && "L'equilibrio perfetto. L'urna unirà casualmente un Attaccante e un Difensore."}
                 {tournament.type === "sorteggio_integrale" && "Il caos puro. Nessuna regola di ruolo, chiunque può finire in coppia con chiunque. Lasciate fare al destino."}
                 {tournament.type === "coppie_fisse" && "Il destino è già scritto. I team sono stati scelti, è arrivato il momento di svelarli al mondo."}
               </p>

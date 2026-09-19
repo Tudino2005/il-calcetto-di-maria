@@ -77,7 +77,7 @@ export default function JoinTournamentPage() {
                 <input type="radio" name="role" value="portiere" checked={role === "portiere"} onChange={() => setRole("portiere")} className="peer sr-only" />
                 <div className="h-full flex flex-col items-center justify-center gap-2 bg-slate-800 border-2 border-slate-700 p-3 rounded-xl peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500 peer-checked:text-white transition-all text-slate-500">
                   <RoleIcon role="portiere" className="w-10 h-10" />
-                  <span className="text-xs font-bold uppercase">Portiere</span>
+                  <span className="text-xs font-bold uppercase">Difensore</span>
                 </div>
               </label>
               <label className="cursor-pointer">

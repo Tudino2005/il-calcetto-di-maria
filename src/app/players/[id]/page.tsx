@@ -219,7 +219,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          {/* SCHEDA PORTIERE */}
+          {/* SCHEDA DIFENSORE */}
           <div className="bg-slate-800/95 border border-blue-500/30 p-6 rounded-3xl shadow-xl flex flex-col justify-between gap-4">
             <div>
               <div className="flex items-center justify-between mb-4">

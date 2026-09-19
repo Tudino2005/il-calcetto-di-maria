@@ -104,7 +104,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
   const getTypeDescription = () => {
     switch (tournament.type) {
       case "sorteggio_ruoli":
-        return "I giocatori vengono divisi in due urne (Attaccanti e Portieri) in base al loro ruolo preferito. L'urna elettronica sorteggerà le coppie bilanciando un attaccante e un portiere per ogni squadra.";
+        return "I giocatori vengono divisi in due urne (Attaccanti e Difensori) in base al loro ruolo preferito. L'urna elettronica sorteggerà le coppie bilanciando un attaccante e un difensore per ogni squadra.";
       case "sorteggio_integrale":
         return "Tutti i giocatori in un'unica urna. Le coppie sono formate in modo completamente casuale.";
       case "coppie_fisse":
@@ -198,7 +198,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
             className="bg-slate-800 border border-slate-600 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-emerald-500"
           >
             <option value="attaccante">Attaccante</option>
-            <option value="portiere">Portiere</option>
+            <option value="portiere">Difensore</option>
             <option value="entrambi">Entrambi</option>
           </select>
           <button 
@@ -306,7 +306,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
             
             <div className="flex items-center gap-3 pt-4 border-t border-slate-700/50 mt-auto">
               <div className="flex-1 bg-blue-500/10 rounded-lg p-2 flex flex-col items-center justify-center border border-blue-500/20">
-                <span className="text-[10px] text-blue-400/70 font-bold uppercase tracking-widest mb-0.5">Portieri</span>
+                <span className="text-[10px] text-blue-400/70 font-bold uppercase tracking-widest mb-0.5">Difensori</span>
                 <span className="text-blue-400 font-black text-lg">
                   {registrations.filter((r: any) => allPlayers.find(p => p.id === r.playerId)?.preferredRole === "portiere").length}
                 </span>

@@ -593,7 +593,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               if (iscritti >= maxPlayers) {
                 missingText = "Limite Iscritti Raggiunto! (Riserve in attesa)";
               } else {
-                missingText = `Mancano: ${Math.max(0, missingAtt)} Attaccanti, ${Math.max(0, missingPor)} Portieri`;
+                missingText = `Mancano: ${Math.max(0, missingAtt)} Attaccanti, ${Math.max(0, missingPor)} Difensori`;
               }
             } else {
               if (iscritti >= maxPlayers) {
@@ -612,7 +612,7 @@ export default function TVSlideshow({ data }: { data: any }) {
             
             const typeTitle = t.type === "sorteggio_ruoli" ? "Sorteggio per Ruoli" : t.type === "sorteggio_integrale" ? "Sorteggio Integrale" : "Coppie Fisse";
             const typeDesc = t.type === "sorteggio_ruoli" 
-              ? "L'algoritmo formerà le coppie in modo bilanciato, accoppiando obbligatoriamente un Attaccante con un Portiere. (Chi sceglie 'Entrambi' farà da jolly)." 
+              ? "L'algoritmo formerà le coppie in modo bilanciato, accoppiando obbligatoriamente un Attaccante con un Difensore. (Chi sceglie 'Entrambi' farà da jolly)." 
               : t.type === "sorteggio_integrale" 
               ? "Sorteggio totalmente cieco. La fortuna decide chi sarà il tuo compagno, indipendentemente dal ruolo preferito." 
               : "Le coppie sono già decise. Ci si iscrive insieme al proprio compagno storico per sfidare le altre coppie.";

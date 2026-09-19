@@ -76,7 +76,7 @@ export default async function CeremonyPage({ params }: { params: Promise<{ id: s
                 ))}
               </div>
             ) : (
-              <p className="text-slate-500 italic">Nessun portiere qualificato</p>
+              <p className="text-slate-500 italic">Nessun difensore qualificato</p>
             )}
           </div>
         </div>

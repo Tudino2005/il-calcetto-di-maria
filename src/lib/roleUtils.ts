@@ -15,7 +15,7 @@ export type ResolvedTeamRoles = {
 };
 
 /**
- * Risolve i ruoli di una squadra (Portiere e Attaccante).
+ * Risolve i ruoli di una squadra (Difensore e Attaccante).
  * Supporta la pre-assegnazione intelligente in base a preferredRole,
  * la gestione automatica dei casi limite (2 portieri o 2 attaccanti con segnalazione 'adattato')
  * e rispetta gli override manuali (tasto ⇄ Scambia).
@@ -49,7 +49,7 @@ export function resolveTeamRoles(
 
     if (bothGoalkeepers) {
       adaptedPlayerName = stPlayer.name;
-      adaptationNote = `Coppia di Portieri: ${stPlayer.name} gioca in Attacco (adattato)`;
+      adaptationNote = `Coppia di Difensori: ${stPlayer.name} gioca in Attacco (adattato)`;
     } else if (bothStrikers) {
       adaptedPlayerName = gkPlayer.name;
       adaptationNote = `Coppia di Attaccanti: ${gkPlayer.name} gioca in Porta (adattato)`;
@@ -75,7 +75,7 @@ export function resolveTeamRoles(
     gkId = player1.id;
     stId = player2.id;
     adaptedPlayerName = player2.name;
-    adaptationNote = `Coppia di Portieri: ${player2.name} gioca in Attacco (adattato)`;
+    adaptationNote = `Coppia di Difensori: ${player2.name} gioca in Attacco (adattato)`;
   } else if (bothStrikers) {
     // Entrambi attaccanti: p1 si sacrifica dietro, p2 resta avanti
     gkId = player1.id;
@@ -276,7 +276,7 @@ export function calculatePlayerRoleStats(
   } else if (gkMatches > 0) {
     verdetto = {
       titolo: "Specialista della Porta 🛡️",
-      descrizione: `Hai disputato ${gkMatches} partite da Portiere con media ${defensiveIndex} gol subiti e ${gkWinRate}% Win Rate.`,
+      descrizione: `Hai disputato ${gkMatches} partite da Difensore con media ${defensiveIndex} gol subiti e ${gkWinRate}% Win Rate.`,
       consiglio: "Un vero guardiano dei pali. Mettiti alla prova anche in attacco per scoprire la tua flessibilità!",
       tag: "difesa",
     };
@@ -291,7 +291,7 @@ export function calculatePlayerRoleStats(
     verdetto = {
       titolo: "In Attesa di Dati ⏳",
       descrizione: "Gioca le tue prime partite per generare l'analisi dettagliata di rendimento per ruolo.",
-      consiglio: "Completa almeno una partita da portiere o attaccante per sbloccare gli indici.",
+      consiglio: "Completa almeno una partita da difensore o attaccante per sbloccare gli indici.",
       tag: "neutro",
     };
   }

@@ -152,7 +152,7 @@ export default function TournamentForm() {
             <input type="radio" name="typeRadio" value="sorteggio_ruoli" checked={type === "sorteggio_ruoli"} onChange={() => setType("sorteggio_ruoli")} className="w-5 h-5 accent-purple-500" />
             <div>
               <span className="text-white font-bold block">Sorteggio per Ruoli</span>
-              <span className="text-slate-500 text-sm">Crea coppie equilibrate unendo un attaccante e un portiere.</span>
+              <span className="text-slate-500 text-sm">Crea coppie equilibrate unendo un attaccante e un difensore.</span>
             </div>
           </label>
           <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", type === "sorteggio_integrale" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
