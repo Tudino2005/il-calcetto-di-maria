@@ -179,13 +179,32 @@ export default function QuickTournamentForm({ players }: { players: any[] }) {
           </div>
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-700 mb-6 flex justify-between items-center">
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-700 mb-6 flex flex-col md:flex-row justify-between md:items-center gap-4">
           <span className="text-slate-400 font-bold text-lg">
             {type === "coppie_fisse" ? "Squadre Formate:" : "Giocatori Selezionati:"}
           </span>
-          <span className="text-4xl font-black text-white">
-            {type === "coppie_fisse" ? Math.floor(fixedPairs.flat().length / 2) : selectedPlayers.length}
-          </span>
+          
+          <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
+            {type !== "coppie_fisse" && (
+              <div className="flex gap-4 md:mr-4 md:border-r border-slate-700 md:pr-8">
+                 <div className="flex flex-col items-center">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase mb-1">Attaccanti</span>
+                    <span className="text-xl font-bold text-red-400">{players.filter(p => selectedPlayers.includes(p.id) && p.preferredRole === 'attaccante').length}</span>
+                 </div>
+                 <div className="flex flex-col items-center">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase mb-1">Difensori</span>
+                    <span className="text-xl font-bold text-blue-400">{players.filter(p => selectedPlayers.includes(p.id) && p.preferredRole === 'portiere').length}</span>
+                 </div>
+                 <div className="flex flex-col items-center">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase mb-1">Entrambi</span>
+                    <span className="text-xl font-bold text-purple-400">{players.filter(p => selectedPlayers.includes(p.id) && p.preferredRole === 'entrambi').length}</span>
+                 </div>
+              </div>
+            )}
+            <span className="text-4xl font-black text-white">
+              {type === "coppie_fisse" ? Math.floor(fixedPairs.flat().length / 2) : selectedPlayers.length}
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 max-h-[50vh] overflow-y-auto pr-4 custom-scrollbar">
