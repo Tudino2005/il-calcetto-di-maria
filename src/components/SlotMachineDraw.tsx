@@ -38,7 +38,7 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
   const [showcaseIndex, setShowcaseIndex] = useState(-1); // -1 = not started
   const [showcasePhase, setShowcasePhase] = useState<"fly-in" | "hold" | "fly-out">("fly-in");
 
-  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "lineup_intro_text" | "player_lineup" | "draw_intro_text" | "countdown" | "slot_machine">("pending");
+  const [introState, setIntroState] = useState<"pending" | "playing_intro" | "lineup_intro_text" | "player_lineup" | "draw_intro_text" | "countdown" | "slot_machine" | "pre_showcase_intro" | "rules_scroll">("pending");
   const [lineupIndex, setLineupIndex] = useState(0);
   const [showLineupVideo, setShowLineupVideo] = useState(false);
   const [countdownValue, setCountdownValue] = useState(3);
@@ -61,23 +61,29 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
      }, 600);
   };
 
-  // When all teams are revealed, start showcase
+  // When all teams are revealed, start pre-showcase cinematic
   useEffect(() => {
-    if (revealedIndex >= teams.length && teams.length > 0 && showcaseIndex === -1) {
+    if (revealedIndex >= teams.length && teams.length > 0 && showcaseIndex === -1 && introState !== "pre_showcase_intro") {
       if (audioRef2.current) fadeOutAudio(audioRef2.current, 1000); // Sfuma traccia 2
       
-      // Esegue la transizione 3D e fa partire la traccia 3
       triggerPhaseChange(() => {
-         setShowcaseIndex(0);
+         setIntroState("pre_showcase_intro");
          if (audioRef3.current) {
            audioRef3.current.volume = 1;
            audioRef3.current.currentTime = 0;
            audioRef3.current.play().catch(e => console.error("Track 3 failed:", e));
          }
+         
+         // After 4 seconds of black screen + text, transition to actual showcase
+         setTimeout(() => {
+            triggerPhaseChange(() => {
+                setShowcaseIndex(0);
+                setIntroState("slot_machine"); // Go back to slot_machine state to render the grid
+            });
+         }, 4500); // 4.5 seconds to account for fade animations
       });
     }
-  }, [revealedIndex, teams.length, showcaseIndex]);
-
+  }, [revealedIndex, teams.length, showcaseIndex, introState]);
   // Showcase sequencer
   useEffect(() => {
     if (showcaseIndex < 0 || showcaseIndex >= teams.length) return;
@@ -92,13 +98,11 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
         setShowcasePhase("fly-out");
         const nextTimer = setTimeout(() => {
           if (showcaseIndex + 1 >= teams.length) {
-            // All teams shown → wait to admire the final grid
-            setShowcaseIndex(prev => prev + 1); // Pushes the last team into the grid
-            
-            // Fallback timer (180s) in case the audio onEnded event doesn't fire
-            setTimeout(() => {
-              finishDrawAnimation(tournament.id).then(() => router.refresh());
-            }, 180000); 
+            // All teams shown → switch to scrolling rules cinematic
+            triggerPhaseChange(() => {
+               setShowcaseIndex(prev => prev + 1);
+               setIntroState("rules_scroll");
+            });
           } else {
             setShowcaseIndex(prev => prev + 1);
           }
@@ -420,6 +424,160 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
               {countdownValue}
             </h1>
           </div>
+        </div>
+      )}
+
+      {introState === "pre_showcase_intro" && (
+        <div className="absolute inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden">
+           <style>{`
+             .typewriter-line1 {
+               overflow: hidden;
+               white-space: nowrap;
+               margin: 0 auto;
+               max-width: 0;
+               border-right: 0.1em solid rgba(251, 191, 36, 0.8);
+               animation: 
+                 typing1 1.5s steps(30, end) forwards,
+                 blinkCaret 0.75s step-end 3;
+             }
+             .typewriter-line2 {
+               overflow: hidden;
+               white-space: nowrap;
+               margin: 0 auto;
+               max-width: 0;
+               border-right: 0.1em solid transparent;
+               animation: 
+                 typing2 2.5s steps(50, end) forwards;
+               animation-delay: 2s;
+             }
+             @keyframes typing1 {
+               from { max-width: 0 }
+               to { max-width: 100% }
+             }
+             @keyframes typing2 {
+               from { max-width: 0; border-right-color: rgba(251, 191, 36, 0.8); }
+               to { max-width: 100%; border-right-color: transparent; }
+             }
+             @keyframes blinkCaret {
+               from, to { border-right-color: transparent }
+               50% { border-right-color: rgba(251, 191, 36, 0.8); }
+             }
+           `}</style>
+           <div className="z-10 flex flex-col items-center text-center w-fit mx-auto" style={{ fontFamily: 'Georgia, serif' }}>
+              <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-500 to-amber-700 uppercase tracking-[0.1em] leading-tight pb-2 typewriter-line1 px-4">
+                Signore e Signori
+              </h1>
+              <span className="text-slate-200 text-2xl sm:text-4xl md:text-5xl font-light tracking-widest mt-6 block typewriter-line2 drop-shadow-md px-4">
+                onorati di presentarvi le Squadre partecipanti
+              </span>
+           </div>
+        </div>
+      )}
+      {introState === "rules_scroll" && (
+        <div className="absolute inset-0 z-[10000] bg-slate-950 flex overflow-hidden">
+           {/* Left Column */}
+           <div className="w-[30%] h-full p-6 flex flex-col gap-4 overflow-y-auto animate-in slide-in-from-left-20 duration-[1500ms] border-r border-slate-800/50 scrollbar-hide">
+             {teams.slice(0, Math.ceil(teams.length / 2)).map((t, i) => (
+                <div key={i} className="bg-slate-900 border-2 border-yellow-400/30 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-xl relative overflow-hidden">
+                   <div className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-transparent"></div>
+                   {tournament.teamNames?.[t.id] && (
+                     <span className="text-xs font-black text-yellow-400 uppercase tracking-widest relative z-10">"{tournament.teamNames[t.id]}"</span>
+                   )}
+                   <div className="flex items-center gap-3 w-full justify-center relative z-10">
+                     <div className="flex flex-col items-center flex-1">
+                       {t.player1?.avatarUrl ? (
+                         <div className="w-14 h-14 rounded-full overflow-hidden mb-1 border-2 border-slate-700">
+                           <img src={`/players/${t.player1.avatarUrl}`} className="w-full h-full object-cover object-top" />
+                         </div>
+                       ) : <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-8 h-8 text-yellow-400 mb-1" />}
+                       <span className="text-sm font-black text-white text-center leading-tight">{t.player1?.name}</span>
+                     </div>
+                     <span className="text-sm font-black text-slate-500">&</span>
+                     <div className="flex flex-col items-center flex-1">
+                       {t.player2?.avatarUrl ? (
+                         <div className="w-14 h-14 rounded-full overflow-hidden mb-1 border-2 border-slate-700">
+                           <img src={`/players/${t.player2.avatarUrl}`} className="w-full h-full object-cover object-top" />
+                         </div>
+                       ) : <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-8 h-8 text-emerald-400 mb-1" />}
+                       <span className="text-sm font-black text-white text-center leading-tight">{t.player2?.name}</span>
+                     </div>
+                   </div>
+                </div>
+             ))}
+           </div>
+           
+           {/* Center Scrolling Credits */}
+           <div className="w-[40%] h-full relative overflow-hidden flex justify-center perspective-[1000px]">
+              <style>{`
+                 @keyframes starWarsScroll {
+                    0% { transform: translateY(100vh) rotateX(15deg); opacity: 0; }
+                    5% { opacity: 1; }
+                    80% { opacity: 1; }
+                    100% { transform: translateY(-150vh) rotateX(15deg); opacity: 0; }
+                 }
+                 .scrollbar-hide::-webkit-scrollbar { display: none; }
+                 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+              `}</style>
+              {/* Fade out top edge */}
+              <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-slate-950 to-transparent z-10 pointer-events-none"></div>
+              {/* Fade out bottom edge */}
+              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent z-10 pointer-events-none"></div>
+              
+              <div 
+                className="absolute w-[90%] text-center leading-relaxed pb-32"
+                style={{ animation: 'starWarsScroll 35s linear forwards' }}
+                onAnimationEnd={() => finishDrawAnimation(tournament.id).then(() => router.refresh())}
+              >
+                 <h2 className="text-5xl font-black mb-8 text-yellow-400 uppercase tracking-widest drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]">Regolamento Ufficiale</h2>
+                 <p className="text-2xl font-bold mb-16 italic text-slate-300">Eliminazione diretta pura e spietata: un errore e il team è fuori.</p>
+                 
+                 <div className="text-left space-y-16">
+                    <div>
+                       <h3 className="text-3xl font-black text-yellow-400 mb-6">1. Formato del Match</h3>
+                       <p className="text-2xl text-slate-100 leading-relaxed">Il torneo si disputa con la formula dell'eliminazione diretta. Ogni partita si gioca al meglio dei 3 set (vince chi se ne aggiudica 2). Vince il singolo set la squadra che per prima raggiunge i 6 gol. È obbligatorio uno scarto di due reti per la vittoria: in caso di parità sul 6-6, si andrà ai vantaggi ad oltranza finché una delle due squadre non otterrà un doppio vantaggio consecutivo (es. 7-5, 8-6, 12-10).</p>
+                    </div>
+                    <div>
+                       <h3 className="text-3xl font-black text-yellow-400 mb-6">2. Zero Rullate (Spinning)</h3>
+                       <p className="text-2xl text-slate-100 leading-relaxed">La rotazione della stecca di 360 gradi, sia prima che dopo aver colpito la pallina, costituisce fallo. Questa regola traccia il confine invalicabile tra un torneo strutturato e il gioco casuale. Se la pallina entra in rete in seguito a una rullata, il gol è considerato nullo.</p>
+                    </div>
+                    <div>
+                       <h3 className="text-3xl font-black text-yellow-400 mb-6">3. Divieto di Gancio (o Passetto)</h3>
+                       <p className="text-2xl text-slate-100 leading-relaxed">È severamente vietato fermare, bloccare o controllare la pallina con un omino per poi scoccare il tiro in porta con lo stesso omino. Allo stesso modo, è vietato il "passetto", ovvero passare la palla a un omino posizionato sulla medesima stecca prima di effettuare il tiro. Il gioco deve svilupparsi di prima intenzione o tramite sponda.</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
+
+           {/* Right Column */}
+           <div className="w-[30%] h-full p-6 flex flex-col gap-4 overflow-y-auto animate-in slide-in-from-right-20 duration-[1500ms] border-l border-slate-800/50 scrollbar-hide">
+             {teams.slice(Math.ceil(teams.length / 2)).map((t, i) => (
+                <div key={i} className="bg-slate-900 border-2 border-yellow-400/30 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-xl relative overflow-hidden">
+                   <div className="absolute inset-0 bg-gradient-to-bl from-slate-800/50 to-transparent"></div>
+                   {tournament.teamNames?.[t.id] && (
+                     <span className="text-xs font-black text-yellow-400 uppercase tracking-widest relative z-10">"{tournament.teamNames[t.id]}"</span>
+                   )}
+                   <div className="flex items-center gap-3 w-full justify-center relative z-10">
+                     <div className="flex flex-col items-center flex-1">
+                       {t.player1?.avatarUrl ? (
+                         <div className="w-14 h-14 rounded-full overflow-hidden mb-1 border-2 border-slate-700">
+                           <img src={`/players/${t.player1.avatarUrl}`} className="w-full h-full object-cover object-top" />
+                         </div>
+                       ) : <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-8 h-8 text-yellow-400 mb-1" />}
+                       <span className="text-sm font-black text-white text-center leading-tight">{t.player1?.name}</span>
+                     </div>
+                     <span className="text-sm font-black text-slate-500">&</span>
+                     <div className="flex flex-col items-center flex-1">
+                       {t.player2?.avatarUrl ? (
+                         <div className="w-14 h-14 rounded-full overflow-hidden mb-1 border-2 border-slate-700">
+                           <img src={`/players/${t.player2.avatarUrl}`} className="w-full h-full object-cover object-top" />
+                         </div>
+                       ) : <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-8 h-8 text-emerald-400 mb-1" />}
+                       <span className="text-sm font-black text-white text-center leading-tight">{t.player2?.name}</span>
+                     </div>
+                   </div>
+                </div>
+             ))}
+           </div>
         </div>
       )}
 
