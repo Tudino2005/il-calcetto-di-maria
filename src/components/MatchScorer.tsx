@@ -455,9 +455,10 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         </div>
       </header>
 
-      {/* ALWAYS VISIBLE SETTINGS PANEL */}
-      {mode === "goals" && (
-        <div className="bg-slate-900/95 border border-purple-500/30 rounded-2xl p-4 mb-4 shadow-xl flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2 w-full md:w-1/2">
+      <div className="flex flex-col lg:flex-row items-stretch gap-4 mb-4 w-full">
+        {/* ALWAYS VISIBLE SETTINGS PANEL */}
+        {mode === "goals" && (
+          <div className="bg-slate-900/95 border border-purple-500/30 rounded-2xl p-4 shadow-xl flex flex-wrap items-center justify-center lg:justify-start gap-4 animate-in fade-in slide-in-from-top-2 w-full lg:w-1/2">
           <div className="flex items-center gap-4 flex-wrap">
             <div>
               <label className="text-[11px] font-black uppercase tracking-wider text-purple-300 block mb-1">
@@ -505,31 +506,35 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         </div>
       )}
 
-      {/* BEST OF 3 SETS SCOREBOARD HEADER */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3 mb-4 shadow-lg flex flex-col items-center justify-center gap-3 w-full md:w-1/2 ml-auto">
-        <div className="flex items-center gap-6 w-full justify-center">
-          {/* Sets summary team A */}
-          <div className="flex items-center gap-3">
-            <span className="w-3 h-3 rounded-full bg-red-500 shrink-0"></span>
-            <span className="font-black text-white text-base md:text-lg truncate max-w-[130px] sm:max-w-none">
-              {match.teamA.player1.name} & {match.teamA.player2.name}
-            </span>
-            <span className="text-2xl md:text-3xl font-black text-red-400 ml-1">
-              {mode === "goals" ? setsWonA : match.scoreTeamA}
-            </span>
-          </div>
+        {/* BEST OF 3 SETS SCOREBOARD HEADER */}
+        <div className={clsx(
+          "bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex flex-col items-center justify-center gap-3 w-full",
+          mode === "goals" ? "lg:w-1/2" : "w-full"
+        )}>
+          <div className="flex items-center gap-6 w-full justify-center h-full">
+            {/* Sets summary team A */}
+            <div className="flex items-center gap-3">
+              <span className="w-3 h-3 rounded-full bg-red-500 shrink-0"></span>
+              <span className="font-black text-white text-base md:text-lg truncate max-w-[130px] sm:max-w-none">
+                {match.teamA.player1.name} & {match.teamA.player2.name}
+              </span>
+              <span className="text-2xl md:text-3xl font-black text-red-400 ml-1">
+                {mode === "goals" ? setsWonA : match.scoreTeamA}
+              </span>
+            </div>
 
-          <span className="text-slate-600 font-black text-xl shrink-0">VS</span>
+            <span className="text-slate-600 font-black text-xl shrink-0">VS</span>
 
-          {/* Sets summary team B */}
-          <div className="flex items-center gap-3">
-            <span className="text-2xl md:text-3xl font-black text-blue-400 mr-1">
-              {mode === "goals" ? setsWonB : match.scoreTeamB}
-            </span>
-            <span className="font-black text-white text-base md:text-lg truncate max-w-[130px] sm:max-w-none">
-              {match.teamB.player1.name} & {match.teamB.player2.name}
-            </span>
-            <span className="w-3 h-3 rounded-full bg-blue-500 shrink-0"></span>
+            {/* Sets summary team B */}
+            <div className="flex items-center gap-3">
+              <span className="text-2xl md:text-3xl font-black text-blue-400 mr-1">
+                {mode === "goals" ? setsWonB : match.scoreTeamB}
+              </span>
+              <span className="font-black text-white text-base md:text-lg truncate max-w-[130px] sm:max-w-none">
+                {match.teamB.player1.name} & {match.teamB.player2.name}
+              </span>
+              <span className="w-3 h-3 rounded-full bg-blue-500 shrink-0"></span>
+            </div>
           </div>
         </div>
       </div>
