@@ -40,8 +40,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   // Slide for Player Advanced Stats
   if (data.advancedPlayerStats && data.advancedPlayerStats.length > 0) {
     const statsCount = data.advancedPlayerStats.length;
-    // 2 columns, so roughly 3s per row
-    const statsDuration = Math.max(20000, Math.ceil(statsCount / 2) * 3000);
+    // 4 columns, much slower scroll (8s per row)
+    const statsDuration = Math.max(30000, Math.ceil(statsCount / 4) * 8000);
     slides.push({ type: "player_stats", duration: statsDuration });
   }
   
@@ -501,7 +501,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="w-full flex-1 min-h-0 relative overflow-hidden mask-edges px-4">
                   <div 
-                    className="w-full grid grid-cols-1 xl:grid-cols-2 gap-8 pb-[30vh] pt-[10vh]"
+                    className="w-full grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-[30vh] pt-[10vh]"
                     style={{
                       animationName: "scrollVertical",
                       animationTimingFunction: "linear",
@@ -512,26 +512,26 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {data.advancedPlayerStats?.map((ps: any) => {
                       const { player, rank, played, wins, winRate, roleStats, idealPartner } = ps;
                       return (
-                        <div key={player.id} className="bg-slate-900 border-2 border-slate-700/80 p-6 rounded-[2rem] shadow-xl flex flex-col gap-5 relative overflow-hidden">
+                        <div key={player.id} className="bg-slate-900 border-2 border-slate-700/80 p-3 rounded-2xl shadow-xl flex flex-col gap-3 relative overflow-hidden">
                           {/* Colored glowing accent based on rank */}
-                          {rank === 1 && <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none text-9xl">👑</div>}
+                          {rank === 1 && <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none text-7xl">👑</div>}
                           
                           {/* TOP ROW: Profile & Rank */}
                           <div className="flex items-center justify-between z-10">
-                            <div className="flex items-center gap-5">
+                            <div className="flex items-center gap-3">
                               {player.avatarUrl ? (
-                                <img src={player.avatarUrl} alt={player.name} className="w-20 h-20 rounded-full object-cover border-[3px] border-slate-600 shadow-lg" />
+                                <img src={player.avatarUrl} alt={player.name} className="w-12 h-12 rounded-full object-cover border-2 border-slate-600 shadow-sm" />
                               ) : (
-                                <div className="w-20 h-20 bg-slate-800 rounded-full border-[3px] border-slate-600 flex items-center justify-center shadow-lg">
-                                  <span className="text-3xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                <div className="w-12 h-12 bg-slate-800 rounded-full border-2 border-slate-600 flex items-center justify-center shadow-sm">
+                                  <span className="text-xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
                                 </div>
                               )}
                               <div>
-                                <div className="flex items-center gap-3">
-                                  <h3 className="text-3xl font-black text-white">{player.name}</h3>
-                                  {rank && <span className="text-3xl font-black text-purple-400 drop-shadow-[0_0_10px_rgba(192,132,252,0.4)]">{rank}°</span>}
+                                <div className="flex items-center gap-2">
+                                  <h3 className="text-lg font-black text-white truncate max-w-[90px]">{player.name}</h3>
+                                  {rank && <span className="text-xl font-black text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.4)]">{rank}°</span>}
                                 </div>
-                                <div className="text-sm font-black text-slate-400 uppercase tracking-widest mt-1">
+                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">
                                   {player.preferredRole}
                                 </div>
                               </div>
@@ -539,49 +539,49 @@ export default function TVSlideshow({ data }: { data: any }) {
                             
                             {/* VERDICT BADGE */}
                             {roleStats.verdettoAlchimia && (
-                              <div className="flex flex-col items-end max-w-[220px] text-right">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">Verdetto Alchimia</span>
-                                <span className={`px-3 py-1.5 rounded-xl text-sm font-black uppercase tracking-wider ${
+                              <div className="flex flex-col items-end max-w-[100px] text-right">
+                                <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 mb-1">Verdetto</span>
+                                <span className={`px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider leading-tight ${
                                   roleStats.verdettoAlchimia.tag === 'difesa' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' :
                                   roleStats.verdettoAlchimia.tag === 'attacco' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
                                   roleStats.verdettoAlchimia.tag === 'jolly' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
                                   'bg-slate-700/50 text-slate-300 border border-slate-600'
                                 }`}>
-                                  {roleStats.verdettoAlchimia.titolo.split(' ')[0]} {roleStats.verdettoAlchimia.titolo.split(' ').slice(1).join(' ')}
+                                  {roleStats.verdettoAlchimia.titolo.split(' ')[0]}
                                 </span>
                               </div>
                             )}
                           </div>
 
                           {/* MIDDLE ROW: Stats Grid */}
-                          <div className="grid grid-cols-4 gap-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 z-10">
+                          <div className="grid grid-cols-4 gap-1.5 bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 z-10">
                             <div className="flex flex-col items-center justify-center">
-                              <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-1">Giocate</span>
-                              <span className="text-2xl font-black text-white">{played}</span>
+                              <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Gioc</span>
+                              <span className="text-sm font-black text-white">{played}</span>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                              <span className="text-[11px] font-black uppercase tracking-widest text-emerald-500 mb-1">Vinte</span>
-                              <span className="text-2xl font-black text-emerald-400">{wins}</span>
+                              <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500 mb-0.5">Vinte</span>
+                              <span className="text-sm font-black text-emerald-400">{wins}</span>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                              <span className="text-[11px] font-black uppercase tracking-widest text-yellow-500 mb-1">Win Rate</span>
-                              <span className="text-2xl font-black text-yellow-400">{winRate}%</span>
+                              <span className="text-[8px] font-black uppercase tracking-widest text-yellow-500 mb-0.5">WR%</span>
+                              <span className="text-sm font-black text-yellow-400">{winRate}%</span>
                             </div>
-                            <div className="flex flex-col items-center justify-center border-l border-slate-800 pl-3">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 text-center leading-tight mb-1">Partner<br/>Ideale</span>
-                              <span className="text-sm font-black text-blue-300 truncate w-full text-center">{idealPartner || '-'}</span>
+                            <div className="flex flex-col items-center justify-center border-l border-slate-800 pl-1.5">
+                              <span className="text-[8px] font-black uppercase tracking-widest text-blue-400 text-center leading-none mb-0.5">Partner</span>
+                              <span className="text-[10px] font-black text-blue-300 truncate w-full text-center">{idealPartner || '-'}</span>
                             </div>
                           </div>
 
                           {/* BOTTOM ROW: Indices */}
-                          <div className="flex items-center gap-4 z-10">
-                            <div className="flex-1 bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-center justify-between">
-                              <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-blue-400"/> Indice Difensivo</span>
-                              <span className="text-2xl font-black text-blue-400">{roleStats.defensiveIndex ?? '-'}</span>
+                          <div className="flex items-center gap-2 z-10">
+                            <div className="flex-1 bg-slate-800/50 p-2 rounded-lg border border-slate-700 flex items-center justify-between">
+                              <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1"><Shield className="w-2.5 h-2.5 text-blue-400"/> Ind. Dif.</span>
+                              <span className="text-base font-black text-blue-400">{roleStats.defensiveIndex ?? '-'}</span>
                             </div>
-                            <div className="flex-1 bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-center justify-between">
-                              <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Swords className="w-3.5 h-3.5 text-red-400"/> Indice Offensivo</span>
-                              <span className="text-2xl font-black text-red-400">{roleStats.offensiveIndex ?? '-'}</span>
+                            <div className="flex-1 bg-slate-800/50 p-2 rounded-lg border border-slate-700 flex items-center justify-between">
+                              <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1"><Swords className="w-2.5 h-2.5 text-red-400"/> Ind. Off.</span>
+                              <span className="text-base font-black text-red-400">{roleStats.offensiveIndex ?? '-'}</span>
                             </div>
                           </div>
                         </div>
