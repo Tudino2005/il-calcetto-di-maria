@@ -492,6 +492,15 @@ export default function TVSlideshow({ data }: { data: any }) {
           {/* PLAYER STATS SLIDE */}
           {currentSlide.type === "player_stats" && (() => {
             const durationSec = (currentSlide.duration || 20000) / 1000;
+            const formatRole = (role: string) => {
+              if (!role) return "";
+              const r = role.toLowerCase();
+              if (r === 'portiere' || r === 'difensore') return 'Defender';
+              if (r === 'attaccante') return 'Striker';
+              if (r === 'entrambi') return 'Both';
+              return role;
+            };
+            
             return (
               <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-8">
                 <Activity className="w-16 h-16 text-blue-400 mb-4 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
@@ -532,7 +541,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                   {rank && <span className="text-xl font-black text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.4)]">{rank}°</span>}
                                 </div>
                                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">
-                                  {player.preferredRole}
+                                  {formatRole(player.preferredRole)}
                                 </div>
                               </div>
                             </div>
