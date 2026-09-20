@@ -295,8 +295,10 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
                         {topTeams.map((tt: any, idx: number) => (
                            <div key={tt.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
-                             <div className="text-3xl font-black text-white leading-tight">{tt.player1?.name || "Giocatore 1"}</div>
-                             <div className="text-3xl font-black text-white leading-tight">{tt.player2?.name || "Giocatore 2"}</div>
+                             <div className="grid grid-cols-2 gap-x-4">
+                               <div className="text-3xl font-black text-white leading-tight truncate">{tt.player1?.name || "Giocatore 1"}</div>
+                               <div className="text-3xl font-black text-white leading-tight truncate">{tt.player2?.name || "Giocatore 2"}</div>
+                             </div>
                            </div>
                         ))}
                       </div>
@@ -332,7 +334,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                          <div className="flex flex-col min-w-0">
+                          <div className="grid grid-cols-2 gap-x-4 min-w-0">
                             <div className="text-xl font-bold text-white truncate leading-tight">{t.player1?.name || "Giocatore 1"}</div>
                             <div className="text-xl font-bold text-white truncate leading-tight">{t.player2?.name || "Giocatore 2"}</div>
                           </div>
