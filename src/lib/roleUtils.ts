@@ -138,13 +138,17 @@ export type PlayerRoleStats = {
   gkMatches: number;
   gkWins: number;
   gkGoalsConceded: number;
-  defensiveIndex: string | null; // media gol subiti a partita (più basso è, meglio è)
+  gkGoalsScored: number;          // gol FATTI dalla squadra mentre questo giocatore era in porta
+  defensiveIndex: string | null;  // media gol subiti da Defender
+  gkOffensiveIndex: string | null;// media gol fatti da Defender
   gkWinRate: string | null;
 
   stMatches: number;
   stWins: number;
   stGoalsScored: number;
-  offensiveIndex: string | null; // media gol fatti a partita (più alto è, meglio è)
+  stGoalsConceded: number;        // gol SUBITI dalla squadra mentre questo giocatore era in attacco
+  offensiveIndex: string | null;  // media gol fatti da Striker
+  stDefensiveIndex: string | null;// media gol subiti da Striker
   stWinRate: string | null;
 
   verdettoAlchimia: {
@@ -166,10 +170,12 @@ export function calculatePlayerRoleStats(
   let gkMatches = 0;
   let gkWins = 0;
   let gkGoalsConceded = 0;
+  let gkGoalsScored = 0;    // gol fatti dalla squadra mentre in porta
 
   let stMatches = 0;
   let stWins = 0;
   let stGoalsScored = 0;
+  let stGoalsConceded = 0;  // gol subiti dalla squadra mentre in attacco
 
   for (const m of matches) {
     const isTeamA = m.teamA?.player1Id === playerId || m.teamA?.player2Id === playerId;
@@ -226,21 +232,27 @@ export function calculatePlayerRoleStats(
     if (role === "portiere") {
       gkMatches++;
       gkGoalsConceded += opponentGoals;
+      gkGoalsScored += teamGoals;
       if (won) gkWins++;
     } else if (role === "attaccante") {
       stMatches++;
       stGoalsScored += teamGoals;
+      stGoalsConceded += opponentGoals;
       if (won) stWins++;
     }
   }
 
   const defensiveIndex =
     gkMatches > 0 ? (gkGoalsConceded / gkMatches).toFixed(2) : null;
+  const gkOffensiveIndex =
+    gkMatches > 0 ? (gkGoalsScored / gkMatches).toFixed(2) : null;
   const gkWinRate =
     gkMatches > 0 ? ((gkWins / gkMatches) * 100).toFixed(1) : null;
 
   const offensiveIndex =
     stMatches > 0 ? (stGoalsScored / stMatches).toFixed(2) : null;
+  const stDefensiveIndex =
+    stMatches > 0 ? (stGoalsConceded / stMatches).toFixed(2) : null;
   const stWinRate =
     stMatches > 0 ? ((stWins / stMatches) * 100).toFixed(1) : null;
 
@@ -341,12 +353,16 @@ export function calculatePlayerRoleStats(
     gkMatches,
     gkWins,
     gkGoalsConceded,
+    gkGoalsScored,
     defensiveIndex,
+    gkOffensiveIndex,
     gkWinRate,
     stMatches,
     stWins,
     stGoalsScored,
+    stGoalsConceded,
     offensiveIndex,
+    stDefensiveIndex,
     stWinRate,
     verdettoAlchimia: verdetto,
   };

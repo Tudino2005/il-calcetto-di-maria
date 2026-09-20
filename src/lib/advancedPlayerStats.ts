@@ -26,64 +26,34 @@ export async function getAdvancedPlayerStatsForTV() {
     // Skip players with 0 matches
     if (basicStats.played === 0) return null;
 
-    const roleStats = calculatePlayerRoleStats(player.id, allMatches);
-
-    // Calculate ideal partner
-    const partnerMap = new Map();
+    // Calculate total goals made by this player's team across all matches
+    let totalGoalsScored = 0;
     allMatches.forEach((m: any) => {
       const isTeamA = m.teamA?.player1Id === player.id || m.teamA?.player2Id === player.id;
       const isTeamB = m.teamB?.player1Id === player.id || m.teamB?.player2Id === player.id;
       if (!isTeamA && !isTeamB) return;
 
-      const myTeam = isTeamA ? m.teamA : m.teamB;
-      const partner = myTeam.player1Id === player.id ? myTeam.player2 : myTeam.player1;
-      if (!partner) return;
-
-      const iWon = m.winnerTeamId === myTeam.id;
-
-      let goalsAgainst = 0;
-      let goalsFor = 0;
       if (m.setScores) {
         try {
           const parsedSets = typeof m.setScores === 'string' ? JSON.parse(m.setScores) : m.setScores;
           if (Array.isArray(parsedSets)) {
             parsedSets.forEach((set: any) => {
-              if (isTeamA) {
-                goalsFor += Number(set.scoreA || 0);
-                goalsAgainst += Number(set.scoreB || 0);
-              } else {
-                goalsFor += Number(set.scoreB || 0);
-                goalsAgainst += Number(set.scoreA || 0);
-              }
+              if (isTeamA) totalGoalsScored += Number(set.scoreA || 0);
+              else totalGoalsScored += Number(set.scoreB || 0);
             });
           }
         } catch (e) {}
+      } else {
+        if (isTeamA) totalGoalsScored += Number(m.scoreTeamA || 0);
+        else totalGoalsScored += Number(m.scoreTeamB || 0);
       }
-
-      if (!partnerMap.has(partner.id)) {
-        partnerMap.set(partner.id, { partner, played: 0, wins: 0, goalsConceded: 0, goalsScored: 0 });
-      }
-      const entry = partnerMap.get(partner.id)!;
-      entry.played += 1;
-      if (iWon) entry.wins += 1;
-      entry.goalsConceded += goalsAgainst;
-      entry.goalsScored += goalsFor;
     });
 
-    const partnerStatsArr = Array.from(partnerMap.values()).map(p => ({
-      ...p,
-      winRate: p.played > 0 ? ((p.wins / p.played) * 100).toFixed(1) : "0.0"
-    }));
+    const avgGoalsPerMatch = basicStats.played > 0
+      ? (totalGoalsScored / basicStats.played).toFixed(2)
+      : null;
 
-    let idealPartner = partnerStatsArr.filter(p => p.played >= 3).sort((a, b) => {
-      const wrDiff = Number(b.winRate) - Number(a.winRate);
-      if (wrDiff !== 0) return wrDiff;
-      if (b.played !== a.played) return b.played - a.played;
-      if (a.goalsConceded !== b.goalsConceded) return a.goalsConceded - b.goalsConceded;
-      const rankA = playerRankMap.get(a.partner.id) || 999;
-      const rankB = playerRankMap.get(b.partner.id) || 999;
-      return rankA - rankB;
-    });
+    const roleStats = calculatePlayerRoleStats(player.id, allMatches);
 
     return {
       player,
@@ -91,8 +61,9 @@ export async function getAdvancedPlayerStatsForTV() {
       played: basicStats.played,
       wins: basicStats.wins,
       winRate: basicStats.winRate,
+      totalGoalsScored,
+      avgGoalsPerMatch,
       roleStats,
-      idealPartner: idealPartner.length > 0 ? idealPartner[0].partner.name : null
     };
   });
   
