@@ -5,6 +5,7 @@ import { Trophy, Dices, Users, Sparkles, Play } from "lucide-react";
 import { finishDrawAnimation } from "@/app/actions/tournamentActions";
 import { useRouter } from "next/navigation";
 import RoleIcon from "./RoleIcon";
+import { calculateTournamentProbabilities } from "@/lib/probabilityUtils";
 
 const fadeOutAudio = (audio: HTMLAudioElement, duration: number = 2000) => {
   const steps = 20;
@@ -48,56 +49,12 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
   const audioRef3 = useRef<HTMLAudioElement | null>(null);
 
+
   // Calcolo probabilità di vittoria (Power Score System)
   const teamProbabilities = useMemo(() => {
     if (!teams.length || !advancedPlayerStats?.length) return new Map();
-
-    const getPlayerRating = (playerId: string) => {
-      const stats = advancedPlayerStats.find(s => s.player.id === playerId);
-      if (!stats) return 50; 
-      const played = stats.playedMatches || 0;
-      const wins = stats.wonMatches || 0;
-      // Bayesian average per normalizzare chi ha giocato pochissime partite verso il 50%
-      return ((wins + 2.5) / (played + 5)) * 100;
-    };
-
-    let totalTournamentRating = 0;
-    const teamRatings = new Map();
-
-    teams.forEach(team => {
-      const p1Rating = getPlayerRating(team.player1.id);
-      const p2Rating = getPlayerRating(team.player2.id);
-      let baseRating = p1Rating + p2Rating;
-      
-      // Synergy Bonus (5%) se i ruoli sono perfettamente assortiti
-      const p1Role = (team.player1.preferredRole || '').toLowerCase();
-      const p2Role = (team.player2.preferredRole || '').toLowerCase();
-      const isP1Def = p1Role === 'portiere' || p1Role === 'difensore';
-      const isP1Str = p1Role === 'attaccante';
-      const isP2Def = p2Role === 'portiere' || p2Role === 'difensore';
-      const isP2Str = p2Role === 'attaccante';
-      
-      if ((isP1Def && isP2Str) || (isP1Str && isP2Def)) {
-        baseRating *= 1.05;
-      }
-
-      // Eleviamo al cubo per simulare l'impatto esponenziale in un torneo a eliminazione diretta
-      const expRating = Math.pow(baseRating, 3);
-      teamRatings.set(team.id, expRating);
-      totalTournamentRating += expRating;
-    });
-
-    const probabilities = new Map();
-    if (totalTournamentRating > 0) {
-      teams.forEach(team => {
-        const expRating = teamRatings.get(team.id);
-        const prob = (expRating / totalTournamentRating) * 100;
-        probabilities.set(team.id, prob);
-      });
-    }
-
-    return probabilities;
-  }, [teams, advancedPlayerStats]);
+    return calculateTournamentProbabilities(tournament, advancedPlayerStats);
+  }, [teams, advancedPlayerStats, tournament]);
 
   const triggerPhaseChange = (nextPhaseOrFn: string | (() => void)) => {
      setFlipState("out");
