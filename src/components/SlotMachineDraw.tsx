@@ -716,9 +716,6 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
                       <span className="text-4xl font-black text-white text-center leading-tight relative z-10 drop-shadow-lg">{t.player2?.name}</span>
                     </div>
                   </div>
-                  <div className="text-slate-500 font-bold text-sm uppercase tracking-widest">
-                    Squadra {showcaseIndex + 1} di {teams.length}
-                  </div>
                 </div>
               </div>
             );
