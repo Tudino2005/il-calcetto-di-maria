@@ -68,3 +68,56 @@ export function calculateTournamentProbabilities(tournament: any, advancedPlayer
 
   return probabilities;
 }
+
+export function calculateMatchProbabilities(tournament: any, advancedPlayerStats: any[]) {
+  if (!tournament || !tournament.matches || !advancedPlayerStats) return new Map();
+
+  const getPlayerRating = (playerId: string) => {
+    const stats = advancedPlayerStats.find((s: any) => s.player.id === playerId);
+    if (!stats) return 50;
+    const played = stats.playedMatches || 0;
+    const wins = stats.wonMatches || 0;
+    return ((wins + 2.5) / (played + 5)) * 100;
+  };
+
+  const getTeamRating = (team: any) => {
+    if (!team || !team.player1 || !team.player2) return 0;
+    const p1Rating = getPlayerRating(team.player1.id);
+    const p2Rating = getPlayerRating(team.player2.id);
+    let baseRating = p1Rating + p2Rating;
+    
+    const p1Role = (team.player1.preferredRole || '').toLowerCase();
+    const p2Role = (team.player2.preferredRole || '').toLowerCase();
+    const isP1Def = p1Role === 'portiere' || p1Role === 'difensore';
+    const isP1Str = p1Role === 'attaccante';
+    const isP2Def = p2Role === 'portiere' || p2Role === 'difensore';
+    const isP2Str = p2Role === 'attaccante';
+    
+    if ((isP1Def && isP2Str) || (isP1Str && isP2Def)) {
+      baseRating *= 1.05;
+    }
+    return baseRating;
+  };
+
+  const matchProbabilities = new Map();
+
+  tournament.matches.forEach((m: any) => {
+    if (m.teamA && m.teamB && !m.winnerTeamId) {
+      const ratingA = getTeamRating(m.teamA);
+      const ratingB = getTeamRating(m.teamB);
+      
+      const expA = Math.pow(ratingA, 2);
+      const expB = Math.pow(ratingB, 2);
+      const totalExp = expA + expB;
+      
+      if (totalExp > 0) {
+        matchProbabilities.set(m.id, {
+          teamAProb: (expA / totalExp) * 100,
+          teamBProb: (expB / totalExp) * 100
+        });
+      }
+    }
+  });
+
+  return matchProbabilities;
+}

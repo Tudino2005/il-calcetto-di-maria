@@ -6,7 +6,7 @@ import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Cloc
 import QRCodeDisplay from "@/components/QRCodeDisplay";
 import SlotMachineDraw from "@/components/SlotMachineDraw";
 import { formatSetScores } from "@/lib/scoreUtils";
-import { calculateTournamentProbabilities } from "@/lib/probabilityUtils";
+import { calculateTournamentProbabilities, calculateMatchProbabilities } from "@/lib/probabilityUtils";
 
 export default function TVSlideshow({ data }: { data: any }) {
   const router = useRouter();
@@ -1042,7 +1042,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {currentSlide.type === "bracket_tree" && (() => {
             const t = currentSlide.tournament;
-            const tProbabilities = calculateTournamentProbabilities(t, data.advancedPlayerStats);
+            const matchProbs = calculateMatchProbabilities(t, data.advancedPlayerStats);
             let rounds: any[][] = [];
             
             try {
@@ -1099,8 +1099,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                                     )}
                                     <span className={`text-base font-bold truncate leading-tight flex flex-col ${m.winnerTeamId === m.teamAId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
                                       <span>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
-                                      {m.teamAId && tProbabilities.has(m.teamAId) && tProbabilities.get(m.teamAId) > 0 && !m.winnerTeamId && (
-                                        <span className="text-[10px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN PROB: {tProbabilities.get(m.teamAId).toFixed(1)}%</span>
+                                      {matchProbs.has(m.id) && !m.winnerTeamId && (
+                                        <span className="text-[10px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN: {matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
                                       )}
                                     </span>
                                   </div>
@@ -1122,8 +1122,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                                     )}
                                     <span className={`text-base font-bold truncate leading-tight flex flex-col items-end ${m.winnerTeamId === m.teamBId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
                                       <span>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
-                                      {m.teamBId && tProbabilities.has(m.teamBId) && tProbabilities.get(m.teamBId) > 0 && !m.winnerTeamId && (
-                                        <span className="text-[10px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN PROB: {tProbabilities.get(m.teamBId).toFixed(1)}%</span>
+                                      {matchProbs.has(m.id) && !m.winnerTeamId && (
+                                        <span className="text-[10px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN: {matchProbs.get(m.id).teamBProb.toFixed(0)}%</span>
                                       )}
                                     </span>
                                   </div>
@@ -1151,7 +1151,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* LIVE BRACKET / MATCHES SLIDE */}
           {currentSlide.type === "live_bracket" && (() => {
-            const tProbabilitiesLive = calculateTournamentProbabilities(currentSlide.tournament, data.advancedPlayerStats);
+            const matchProbsLive = calculateMatchProbabilities(currentSlide.tournament, data.advancedPlayerStats);
             return (
             <div className="flex flex-col items-center justify-center w-full">
               <div className="inline-flex items-center gap-3 px-6 py-2 bg-blue-500/20 text-blue-400 rounded-full font-bold uppercase tracking-widest border border-blue-500/30 mb-4">
@@ -1184,15 +1184,15 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div className="flex justify-between w-full items-start">
                             <div className="flex-1 flex flex-col">
                               <span className="text-white leading-tight">{m.teamA?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamA?.player2?.name}</span>
-                              {m.teamAId && tProbabilitiesLive.has(m.teamAId) && tProbabilitiesLive.get(m.teamAId) > 0 && (
-                                <span className="text-[10px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN PROB: {tProbabilitiesLive.get(m.teamAId).toFixed(1)}%</span>
+                              {matchProbsLive.has(m.id) && (
+                                <span className="text-[10px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN: {matchProbsLive.get(m.id).teamAProb.toFixed(0)}%</span>
                               )}
                             </div>
                             <span className="text-slate-500 mx-4 shrink-0 pt-1">VS</span>
                             <div className="flex-1 flex flex-col items-end text-right">
                               <span className="text-white leading-tight">{m.teamB?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamB?.player2?.name}</span>
-                              {m.teamBId && tProbabilitiesLive.has(m.teamBId) && tProbabilitiesLive.get(m.teamBId) > 0 && (
-                                <span className="text-[10px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN PROB: {tProbabilitiesLive.get(m.teamBId).toFixed(1)}%</span>
+                              {matchProbsLive.has(m.id) && (
+                                <span className="text-[10px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN: {matchProbsLive.get(m.id).teamBProb.toFixed(0)}%</span>
                               )}
                             </div>
                           </div>
