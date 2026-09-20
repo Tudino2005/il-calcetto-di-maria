@@ -40,8 +40,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   // Slide for Player Advanced Stats
   if (data.advancedPlayerStats && data.advancedPlayerStats.length > 0) {
     const statsCount = data.advancedPlayerStats.length;
-    // 4 columns, much slower scroll (8s per row)
-    const statsDuration = Math.max(30000, Math.ceil(statsCount / 4) * 8000);
+    // 4 columns, scroll ulteriormente rallentato del 30%+ (12s per row)
+    const statsDuration = Math.max(40000, Math.ceil(statsCount / 4) * 12000);
     slides.push({ type: "player_stats", duration: statsDuration });
   }
   
@@ -520,7 +520,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div className="flex items-center justify-between z-10">
                             <div className="flex items-center gap-3">
                               {player.avatarUrl ? (
-                                <img src={player.avatarUrl} alt={player.name} className="w-12 h-12 rounded-full object-cover border-2 border-slate-600 shadow-sm" />
+                                <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-12 h-12 rounded-full object-cover border-2 border-slate-600 shadow-sm" />
                               ) : (
                                 <div className="w-12 h-12 bg-slate-800 rounded-full border-2 border-slate-600 flex items-center justify-center shadow-sm">
                                   <span className="text-xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
