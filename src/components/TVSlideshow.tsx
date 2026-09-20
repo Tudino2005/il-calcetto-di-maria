@@ -658,7 +658,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <div
                         key={`spotlight-${spotlightPlayerIdx}`}
                         className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none"
-                        style={{ animation: 'spotlightIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
+                        style={{ animation: 'spotlightIn 1s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
                       >
                         <div className="bg-slate-900 border-2 border-indigo-500/80 shadow-[0_0_80px_rgba(99,102,241,0.5)] rounded-3xl p-8 flex flex-col gap-5 w-[520px] max-w-[90vw] relative overflow-hidden">
                           {rank === 1 && <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none text-9xl">👑</div>}
