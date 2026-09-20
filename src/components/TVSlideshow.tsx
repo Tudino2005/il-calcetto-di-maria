@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay } from "lucide-react";
+import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay, Shield } from "lucide-react";
 import QRCodeDisplay from "@/components/QRCodeDisplay";
 import SlotMachineDraw from "@/components/SlotMachineDraw";
 import { formatSetScores } from "@/lib/scoreUtils";
@@ -35,6 +35,14 @@ export default function TVSlideshow({ data }: { data: any }) {
     // 1.1s per match, min 12s
     const recentMatchesDuration = scrollNeeded ? Math.max(12000, matchCount * 1100) : 12000;
     slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
+  }
+
+  // Slide for Player Advanced Stats
+  if (data.advancedPlayerStats && data.advancedPlayerStats.length > 0) {
+    const statsCount = data.advancedPlayerStats.length;
+    // 2 columns, so roughly 3s per row
+    const statsDuration = Math.max(20000, Math.ceil(statsCount / 2) * 3000);
+    slides.push({ type: "player_stats", duration: statsDuration });
   }
   
   // Slides for Promo
@@ -480,6 +488,110 @@ export default function TVSlideshow({ data }: { data: any }) {
               </div>
             </div>
           )}
+
+          {/* PLAYER STATS SLIDE */}
+          {currentSlide.type === "player_stats" && (() => {
+            const durationSec = (currentSlide.duration || 20000) / 1000;
+            return (
+              <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-8">
+                <Activity className="w-16 h-16 text-blue-400 mb-4 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
+                <h2 className="text-5xl font-black uppercase tracking-widest text-white mb-8 drop-shadow-lg flex items-center gap-4">
+                  Fascicolo Giocatori
+                </h2>
+                
+                <div className="w-full flex-1 min-h-0 relative overflow-hidden mask-edges px-4">
+                  <div 
+                    className="w-full grid grid-cols-1 xl:grid-cols-2 gap-8 pb-[30vh] pt-[10vh]"
+                    style={{
+                      animationName: "scrollVertical",
+                      animationTimingFunction: "linear",
+                      animationFillMode: "forwards",
+                      animationDuration: `${durationSec}s`
+                    }}
+                  >
+                    {data.advancedPlayerStats?.map((ps: any) => {
+                      const { player, rank, played, wins, winRate, roleStats, idealPartner } = ps;
+                      return (
+                        <div key={player.id} className="bg-slate-900 border-2 border-slate-700/80 p-6 rounded-[2rem] shadow-xl flex flex-col gap-5 relative overflow-hidden">
+                          {/* Colored glowing accent based on rank */}
+                          {rank === 1 && <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none text-9xl">👑</div>}
+                          
+                          {/* TOP ROW: Profile & Rank */}
+                          <div className="flex items-center justify-between z-10">
+                            <div className="flex items-center gap-5">
+                              {player.avatarUrl ? (
+                                <img src={player.avatarUrl} alt={player.name} className="w-20 h-20 rounded-full object-cover border-[3px] border-slate-600 shadow-lg" />
+                              ) : (
+                                <div className="w-20 h-20 bg-slate-800 rounded-full border-[3px] border-slate-600 flex items-center justify-center shadow-lg">
+                                  <span className="text-3xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                </div>
+                              )}
+                              <div>
+                                <div className="flex items-center gap-3">
+                                  <h3 className="text-3xl font-black text-white">{player.name}</h3>
+                                  {rank && <span className="text-3xl font-black text-purple-400 drop-shadow-[0_0_10px_rgba(192,132,252,0.4)]">{rank}°</span>}
+                                </div>
+                                <div className="text-sm font-black text-slate-400 uppercase tracking-widest mt-1">
+                                  {player.preferredRole}
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* VERDICT BADGE */}
+                            {roleStats.verdettoAlchimia && (
+                              <div className="flex flex-col items-end max-w-[220px] text-right">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">Verdetto Alchimia</span>
+                                <span className={`px-3 py-1.5 rounded-xl text-sm font-black uppercase tracking-wider ${
+                                  roleStats.verdettoAlchimia.tag === 'difesa' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' :
+                                  roleStats.verdettoAlchimia.tag === 'attacco' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                                  roleStats.verdettoAlchimia.tag === 'jolly' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                  'bg-slate-700/50 text-slate-300 border border-slate-600'
+                                }`}>
+                                  {roleStats.verdettoAlchimia.titolo.split(' ')[0]} {roleStats.verdettoAlchimia.titolo.split(' ').slice(1).join(' ')}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* MIDDLE ROW: Stats Grid */}
+                          <div className="grid grid-cols-4 gap-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 z-10">
+                            <div className="flex flex-col items-center justify-center">
+                              <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-1">Giocate</span>
+                              <span className="text-2xl font-black text-white">{played}</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center">
+                              <span className="text-[11px] font-black uppercase tracking-widest text-emerald-500 mb-1">Vinte</span>
+                              <span className="text-2xl font-black text-emerald-400">{wins}</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center">
+                              <span className="text-[11px] font-black uppercase tracking-widest text-yellow-500 mb-1">Win Rate</span>
+                              <span className="text-2xl font-black text-yellow-400">{winRate}%</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center border-l border-slate-800 pl-3">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 text-center leading-tight mb-1">Partner<br/>Ideale</span>
+                              <span className="text-sm font-black text-blue-300 truncate w-full text-center">{idealPartner || '-'}</span>
+                            </div>
+                          </div>
+
+                          {/* BOTTOM ROW: Indices */}
+                          <div className="flex items-center gap-4 z-10">
+                            <div className="flex-1 bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-center justify-between">
+                              <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-blue-400"/> Indice Difensivo</span>
+                              <span className="text-2xl font-black text-blue-400">{roleStats.defensiveIndex ?? '-'}</span>
+                            </div>
+                            <div className="flex-1 bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex items-center justify-between">
+                              <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Swords className="w-3.5 h-3.5 text-red-400"/> Indice Offensivo</span>
+                              <span className="text-2xl font-black text-red-400">{roleStats.offensiveIndex ?? '-'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* RECENT MATCHES SLIDE */}
           {currentSlide.type === "recent_matches" && (() => {

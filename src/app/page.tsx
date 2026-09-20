@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { getLeaderboardData, getFreeMatchesLeaderboard } from "@/lib/leaderboardData";
+import { getAdvancedPlayerStatsForTV } from "@/lib/advancedPlayerStats";
 import TVSlideshow from "@/components/TVSlideshow";
 
 export const revalidate = 0; // Disable caching for live TV mode
@@ -45,6 +46,7 @@ export default async function TVHomePage() {
 
   const { playerStats, teamStats } = await getLeaderboardData();
   const freeMatchesStats = await getFreeMatchesLeaderboard();
+  const advancedPlayerStats = await getAdvancedPlayerStatsForTV();
 
   const data = {
     promoTournaments,
@@ -53,7 +55,8 @@ export default async function TVHomePage() {
     recentFreeMatches,
     playerStats,
     teamStats,
-    freeMatchesStats
+    freeMatchesStats,
+    advancedPlayerStats
   };
 
   return <TVSlideshow data={data} />;
