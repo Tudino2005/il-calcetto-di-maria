@@ -622,12 +622,12 @@ export default function TVSlideshow({ data }: { data: any }) {
                               </div>
                               <div className="grid grid-cols-2 gap-1">
                                 <div className="flex items-center justify-between bg-slate-900/60 rounded-lg px-2 py-1">
-                                  <span className="text-[7px] font-black uppercase text-slate-400">Subiti</span>
-                                  <span className="text-xs font-black text-blue-300">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span>
+                                  <span className="text-[7px] font-black uppercase text-slate-400">Tot Subiti</span>
+                                  <span className="text-xs font-black text-blue-300">{roleStats.gkGoalsConceded > 0 ? roleStats.gkGoalsConceded : <span className="text-slate-600">-</span>}</span>
                                 </div>
                                 <div className="flex items-center justify-between bg-slate-900/60 rounded-lg px-2 py-1">
-                                  <span className="text-[7px] font-black uppercase text-slate-400">Fatti</span>
-                                  <span className="text-xs font-black text-blue-200">{roleStats.gkOffensiveIndex ?? <span className="text-slate-600">-</span>}</span>
+                                  <span className="text-[7px] font-black uppercase text-slate-400">Media</span>
+                                  <span className="text-xs font-black text-blue-200">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span>
                                 </div>
                               </div>
                             </div>
@@ -639,11 +639,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                               </div>
                               <div className="grid grid-cols-2 gap-1">
                                 <div className="flex items-center justify-between bg-slate-900/60 rounded-lg px-2 py-1">
-                                  <span className="text-[7px] font-black uppercase text-slate-400">Subiti</span>
-                                  <span className="text-xs font-black text-red-300">{roleStats.stDefensiveIndex ?? <span className="text-slate-600">-</span>}</span>
+                                  <span className="text-[7px] font-black uppercase text-slate-400">Tot Fatti</span>
+                                  <span className="text-xs font-black text-red-300">{roleStats.stGoalsScored > 0 ? roleStats.stGoalsScored : <span className="text-slate-600">-</span>}</span>
                                 </div>
                                 <div className="flex items-center justify-between bg-slate-900/60 rounded-lg px-2 py-1">
-                                  <span className="text-[7px] font-black uppercase text-slate-400">Fatti</span>
+                                  <span className="text-[7px] font-black uppercase text-slate-400">Media</span>
                                   <span className="text-xs font-black text-red-200">{roleStats.offensiveIndex ?? <span className="text-slate-600">-</span>}</span>
                                 </div>
                               </div>
@@ -695,8 +695,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 {roleStats.gkMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[10px]">({roleStats.gkMatches} match)</span>}
                               </div>
                               <div className="grid grid-cols-2 gap-2">
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Subiti</span><span className="text-xl font-black text-blue-300">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Fatti</span><span className="text-xl font-black text-blue-200">{roleStats.gkOffensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Tot Subiti</span><span className="text-xl font-black text-blue-300">{roleStats.gkGoalsConceded > 0 ? roleStats.gkGoalsConceded : <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Media</span><span className="text-xl font-black text-blue-200">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
                               </div>
                             </div>
                             <div className="bg-red-950/50 border border-red-700/50 rounded-2xl p-4">
@@ -705,8 +705,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 {roleStats.stMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[10px]">({roleStats.stMatches} match)</span>}
                               </div>
                               <div className="grid grid-cols-2 gap-2">
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Subiti</span><span className="text-xl font-black text-red-300">{roleStats.stDefensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Fatti</span><span className="text-xl font-black text-red-200">{roleStats.offensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Tot Fatti</span><span className="text-xl font-black text-red-300">{roleStats.stGoalsScored > 0 ? roleStats.stGoalsScored : <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Media</span><span className="text-xl font-black text-red-200">{roleStats.offensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
                               </div>
                             </div>
                           </div>
