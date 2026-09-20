@@ -42,7 +42,10 @@ export default function TVSlideshow({ data }: { data: any }) {
     const playersPerPage = 8;
     const pages = Math.ceil(data.advancedPlayerStats.length / playersPerPage);
     for (let p = 0; p < pages; p++) {
-      slides.push({ type: "player_stats", duration: 15000, page: p });
+      const playersOnPage = Math.min(playersPerPage, data.advancedPlayerStats.length - p * playersPerPage);
+      // Give each player 10.5 seconds, plus a small buffer
+      const slideDuration = playersOnPage * 10500 + 1000;
+      slides.push({ type: "player_stats", duration: slideDuration, page: p });
     }
   }
   
@@ -141,7 +144,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, cycleCount]);
 
-  // Advance spotlight to next player every 5 seconds
+  // Advance spotlight to next player every 10 seconds
   useEffect(() => {
     if (spotlightPlayerIdx === null) return;
     const slide = slides[currentIndex < slides.length ? currentIndex : 0];
@@ -154,7 +157,7 @@ export default function TVSlideshow({ data }: { data: any }) {
       } else {
         setSpotlightPlayerIdx(null);
       }
-    }, 5300);
+    }, 10500);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spotlightPlayerIdx]);
