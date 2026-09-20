@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "it_IT",
   },
+  verification: {
+    google: "1llNYLEwCyz396isCJPNQIVxEf5gB36BgkOPr-biDQw",
+  },
   manifest: "/manifest.json",
 };
 
