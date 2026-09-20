@@ -247,46 +247,87 @@ export function calculatePlayerRoleStats(
   // Costruzione verdetto Alchimia dinamico
   let verdetto: PlayerRoleStats["verdettoAlchimia"];
 
-  if (gkMatches > 0 && stMatches > 0) {
-    const gkWRNum = Number(gkWinRate);
-    const stWRNum = Number(stWinRate);
+  const gkWRNum = gkWinRate ? Number(gkWinRate) : 0;
+  const stWRNum = stWinRate ? Number(stWinRate) : 0;
 
-    if (gkWRNum >= stWRNum + 10) {
+  if (gkMatches > 0 && stMatches > 0) {
+    if (gkWRNum <= 33 && stWRNum <= 33 && (gkMatches + stMatches) >= 3) {
+      verdetto = {
+        titolo: "Anello Debole ⛓️",
+        descrizione: `Un dramma bidirezionale: ${gkWinRate}% di vittorie in Porta e ${stWinRate}% in Attacco.`,
+        consiglio: "Né carne né pesce, fai acqua da tutte le parti. Forse è il momento di darsi al Padel?",
+        tag: "neutro",
+      };
+    } else if (gkWRNum >= stWRNum + 15) {
       verdetto = {
         titolo: "Pilastro Difensivo 🛡️",
-        descrizione: `Quando giochi in Porta hai il ${gkWinRate}% di vittorie (media ${defensiveIndex} gol subiti), contro il ${stWinRate}% in Attacco.`,
-        consiglio: "Il tuo rendimento migliore è nettamente tra i pali: schierati in difesa per massimizzare la vittoria!",
+        descrizione: `Quando giochi in Porta hai il ${gkWinRate}% di vittorie (media ${defensiveIndex} gol subiti), contro un misero ${stWinRate}% in Attacco.`,
+        consiglio: "Il tuo rendimento migliore è nettamente tra i pali: resta dietro per il bene della squadra!",
         tag: "difesa",
       };
-    } else if (stWRNum >= gkWRNum + 10) {
+    } else if (stWRNum >= gkWRNum + 15) {
       verdetto = {
         titolo: "Bocca da Fuoco ⚔️",
         descrizione: `Quando giochi in Attacco hai il ${stWinRate}% di vittorie (media ${offensiveIndex} gol fatti), contro il ${gkWinRate}% in Porta.`,
-        consiglio: "Sei un finalizzatore naturale: la tua squadra ha bisogno della tua incisività in avanti!",
+        consiglio: "Sei un finalizzatore nato, mentre in porta fai disastri. Resta in avanti a martellare!",
         tag: "attacco",
       };
     } else {
       verdetto = {
-        titolo: "Jolly Completo 🎭",
-        descrizione: `Grande equilibrio tra i ruoli: ${gkWinRate}% Win Rate in Porta (media ${defensiveIndex} subiti) e ${stWinRate}% in Attacco (media ${offensiveIndex} fatti).`,
-        consiglio: "Altissima versatilità tattica: puoi alternarti con qualsiasi compagno senza cali di rendimento!",
+        titolo: gkWRNum >= 50 ? "Jolly Completo 🎭" : "Jolly Incompiuto 📉",
+        descrizione: `Equilibrio tra i ruoli: ${gkWinRate}% Win Rate in Porta (media ${defensiveIndex} subiti) e ${stWinRate}% in Attacco.`,
+        consiglio: gkWRNum >= 50 
+          ? "Altissima versatilità tattica: puoi alternarti con qualsiasi compagno senza cali di rendimento!" 
+          : "Sei ugualmente mediocre in entrambi i ruoli. C'è ampio margine di miglioramento ovunque...",
         tag: "jolly",
       };
     }
   } else if (gkMatches > 0) {
-    verdetto = {
-      titolo: "Specialista della Porta 🛡️",
-      descrizione: `Hai disputato ${gkMatches} partite da Difensore con media ${defensiveIndex} gol subiti e ${gkWinRate}% Win Rate.`,
-      consiglio: "Un vero guardiano dei pali. Mettiti alla prova anche in attacco per scoprire la tua flessibilità!",
-      tag: "difesa",
-    };
+    if (gkWRNum <= 30 && gkMatches >= 2) {
+      verdetto = {
+        titolo: "Scolapasta 🍝",
+        descrizione: `Hai disputato ${gkMatches} partite da Difensore incassando la tragica media di ${defensiveIndex} gol a partita (${gkWinRate}% Win Rate).`,
+        consiglio: "La tua porta è perennemente sguarnita. Sicuro di non voler provare ad attaccare?",
+        tag: "difesa",
+      };
+    } else if (gkWRNum >= 75 && gkMatches >= 2) {
+      verdetto = {
+        titolo: "Saracinesca 🧱",
+        descrizione: `Hai disputato ${gkMatches} partite da Difensore con media ${defensiveIndex} gol subiti e un clamoroso ${gkWinRate}% Win Rate.`,
+        consiglio: "Un muro invalicabile. Continua a difendere i pali, gli avversari ti temono!",
+        tag: "difesa",
+      };
+    } else {
+      verdetto = {
+        titolo: "Specialista della Porta 🛡️",
+        descrizione: `Hai disputato ${gkMatches} partite da Difensore con media ${defensiveIndex} gol subiti e ${gkWinRate}% Win Rate.`,
+        consiglio: "Un buon guardiano dei pali. Mettiti alla prova anche in attacco per scoprire la tua flessibilità!",
+        tag: "difesa",
+      };
+    }
   } else if (stMatches > 0) {
-    verdetto = {
-      titolo: "Punta di Diamante ⚔️",
-      descrizione: `Hai disputato ${stMatches} partite da Attaccante con media ${offensiveIndex} gol fatti e ${stWinRate}% Win Rate.`,
-      consiglio: "Attaccante instancabile! Prova qualche match in difesa per testare la tua tenuta tra i pali.",
-      tag: "attacco",
-    };
+    if (stWRNum <= 30 && stMatches >= 2) {
+      verdetto = {
+        titolo: "Fantasma d'Area 👻",
+        descrizione: `In ${stMatches} partite da Attaccante hai un tragico Win Rate del ${stWinRate}% (media ${offensiveIndex} gol fatti).`,
+        consiglio: "Lì davanti sei inoffensivo quanto un gattino. Arretra in difesa prima di fare altri danni!",
+        tag: "attacco",
+      };
+    } else if (stWRNum >= 75 && stMatches >= 2) {
+      verdetto = {
+        titolo: "Cecchino Implacabile 🎯",
+        descrizione: `Hai disputato ${stMatches} partite da Attaccante con media ${offensiveIndex} gol fatti e un surreale ${stWinRate}% Win Rate.`,
+        consiglio: "Sotto rete non perdoni. Resta in avanti e continua a gonfiare la rete!",
+        tag: "attacco",
+      };
+    } else {
+      verdetto = {
+        titolo: "Punta di Diamante ⚔️",
+        descrizione: `Hai disputato ${stMatches} partite da Attaccante con media ${offensiveIndex} gol fatti e ${stWinRate}% Win Rate.`,
+        consiglio: "Attaccante instancabile! Prova qualche match in difesa per testare la tua tenuta tra i pali.",
+        tag: "attacco",
+      };
+    }
   } else {
     verdetto = {
       titolo: "In Attesa di Dati ⏳",
