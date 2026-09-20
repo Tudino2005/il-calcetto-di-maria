@@ -588,8 +588,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                             </div>
                           </div>
 
-                          {/* MIDDLE ROW: Key stats — Gioc / Vinte / WR% / Gol / Media */}
-                          <div className="grid grid-cols-5 gap-1 bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 z-10">
+                          {/* MIDDLE ROW: Key stats — Gioc / Vinte / WR% */}
+                          <div className="grid grid-cols-3 gap-1 bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 z-10">
                             <div className="flex flex-col items-center">
                               <span className="text-[7px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Gioc</span>
                               <span className="text-sm font-black text-white">{played}</span>
@@ -601,14 +601,6 @@ export default function TVSlideshow({ data }: { data: any }) {
                             <div className="flex flex-col items-center">
                               <span className="text-[7px] font-black uppercase tracking-widest text-yellow-500 mb-0.5">WR%</span>
                               <span className="text-sm font-black text-yellow-400">{winRate}%</span>
-                            </div>
-                            <div className="flex flex-col items-center border-l border-slate-800 pl-1">
-                              <span className="text-[7px] font-black uppercase tracking-widest text-orange-400 mb-0.5">Gol</span>
-                              <span className="text-sm font-black text-orange-300">{totalGoalsScored ?? '-'}</span>
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <span className="text-[7px] font-black uppercase tracking-widest text-orange-300 mb-0.5">Media</span>
-                              <span className="text-sm font-black text-orange-200">{avgGoalsPerMatch ?? '-'}</span>
                             </div>
                           </div>
 
@@ -681,12 +673,10 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="text-sm font-black text-indigo-400 uppercase tracking-[0.3em] mt-1">{formatRole(player.preferredRole)}</div>
                             </div>
                           </div>
-                          <div className="grid grid-cols-5 gap-2 bg-slate-950/70 p-4 rounded-2xl border border-slate-800">
+                          <div className="grid grid-cols-3 gap-2 bg-slate-950/70 p-4 rounded-2xl border border-slate-800">
                             <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Gioc</span><span className="text-2xl font-black text-white">{played}</span></div>
                             <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Vinte</span><span className="text-2xl font-black text-emerald-400">{wins}</span></div>
                             <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-yellow-500 mb-1">WR%</span><span className="text-2xl font-black text-yellow-400">{winRate}%</span></div>
-                            <div className="flex flex-col items-center border-l border-slate-800 pl-2"><span className="text-[10px] font-black uppercase tracking-widest text-orange-400 mb-1">Gol</span><span className="text-2xl font-black text-orange-300">{totalGoalsScored ?? '-'}</span></div>
-                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-orange-300 mb-1">Media</span><span className="text-2xl font-black text-orange-200">{avgGoalsPerMatch ?? '-'}</span></div>
                           </div>
                           <div className="flex flex-col gap-3">
                             <div className="bg-blue-950/50 border border-blue-700/50 rounded-2xl p-4">
