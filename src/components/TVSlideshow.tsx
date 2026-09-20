@@ -39,10 +39,11 @@ export default function TVSlideshow({ data }: { data: any }) {
 
   // Slide for Player Advanced Stats
   if (data.advancedPlayerStats && data.advancedPlayerStats.length > 0) {
-    const statsCount = data.advancedPlayerStats.length;
-    // 4 columns, scroll ulteriormente rallentato del 30%+ (12s per row)
-    const statsDuration = Math.max(40000, Math.ceil(statsCount / 4) * 12000);
-    slides.push({ type: "player_stats", duration: statsDuration });
+    const playersPerPage = 8;
+    const pages = Math.ceil(data.advancedPlayerStats.length / playersPerPage);
+    for (let p = 0; p < pages; p++) {
+      slides.push({ type: "player_stats", duration: 15000, page: p });
+    }
   }
   
   // Slides for Promo
@@ -491,7 +492,10 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* PLAYER STATS SLIDE */}
           {currentSlide.type === "player_stats" && (() => {
-            const durationSec = (currentSlide.duration || 20000) / 1000;
+            const page = currentSlide.page || 0;
+            const playersPerPage = 8;
+            const pageStats = data.advancedPlayerStats?.slice(page * playersPerPage, (page + 1) * playersPerPage) || [];
+            
             const formatRole = (role: string) => {
               if (!role) return "";
               const r = role.toLowerCase();
@@ -502,23 +506,17 @@ export default function TVSlideshow({ data }: { data: any }) {
             };
             
             return (
-              <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-8">
-                <Activity className="w-16 h-16 text-blue-400 mb-4 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
-                <h2 className="text-5xl font-black uppercase tracking-widest text-white mb-8 drop-shadow-lg flex items-center gap-4">
-                  Fascicolo Giocatori
-                </h2>
+              <div className="flex flex-col items-center justify-center w-full h-[85vh] relative z-10 px-8 animate-fade-in">
+                <div className="flex flex-col items-center shrink-0 mb-6">
+                  <Activity className="w-16 h-16 text-blue-400 mb-4 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
+                  <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg flex items-center gap-4">
+                    Fascicolo Giocatori {data.advancedPlayerStats?.length > playersPerPage && <span className="text-2xl text-slate-500 font-bold ml-2">Pag. {page + 1}</span>}
+                  </h2>
+                </div>
                 
-                <div className="w-full flex-1 min-h-0 relative overflow-hidden mask-edges px-4">
-                  <div 
-                    className="w-full grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-[30vh] pt-[10vh]"
-                    style={{
-                      animationName: "scrollVertical",
-                      animationTimingFunction: "linear",
-                      animationFillMode: "forwards",
-                      animationDuration: `${durationSec}s`
-                    }}
-                  >
-                    {data.advancedPlayerStats?.map((ps: any) => {
+                <div className="w-full flex-1 flex flex-col justify-center min-h-0 relative px-4 max-w-[1600px] mx-auto">
+                  <div className="w-full grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {pageStats.map((ps: any) => {
                       const { player, rank, played, wins, winRate, roleStats, idealPartner } = ps;
                       return (
                         <div key={player.id} className="bg-slate-900 border-2 border-slate-700/80 p-3 rounded-2xl shadow-xl flex flex-col gap-3 relative overflow-hidden">
