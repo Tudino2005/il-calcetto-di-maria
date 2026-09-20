@@ -388,6 +388,37 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                   )}
                </div>
              )}
+
+             {/* LOWER THIRD BROADCAST GRAPHIC */}
+             {showLineupVideo && (() => {
+               const role = p.preferredRole;
+               const roleText = role === 'Portiere' ? 'DEFENDER' : role === 'Attaccante' ? 'STRIKER' : 'DEFENDER & STRIKER';
+               const barColor = role === 'Portiere' ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]' : role === 'Attaccante' ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)]';
+               const badgeColor = role === 'Portiere' ? 'bg-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.4)]' : role === 'Attaccante' ? 'bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)]' : 'bg-purple-600 shadow-[0_0_20px_rgba(147,51,234,0.4)]';
+               
+               return (
+                 <div className="absolute bottom-12 left-8 md:bottom-20 md:left-16 z-[60] flex flex-col animate-in slide-in-from-left-24 fade-in duration-1000 delay-500 fill-mode-both">
+                   <div className="flex items-center shadow-2xl">
+                     {/* Color Accent Bar */}
+                     <div className={`w-3 h-14 md:h-20 rounded-l-lg ${barColor}`}></div>
+                     
+                     {/* Name Plate */}
+                     <div className="bg-slate-900/95 backdrop-blur-xl px-6 py-2 md:px-8 md:py-3 rounded-r-lg border-y border-r border-slate-700/50 min-w-[250px] md:min-w-[320px]">
+                       <h2 className="text-3xl md:text-6xl font-black text-white uppercase tracking-tight drop-shadow-md">
+                         {p.name}
+                       </h2>
+                     </div>
+                   </div>
+                   
+                   {/* Role Badge */}
+                   <div className={`mt-2 ml-3 px-4 py-1 md:px-5 md:py-1.5 rounded inline-block self-start border border-white/20 ${badgeColor}`}>
+                      <span className="text-xs md:text-xl font-black uppercase tracking-[0.4em] text-white">
+                        {roleText}
+                      </span>
+                   </div>
+                 </div>
+               );
+             })()}
           </div>
         );
       })()}
