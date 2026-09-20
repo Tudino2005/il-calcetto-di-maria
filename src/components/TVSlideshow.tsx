@@ -70,6 +70,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   
   const drawSlideIndex = slides.findIndex(s => s.type === "slot_machine");
   const [currentIndex, setCurrentIndex] = useState(drawSlideIndex !== -1 ? drawSlideIndex : 0);
+  const [spotlightPlayerIdx, setSpotlightPlayerIdx] = useState<number | null>(null);
 
   // Jump to slot machine immediately if it appears
   useEffect(() => {
@@ -128,6 +129,35 @@ export default function TVSlideshow({ data }: { data: any }) {
       setCurrentIndex(0);
     }
   }, [slides.length, currentIndex]);
+
+  // Start spotlight from player 0 whenever we enter a player_stats slide
+  useEffect(() => {
+    const slide = slides[currentIndex < slides.length ? currentIndex : 0];
+    if (slide?.type !== 'player_stats') {
+      setSpotlightPlayerIdx(null);
+      return;
+    }
+    setSpotlightPlayerIdx(0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, cycleCount]);
+
+  // Advance spotlight to next player every 5 seconds
+  useEffect(() => {
+    if (spotlightPlayerIdx === null) return;
+    const slide = slides[currentIndex < slides.length ? currentIndex : 0];
+    if (slide?.type !== 'player_stats') return;
+    const page = (slide as any)?.page || 0;
+    const pageStats = data.advancedPlayerStats?.slice(page * 8, (page + 1) * 8) || [];
+    const timer = setTimeout(() => {
+      if (spotlightPlayerIdx < pageStats.length - 1) {
+        setSpotlightPlayerIdx(prev => prev !== null ? prev + 1 : null);
+      } else {
+        setSpotlightPlayerIdx(null);
+      }
+    }, 5300);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spotlightPlayerIdx]);
 
   if (slides.length === 0) return <div className="flex h-screen items-center justify-center bg-slate-950 text-white text-3xl">Nessun dato disponibile</div>;
 
@@ -520,10 +550,21 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="w-full flex-1 flex flex-col justify-center min-h-0 relative px-4 max-w-[1600px] mx-auto">
                   <div className="w-full grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {pageStats.map((ps: any) => {
+                    {pageStats.map((ps: any, cardIdx: number) => {
                       const { player, rank, played, wins, winRate, totalGoalsScored, avgGoalsPerMatch, roleStats } = ps;
+                      const isSpotlighted = spotlightPlayerIdx === cardIdx;
+                      const isDimmed = spotlightPlayerIdx !== null && !isSpotlighted;
                       return (
-                        <div key={player.id} className="bg-slate-900 border-2 border-slate-700/80 p-3 rounded-2xl shadow-xl flex flex-col gap-2.5 relative overflow-hidden">
+                        <div
+                          key={player.id}
+                          className="bg-slate-900 border-2 border-slate-700/80 p-3 rounded-2xl shadow-xl flex flex-col gap-2.5 relative overflow-hidden transition-all duration-500"
+                          style={{
+                            opacity: isDimmed ? 0.2 : 1,
+                            transform: isSpotlighted ? 'scale(1.04)' : 'scale(1)',
+                            borderColor: isSpotlighted ? 'rgba(99,102,241,0.8)' : undefined,
+                            boxShadow: isSpotlighted ? '0 0 30px rgba(99,102,241,0.3)' : undefined,
+                          }}
+                        >
                           {rank === 1 && <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none text-7xl">👑</div>}
                           
                           {/* TOP ROW: Profile, Name, Role */}
@@ -609,6 +650,67 @@ export default function TVSlideshow({ data }: { data: any }) {
                       );
                     })}
                   </div>
+
+                  {/* SPOTLIGHT OVERLAY — card ingrandita al centro */}
+                  {spotlightPlayerIdx !== null && pageStats[spotlightPlayerIdx] && (() => {
+                    const { player, rank, played, wins, winRate, totalGoalsScored, avgGoalsPerMatch, roleStats } = pageStats[spotlightPlayerIdx];
+                    return (
+                      <div
+                        key={`spotlight-${spotlightPlayerIdx}`}
+                        className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none"
+                        style={{ animation: 'spotlightIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
+                      >
+                        <div className="bg-slate-900 border-2 border-indigo-500/80 shadow-[0_0_80px_rgba(99,102,241,0.5)] rounded-3xl p-8 flex flex-col gap-5 w-[520px] max-w-[90vw] relative overflow-hidden">
+                          {rank === 1 && <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none text-9xl">👑</div>}
+                          <div className="flex items-center gap-5 z-10">
+                            {player.avatarUrl ? (
+                              <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-24 h-24 rounded-full object-cover border-4 border-indigo-500/60 shadow-xl flex-shrink-0" />
+                            ) : (
+                              <div className="w-24 h-24 bg-slate-800 rounded-full border-4 border-indigo-500/60 flex items-center justify-center shadow-xl flex-shrink-0">
+                                <span className="text-4xl font-black text-slate-400 uppercase">{player.name.substring(0,2)}</span>
+                              </div>
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-3">
+                                <h3 className="text-4xl font-black text-white truncate">{player.name}</h3>
+                                {rank && <span className="text-4xl font-black text-purple-400 drop-shadow-[0_0_12px_rgba(192,132,252,0.5)] flex-shrink-0">{rank}°</span>}
+                              </div>
+                              <div className="text-sm font-black text-indigo-400 uppercase tracking-[0.3em] mt-1">{formatRole(player.preferredRole)}</div>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-5 gap-2 bg-slate-950/70 p-4 rounded-2xl border border-slate-800">
+                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Gioc</span><span className="text-2xl font-black text-white">{played}</span></div>
+                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Vinte</span><span className="text-2xl font-black text-emerald-400">{wins}</span></div>
+                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-yellow-500 mb-1">WR%</span><span className="text-2xl font-black text-yellow-400">{winRate}%</span></div>
+                            <div className="flex flex-col items-center border-l border-slate-800 pl-2"><span className="text-[10px] font-black uppercase tracking-widest text-orange-400 mb-1">Gol</span><span className="text-2xl font-black text-orange-300">{totalGoalsScored ?? '-'}</span></div>
+                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-orange-300 mb-1">Media</span><span className="text-2xl font-black text-orange-200">{avgGoalsPerMatch ?? '-'}</span></div>
+                          </div>
+                          <div className="flex flex-col gap-3">
+                            <div className="bg-blue-950/50 border border-blue-700/50 rounded-2xl p-4">
+                              <div className="text-[11px] font-black uppercase tracking-widest text-blue-400 mb-2 flex items-center gap-2">
+                                <Shield className="w-4 h-4"/> Defender
+                                {roleStats.gkMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[10px]">({roleStats.gkMatches} match)</span>}
+                              </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Subiti</span><span className="text-xl font-black text-blue-300">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Fatti</span><span className="text-xl font-black text-blue-200">{roleStats.gkOffensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                              </div>
+                            </div>
+                            <div className="bg-red-950/50 border border-red-700/50 rounded-2xl p-4">
+                              <div className="text-[11px] font-black uppercase tracking-widest text-red-400 mb-2 flex items-center gap-2">
+                                <Swords className="w-4 h-4"/> Striker
+                                {roleStats.stMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[10px]">({roleStats.stMatches} match)</span>}
+                              </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Subiti</span><span className="text-xl font-black text-red-300">{roleStats.stDefensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Fatti</span><span className="text-xl font-black text-red-200">{roleStats.offensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             );
@@ -1290,6 +1392,10 @@ export default function TVSlideshow({ data }: { data: any }) {
         @keyframes scrollVertical {
           0% { transform: translateY(50vh); }
           100% { transform: translateY(calc(-100% - 20vh)); }
+        }
+        @keyframes spotlightIn {
+          0% { opacity: 0; transform: scale(0.7) translateY(40px); }
+          100% { opacity: 1; transform: scale(1) translateY(0); }
         }
         .animate-scroll-vertical {
           animation-name: scrollVertical;
