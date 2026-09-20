@@ -21,7 +21,7 @@ export default function PlayerForm() {
 
     const res = await createPlayer(name, preferredRole, mediaUrl.trim() || undefined, avatarUrl.trim() || undefined);
     if ('error' in res) {
-      setError(res.error);
+      setError(res.error as string);
       return;
     }
 

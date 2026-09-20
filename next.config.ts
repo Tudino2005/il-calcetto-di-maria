@@ -6,7 +6,7 @@ const withPWA = withPWAInit({
   disable: process.env.NODE_ENV === "development",
 });
 
-const nextConfig: NextConfig = {
+const nextConfig: any = {
   turbopack: {},
   eslint: {
     ignoreDuringBuilds: true,
