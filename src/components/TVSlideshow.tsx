@@ -170,7 +170,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   if (currentSlide?.type === "slot_machine") {
       return (
         <div className="w-full h-screen bg-slate-950 text-white">
-          <SlotMachineDraw tournament={currentSlide.tournament} />
+          <SlotMachineDraw tournament={currentSlide.tournament} advancedPlayerStats={data.advancedPlayerStats} />
         </div>
       );
   }

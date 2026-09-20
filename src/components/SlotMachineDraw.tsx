@@ -24,7 +24,7 @@ const fadeOutAudio = (audio: HTMLAudioElement, duration: number = 2000) => {
   }, stepTime);
 };
 
-export default function SlotMachineDraw({ tournament }: { tournament: any }) {
+export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }: { tournament: any, advancedPlayerStats?: any[] }) {
   const router = useRouter();
   const [teams, setTeams] = useState<any[]>([]);
   const [revealedIndex, setRevealedIndex] = useState(0);
@@ -391,10 +391,29 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
 
              {/* LOWER THIRD BROADCAST GRAPHIC */}
              {showLineupVideo && (() => {
-               const role = p.preferredRole;
-               const roleText = role === 'Portiere' ? 'DEFENDER' : role === 'Attaccante' ? 'STRIKER' : 'DEFENDER & STRIKER';
-               const barColor = role === 'Portiere' ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]' : role === 'Attaccante' ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)]';
-               const badgeColor = role === 'Portiere' ? 'bg-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.4)]' : role === 'Attaccante' ? 'bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)]' : 'bg-purple-600 shadow-[0_0_20px_rgba(147,51,234,0.4)]';
+               const rLower = (p.preferredRole || '').toLowerCase();
+               const isDefender = rLower === 'portiere' || rLower === 'difensore';
+               const isStriker = rLower === 'attaccante';
+               const isBoth = !isDefender && !isStriker;
+               
+               const roleText = isDefender ? 'DEFENDER' : isStriker ? 'STRIKER' : 'DEFENDER & STRIKER';
+               const barColor = isDefender ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]' : isStriker ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.5)]';
+               const badgeColor = isDefender ? 'bg-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.4)]' : isStriker ? 'bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)]' : 'bg-purple-600 shadow-[0_0_20px_rgba(147,51,234,0.4)]';
+               
+               const pStats = advancedPlayerStats?.find((s: any) => s.player.id === p.id);
+               const rankDisplay = pStats?.rank ? ` - ${pStats.rank}°` : '';
+               
+               let statsText = pStats ? `WR: ${pStats.winRate}%` : '';
+               if (pStats && pStats.roleStats) {
+                 if (isDefender && pStats.roleStats.gkGoalsConceded > 0) {
+                   statsText += ` • TOT SUBITI: ${pStats.roleStats.gkGoalsConceded}`;
+                 } else if (isStriker && pStats.roleStats.stGoalsScored > 0) {
+                   statsText += ` • TOT FATTI: ${pStats.roleStats.stGoalsScored}`;
+                 } else if (isBoth) {
+                   if (pStats.roleStats.stGoalsScored > 0) statsText += ` • FATTI: ${pStats.roleStats.stGoalsScored}`;
+                   if (pStats.roleStats.gkGoalsConceded > 0) statsText += ` • SUBITI: ${pStats.roleStats.gkGoalsConceded}`;
+                 }
+               }
                
                return (
                  <div className="absolute bottom-12 left-8 md:bottom-20 md:left-16 z-[60] flex flex-col animate-in slide-in-from-left-24 fade-in duration-1000 delay-500 fill-mode-both">
@@ -404,17 +423,27 @@ export default function SlotMachineDraw({ tournament }: { tournament: any }) {
                      
                      {/* Name Plate */}
                      <div className="bg-slate-900/95 backdrop-blur-xl px-6 py-2 md:px-8 md:py-3 rounded-r-lg border-y border-r border-slate-700/50 min-w-[250px] md:min-w-[320px]">
-                       <h2 className="text-3xl md:text-6xl font-black text-white uppercase tracking-tight drop-shadow-md">
+                       <h2 className="text-3xl md:text-6xl font-black text-white uppercase tracking-tight drop-shadow-md flex items-center">
                          {p.name}
+                         {rankDisplay && <span className="text-yellow-400 font-black ml-2 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">{rankDisplay}</span>}
                        </h2>
                      </div>
                    </div>
                    
-                   {/* Role Badge */}
-                   <div className={`mt-2 ml-3 px-4 py-1 md:px-5 md:py-1.5 rounded inline-block self-start border border-white/20 ${badgeColor}`}>
-                      <span className="text-xs md:text-xl font-black uppercase tracking-[0.4em] text-white">
-                        {roleText}
-                      </span>
+                   {/* Role Badge and Stats */}
+                   <div className="flex items-center gap-3 mt-2 ml-3">
+                     <div className={`px-4 py-1 md:px-5 md:py-1.5 rounded border border-white/20 shadow-lg ${badgeColor}`}>
+                        <span className="text-xs md:text-xl font-black uppercase tracking-[0.4em] text-white">
+                          {roleText}
+                        </span>
+                     </div>
+                     {statsText && (
+                       <div className="bg-slate-900/80 backdrop-blur-md px-3 py-1 md:px-4 md:py-1.5 rounded border border-slate-700/50 shadow-lg">
+                         <span className="text-[10px] md:text-sm font-black text-slate-300 uppercase tracking-widest">
+                           {statsText}
+                         </span>
+                       </div>
+                     )}
                    </div>
                  </div>
                );
