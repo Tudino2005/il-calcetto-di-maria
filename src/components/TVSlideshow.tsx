@@ -256,9 +256,15 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
                         {topPlayers.map((tp: any, idx: number) => (
                           <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 flex-1 justify-between pr-6">
                                                             <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
-
+                                                            {tp.preferredRole && (() => {
+                              const r = tp.preferredRole.toLowerCase();
+                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
+                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
+                              if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
+                              return null;
+                            })()}
                             </div>
                           </div>
                         ))}
@@ -286,7 +292,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const rank = i + 1 + playerStats.filter((ps: any) => ps.winRate === playerStats[0]?.winRate && ps.wins === playerStats[0]?.wins && ps.played === playerStats[0]?.played).length;
                       return (
                       <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
-                        <div className="flex items-center gap-6 min-w-0">
+                        <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-yellow-500" :
                             rank === 2 ? "text-slate-300" :
@@ -296,8 +302,15 @@ export default function TVSlideshow({ data }: { data: any }) {
                             {rank}
                           </div>
                                                     <div className="flex flex-col min-w-0 justify-center flex-1">
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 flex-1 justify-between pr-6">
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
+                              {p.preferredRole && (() => {
+                              const r = p.preferredRole.toLowerCase();
+                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
+                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
+                              if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
+                              return null;
+                            })()}
                             </div>
                           </div>
 
@@ -370,7 +383,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const rank = i + 1 + teamStats.filter((ts: any) => ts.winRate === teamStats[0]?.winRate && ts.wins === teamStats[0]?.wins && ts.played === teamStats[0]?.played).length;
                       return (
                       <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
-                        <div className="flex items-center gap-6 min-w-0">
+                        <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-yellow-500" :
                             rank === 2 ? "text-slate-300" :
@@ -508,7 +521,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const rank = i + 1 + defenderStats.filter((ps: any) => ps.winRate === defenderStats[0]?.winRate && ps.wins === defenderStats[0]?.wins && ps.played === defenderStats[0]?.played).length;
                       return (
                       <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
-                        <div className="flex items-center gap-6 min-w-0">
+                        <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-blue-500" :
                             rank === 2 ? "text-slate-300" :
@@ -625,7 +638,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const rank = i + 1 + strikerStats.filter((ts: any) => ts.winRate === strikerStats[0]?.winRate && ts.wins === strikerStats[0]?.wins && ts.played === strikerStats[0]?.played).length;
                       return (
                       <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
-                        <div className="flex items-center gap-6 min-w-0">
+                        <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-red-500" :
                             rank === 2 ? "text-slate-300" :
