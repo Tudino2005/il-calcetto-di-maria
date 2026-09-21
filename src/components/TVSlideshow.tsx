@@ -254,7 +254,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                                             {tp.preferredRole && (() => {
                               const r = tp.preferredRole.toLowerCase();
                               if (r === 'portiere' || r === 'difensore') return <img src="/images/defender_icon_gold.png" alt="Defender" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
-                              if (r === 'attaccante') return <img src="/images/striker_icon_gold.jpg" alt="Striker" className="h-7 w-12 rounded-md object-cover shadow-sm border border-slate-600" />;
+                              if (r === 'attaccante') return <img src="/images/striker_icon_gold.png" alt="Striker" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
@@ -300,7 +300,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               {p.preferredRole && (() => {
                               const r = p.preferredRole.toLowerCase();
                               if (r === 'portiere' || r === 'difensore') return <img src="/images/defender_icon_gold.png" alt="Defender" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
-                              if (r === 'attaccante') return <img src="/images/striker_icon_gold.jpg" alt="Striker" className="h-7 w-12 rounded-md object-cover shadow-sm border border-slate-600" />;
+                              if (r === 'attaccante') return <img src="/images/striker_icon_gold.png" alt="Striker" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
@@ -825,7 +825,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               if (!role) return null;
               const r = role.toLowerCase();
               if (r === 'portiere' || r === 'difensore') return <img src="/images/defender_icon_gold.png" alt="Defender" className="h-8 w-14 object-contain drop-shadow-md scale-[2.5]" />;
-              if (r === 'attaccante') return <img src="/images/striker_icon_gold.jpg" alt="Striker" className="h-8 w-14 rounded-md object-cover shadow-md border-2 border-slate-600" />;
+              if (r === 'attaccante') return <img src="/images/striker_icon_gold.png" alt="Striker" className="h-8 w-14 object-contain drop-shadow-md scale-[2.5]" />;
               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[12px] uppercase shadow-sm">Jolly</span>;
               return <span className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{role}</span>;
             };
