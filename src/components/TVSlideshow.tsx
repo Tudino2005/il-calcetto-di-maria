@@ -253,8 +253,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                                                             <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
                                                             {tp.preferredRole && (() => {
                               const r = tp.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <img src="/DefenderIco.jpeg" alt="Defender" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
-                              if (r === 'attaccante') return <img src="/FoosballStriker.jpeg" alt="Striker" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
+                              if (r === 'portiere' || r === 'difensore') return <img src="/images/DefenderIco.jpeg" alt="Defender" className="h-7 w-12 rounded-md object-cover shadow-sm border border-slate-600" />;
+                              if (r === 'attaccante') return <img src="/images/FoosballStriker.jpeg" alt="Striker" className="h-7 w-12 rounded-md object-cover shadow-sm border border-slate-600" />;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
@@ -299,8 +299,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
                               {p.preferredRole && (() => {
                               const r = p.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <img src="/DefenderIco.jpeg" alt="Defender" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
-                              if (r === 'attaccante') return <img src="/FoosballStriker.jpeg" alt="Striker" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
+                              if (r === 'portiere' || r === 'difensore') return <img src="/images/DefenderIco.jpeg" alt="Defender" className="h-7 w-12 rounded-md object-cover shadow-sm border border-slate-600" />;
+                              if (r === 'attaccante') return <img src="/images/FoosballStriker.jpeg" alt="Striker" className="h-7 w-12 rounded-md object-cover shadow-sm border border-slate-600" />;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
@@ -821,13 +821,13 @@ export default function TVSlideshow({ data }: { data: any }) {
           {currentSlide.type === "player_stats" && (() => {
             const pageStats = data.advancedPlayerStats?.slice(0, 3) || [];
             
-            const formatRole = (role: string) => {
-              if (!role) return "";
+            const renderRoleBadge = (role: string) => {
+              if (!role) return null;
               const r = role.toLowerCase();
-              if (r === 'portiere' || r === 'difensore') return 'Defender';
-              if (r === 'attaccante') return 'Striker';
-              if (r === 'entrambi') return 'Both';
-              return role;
+              if (r === 'portiere' || r === 'difensore') return <img src="/images/DefenderIco.jpeg" alt="Defender" className="h-8 w-14 rounded-md object-cover shadow-md border-2 border-slate-600" />;
+              if (r === 'attaccante') return <img src="/images/FoosballStriker.jpeg" alt="Striker" className="h-8 w-14 rounded-md object-cover shadow-md border-2 border-slate-600" />;
+              if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[12px] uppercase shadow-sm">Jolly</span>;
+              return <span className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{role}</span>;
             };
             
             const stage = spotlightPlayerIdx !== null ? spotlightPlayerIdx : 0;
@@ -894,7 +894,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 <h3 className="text-2xl font-black text-white truncate">{player.name}</h3>
                                 {rank && <span className="text-2xl font-black text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.4)] flex-shrink-0">{rank}°</span>}
                               </div>
-                              <div className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{formatRole(player.preferredRole)}</div>
+                              <div className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{renderRoleBadge(player.preferredRole)}</div>
                             </div>
                           </div>
 
