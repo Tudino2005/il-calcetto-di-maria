@@ -190,7 +190,14 @@ export default function TVSlideshow({ data }: { data: any }) {
         </div>
         <div className="flex gap-2">
           {slides.map((_, i) => (
-            <div key={i} className={`h-2 rounded-full transition-all duration-1000 ${i === safeCurrentIndex ? 'w-12 bg-emerald-400' : 'w-3 bg-slate-700'}`} />
+            <div 
+              key={i} 
+              onClick={() => {
+                setCurrentIndex(i);
+                setCycleCount(c => c + 1);
+              }}
+              className={`h-2 rounded-full transition-all duration-1000 cursor-pointer hover:bg-emerald-300 ${i === safeCurrentIndex ? 'w-12 bg-emerald-400' : 'w-3 bg-slate-700'}`} 
+            />
           ))}
         </div>
       </div>
