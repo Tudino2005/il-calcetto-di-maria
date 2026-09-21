@@ -265,11 +265,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
                                 return (
                                   <div className="flex items-center gap-2 shrink-0 ml-4">
-                                    <div className="bg-blue-950/50 border border-blue-900/50 px-3 py-1.5 rounded-lg flex flex-col items-center">
+                                    <div className="flex flex-col items-center">
                                       <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
                                       <span className="text-lg font-black text-white leading-none mt-1">{tSubiti}</span>
                                     </div>
-                                    <div className="bg-blue-950/50 border border-blue-900/50 px-3 py-1.5 rounded-lg flex flex-col items-center">
+                                    <div className="flex flex-col items-center">
                                       <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
                                       <span className="text-lg font-black text-white leading-none mt-1">{mSubiti}</span>
                                     </div>
@@ -324,11 +324,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                             const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
                             return (
                               <div className="flex items-center gap-2 shrink-0 mx-2">
-                                <div className="bg-blue-950/40 border border-blue-900/40 px-2 py-1 rounded-md flex gap-2 items-baseline">
+                                <div className="flex gap-2 items-baseline">
                                   <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
                                   <span className="text-base font-black text-white leading-none">{tSubiti}</span>
                                 </div>
-                                <div className="bg-blue-950/40 border border-blue-900/40 px-2 py-1 rounded-md flex gap-2 items-baseline">
+                                <div className="flex gap-2 items-baseline">
                                   <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
                                   <span className="text-base font-black text-white leading-none">{mSubiti}</span>
                                 </div>
@@ -504,11 +504,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
                                 return (
                                   <div className="flex items-center gap-2 shrink-0 ml-4">
-                                    <div className="bg-blue-950/50 border border-blue-900/50 px-3 py-1.5 rounded-lg flex flex-col items-center">
+                                    <div className="flex flex-col items-center">
                                       <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
                                       <span className="text-lg font-black text-white leading-none mt-1">{tSubiti}</span>
                                     </div>
-                                    <div className="bg-blue-950/50 border border-blue-900/50 px-3 py-1.5 rounded-lg flex flex-col items-center">
+                                    <div className="flex flex-col items-center">
                                       <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
                                       <span className="text-lg font-black text-white leading-none mt-1">{mSubiti}</span>
                                     </div>
@@ -563,11 +563,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                             const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
                             return (
                               <div className="flex items-center gap-2 shrink-0 mx-2">
-                                <div className="bg-blue-950/40 border border-blue-900/40 px-2 py-1 rounded-md flex gap-2 items-baseline">
+                                <div className="flex gap-2 items-baseline">
                                   <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
                                   <span className="text-base font-black text-white leading-none">{tSubiti}</span>
                                 </div>
-                                <div className="bg-blue-950/40 border border-blue-900/40 px-2 py-1 rounded-md flex gap-2 items-baseline">
+                                <div className="flex gap-2 items-baseline">
                                   <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
                                   <span className="text-base font-black text-white leading-none">{mSubiti}</span>
                                 </div>
@@ -621,11 +621,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 const mFatti = rStats?.stMatches > 0 ? (tFatti / rStats.stMatches).toFixed(2) : '-';
                                 return (
                                   <div className="flex items-center gap-2 shrink-0 ml-4">
-                                    <div className="bg-red-950/50 border border-red-900/50 px-3 py-1.5 rounded-lg flex flex-col items-center">
+                                    <div className="flex flex-col items-center">
                                       <span className="text-[10px] text-red-400 font-bold tracking-widest uppercase">Tot Fatti</span>
                                       <span className="text-lg font-black text-white leading-none mt-1">{tFatti}</span>
                                     </div>
-                                    <div className="bg-red-950/50 border border-red-900/50 px-3 py-1.5 rounded-lg flex flex-col items-center">
+                                    <div className="flex flex-col items-center">
                                       <span className="text-[10px] text-red-400 font-bold tracking-widest uppercase">Media</span>
                                       <span className="text-lg font-black text-white leading-none mt-1">{mFatti}</span>
                                     </div>
@@ -678,11 +678,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                             const mFatti = rStats?.stMatches > 0 ? (tFatti / rStats.stMatches).toFixed(2) : '-';
                             return (
                               <div className="flex items-center gap-2 shrink-0 mx-2">
-                                <div className="bg-red-950/40 border border-red-900/40 px-2 py-1 rounded-md flex gap-2 items-baseline">
+                                <div className="flex gap-2 items-baseline">
                                   <span className="text-[9px] text-red-400 font-bold tracking-widest uppercase">Tot Fatti</span>
                                   <span className="text-base font-black text-white leading-none">{tFatti}</span>
                                 </div>
-                                <div className="bg-red-950/40 border border-red-900/40 px-2 py-1 rounded-md flex gap-2 items-baseline">
+                                <div className="flex gap-2 items-baseline">
                                   <span className="text-[9px] text-red-400 font-bold tracking-widest uppercase">Media</span>
                                   <span className="text-base font-black text-white leading-none">{mFatti}</span>
                                 </div>
