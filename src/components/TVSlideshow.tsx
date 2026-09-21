@@ -1111,7 +1111,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
                                   <div className="shrink-0 flex items-center gap-3 mx-1">
                                     {matchProbs.has(m.id) && !m.winnerTeamId && (
-                                      <span className="text-[15px] text-yellow-500/90 font-black tracking-wider text-right uppercase">WIN<br/>{matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
+                                      <span className="text-[15px] text-yellow-500/90 font-black tracking-wider text-right uppercase">WIN: {matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
                                     )}
                                     <div className="bg-slate-950 px-5 py-2.5 rounded-2xl text-2xl font-black text-white shadow-inner flex flex-col items-center border border-slate-800">
                                       <span>{m.winnerTeamId ? `${m.scoreTeamA} - ${m.scoreTeamB}` : 'VS'}</span>
@@ -1122,7 +1122,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                       )}
                                     </div>
                                     {matchProbs.has(m.id) && !m.winnerTeamId && (
-                                      <span className="text-[15px] text-yellow-500/90 font-black tracking-wider text-left uppercase">WIN<br/>{matchProbs.get(m.id).teamBProb.toFixed(0)}%</span>
+                                      <span className="text-[15px] text-yellow-500/90 font-black tracking-wider text-left uppercase">WIN: {matchProbs.get(m.id).teamBProb.toFixed(0)}%</span>
                                     )}
                                   </div>
 
@@ -1197,11 +1197,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                             
                             <div className="shrink-0 flex items-center gap-3 mx-2">
                               {matchProbsLive.has(m.id) && (
-                                <span className="text-[13px] text-yellow-500/90 font-black tracking-wider uppercase text-right leading-tight">WIN<br/>{matchProbsLive.get(m.id).teamAProb.toFixed(0)}%</span>
+                                <span className="text-[13px] text-yellow-500/90 font-black tracking-wider uppercase text-right leading-tight">WIN: {matchProbsLive.get(m.id).teamAProb.toFixed(0)}%</span>
                               )}
                               <span className="text-slate-500 shrink-0 font-black text-xl">VS</span>
                               {matchProbsLive.has(m.id) && (
-                                <span className="text-[13px] text-yellow-500/90 font-black tracking-wider uppercase text-left leading-tight">WIN<br/>{matchProbsLive.get(m.id).teamBProb.toFixed(0)}%</span>
+                                <span className="text-[13px] text-yellow-500/90 font-black tracking-wider uppercase text-left leading-tight">WIN: {matchProbsLive.get(m.id).teamBProb.toFixed(0)}%</span>
                               )}
                             </div>
                             
