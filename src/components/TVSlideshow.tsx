@@ -39,16 +39,12 @@ export default function TVSlideshow({ data }: { data: any }) {
     slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
   }
 
-  // Slide for Player Advanced Stats
+  // Slide for Player Advanced Stats (TOP 3 solo con podio finale)
   if (data.advancedPlayerStats && data.advancedPlayerStats.length > 0) {
-    const playersPerPage = 8;
-    const pages = Math.ceil(data.advancedPlayerStats.length / playersPerPage);
-    for (let p = 0; p < pages; p++) {
-      const playersOnPage = Math.min(playersPerPage, data.advancedPlayerStats.length - p * playersPerPage);
-      // Give each player 6.3 seconds, plus a small buffer
-      const slideDuration = playersOnPage * 6300 + 1000;
-      slides.push({ type: "player_stats", duration: slideDuration, page: p });
-    }
+    const playersOnPage = Math.min(3, data.advancedPlayerStats.length);
+    // 6.3 seconds per player spotlight + 10 seconds for podium
+    const slideDuration = playersOnPage * 6300 + 10000;
+    slides.push({ type: "player_stats", duration: slideDuration, page: 0 });
   }
   
   // Slides for Promo
@@ -151,13 +147,10 @@ export default function TVSlideshow({ data }: { data: any }) {
     if (spotlightPlayerIdx === null) return;
     const slide = slides[currentIndex < slides.length ? currentIndex : 0];
     if (slide?.type !== 'player_stats') return;
-    const page = (slide as any)?.page || 0;
-    const pageStats = data.advancedPlayerStats?.slice(page * 8, (page + 1) * 8) || [];
+    const playersOnPage = Math.min(3, data.advancedPlayerStats?.length || 0);
     const timer = setTimeout(() => {
-      if (spotlightPlayerIdx < pageStats.length - 1) {
+      if (spotlightPlayerIdx < playersOnPage) {
         setSpotlightPlayerIdx(prev => prev !== null ? prev + 1 : null);
-      } else {
-        setSpotlightPlayerIdx(null);
       }
     }, 6300);
     return () => clearTimeout(timer);
@@ -826,9 +819,8 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* PLAYER STATS SLIDE */}
           {currentSlide.type === "player_stats" && (() => {
-            const page = currentSlide.page || 0;
-            const playersPerPage = 8;
-            const pageStats = data.advancedPlayerStats?.slice(page * playersPerPage, (page + 1) * playersPerPage) || [];
+            const pageStats = data.advancedPlayerStats?.slice(0, 3) || [];
+            const isPodium = spotlightPlayerIdx !== null && spotlightPlayerIdx >= pageStats.length;
             
             const formatRole = (role: string) => {
               if (!role) return "";
@@ -844,25 +836,31 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="flex flex-col items-center shrink-0 mb-6">
                   <Activity className="w-16 h-16 text-blue-400 mb-4 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
                   <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg flex items-center gap-4">
-                    Fascicolo Giocatori {data.advancedPlayerStats?.length > playersPerPage && <span className="text-2xl text-slate-500 font-bold ml-2">Pag. {page + 1}</span>}
+                    Fascicolo Giocatori (TOP 3)
                   </h2>
                 </div>
                 
                 <div className="w-full flex-1 flex flex-col justify-center min-h-0 relative px-4 max-w-[1600px] mx-auto">
-                  <div className="w-full grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  <div className={`w-full flex justify-center gap-6 transition-all duration-1000 ${isPodium ? "items-end h-[600px] pb-10" : "items-center"}`}>
                     {pageStats.map((ps: any, cardIdx: number) => {
                       const { player, rank, played, wins, winRate, totalGoalsScored, avgGoalsPerMatch, roleStats } = ps;
-                      const isSpotlighted = spotlightPlayerIdx === cardIdx;
-                      const isDimmed = spotlightPlayerIdx !== null && !isSpotlighted;
+                      const isSpotlighted = !isPodium && spotlightPlayerIdx === cardIdx;
+                      const isDimmed = !isPodium && spotlightPlayerIdx !== null && !isSpotlighted;
+                      
+                      const podiumOrder = cardIdx === 0 ? 'order-2' : cardIdx === 1 ? 'order-1' : 'order-3';
+                      const podiumTransform = cardIdx === 0 ? 'scale(1.15) translateY(-30px)' : cardIdx === 1 ? 'scale(0.95)' : 'scale(0.9) translateY(30px)';
+                      const podiumZIndex = cardIdx === 0 ? 30 : cardIdx === 1 ? 20 : 10;
+                      
                       return (
                         <div
                           key={player.id}
-                          className="bg-slate-900 border-2 border-slate-700/80 p-3 rounded-2xl shadow-xl flex flex-col gap-2.5 relative overflow-hidden transition-all duration-500"
+                          className={`bg-slate-900 border-2 p-3 rounded-2xl flex flex-col gap-2.5 relative overflow-hidden transition-all duration-1000 ${isPodium ? podiumOrder : ''} w-[380px] max-w-full`}
                           style={{
                             opacity: isDimmed ? 0.2 : 1,
-                            transform: isSpotlighted ? 'scale(1.04)' : 'scale(1)',
-                            borderColor: isSpotlighted ? 'rgba(99,102,241,0.8)' : undefined,
-                            boxShadow: isSpotlighted ? '0 0 30px rgba(99,102,241,0.3)' : undefined,
+                            transform: isPodium ? podiumTransform : (isSpotlighted ? 'scale(1.04)' : 'scale(1)'),
+                            borderColor: isPodium ? (cardIdx === 0 ? 'rgba(234,179,8,0.8)' : cardIdx === 1 ? 'rgba(203,213,225,0.8)' : 'rgba(249,115,22,0.8)') : (isSpotlighted ? 'rgba(99,102,241,0.8)' : 'rgba(51,65,85,0.8)'),
+                            boxShadow: isPodium && cardIdx === 0 ? '0 0 40px rgba(234,179,8,0.3)' : (isSpotlighted ? '0 0 30px rgba(99,102,241,0.3)' : '0 10px 15px -3px rgba(0,0,0,0.5)'),
+                            zIndex: isPodium ? podiumZIndex : 1,
                           }}
                         >
                           {rank === 1 && <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none text-7xl">👑</div>}
@@ -944,7 +942,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                   </div>
 
                   {/* SPOTLIGHT OVERLAY — card ingrandita al centro */}
-                  {spotlightPlayerIdx !== null && pageStats[spotlightPlayerIdx] && (() => {
+                  {!isPodium && spotlightPlayerIdx !== null && pageStats[spotlightPlayerIdx] && (() => {
                     const { player, rank, played, wins, winRate, totalGoalsScored, avgGoalsPerMatch, roleStats } = pageStats[spotlightPlayerIdx];
                     return (
                       <div
@@ -1379,7 +1377,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     }
                     
                     return (
-                      <div key={rIndex} className="flex-1 flex flex-col gap-4 min-w-[320px] max-w-5xl h-full overflow-y-auto custom-scrollbar pb-10">
+                      <div key={rIndex} className="flex-1 flex flex-col gap-4 min-w-[380px] max-w-5xl h-full overflow-y-auto custom-scrollbar pb-10">
                          <div className="bg-slate-900/90 p-4 text-center rounded-2xl border-2 border-pink-500/30 shadow-xl sticky top-0 z-10 backdrop-blur-md">
                            <h3 className="text-xl font-black text-pink-400 uppercase tracking-widest">{roundName}</h3>
                          </div>
