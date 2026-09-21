@@ -258,24 +258,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
                             <div className="flex items-center gap-3">
                                                             <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
-                              {(() => {
-                                const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === tp.id);
-                                const rStats = advStats?.roleStats;
-                                const tSubiti = rStats?.gkGoalsConceded || 0;
-                                const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
-                                return (
-                                  <div className="flex items-center gap-2 shrink-0 ml-4">
-                                    <div className="flex flex-col items-center">
-                                      <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
-                                      <span className="text-lg font-black text-white leading-none mt-1">{tSubiti}</span>
-                                    </div>
-                                    <div className="flex flex-col items-center">
-                                      <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
-                                      <span className="text-lg font-black text-white leading-none mt-1">{mSubiti}</span>
-                                    </div>
-                                  </div>
-                                );
-                              })()}
+
                             </div>
                           </div>
                         ))}
@@ -317,24 +300,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
                             </div>
                           </div>
-                          {(() => {
-                            const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === p.id);
-                            const rStats = advStats?.roleStats;
-                            const tSubiti = rStats?.gkGoalsConceded || 0;
-                            const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
-                            return (
-                              <div className="flex items-center gap-2 shrink-0 mx-2">
-                                <div className="flex gap-2 items-baseline">
-                                  <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
-                                  <span className="text-base font-black text-white leading-none">{tSubiti}</span>
-                                </div>
-                                <div className="flex gap-2 items-baseline">
-                                  <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
-                                  <span className="text-base font-black text-white leading-none">{mSubiti}</span>
-                                </div>
-                              </div>
-                            );
-                          })()}
+
                         </div>
                         
                         <div className="flex flex-col items-end shrink-0 ml-4">
