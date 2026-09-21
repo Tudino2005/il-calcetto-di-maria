@@ -510,7 +510,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           {stats.recentForm.slice().reverse().map((result: string, rIdx: number) => (
                             <div 
                               key={rIdx}
-                              className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm ${
+                              className={`w-4 h-4 rounded-full flex items-center justify-center text-[15px] font-bold text-white shadow-sm ${
                                 result === 'W' ? 'bg-emerald-500' : 'bg-red-500'
                               }`}
                             >
@@ -528,7 +528,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
                 
                 {/* FOOTER INFO */}
-                <div className="bg-slate-950 p-2 text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest border-t border-slate-800">
+                <div className="bg-slate-950 p-2 text-center text-[15px] text-slate-500 font-bold uppercase tracking-widest border-t border-slate-800">
                   SG: Sfide Giocate • V: Vittorie • P: Perse • SV: Set Vinti • SP: Set Persi • DS: Differenza Set • WR%: Win Rate (Vittorie / Sfide)
                 </div>
               </div>
@@ -592,7 +592,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 <h3 className="text-lg font-black text-white truncate">{player.name}</h3>
                                 {rank && <span className="text-xl font-black text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.4)] flex-shrink-0">{rank}°</span>}
                               </div>
-                              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{formatRole(player.preferredRole)}</div>
+                              <div className="text-[15px] font-black text-slate-400 uppercase tracking-widest">{formatRole(player.preferredRole)}</div>
                             </div>
                           </div>
 
@@ -682,29 +682,29 @@ export default function TVSlideshow({ data }: { data: any }) {
                             </div>
                           </div>
                           <div className="grid grid-cols-3 gap-2 bg-slate-950/70 p-4 rounded-2xl border border-slate-800">
-                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Gioc</span><span className="text-2xl font-black text-white">{played}</span></div>
-                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Vinte</span><span className="text-2xl font-black text-emerald-400">{wins}</span></div>
-                            <div className="flex flex-col items-center"><span className="text-[10px] font-black uppercase tracking-widest text-yellow-500 mb-1">WR%</span><span className="text-2xl font-black text-yellow-400">{winRate}%</span></div>
+                            <div className="flex flex-col items-center"><span className="text-[15px] font-black uppercase tracking-widest text-slate-400 mb-1">Gioc</span><span className="text-2xl font-black text-white">{played}</span></div>
+                            <div className="flex flex-col items-center"><span className="text-[15px] font-black uppercase tracking-widest text-emerald-500 mb-1">Vinte</span><span className="text-2xl font-black text-emerald-400">{wins}</span></div>
+                            <div className="flex flex-col items-center"><span className="text-[15px] font-black uppercase tracking-widest text-yellow-500 mb-1">WR%</span><span className="text-2xl font-black text-yellow-400">{winRate}%</span></div>
                           </div>
                           <div className="flex flex-col gap-3">
                             <div className="bg-blue-950/50 border border-blue-700/50 rounded-2xl p-4">
                               <div className="text-[11px] font-black uppercase tracking-widest text-blue-400 mb-2 flex items-center gap-2">
                                 <Shield className="w-4 h-4"/> Defender
-                                {roleStats.gkMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[10px]">({roleStats.gkMatches} match)</span>}
+                                {roleStats.gkMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.gkMatches} match)</span>}
                               </div>
                               <div className="grid grid-cols-2 gap-2">
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Tot Subiti</span><span className="text-xl font-black text-blue-300">{roleStats.gkGoalsConceded > 0 ? roleStats.gkGoalsConceded : <span className="text-slate-600">-</span>}</span></div>
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Media</span><span className="text-xl font-black text-blue-200">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[15px] font-black uppercase text-slate-400">Tot Subiti</span><span className="text-xl font-black text-blue-300">{roleStats.gkGoalsConceded > 0 ? roleStats.gkGoalsConceded : <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[15px] font-black uppercase text-slate-400">Media</span><span className="text-xl font-black text-blue-200">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
                               </div>
                             </div>
                             <div className="bg-red-950/50 border border-red-700/50 rounded-2xl p-4">
                               <div className="text-[11px] font-black uppercase tracking-widest text-red-400 mb-2 flex items-center gap-2">
                                 <Swords className="w-4 h-4"/> Striker
-                                {roleStats.stMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[10px]">({roleStats.stMatches} match)</span>}
+                                {roleStats.stMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.stMatches} match)</span>}
                               </div>
                               <div className="grid grid-cols-2 gap-2">
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Tot Fatti</span><span className="text-xl font-black text-red-300">{roleStats.stGoalsScored > 0 ? roleStats.stGoalsScored : <span className="text-slate-600">-</span>}</span></div>
-                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[10px] font-black uppercase text-slate-400">Media</span><span className="text-xl font-black text-red-200">{roleStats.offensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[15px] font-black uppercase text-slate-400">Tot Fatti</span><span className="text-xl font-black text-red-300">{roleStats.stGoalsScored > 0 ? roleStats.stGoalsScored : <span className="text-slate-600">-</span>}</span></div>
+                                <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[15px] font-black uppercase text-slate-400">Media</span><span className="text-xl font-black text-red-200">{roleStats.offensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
                               </div>
                             </div>
                           </div>
@@ -789,7 +789,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           {/* SET SCORES */}
                           {m.setScores && formatSetScores(m.setScores) && (
                             <div className="flex items-center justify-center gap-3 text-xs font-bold bg-slate-950/60 px-3 py-1.5 rounded-lg border border-slate-800 mt-4 mx-auto w-fit">
-                              <span className="text-[10px] text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
+                              <span className="text-[15px] text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
                               <span className="text-emerald-400 font-black tracking-wider text-sm">{formatSetScores(m.setScores)}</span>
                             </div>
                           )}
@@ -1032,7 +1032,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           </div>
                           {m.setScores && formatSetScores(m.setScores) && (
                             <div className="bg-slate-950/80 border border-slate-700/60 rounded-xl px-3 py-1.5 flex items-center justify-between text-xs font-bold mt-1">
-                              <span className="text-[10px] text-purple-400 uppercase tracking-wider font-black">Gol Set:</span>
+                              <span className="text-[15px] text-purple-400 uppercase tracking-wider font-black">Gol Set:</span>
                               <span className="text-emerald-400 font-black tracking-wider text-sm">{formatSetScores(m.setScores)}</span>
                             </div>
                           )}
@@ -1107,7 +1107,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                     <span className={`text-base font-bold truncate leading-tight flex flex-col ${m.winnerTeamId === m.teamAId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
                                       <span>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
                                       {matchProbs.has(m.id) && !m.winnerTeamId && (
-                                        <span className="text-[10px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN: {matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
+                                        <span className="text-[15px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN: {matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
                                       )}
                                     </span>
                                   </div>
@@ -1130,7 +1130,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                     <span className={`text-base font-bold truncate leading-tight flex flex-col items-end ${m.winnerTeamId === m.teamBId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
                                       <span>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
                                       {matchProbs.has(m.id) && !m.winnerTeamId && (
-                                        <span className="text-[10px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN: {matchProbs.get(m.id).teamBProb.toFixed(0)}%</span>
+                                        <span className="text-[15px] text-yellow-500/90 font-black mt-0.5 tracking-wider">WIN: {matchProbs.get(m.id).teamBProb.toFixed(0)}%</span>
                                       )}
                                     </span>
                                   </div>
@@ -1192,14 +1192,14 @@ export default function TVSlideshow({ data }: { data: any }) {
                             <div className="flex-1 flex flex-col">
                               <span className="text-white leading-tight">{m.teamA?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamA?.player2?.name}</span>
                               {matchProbsLive.has(m.id) && (
-                                <span className="text-[10px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN: {matchProbsLive.get(m.id).teamAProb.toFixed(0)}%</span>
+                                <span className="text-[15px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN: {matchProbsLive.get(m.id).teamAProb.toFixed(0)}%</span>
                               )}
                             </div>
                             <span className="text-slate-500 mx-4 shrink-0 pt-1">VS</span>
                             <div className="flex-1 flex flex-col items-end text-right">
                               <span className="text-white leading-tight">{m.teamB?.player1?.name} <span className="text-slate-500 text-sm mx-1">&</span> {m.teamB?.player2?.name}</span>
                               {matchProbsLive.has(m.id) && (
-                                <span className="text-[10px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN: {matchProbsLive.get(m.id).teamBProb.toFixed(0)}%</span>
+                                <span className="text-[15px] text-yellow-500/90 font-black mt-1 tracking-wider uppercase">WIN: {matchProbsLive.get(m.id).teamBProb.toFixed(0)}%</span>
                               )}
                             </div>
                           </div>
