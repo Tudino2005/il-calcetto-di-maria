@@ -12,6 +12,11 @@ export default function TVSlideshow({ data }: { data: any }) {
   const router = useRouter();
   const { playerStats, teamStats, promoTournaments, inProgressTournaments, completedTournaments } = data;
   
+  // Filter out players with 0 wins from Sfide Libere
+  if (data.freeMatchesStats) {
+    data.freeMatchesStats = data.freeMatchesStats.filter((p: any) => p.v > 0);
+  }
+  
   // Build slides array
   const slides: any[] = [];  // Leaderboard Slide (Auto-scrolling)
   const maxRows = Math.max(playerStats.length, teamStats.length);
