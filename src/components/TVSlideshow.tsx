@@ -253,8 +253,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                                                             <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
                                                             {tp.preferredRole && (() => {
                               const r = tp.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
-                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
+                              if (r === 'portiere' || r === 'difensore') return <img src="/DefenderIco.jpeg" alt="Defender" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
+                              if (r === 'attaccante') return <img src="/FoosballStriker.jpeg" alt="Striker" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
@@ -299,8 +299,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
                               {p.preferredRole && (() => {
                               const r = p.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
-                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
+                              if (r === 'portiere' || r === 'difensore') return <img src="/DefenderIco.jpeg" alt="Defender" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
+                              if (r === 'attaccante') return <img src="/FoosballStriker.jpeg" alt="Striker" className="h-6 w-auto rounded object-contain shadow-sm border border-slate-700/50" />;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
