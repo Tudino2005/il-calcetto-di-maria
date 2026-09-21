@@ -4,8 +4,8 @@ export function calculateTournamentProbabilities(tournament: any, advancedPlayer
   const getPlayerRating = (playerId: string) => {
     const stats = advancedPlayerStats.find((s: any) => s.player.id === playerId);
     if (!stats) return 50;
-    const played = stats.playedMatches || 0;
-    const wins = stats.wonMatches || 0;
+    const played = stats.played || 0;
+    const wins = stats.wins || 0;
     return ((wins + 2.5) / (played + 5)) * 100;
   };
 
@@ -75,8 +75,8 @@ export function calculateMatchProbabilities(tournament: any, advancedPlayerStats
   const getPlayerRating = (playerId: string) => {
     const stats = advancedPlayerStats.find((s: any) => s.player.id === playerId);
     if (!stats) return 50;
-    const played = stats.playedMatches || 0;
-    const wins = stats.wonMatches || 0;
+    const played = stats.played || 0;
+    const wins = stats.wins || 0;
     return ((wins + 2.5) / (played + 5)) * 100;
   };
 
