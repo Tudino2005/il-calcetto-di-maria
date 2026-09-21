@@ -253,8 +253,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                                                             <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
                                                             {tp.preferredRole && (() => {
                               const r = tp.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <img src="/images/defender_icon_gold.png" alt="Defender" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
-                              if (r === 'attaccante') return <img src="/images/striker_icon_gold.png" alt="Striker" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
+                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
+                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
@@ -299,8 +299,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
                               {p.preferredRole && (() => {
                               const r = p.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <img src="/images/defender_icon_gold.png" alt="Defender" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
-                              if (r === 'attaccante') return <img src="/images/striker_icon_gold.png" alt="Striker" className="h-7 w-12 object-contain drop-shadow-md scale-[2]" />;
+                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
+                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
                               if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
                               return null;
                             })()}
@@ -821,13 +821,13 @@ export default function TVSlideshow({ data }: { data: any }) {
           {currentSlide.type === "player_stats" && (() => {
             const pageStats = data.advancedPlayerStats?.slice(0, 3) || [];
             
-            const renderRoleBadge = (role: string) => {
-              if (!role) return null;
+            const formatRole = (role: string) => {
+              if (!role) return "";
               const r = role.toLowerCase();
-              if (r === 'portiere' || r === 'difensore') return <img src="/images/defender_icon_gold.png" alt="Defender" className="h-8 w-14 object-contain drop-shadow-md scale-[2.5]" />;
-              if (r === 'attaccante') return <img src="/images/striker_icon_gold.png" alt="Striker" className="h-8 w-14 object-contain drop-shadow-md scale-[2.5]" />;
-              if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[12px] uppercase shadow-sm">Jolly</span>;
-              return <span className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{role}</span>;
+              if (r === 'portiere' || r === 'difensore') return 'Defender';
+              if (r === 'attaccante') return 'Striker';
+              if (r === 'entrambi') return 'Both';
+              return role;
             };
             
             const stage = spotlightPlayerIdx !== null ? spotlightPlayerIdx : 0;
@@ -896,7 +896,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 <h3 className="text-2xl font-black text-white truncate">{player.name}</h3>
                                 {rank && <span className="text-2xl font-black text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.4)] flex-shrink-0">{rank}°</span>}
                               </div>
-                              <div className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{renderRoleBadge(player.preferredRole)}</div>
+                              <div className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{formatRole(player.preferredRole)}</div>
                             </div>
                           </div>
 
