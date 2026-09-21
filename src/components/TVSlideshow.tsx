@@ -44,12 +44,23 @@ export default function TVSlideshow({ data }: { data: any }) {
     slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
   }
 
-  // Slide for Player Advanced Stats (TOP 3 solo con podio finale)
+  // Slides for Player Advanced Stats (TOP 3 Podiums)
   if (data.advancedPlayerStats && data.advancedPlayerStats.length > 0) {
-    const playersOnPage = Math.min(3, data.advancedPlayerStats.length);
-    // 6.3 seconds per player spotlight + 10 seconds for podium
-    const slideDuration = playersOnPage * 6300 + 10000;
-    slides.push({ type: "player_stats", duration: slideDuration, page: 0 });
+    // Global
+    const globalCount = Math.min(3, data.advancedPlayerStats.length);
+    slides.push({ type: "player_stats", duration: globalCount * 6300 + 10000, roleFilter: 'all' });
+    
+    // Defenders
+    const defs = data.advancedPlayerStats.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'difensore' || p.player.preferredRole?.toLowerCase() === 'portiere');
+    if (defs.length > 0) {
+      slides.push({ type: "player_stats", duration: Math.min(3, defs.length) * 6300 + 10000, roleFilter: 'defender' });
+    }
+    
+    // Strikers
+    const strks = data.advancedPlayerStats.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'attaccante');
+    if (strks.length > 0) {
+      slides.push({ type: "player_stats", duration: Math.min(3, strks.length) * 6300 + 10000, roleFilter: 'striker' });
+    }
   }
   
   // Slides for Promo
@@ -147,12 +158,20 @@ export default function TVSlideshow({ data }: { data: any }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, cycleCount]);
 
-  // Advance spotlight to next player every 6 seconds
+  // Advance spotlight to next player every 6.3 seconds
   useEffect(() => {
     if (spotlightPlayerIdx === null) return;
     const slide = slides[currentIndex < slides.length ? currentIndex : 0];
     if (slide?.type !== 'player_stats') return;
-    const playersOnPage = Math.min(3, data.advancedPlayerStats?.length || 0);
+    
+    let filtered = data.advancedPlayerStats || [];
+    if (slide.roleFilter === 'defender') {
+      filtered = filtered.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'difensore' || p.player.preferredRole?.toLowerCase() === 'portiere');
+    } else if (slide.roleFilter === 'striker') {
+      filtered = filtered.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'attaccante');
+    }
+    
+    const playersOnPage = Math.min(3, filtered.length);
     const timer = setTimeout(() => {
       if (spotlightPlayerIdx < playersOnPage) {
         setSpotlightPlayerIdx(prev => prev !== null ? prev + 1 : null);
@@ -824,7 +843,16 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* PLAYER STATS SLIDE */}
           {currentSlide.type === "player_stats" && (() => {
-            const pageStats = data.advancedPlayerStats?.slice(0, 3) || [];
+            let filteredStats = data.advancedPlayerStats || [];
+            if (currentSlide.roleFilter === 'defender') {
+              filteredStats = filteredStats.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'difensore' || p.player.preferredRole?.toLowerCase() === 'portiere');
+            } else if (currentSlide.roleFilter === 'striker') {
+              filteredStats = filteredStats.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'attaccante');
+            }
+            const pageStats = filteredStats.slice(0, 3);
+            
+            const titleText = currentSlide.roleFilter === 'defender' ? 'TOP 3 DEFENDER' : currentSlide.roleFilter === 'striker' ? 'TOP 3 STRIKER' : 'TOP 3';
+            
             
             const formatRole = (role: string) => {
               if (!role) return "";
@@ -842,7 +870,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="flex flex-row items-center justify-center shrink-0 mb-6 absolute top-0 pt-8 w-full z-10 gap-6">
                   <Activity className="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
                   <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg flex items-center">
-                    TOP 3
+                    {titleText}
                   </h2>
                 </div>
                 
@@ -850,7 +878,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {pageStats.map((ps: any, cardIdx: number) => {
                       const { player, rank, played, wins, winRate, totalGoalsScored, avgGoalsPerMatch, roleStats } = ps;
                       
-                      const mySpotlightStage = 2 - cardIdx;
+                      const mySpotlightStage = (pageStats.length - 1) - cardIdx;
                       let styles: any = {};
                       
                       const podiumOffsets = [
@@ -858,6 +886,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                         { x: '-460px', y: '100px', scale: 1.25, color: 'rgba(203,213,225,0.8)', shadow: '0 20px 25px -5px rgba(0,0,0,0.5)' },
                         { x: '460px', y: '160px', scale: 1.25, color: 'rgba(249,115,22,0.8)', shadow: '0 20px 25px -5px rgba(0,0,0,0.5)' },
                       ];
+                      if (pageStats.length === 2) {
+                        podiumOffsets[0].x = '230px';
+                        podiumOffsets[1].x = '-230px';
+                      }
+                      
                       const pos = podiumOffsets[cardIdx];
 
                       if (stage < mySpotlightStage) {
