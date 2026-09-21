@@ -946,11 +946,6 @@ export default function TVSlideshow({ data }: { data: any }) {
                       );
                     })}
                 </div>
-                
-                {/* FOOTER INFO */}
-                <div className="bg-slate-950 absolute bottom-0 left-0 w-full p-2 text-center text-[15px] text-slate-500 font-bold uppercase tracking-widest border-t border-slate-800 z-20">
-                  SG: Sfide Giocate • V: Vittorie • P: Perse • WR%: Win Rate (Vittorie / Sfide)
-                </div>
               </div>
             );
           })()}
