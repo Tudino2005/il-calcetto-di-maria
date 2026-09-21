@@ -834,10 +834,10 @@ export default function TVSlideshow({ data }: { data: any }) {
             
             return (
               <div className="flex flex-col items-center justify-center w-full h-[85vh] relative z-10 px-8 animate-fade-in">
-                <div className="flex flex-col items-center shrink-0 mb-6 absolute top-0 pt-8 w-full z-10">
-                  <Activity className="w-16 h-16 text-blue-400 mb-4 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
-                  <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg flex items-center gap-4">
-                    Fascicolo Giocatori (TOP 3)
+                <div className="flex flex-row items-center justify-center shrink-0 mb-6 absolute top-0 pt-8 w-full z-10 gap-6">
+                  <Activity className="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
+                  <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg flex items-center">
+                    TOP 3
                   </h2>
                 </div>
                 
