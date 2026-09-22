@@ -84,7 +84,7 @@ export default function JoinClient({ tournament }: { tournament: any }) {
               Vogliamo farti apparire sulle TV del locale con stile! Invia un messaggio alla nostra Pagina Facebook ufficiale con la tua <strong>foto migliore</strong>.
             </p>
             
-            <a href="https://m.me/61594379083733" target="_blank" rel="noopener noreferrer" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest py-4 rounded-xl text-center flex items-center justify-center gap-3 transition-colors shadow-[0_0_20px_rgba(37,99,235,0.4)] relative z-10">
+            <a href="https://www.facebook.com/profile.php?id=61594379083733" target="_blank" rel="noopener noreferrer" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest py-4 rounded-xl text-center flex items-center justify-center gap-3 transition-colors shadow-[0_0_20px_rgba(37,99,235,0.4)] relative z-10">
               <MessageCircle className="w-5 h-5" /> Apri Messenger
             </a>
           </div>
