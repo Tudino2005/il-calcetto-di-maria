@@ -5,6 +5,7 @@ import { Calendar, Banknote, Trophy, Users, Swords, Info } from "lucide-react";
 import Link from "next/link";
 import QRCodeDisplay from "@/components/QRCodeDisplay";
 import RoleIcon from "@/components/RoleIcon";
+import TournamentRulebook from "@/components/TournamentRulebook";
 
 export default async function PromoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -119,6 +120,9 @@ export default async function PromoPage({ params }: { params: Promise<{ id: stri
             <p className="text-slate-300 text-lg leading-relaxed">{getTypeDescription()}</p>
           </div>
         </section>
+
+        {/* REGOLAMENTO DINAMICO */}
+        <TournamentRulebook tournament={tournament} />
 
         {/* HYPE & ROSTER */}
         <section className="bg-slate-900/80 rounded-3xl border border-slate-800 p-8 backdrop-blur-sm shadow-2xl">

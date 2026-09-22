@@ -8,6 +8,7 @@ import { Users, Swords, AlertTriangle, UserPlus, X, Calendar, Banknote, Trophy, 
 import Link from "next/link";
 import clsx from "clsx";
 import RoleIcon from "@/components/RoleIcon";
+import TournamentRulebook from "@/components/TournamentRulebook";
 
 export default function TournamentLobby({ tournament, allPlayers }: { tournament: any, allPlayers: any[] }) {
   const [selectedPlayerId, setSelectedPlayerId] = useState("");
@@ -165,17 +166,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
           )}
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8 relative z-10">
-          <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
-            <h3 className="text-purple-400 font-bold uppercase tracking-wider mb-2 text-sm">Formato Scelto: {tournament.format.replace("_", " ")}</h3>
-            <p className="text-slate-300 text-sm leading-relaxed">{getFormatDescription()}</p>
-          </div>
-          
-          <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
-            <h3 className="text-blue-400 font-bold uppercase tracking-wider mb-2 text-sm">Composizione: {tournament.type.replace("_", " ")}</h3>
-            <p className="text-slate-300 text-sm leading-relaxed">{getTypeDescription()}</p>
-          </div>
-        </div>
+        <TournamentRulebook tournament={tournament} />
       </div>
 
       
