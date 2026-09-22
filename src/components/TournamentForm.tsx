@@ -66,6 +66,8 @@ export default function TournamentForm() {
     if (pricePerPlayer) formData.append("pricePerPlayer", pricePerPlayer);
     if (prizes) formData.append("prizes", prizes);
     formData.append("allowRoleSwaps", type === "coppie_fisse" ? "false" : allowRoleSwaps.toString());
+    formData.append("targetGoals", targetGoals.toString());
+    formData.append("advantageThreshold", advantageThreshold.toString());
 
     await createTournament(formData);
   };

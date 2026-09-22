@@ -100,6 +100,8 @@ model Tournament {
   endDate        DateTime?
   drawDate       DateTime?
   maxTeams       Int                      @default(8)
+  targetGoals    Int                      @default(7)
+  advantageThreshold Int                  @default(5)
   allowRoleSwaps Boolean                  @default(false)
   pricePerPlayer Float?
   prizes         String?

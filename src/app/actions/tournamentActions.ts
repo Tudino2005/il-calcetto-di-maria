@@ -18,6 +18,8 @@ export async function createTournament(formData: FormData) {
   const prizes = formData.get("prizes") as string;
   const allowRoleSwapsStr = formData.get("allowRoleSwaps") as string;
   const allowRoleSwaps = allowRoleSwapsStr === "true";
+  const targetGoals = Number(formData.get("targetGoals") || 7);
+  const advantageThreshold = Number(formData.get("advantageThreshold") || 5);
 
   const drawDateStr = formData.get("drawDate") as string;
   const drawDate = drawDateStr ? new Date(drawDateStr) : null;
@@ -32,6 +34,8 @@ export async function createTournament(formData: FormData) {
       type, 
       format, 
       allowRoleSwaps,
+      targetGoals,
+      advantageThreshold,
       status: "setup",
       startDate,
       endDate,
