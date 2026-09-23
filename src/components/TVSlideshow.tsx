@@ -61,16 +61,16 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
 
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm pointer-events-none transition-opacity duration-500 ${isFading ? 'opacity-100' : 'opacity-0'}`}>
-       <div className={`transform transition-transform duration-500 ${isFading ? 'scale-[1.6]' : 'scale-50'} w-[500px]`}>
+       <div className={`transform transition-transform duration-500 ${isFading ? 'scale-[1.6]' : 'scale-50'} w-full max-w-[900px]`}>
            <div className="p-6 rounded-2xl border-4 flex flex-col justify-center items-center gap-4 relative shadow-[0_0_80px_rgba(236,72,153,0.6)] bg-slate-900 border-pink-500">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex-1 flex flex-col min-w-0 pr-2">
                     {m.teamAId && t.teamNames && t.teamNames[m.teamAId] && (
-                      <span className="text-xs text-purple-400 font-bold uppercase tracking-wider truncate mb-1">
+                      <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-1">
                         "{t.teamNames[m.teamAId]}"
                       </span>
                     )}
-                    <span className="text-lg font-bold truncate leading-tight text-slate-200">
+                    <span className="text-lg font-bold leading-tight text-slate-200">
                       {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
                     </span>
                   </div>
@@ -89,11 +89,11 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
 
                   <div className="flex-1 flex flex-col min-w-0 pl-2 text-right">
                     {m.teamBId && t.teamNames && t.teamNames[m.teamBId] && (
-                      <span className="text-xs text-purple-400 font-bold uppercase tracking-wider truncate mb-1">
+                      <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-1">
                         "{t.teamNames[m.teamBId]}"
                       </span>
                     )}
-                    <span className="text-lg font-bold truncate leading-tight text-slate-200">
+                    <span className="text-lg font-bold leading-tight text-slate-200">
                       {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}
                     </span>
                   </div>
