@@ -77,9 +77,9 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                            player && (
                              <div key={i} className="flex flex-col items-center gap-4 flex-1">
                                {player.avatarUrl ? (
-                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
                                ) : (
-                                 <div className="w-40 h-40 bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                 <div className="w-40 h-40 shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
                                    <span className="text-5xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
                                  </div>
                                )}
@@ -96,7 +96,16 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                   </div>
 
                   {/* VS BADGE */}
-                  <div className="shrink-0 flex flex-col items-center justify-center self-center mx-4 gap-4 mt-8">
+                  <div className="shrink-0 flex flex-col items-center justify-center self-center mx-4 gap-6 mt-2">
+                    {(() => {
+                      const dateToUse = m.scheduledAt || t.startDate;
+                      if (!dateToUse) return null;
+                      return (
+                        <div className="text-xl font-black text-white bg-pink-500 px-8 py-3 rounded-2xl shadow-lg border-2 border-pink-400">
+                          {new Date(dateToUse).toLocaleDateString('it-IT')} {m.scheduledAt ? `alle ${new Date(dateToUse).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}` : ''}
+                        </div>
+                      );
+                    })()}
                     <div className="flex items-center gap-4">
                       {matchProbs.has(m.id) && (
                         <span className="text-[19px] text-yellow-500/90 font-black tracking-wider text-right uppercase">WIN: {matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
@@ -123,9 +132,9 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                            player && (
                              <div key={i} className="flex flex-col items-center gap-4 flex-1">
                                {player.avatarUrl ? (
-                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
                                ) : (
-                                 <div className="w-40 h-40 bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                 <div className="w-40 h-40 shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
                                    <span className="text-5xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
                                  </div>
                                )}
@@ -141,15 +150,7 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                     )}
                   </div>
                 </div>
-                {(() => {
-                  const dateToUse = m.scheduledAt || tournament.startDate;
-                  if (!dateToUse) return null;
-                  return (
-                    <div className="text-lg font-black text-white bg-pink-500 px-6 py-2 rounded-xl mt-3 shadow-lg">
-                      {new Date(dateToUse).toLocaleDateString('it-IT')} {m.scheduledAt ? `alle ${new Date(dateToUse).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}` : ''}
-                    </div>
-                  );
-                })()}
+
              </div>
        </div>
     </div>
