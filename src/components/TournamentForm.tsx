@@ -74,20 +74,20 @@ export default function TournamentForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-      <div>
-        <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Nome Torneo</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="es. Coppa dei Campioni 2026"
-          className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors"
-          required
-        />
-      </div>
-
-      <div className="flex flex-col gap-6 mb-2 lg:w-1/2">
-        <div>
+      {/* ROW 1 */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="md:col-span-5">
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Nome Torneo</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="es. Coppa dei Campioni 2026"
+            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors"
+            required
+          />
+        </div>
+        <div className="md:col-span-4">
           <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Numero Max Squadre</label>
           <select value={maxTeams} onChange={(e) => setMaxTeams(Number(e.target.value))} className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500">
             <option value={4}>4 Squadre (8 Giocatori)</option>
@@ -97,40 +97,7 @@ export default function TournamentForm() {
             <option value={64}>64 Squadre (128 Giocatori)</option>
           </select>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Inizio</label>
-            <input
-              type="datetime-local"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-            />
-          </div>
-          <div>
-            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Fine</label>
-            <input
-              type="datetime-local"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="grid md:grid-cols-3 gap-6">
-        {type !== "coppie_fisse" && (
-          <div>
-            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data Sorteggio</label>
-            <input
-              type="datetime-local"
-              value={drawDate}
-              onChange={(e) => setDrawDate(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-            />
-          </div>
-        )}
-        <div>
+        <div className="md:col-span-3">
           <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo Iscrizione a Persona (€)</label>
           <input
             type="number"
@@ -142,16 +109,63 @@ export default function TournamentForm() {
             className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
           />
         </div>
-        <div>
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Premi</label>
+      </div>
+
+      {/* ROW 2 */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="md:col-span-3">
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Inizio</label>
           <input
-            type="text"
-            value={prizes}
-            onChange={(e) => setPrizes(e.target.value)}
-            placeholder="es. 1° Coppa, 2° Cena"
+            type="datetime-local"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
             className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
           />
         </div>
+        <div className="md:col-span-3">
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Fine</label>
+          <input
+            type="datetime-local"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+          />
+        </div>
+        
+        {type !== "coppie_fisse" ? (
+          <>
+            <div className="md:col-span-3">
+              <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data Sorteggio</label>
+              <input
+                type="datetime-local"
+                value={drawDate}
+                onChange={(e) => setDrawDate(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Premi</label>
+              <input
+                type="text"
+                value={prizes}
+                onChange={(e) => setPrizes(e.target.value)}
+                placeholder="es. 1° Coppa, 2° Cena"
+                className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+              />
+            </div>
+          </>
+        ) : (
+          <div className="md:col-span-6">
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Premi</label>
+            <input
+              type="text"
+              value={prizes}
+              onChange={(e) => setPrizes(e.target.value)}
+              placeholder="es. 1° Coppa, 2° Cena"
+              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+            />
+          </div>
+        )}
       </div>
 
       <div>
