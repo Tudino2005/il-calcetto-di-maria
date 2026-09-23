@@ -62,70 +62,83 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm pointer-events-none transition-opacity duration-1000 ease-in-out ${isFading ? 'opacity-100' : 'opacity-0'}`}>
        <div className={`transform transition-transform duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${isFading ? 'scale-[1.6]' : 'scale-50'} w-full max-w-[900px]`}>
-           <div className="p-6 rounded-2xl border-4 flex flex-col justify-center items-center gap-4 relative shadow-[0_0_80px_rgba(236,72,153,0.6)] bg-slate-900 border-pink-500">
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex-1 flex flex-col min-w-0 pr-4">
+           <div className="p-10 rounded-3xl border-4 flex flex-col justify-center items-center gap-4 relative shadow-[0_0_80px_rgba(236,72,153,0.6)] bg-slate-900 border-pink-500">
+                <div className="flex justify-between items-start w-full">
+                  {/* TEAM A */}
+                  <div className="flex-1 flex flex-col min-w-0 px-2 items-center">
                     {m.teamAId && t.teamNames && t.teamNames[m.teamAId] && (
-                      <span className="text-[13px] text-purple-400 font-black uppercase tracking-widest mb-3">
+                      <span className="text-sm text-purple-400 font-black uppercase tracking-widest mb-6 text-center">
                         "{t.teamNames[m.teamAId]}"
                       </span>
                     )}
-                    {m.teamA && (
-                      <div className="flex items-center gap-4 justify-start">
+                    {m.teamA ? (
+                      <div className="flex items-start justify-center gap-6 w-full">
                         {[m.teamA.player1, m.teamA.player2].map((player, i) => (
                            player && (
-                             player.avatarUrl ? (
-                               <img key={i} src={`/players/${player.avatarUrl}`} alt={player.name} className="w-24 h-24 rounded-full object-cover border-[3px] border-slate-600 shadow-lg" />
-                             ) : (
-                               <div key={i} className="w-24 h-24 bg-slate-800 rounded-full border-[3px] border-slate-600 flex items-center justify-center shadow-lg">
-                                 <span className="text-3xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
-                               </div>
-                             )
+                             <div key={i} className="flex flex-col items-center gap-4 flex-1">
+                               {player.avatarUrl ? (
+                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                               ) : (
+                                 <div className="w-40 h-40 bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                   <span className="text-5xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                 </div>
+                               )}
+                               <span className="text-2xl font-bold leading-tight text-white text-center break-words w-full">
+                                 {player.name}
+                               </span>
+                             </div>
                            )
                         ))}
                       </div>
+                    ) : (
+                      <span className="text-2xl font-bold text-slate-500 mt-10">TBD</span>
                     )}
-                    <span className="text-xl font-bold leading-tight text-slate-200 mt-4">
-                      {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
-                    </span>
                   </div>
 
-                  <div className="shrink-0 flex items-center gap-4 mx-2">
-                    {matchProbs.has(m.id) && (
-                      <span className="text-[17px] text-yellow-500/90 font-black tracking-wider text-right uppercase">WIN: {matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
-                    )}
-                    <div className="bg-slate-950 px-6 py-4 rounded-2xl text-4xl font-black text-white shadow-inner flex flex-col items-center border border-slate-800">
-                      <span>VS</span>
+                  {/* VS BADGE */}
+                  <div className="shrink-0 flex flex-col items-center justify-center self-center mx-4 gap-4 mt-8">
+                    <div className="flex items-center gap-4">
+                      {matchProbs.has(m.id) && (
+                        <span className="text-[19px] text-yellow-500/90 font-black tracking-wider text-right uppercase">WIN: {matchProbs.get(m.id).teamAProb.toFixed(0)}%</span>
+                      )}
+                      <div className="bg-slate-950 px-8 py-5 rounded-3xl text-5xl font-black text-white shadow-inner flex flex-col items-center border-2 border-slate-800">
+                        <span>VS</span>
+                      </div>
+                      {matchProbs.has(m.id) && (
+                        <span className="text-[19px] text-yellow-500/90 font-black tracking-wider text-left uppercase">WIN: {matchProbs.get(m.id).teamBProb.toFixed(0)}%</span>
+                      )}
                     </div>
-                    {matchProbs.has(m.id) && (
-                      <span className="text-[17px] text-yellow-500/90 font-black tracking-wider text-left uppercase">WIN: {matchProbs.get(m.id).teamBProb.toFixed(0)}%</span>
-                    )}
                   </div>
 
-                  <div className="flex-1 flex flex-col items-end min-w-0 pl-4 text-right">
+                  {/* TEAM B */}
+                  <div className="flex-1 flex flex-col min-w-0 px-2 items-center">
                     {m.teamBId && t.teamNames && t.teamNames[m.teamBId] && (
-                      <span className="text-[13px] text-purple-400 font-black uppercase tracking-widest mb-3">
+                      <span className="text-sm text-purple-400 font-black uppercase tracking-widest mb-6 text-center">
                         "{t.teamNames[m.teamBId]}"
                       </span>
                     )}
-                    {m.teamB && (
-                      <div className="flex items-center gap-4 justify-end">
+                    {m.teamB ? (
+                      <div className="flex items-start justify-center gap-6 w-full">
                         {[m.teamB.player1, m.teamB.player2].map((player, i) => (
                            player && (
-                             player.avatarUrl ? (
-                               <img key={i} src={`/players/${player.avatarUrl}`} alt={player.name} className="w-24 h-24 rounded-full object-cover border-[3px] border-slate-600 shadow-lg" />
-                             ) : (
-                               <div key={i} className="w-24 h-24 bg-slate-800 rounded-full border-[3px] border-slate-600 flex items-center justify-center shadow-lg">
-                                 <span className="text-3xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
-                               </div>
-                             )
+                             <div key={i} className="flex flex-col items-center gap-4 flex-1">
+                               {player.avatarUrl ? (
+                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                               ) : (
+                                 <div className="w-40 h-40 bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                   <span className="text-5xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                 </div>
+                               )}
+                               <span className="text-2xl font-bold leading-tight text-white text-center break-words w-full">
+                                 {player.name}
+                               </span>
+                             </div>
                            )
                         ))}
                       </div>
+                    ) : (
+                      <span className="text-2xl font-bold text-slate-500 mt-10">TBD</span>
                     )}
-                    <span className="text-xl font-bold leading-tight text-slate-200 mt-4">
-                      {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}
-                    </span>
                   </div>
                 </div>
                 {(() => {
