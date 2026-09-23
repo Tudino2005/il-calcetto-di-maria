@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Trophy, Users, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay, Shield } from "lucide-react";
+import { Trophy, Users, Goal, ShieldAlert, AlertTriangle, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay, Shield } from "lucide-react";
 import QRCodeDisplay from "@/components/QRCodeDisplay";
 import SlotMachineDraw from "@/components/SlotMachineDraw";
 import TournamentRulebook from "@/components/TournamentRulebook";
@@ -378,7 +378,7 @@ export default function TVSlideshow({ data }: { data: any }) {
           
           {/* LEADERBOARD SLIDE */}
           {currentSlide.type === "leaderboard" && (
-            <div className="flex flex-col w-full h-[85vh] gap-6">
+            <div className="flex flex-col w-full h-[90vh] gap-6">
               
               {/* HEADER LEGEND */}
               <div className="flex justify-center shrink-0 w-full">
@@ -596,7 +596,7 @@ export default function TVSlideshow({ data }: { data: any }) {
             const strikerStats = playerStats.filter((p: any) => p.preferredRole?.toLowerCase() === 'attaccante');
             
             return (
-            <div className="flex flex-col w-full h-[85vh] gap-6">
+            <div className="flex flex-col w-full h-[90vh] gap-6">
               
               {/* HEADER LEGEND */}
               <div className="flex justify-center shrink-0 w-full">
@@ -867,7 +867,7 @@ export default function TVSlideshow({ data }: { data: any }) {
           {/* LEADERBOARD FREE MATCHES (SERIE A STYLE) */}
 
           {currentSlide.type === "leaderboard_free" && (
-            <div className="flex flex-col items-center w-full max-w-7xl h-[85vh] justify-start relative z-10 mx-auto px-4">
+            <div className="flex flex-col items-center w-full max-w-7xl h-[90vh] justify-start relative z-10 mx-auto px-4">
               <div className="flex flex-col items-center gap-2 mb-4 shrink-0 w-full">
                 <div className="flex items-center gap-4 mb-2">
                   <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
@@ -1046,7 +1046,7 @@ export default function TVSlideshow({ data }: { data: any }) {
             const stage = spotlightPlayerIdx !== null ? spotlightPlayerIdx : 0;
             
             return (
-              <div className="flex flex-col items-center justify-center w-full h-[85vh] relative z-10 px-8 animate-fade-in">
+              <div className="flex flex-col items-center justify-center w-full h-[90vh] relative z-10 px-8 animate-fade-in">
                 <div className="flex flex-row items-center justify-center shrink-0 mb-6 absolute top-0 pt-8 w-full z-10 gap-6">
                   <Activity className="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)] animate-pulse" />
                   <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg flex items-center">
@@ -1197,7 +1197,7 @@ export default function TVSlideshow({ data }: { data: any }) {
             const durationSec = (currentSlide.duration || 12000) / 1000;
 
             return (
-              <div className="flex flex-col items-center w-full h-[85vh] relative z-10 px-12">
+              <div className="flex flex-col items-center w-full h-[90vh] relative z-10 px-12">
                 <h2 className="text-3xl font-black uppercase tracking-widest text-slate-300 mb-6 shrink-0">
                   Ultime Sfide Libere
                 </h2>
@@ -1328,10 +1328,10 @@ export default function TVSlideshow({ data }: { data: any }) {
               : "Le coppie sono già decise. Ci si iscrive insieme al proprio compagno storico per sfidare le altre coppie.";
 
             return (
-            <div className="flex w-full h-[85vh] gap-12 text-left items-start mt-8">
+            <div className="flex w-full h-[90vh] gap-8 text-left items-start mt-4">
               
               {/* LEFT COLUMN - INFO */}
-              <div className="flex-1 flex flex-col bg-slate-900/80 p-10 rounded-[3rem] border border-slate-700 shadow-2xl">
+              <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[2rem] border border-slate-700 shadow-2xl">
                 
                 <div className="flex flex-wrap items-center gap-4 mb-6">
                   {iscritti < maxPlayers ? (
@@ -1348,7 +1348,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                   </div>
                 </div>
                 
-                <h2 className="text-5xl font-black uppercase tracking-tight text-white mb-6 line-clamp-2">
+                <h2 className="text-5xl font-black uppercase tracking-tight text-white mb-4 line-clamp-1">
                   {t.name}
                 </h2>
                 
@@ -1376,7 +1376,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                   </div>
                 )}
                 
-                <div className="flex gap-6 mb-8 w-[70%]">
+                <div className="flex gap-6 mb-6 w-[75%]">
                   <div className="bg-slate-950 p-6 rounded-3xl border border-slate-800 flex items-center gap-4 flex-1">
                     <Calendar className="w-10 h-10 text-blue-400 shrink-0" />
                     <div>
@@ -1394,40 +1394,90 @@ export default function TVSlideshow({ data }: { data: any }) {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-4">
-                  <div className="bg-slate-950/50 p-6 rounded-3xl border border-slate-800 relative overflow-hidden group flex items-center gap-8">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
-                      <Trophy className="w-32 h-32 text-yellow-500" />
+                <div className="flex flex-col gap-3">
+                  <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800 relative overflow-hidden group flex items-center gap-6">
+                    <div className="absolute top-0 right-0 p-2 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+                      <Trophy className="w-24 h-24 text-yellow-500" />
                     </div>
-                    <div className="w-1/3 shrink-0 relative z-10">
-                      <div className="flex items-center gap-3 mb-2">
-                        <Trophy className="w-5 h-5 text-yellow-500" />
-                        <span className="text-yellow-500 font-bold uppercase text-xs tracking-widest">Regolamento del Torneo</span>
+                    <div className="w-1/4 shrink-0 relative z-10">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Trophy className="w-4 h-4 text-yellow-500" />
+                        <span className="text-yellow-500 font-bold uppercase text-[10px] tracking-widest">Regolamento</span>
                       </div>
-                      <div className="text-2xl font-black text-white">{formatTitle}</div>
+                      <div className="text-xl font-black text-white leading-tight">{formatTitle}</div>
                     </div>
-                    <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-8">
-                      <p className="text-slate-400 font-medium text-lg leading-snug">{formatDesc}</p>
+                    <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-6">
+                      <p className="text-slate-400 font-medium text-sm leading-snug">{formatDesc}</p>
                     </div>
                   </div>
                   
-                  <div className="bg-slate-950/50 p-6 rounded-3xl border border-slate-800 relative overflow-hidden group flex items-center gap-8">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
-                      <Users className="w-32 h-32 text-blue-500" />
+                  <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800 relative overflow-hidden group flex items-center gap-6">
+                    <div className="absolute top-0 right-0 p-2 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+                      <Users className="w-24 h-24 text-blue-500" />
                     </div>
-                    <div className="w-1/3 shrink-0 relative z-10">
-                      <div className="flex items-center gap-3 mb-2">
-                        <Users className="w-5 h-5 text-blue-500" />
-                        <span className="text-blue-500 font-bold uppercase text-xs tracking-widest">Formazione Squadre</span>
+                    <div className="w-1/4 shrink-0 relative z-10">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Users className="w-4 h-4 text-blue-500" />
+                        <span className="text-blue-500 font-bold uppercase text-[10px] tracking-widest">Formazione Squadre</span>
                       </div>
-                      <div className="text-2xl font-black text-white">{typeTitle}</div>
+                      <div className="text-xl font-black text-white leading-tight">{typeTitle}</div>
                     </div>
-                    <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-8">
-                      <p className="text-slate-400 font-medium text-lg leading-snug">{typeDesc}</p>
+                    <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-6">
+                      <p className="text-slate-400 font-medium text-sm leading-snug">{typeDesc}</p>
                     </div>
                   </div>
-                </div>
 
+                  <div className="bg-slate-950/50 p-4 rounded-2xl border border-slate-800 relative overflow-hidden group flex items-center gap-6">
+                    <div className="absolute top-0 right-0 p-2 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+                      <Goal className="w-24 h-24 text-emerald-500" />
+                    </div>
+                    <div className="w-1/4 shrink-0 relative z-10">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Goal className="w-4 h-4 text-emerald-500" />
+                        <span className="text-emerald-500 font-bold uppercase text-[10px] tracking-widest">Punteggio</span>
+                      </div>
+                      <div className="text-xl font-black text-white leading-tight">Condizioni di Vittoria</div>
+                    </div>
+                    <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-6">
+                      <p className="text-slate-400 font-medium text-sm leading-snug">
+                        Ogni set viene vinto dalla prima squadra che raggiunge i <b>{t.targetGoals || 7} Gol</b>. Se si arriva sul <b>{(t.advantageThreshold || 5)}-{(t.advantageThreshold || 5)}</b>, si attivano i Vantaggi: per vincere servirà uno scarto di 2 gol.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950/50 p-4 rounded-2xl border border-red-900/30 relative overflow-hidden group flex items-center gap-6">
+                    <div className="absolute top-0 right-0 p-2 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+                      <ShieldAlert className="w-24 h-24 text-red-500" />
+                    </div>
+                    <div className="w-1/4 shrink-0 relative z-10">
+                      <div className="flex items-center gap-2 mb-1">
+                        <ShieldAlert className="w-4 h-4 text-red-500" />
+                        <span className="text-red-500 font-bold uppercase text-[10px] tracking-widest">Codice D'Onore</span>
+                      </div>
+                      <div className="text-xl font-black text-white leading-tight">Zero Rullate</div>
+                    </div>
+                    <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-6">
+                      <p className="text-slate-400 font-medium text-sm leading-snug">La rotazione della stecca di 360 gradi, sia prima che dopo aver colpito la pallina, costituisce fallo. Se la pallina entra in rete in seguito a una rullata, il gol è nullo.</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950/50 p-4 rounded-2xl border border-orange-900/30 relative overflow-hidden group flex items-center gap-6">
+                    <div className="absolute top-0 right-0 p-2 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+                      <AlertTriangle className="w-24 h-24 text-orange-500" />
+                    </div>
+                    <div className="w-1/4 shrink-0 relative z-10">
+                      <div className="flex items-center gap-2 mb-1">
+                        <AlertTriangle className="w-4 h-4 text-orange-500" />
+                        <span className="text-orange-500 font-bold uppercase text-[10px] tracking-widest">Codice D'Onore</span>
+                      </div>
+                      <div className="text-xl font-black text-white leading-tight">Divieto di Gancio</div>
+                    </div>
+                    <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-6">
+                      <p className="text-slate-400 font-medium text-sm leading-snug">È vietato fermare o controllare la pallina per poi tirare con lo stesso omino. Vietato anche il 'passetto' (passare palla a un omino sulla stessa stecca). Gioco di prima intenzione o sponda.</p>
+                    </div>
+                  </div>
+
+                </div>
               </div>
 
               {/* RIGHT COLUMN - QR ONLY */}
@@ -1449,7 +1499,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* BRACKET GRID SLIDE */}
           {currentSlide.type === "bracket_grid" && (
-            <div className="flex flex-col items-center w-full h-full max-h-[85vh]">
+            <div className="flex flex-col items-center w-full h-full max-h-[90vh]">
               <div className="inline-flex items-center gap-3 px-6 py-2 bg-purple-500/20 text-purple-400 rounded-full font-bold uppercase tracking-widest border border-purple-500/30 mb-6">
                 <Swords className="w-5 h-5" /> Partite del Tabellone
               </div>
