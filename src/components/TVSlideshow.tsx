@@ -602,14 +602,14 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 const tSubiti = rStats?.gkGoalsConceded || 0;
                                 const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
                                 return (
-                                  <div className="flex items-center gap-2 shrink-0 ml-4">
-                                    <div className="flex flex-col items-center">
-                                      <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
-                                      <span className="text-lg font-black text-white leading-none mt-1">{tSubiti}</span>
+                                  <div className="flex items-center gap-6 shrink-0 ml-8">
+                                    <div className="flex flex-col items-center gap-1">
+                                      <span className="text-[13px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
+                                      <span className="text-3xl font-black text-white leading-none">{tSubiti}</span>
                                     </div>
-                                    <div className="flex flex-col items-center">
-                                      <span className="text-[10px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
-                                      <span className="text-lg font-black text-white leading-none mt-1">{mSubiti}</span>
+                                    <div className="flex flex-col items-center gap-1">
+                                      <span className="text-[13px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
+                                      <span className="text-3xl font-black text-white leading-none">{mSubiti}</span>
                                     </div>
                                   </div>
                                 );
@@ -640,8 +640,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {defenderStats.slice(defenderStats.filter((p: any) => p.winRate === defenderStats[0]?.winRate && p.wins === defenderStats[0]?.wins && p.played === defenderStats[0]?.played).length).map((p: any, i: number) => {
                       const rank = i + 1 + defenderStats.filter((ps: any) => ps.winRate === defenderStats[0]?.winRate && ps.wins === defenderStats[0]?.wins && ps.played === defenderStats[0]?.played).length;
                       return (
-                      <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
-                        <div className="flex items-center gap-6 min-w-0 flex-1">
+                      <div key={p.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                        <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-blue-500" :
                             rank === 2 ? "text-slate-300" :
@@ -650,32 +650,33 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                                                    <div className="flex flex-col min-w-0 justify-center flex-1">
+                          <div className="flex flex-col min-w-0 justify-center">
                             <div className="flex items-center gap-3">
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
                             </div>
                           </div>
+                        </div>
+                        <div className="flex-1 flex justify-center items-center min-w-0">
                           {(() => {
                             const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === p.id);
                             const rStats = advStats?.roleStats;
                             const tSubiti = rStats?.gkGoalsConceded || 0;
                             const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
                             return (
-                              <div className="flex items-center gap-2 shrink-0 mx-2">
-                                <div className="flex gap-2 items-baseline">
-                                  <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
-                                  <span className="text-base font-black text-white leading-none">{tSubiti}</span>
+                              <div className="flex items-center gap-6 shrink-0 mx-2">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span className="text-[12px] text-blue-500 font-bold uppercase tracking-widest leading-none">Tot Subiti</span>
+                                  <span className="text-2xl font-black text-white leading-none">{tSubiti}</span>
                                 </div>
-                                <div className="flex gap-2 items-baseline">
-                                  <span className="text-[9px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
-                                  <span className="text-base font-black text-white leading-none">{mSubiti}</span>
+                                <div className="flex flex-col items-center gap-1">
+                                  <span className="text-[12px] text-blue-500 font-bold uppercase tracking-widest leading-none">Media</span>
+                                  <span className="text-2xl font-black text-white leading-none">{mSubiti}</span>
                                 </div>
                               </div>
                             );
                           })()}
                         </div>
-                        
-                        <div className="flex flex-col items-end shrink-0 ml-4">
+                        <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
                           <div className="text-xl font-black flex items-baseline gap-1">
                             <span className="text-emerald-400">{p.wins} V</span>
                             <span className="text-blue-400">/ {p.played} G</span>
@@ -719,14 +720,14 @@ export default function TVSlideshow({ data }: { data: any }) {
                                 const tFatti = rStats?.stGoalsScored || 0;
                                 const mFatti = rStats?.stMatches > 0 ? (tFatti / rStats.stMatches).toFixed(2) : '-';
                                 return (
-                                  <div className="flex items-center gap-2 shrink-0 ml-4">
-                                    <div className="flex flex-col items-center">
-                                      <span className="text-[10px] text-red-400 font-bold tracking-widest uppercase">Tot Fatti</span>
-                                      <span className="text-lg font-black text-white leading-none mt-1">{tFatti}</span>
+                                  <div className="flex items-center gap-6 shrink-0 ml-8">
+                                    <div className="flex flex-col items-center gap-1">
+                                      <span className="text-[13px] text-red-400 font-bold tracking-widest uppercase">Tot Fatti</span>
+                                      <span className="text-3xl font-black text-white leading-none">{tFatti}</span>
                                     </div>
-                                    <div className="flex flex-col items-center">
-                                      <span className="text-[10px] text-red-400 font-bold tracking-widest uppercase">Media</span>
-                                      <span className="text-lg font-black text-white leading-none mt-1">{mFatti}</span>
+                                    <div className="flex flex-col items-center gap-1">
+                                      <span className="text-[13px] text-red-400 font-bold tracking-widest uppercase">Media</span>
+                                      <span className="text-3xl font-black text-white leading-none">{mFatti}</span>
                                     </div>
                                   </div>
                                 );
@@ -757,8 +758,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {strikerStats.slice(strikerStats.filter((t: any) => t.winRate === strikerStats[0]?.winRate && t.wins === strikerStats[0]?.wins && t.played === strikerStats[0]?.played).length).map((t: any, i: number) => {
                       const rank = i + 1 + strikerStats.filter((ts: any) => ts.winRate === strikerStats[0]?.winRate && ts.wins === strikerStats[0]?.wins && ts.played === strikerStats[0]?.played).length;
                       return (
-                      <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
-                        <div className="flex items-center gap-6 min-w-0 flex-1">
+                      <div key={t.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                        <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-red-500" :
                             rank === 2 ? "text-slate-300" :
@@ -767,30 +768,31 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                                                    <div className="flex items-baseline gap-2 min-w-0 flex-wrap flex-1">
-                            <span className="text-xl font-bold text-white truncate leading-tight">{t.name}</span>
+                          <div className="flex flex-col min-w-0 justify-center">
+                            <span className="text-2xl font-bold text-white truncate leading-tight">{t.name}</span>
                           </div>
+                        </div>
+                        <div className="flex-1 flex justify-center items-center min-w-0">
                           {(() => {
                             const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === t.id);
                             const rStats = advStats?.roleStats;
                             const tFatti = rStats?.stGoalsScored || 0;
                             const mFatti = rStats?.stMatches > 0 ? (tFatti / rStats.stMatches).toFixed(2) : '-';
                             return (
-                              <div className="flex items-center gap-2 shrink-0 mx-2">
-                                <div className="flex gap-2 items-baseline">
-                                  <span className="text-[9px] text-red-400 font-bold tracking-widest uppercase">Tot Fatti</span>
-                                  <span className="text-base font-black text-white leading-none">{tFatti}</span>
+                              <div className="flex items-center gap-6 shrink-0 mx-2">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span className="text-[12px] text-red-500 font-bold uppercase tracking-widest leading-none">Tot Fatti</span>
+                                  <span className="text-2xl font-black text-white leading-none">{tFatti}</span>
                                 </div>
-                                <div className="flex gap-2 items-baseline">
-                                  <span className="text-[9px] text-red-400 font-bold tracking-widest uppercase">Media</span>
-                                  <span className="text-base font-black text-white leading-none">{mFatti}</span>
+                                <div className="flex flex-col items-center gap-1">
+                                  <span className="text-[12px] text-red-500 font-bold uppercase tracking-widest leading-none">Media</span>
+                                  <span className="text-2xl font-black text-white leading-none">{mFatti}</span>
                                 </div>
                               </div>
                             );
                           })()}
                         </div>
-                        
-                        <div className="flex flex-col items-end shrink-0 ml-4">
+                        <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
                           <div className="text-xl font-black flex items-baseline gap-1">
                             <span className="text-emerald-400">{t.wins} V</span>
                             <span className="text-blue-400">/ {t.played} G</span>
