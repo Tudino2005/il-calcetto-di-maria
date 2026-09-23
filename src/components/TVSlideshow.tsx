@@ -73,6 +73,21 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                     <span className="text-lg font-bold leading-tight text-slate-200">
                       {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
                     </span>
+                    {m.teamA && (
+                      <div className="flex items-center gap-2 mt-3 justify-start">
+                        {[m.teamA.player1, m.teamA.player2].map((player, i) => (
+                           player && (
+                             player.avatarUrl ? (
+                               <img key={i} src={`/players/${player.avatarUrl}`} alt={player.name} className="w-12 h-12 rounded-full object-cover border-2 border-slate-600 shadow-sm" />
+                             ) : (
+                               <div key={i} className="w-12 h-12 bg-slate-800 rounded-full border-2 border-slate-600 flex items-center justify-center shadow-sm">
+                                 <span className="text-[16px] font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                               </div>
+                             )
+                           )
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div className="shrink-0 flex items-center gap-4 mx-2">
@@ -96,6 +111,21 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                     <span className="text-lg font-bold leading-tight text-slate-200">
                       {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}
                     </span>
+                    {m.teamB && (
+                      <div className="flex items-center gap-2 mt-3 justify-end">
+                        {[m.teamB.player1, m.teamB.player2].map((player, i) => (
+                           player && (
+                             player.avatarUrl ? (
+                               <img key={i} src={`/players/${player.avatarUrl}`} alt={player.name} className="w-12 h-12 rounded-full object-cover border-2 border-slate-600 shadow-sm" />
+                             ) : (
+                               <div key={i} className="w-12 h-12 bg-slate-800 rounded-full border-2 border-slate-600 flex items-center justify-center shadow-sm">
+                                 <span className="text-[16px] font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                               </div>
+                             )
+                           )
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {(() => {
