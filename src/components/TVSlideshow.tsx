@@ -77,10 +77,10 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                            player && (
                              <div key={i} className="flex flex-col items-center gap-4 flex-1">
                                {player.avatarUrl ? (
-                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
                                ) : (
-                                 <div className="w-40 h-40 shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
-                                   <span className="text-5xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                 <div className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                   <span className="text-4xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
                                  </div>
                                )}
                                <span className="text-2xl font-bold leading-tight text-white text-center break-words w-full">
@@ -132,10 +132,10 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                            player && (
                              <div key={i} className="flex flex-col items-center gap-4 flex-1">
                                {player.avatarUrl ? (
-                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-40 h-40 shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                                 <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
                                ) : (
-                                 <div className="w-40 h-40 shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
-                                   <span className="text-5xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                 <div className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                   <span className="text-4xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
                                  </div>
                                )}
                                <span className="text-2xl font-bold leading-tight text-white text-center break-words w-full">
