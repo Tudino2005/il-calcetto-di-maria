@@ -29,7 +29,7 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
     const startDelay = setTimeout(() => {
       if (!isMounted) return;
       setActiveMatch(toAnimate[idx]);
-      setIsFading(true);
+      setTimeout(() => setIsFading(true), 50);
       
       interval = setInterval(() => {
         setIsFading(false);
@@ -42,9 +42,9 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
             return;
           }
           setActiveMatch(toAnimate[idx]);
-          setIsFading(true);
-        }, 500);
-      }, 3500);
+          setTimeout(() => setIsFading(true), 50);
+        }, 1200); // Attendiamo che finisca l'animazione di uscita (1.2s)
+      }, 5000); // Ciclo totale di 5 secondi a partita
     }, 1500);
 
     return () => {
@@ -60,8 +60,8 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
   const t = tournament;
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm pointer-events-none transition-opacity duration-500 ${isFading ? 'opacity-100' : 'opacity-0'}`}>
-       <div className={`transform transition-transform duration-500 ${isFading ? 'scale-[1.6]' : 'scale-50'} w-full max-w-[900px]`}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm pointer-events-none transition-opacity duration-1000 ease-in-out ${isFading ? 'opacity-100' : 'opacity-0'}`}>
+       <div className={`transform transition-transform duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${isFading ? 'scale-[1.6]' : 'scale-50'} w-full max-w-[900px]`}>
            <div className="p-6 rounded-2xl border-4 flex flex-col justify-center items-center gap-4 relative shadow-[0_0_80px_rgba(236,72,153,0.6)] bg-slate-900 border-pink-500">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex-1 flex flex-col min-w-0 pr-2">
