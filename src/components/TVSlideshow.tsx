@@ -221,7 +221,6 @@ export default function TVSlideshow({ data }: { data: any }) {
   // Slides for Promo
   promoTournaments.forEach((t: any) => {
     slides.push({ type: "promo", tournament: t, duration: 15000 });
-    slides.push({ type: "promo_rules", tournament: t, duration: 20000 });
   });  // Slides for In Progress (Bracket & Agenda)
   inProgressTournaments.forEach((t: any) => {
     if (t.status === "drawing") {
@@ -996,12 +995,7 @@ export default function TVSlideshow({ data }: { data: any }) {
             </div>
           )}
 
-          {/* PROMO RULES SLIDE (Codice d'Onore) */}
-          {currentSlide.type === "promo_rules" && (
-            <div className="flex w-full h-full flex-col justify-center items-center px-16">
-              <TournamentRulebook tournament={currentSlide.tournament} />
-            </div>
-          )}
+
 
           {/* PLAYER STATS SLIDE */}
           {currentSlide.type === "player_stats" && (() => {
