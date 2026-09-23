@@ -1404,7 +1404,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 {currentSlide.tournament.name}
               </h2>
               
-              <div className="w-full overflow-y-auto px-2 custom-scrollbar pb-12">
+              <div className="w-full overflow-y-auto px-2 no-scrollbar pb-12">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 w-full">
                   {currentSlide.tournament.matches?.map((m: any) => {
                     const isFinished = !!m.winnerTeamId;
@@ -1496,7 +1496,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     }
                     
                     return (
-                      <div key={rIndex} className="flex-1 flex flex-col gap-4 min-w-[380px] max-w-5xl h-full overflow-y-auto custom-scrollbar pb-10">
+                      <div key={rIndex} className="flex-1 flex flex-col gap-4 min-w-[380px] max-w-5xl h-full overflow-y-auto no-scrollbar pb-10">
                          <div className="bg-slate-900/90 p-4 text-center rounded-2xl border-2 border-pink-500/30 shadow-xl sticky top-0 z-10 backdrop-blur-md">
                            <h3 className="text-xl font-black text-pink-400 uppercase tracking-widest">{roundName}</h3>
                          </div>

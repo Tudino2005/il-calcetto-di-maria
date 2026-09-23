@@ -34,3 +34,12 @@ body {
     100% { transform: scale(1); opacity: 1; }
   }
 }
+
+/* TV Layout Utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
