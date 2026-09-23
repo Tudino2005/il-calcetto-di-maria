@@ -858,8 +858,26 @@ export default function TVSlideshow({ data }: { data: any }) {
             let filteredStats = data.advancedPlayerStats || [];
             if (currentSlide.roleFilter === 'defender') {
               filteredStats = filteredStats.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'difensore' || p.player.preferredRole?.toLowerCase() === 'portiere');
+              filteredStats.sort((a: any, b: any) => {
+                const wrA = a.roleStats?.gkMatches > 0 ? (a.roleStats.gkWins / a.roleStats.gkMatches) : 0;
+                const wrB = b.roleStats?.gkMatches > 0 ? (b.roleStats.gkWins / b.roleStats.gkMatches) : 0;
+                if (wrB !== wrA) return wrB - wrA;
+                const winsA = a.roleStats?.gkWins || 0;
+                const winsB = b.roleStats?.gkWins || 0;
+                if (winsB !== winsA) return winsB - winsA;
+                return (b.roleStats?.gkMatches || 0) - (a.roleStats?.gkMatches || 0);
+              });
             } else if (currentSlide.roleFilter === 'striker') {
               filteredStats = filteredStats.filter((p: any) => p.player.preferredRole?.toLowerCase() === 'attaccante');
+              filteredStats.sort((a: any, b: any) => {
+                const wrA = a.roleStats?.stMatches > 0 ? (a.roleStats.stWins / a.roleStats.stMatches) : 0;
+                const wrB = b.roleStats?.stMatches > 0 ? (b.roleStats.stWins / b.roleStats.stMatches) : 0;
+                if (wrB !== wrA) return wrB - wrA;
+                const winsA = a.roleStats?.stWins || 0;
+                const winsB = b.roleStats?.stWins || 0;
+                if (winsB !== winsA) return winsB - winsA;
+                return (b.roleStats?.stMatches || 0) - (a.roleStats?.stMatches || 0);
+              });
             }
             const pageStats = filteredStats.slice(0, 3);
             
@@ -890,6 +908,27 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {pageStats.map((ps: any, cardIdx: number) => {
                       const { player, rank, played, wins, winRate, totalGoalsScored, avgGoalsPerMatch, roleStats } = ps;
                       
+                      let displayRank = rank;
+                      let displayPlayed = played;
+                      let displayWins = wins;
+                      let displayWinRate = winRate;
+                      let showDefenderBox = true;
+                      let showStrikerBox = true;
+
+                      if (currentSlide.roleFilter === 'defender') {
+                        displayRank = cardIdx + 1;
+                        displayPlayed = roleStats?.gkMatches || 0;
+                        displayWins = roleStats?.gkWins || 0;
+                        displayWinRate = displayPlayed > 0 ? ((displayWins / displayPlayed) * 100).toFixed(1) : '0.0';
+                        showStrikerBox = false;
+                      } else if (currentSlide.roleFilter === 'striker') {
+                        displayRank = cardIdx + 1;
+                        displayPlayed = roleStats?.stMatches || 0;
+                        displayWins = roleStats?.stWins || 0;
+                        displayWinRate = displayPlayed > 0 ? ((displayWins / displayPlayed) * 100).toFixed(1) : '0.0';
+                        showDefenderBox = false;
+                      }
+
                       const mySpotlightStage = (pageStats.length - 1) - cardIdx;
                       let styles: any = {};
                       
@@ -930,7 +969,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           className="absolute left-1/2 top-[12vh] bg-slate-900 border-4 p-4 rounded-3xl flex flex-col gap-3 overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.34,1.56,0.64,1)] w-[380px]"
                           style={styles}
                         >
-                          {rank === 1 && <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none text-8xl">👑</div>}
+                          {displayRank === 1 && <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none text-8xl">👑</div>}
                           
                           {/* TOP ROW: Profile, Name, Role */}
                           <div className="flex items-center gap-4 z-10">
@@ -944,7 +983,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-2">
                                 <h3 className="text-2xl font-black text-white truncate">{player.name}</h3>
-                                {rank && <span className="text-2xl font-black text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.4)] flex-shrink-0">{rank}°</span>}
+                                {displayRank && <span className="text-2xl font-black text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.4)] flex-shrink-0">{displayRank}°</span>}
                               </div>
                               <div className="text-[17px] font-black text-slate-400 uppercase tracking-widest">{formatRole(player.preferredRole)}</div>
                             </div>
@@ -954,21 +993,21 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div className="grid grid-cols-3 gap-1 bg-slate-950/60 p-3 rounded-xl border border-slate-800/80 z-10 mt-2">
                             <div className="flex flex-col items-center">
                               <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Gioc</span>
-                              <span className="text-xl font-black text-white">{played}</span>
+                              <span className="text-xl font-black text-white">{displayPlayed}</span>
                             </div>
                             <div className="flex flex-col items-center">
                               <span className="text-[9px] font-black uppercase tracking-widest text-emerald-400 mb-0.5">Vinte</span>
-                              <span className="text-xl font-black text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]">{wins}</span>
+                              <span className="text-xl font-black text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]">{displayWins}</span>
                             </div>
                             <div className="flex flex-col items-center bg-yellow-500/10 rounded-lg -m-1 p-1 border border-yellow-500/20">
                               <span className="text-[9px] font-black uppercase tracking-widest text-yellow-500 mb-0.5">WR%</span>
-                              <span className="text-xl font-black text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]">{winRate}%</span>
+                              <span className="text-xl font-black text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]">{displayWinRate}%</span>
                             </div>
                           </div>
 
                           {/* ROLE SPECIFIC STATS */}
                           <div className="flex flex-col gap-2 z-10 mt-2">
-                            {roleStats.gkMatches > 0 && (
+                            {showDefenderBox && roleStats.gkMatches > 0 && (
                               <div className="bg-blue-950/30 border border-blue-900/50 rounded-xl p-2.5">
                                 <div className="text-[11px] font-black uppercase tracking-widest text-blue-400 mb-2 flex items-center gap-2">
                                   <Shield className="w-4 h-4"/> Defender
@@ -981,7 +1020,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               </div>
                             )}
 
-                            {roleStats.stMatches > 0 && (
+                            {showStrikerBox && roleStats.stMatches > 0 && (
                               <div className="bg-red-950/30 border border-red-900/50 rounded-xl p-2.5">
                                 <div className="text-[11px] font-black uppercase tracking-widest text-red-400 mb-2 flex items-center gap-2">
                                   <Swords className="w-4 h-4"/> Striker
