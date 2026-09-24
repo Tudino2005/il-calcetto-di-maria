@@ -5,7 +5,7 @@ import { finishMatchesDrawAnimation } from "@/app/actions/tournamentActions";
 import { Swords } from "lucide-react";
 
 export default function MatchesDrawCeremony({ tournament }: { tournament: any }) {
-  const round1Matches = tournament.matches?.filter((m: any) => m.round === 1) || [];
+  const round1Matches = tournament.matches || [];
   
   const [revealedCount, setRevealedCount] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
