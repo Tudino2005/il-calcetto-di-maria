@@ -17,9 +17,7 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
-    const toAnimate = rounds.flat().filter(m => !m.winnerTeamId && m.scheduledAt).sort((a, b) => {
-        return new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime();
-    });
+    const toAnimate = rounds.flat().filter(m => !m.winnerTeamId);
 
     if (toAnimate.length === 0) return;
 
