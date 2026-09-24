@@ -82,3 +82,56 @@ export function generateBracket(teams: { id: string }[]) {
   }
   return matches;
 }
+
+export function getFeederMatchInfo(tournament: any, currentMatchId: string, slot: "A" | "B"): string {
+  if (!tournament || !tournament.bracketData) return "TBD";
+  
+  try {
+    const bData = JSON.parse(tournament.bracketData);
+    
+    // Single Elim
+    if (bData.rounds) {
+      for (let r = 1; r < bData.rounds.length; r++) {
+        const idx = bData.rounds[r].indexOf(currentMatchId);
+        if (idx !== -1) {
+          const feederIdx = idx * 2 + (slot === "A" ? 0 : 1);
+          const feederId = bData.rounds[r - 1][feederIdx];
+          if (feederId) {
+            const fm = tournament.matches?.find((m: any) => m.id === feederId);
+            if (fm && fm.teamA && fm.teamB) {
+              const nameA = fm.teamA.player1.name + " & " + fm.teamA.player2.name;
+              const nameB = fm.teamB.player1.name + " & " + fm.teamB.player2.name;
+              return `VINCENTE: ${nameA} VS ${nameB}`;
+            }
+          }
+        }
+      }
+    }
+    
+    // Double Elim (Simplification for WB)
+    if (bData.wbRounds) {
+      for (let r = 1; r < bData.wbRounds.length; r++) {
+        const idx = bData.wbRounds[r].indexOf(currentMatchId);
+        if (idx !== -1) {
+          const feederIdx = idx * 2 + (slot === "A" ? 0 : 1);
+          const feederId = bData.wbRounds[r - 1][feederIdx];
+          if (feederId) {
+            const fm = tournament.matches?.find((m: any) => m.id === feederId);
+            if (fm && fm.teamA && fm.teamB) {
+              const nameA = fm.teamA.player1.name + " & " + fm.teamA.player2.name;
+              const nameB = fm.teamB.player1.name + " & " + fm.teamB.player2.name;
+              return `VINCENTE: ${nameA} VS ${nameB}`;
+            }
+          }
+        }
+      }
+      
+      // For GF
+      if (bData.gfMatches && bData.gfMatches.includes(currentMatchId)) {
+         return slot === "A" ? "VINCENTE WB" : "VINCENTE LB";
+      }
+    }
+  } catch(e) {}
+  
+  return "TBD";
+}

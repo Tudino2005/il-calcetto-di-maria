@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import TournamentAgenda from "./TournamentAgenda";
 import { formatSetScores } from "@/lib/scoreUtils";
+import { getFeederMatchInfo } from "@/lib/tournamentLogic";
 import { scheduleMatch } from "@/app/actions/matchActions";
 
 type PlayerInfo = { id: string; name: string };
@@ -130,7 +131,7 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
   {m.teamA && tournament.teamNames && tournament.teamNames[m.teamA.id] && (
     <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-0.5">"{tournament.teamNames[m.teamA.id]}"</span>
   )}
-  <span>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
+  <span>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : getFeederMatchInfo(tournament, m.id, "A")}</span>
 </span>
                           <span className="font-black ml-2">{m.scoreTeamA}</span>
                         </div>
@@ -140,7 +141,7 @@ export default function TournamentBracket({ tournament }: { tournament: Tourname
   {m.teamB && tournament.teamNames && tournament.teamNames[m.teamB.id] && (
     <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-0.5">"{tournament.teamNames[m.teamB.id]}"</span>
   )}
-  <span>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
+  <span>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : getFeederMatchInfo(tournament, m.id, "B")}</span>
 </span>
                           <span className="font-black ml-2">{m.scoreTeamB}</span>
                         </div>

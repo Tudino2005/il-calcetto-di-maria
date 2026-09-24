@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Calendar } from "lucide-react";
+import { getFeederMatchInfo } from "@/lib/tournamentLogic";
 import clsx from "clsx";
 import Link from "next/link";
 import { scheduleMatch } from "@/app/actions/matchActions";
@@ -92,9 +93,9 @@ export default function TournamentAgenda({ tournament }: { tournament: any }) {
                 <div className="hidden md:flex flex-col border-l border-slate-700 pl-6">
                   <span className="text-slate-500 text-xs font-bold uppercase">{bracketLabel}</span>
                   <div className="flex items-center gap-2 text-sm font-bold mt-1 text-slate-300">
-                    <span className={clsx(m.winnerTeamId === m.teamA?.id && "text-emerald-400")}>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
+                    <span className={clsx(m.winnerTeamId === m.teamA?.id && "text-emerald-400")}>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : getFeederMatchInfo(tournament, m.id, "A")}</span>
                     <span className="text-slate-600 px-2">vs</span>
-                    <span className={clsx(m.winnerTeamId === m.teamB?.id && "text-emerald-400")}>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
+                    <span className={clsx(m.winnerTeamId === m.teamB?.id && "text-emerald-400")}>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : getFeederMatchInfo(tournament, m.id, "B")}</span>
                   </div>
                 </div>
               </div>
@@ -103,9 +104,9 @@ export default function TournamentAgenda({ tournament }: { tournament: any }) {
               <div className="md:hidden flex flex-col border-t border-slate-700 pt-3">
                 <span className="text-slate-500 text-xs font-bold uppercase">{bracketLabel}</span>
                 <div className="flex flex-col gap-1 text-sm font-bold mt-1 text-slate-300">
-                  <span className={clsx(m.winnerTeamId === m.teamA?.id && "text-emerald-400")}>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
+                  <span className={clsx(m.winnerTeamId === m.teamA?.id && "text-emerald-400")}>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : getFeederMatchInfo(tournament, m.id, "A")}</span>
                   <span className="text-slate-600 text-xs italic">vs</span>
-                  <span className={clsx(m.winnerTeamId === m.teamB?.id && "text-emerald-400")}>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
+                  <span className={clsx(m.winnerTeamId === m.teamB?.id && "text-emerald-400")}>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : getFeederMatchInfo(tournament, m.id, "B")}</span>
                 </div>
               </div>
 

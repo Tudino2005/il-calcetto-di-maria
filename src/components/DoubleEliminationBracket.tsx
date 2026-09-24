@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { Calendar, Swords, CalendarDays } from "lucide-react";
 import { formatSetScores } from "@/lib/scoreUtils";
 import TournamentAgenda from "./TournamentAgenda";
+import { getFeederMatchInfo } from "@/lib/tournamentLogic";
 
 export default function DoubleEliminationBracket({ tournament }: { tournament: any }) {
   const [activeTab, setActiveTab] = useState<"bracket" | "agenda">("bracket");
@@ -48,12 +49,12 @@ export default function DoubleEliminationBracket({ tournament }: { tournament: a
           
           <div className="flex flex-col gap-1">
             <div className={clsx("flex justify-between items-center p-2 rounded-lg", m.winnerTeamId === m.teamA?.id ? "bg-emerald-500/20 text-emerald-400 font-bold" : "bg-slate-900 text-slate-300")}>
-              <span className="truncate text-sm">{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}</span>
+              <span className="truncate text-sm" title={!m.teamA ? getFeederMatchInfo(tournament, m.id, "A") : ""}>{m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : getFeederMatchInfo(tournament, m.id, "A")}</span>
               <span className="font-black ml-2 text-sm">{m.scoreTeamA}</span>
             </div>
             
             <div className={clsx("flex justify-between items-center p-2 rounded-lg", m.winnerTeamId === m.teamB?.id ? "bg-emerald-500/20 text-emerald-400 font-bold" : "bg-slate-900 text-slate-300")}>
-              <span className="truncate text-sm">{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}</span>
+              <span className="truncate text-sm" title={!m.teamB ? getFeederMatchInfo(tournament, m.id, "B") : ""}>{m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : getFeederMatchInfo(tournament, m.id, "B")}</span>
               <span className="font-black ml-2 text-sm">{m.scoreTeamB}</span>
             </div>
             {m.setScores && formatSetScores(m.setScores) && (

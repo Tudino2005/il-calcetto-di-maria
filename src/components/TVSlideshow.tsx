@@ -10,6 +10,7 @@ import TournamentRulebook from "@/components/TournamentRulebook";
 
 import { formatSetScores } from "@/lib/scoreUtils";
 import { calculateTournamentProbabilities, calculateMatchProbabilities } from "@/lib/probabilityUtils";
+import { getFeederMatchInfo } from "@/lib/tournamentLogic";
 
 
 function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: any[][], tournament: any, matchProbs: any }) {
@@ -1526,7 +1527,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   {m.teamAId && currentSlide.tournament.teamNames && currentSlide.tournament.teamNames[m.teamAId] && (
     <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-1">"{currentSlide.tournament.teamNames[m.teamAId]}"</span>
   )}
-  <span>{m.teamAId ? `${m.teamA?.player1?.name} & ${m.teamA?.player2?.name}` : "TBD"}</span>
+  <span>{m.teamAId ? `${m.teamA?.player1?.name} & ${m.teamA?.player2?.name}` : getFeederMatchInfo(currentSlide.tournament, m.id, "A")}</span>
 </span>
                             <span className="font-black text-xl ml-3">{m.scoreTeamA}</span>
                           </div>
@@ -1536,7 +1537,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   {m.teamBId && currentSlide.tournament.teamNames && currentSlide.tournament.teamNames[m.teamBId] && (
     <span className="text-xs text-purple-400 font-bold uppercase tracking-wider mb-1">"{currentSlide.tournament.teamNames[m.teamBId]}"</span>
   )}
-  <span>{m.teamBId ? `${m.teamB?.player1?.name} & ${m.teamB?.player2?.name}` : "TBD"}</span>
+  <span>{m.teamBId ? `${m.teamB?.player1?.name} & ${m.teamB?.player2?.name}` : getFeederMatchInfo(currentSlide.tournament, m.id, "B")}</span>
 </span>
                             <span className="font-black text-xl ml-3">{m.scoreTeamB}</span>
                           </div>
