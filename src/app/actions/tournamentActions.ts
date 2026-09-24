@@ -51,12 +51,24 @@ export async function createTournament(formData: FormData) {
 }
 
 export async function addPlayerToTournament(tournamentId: string, playerId: string) {
-  await prisma.tournamentRegistration.create({
-    data: {
-      tournamentId,
-      playerId
+  try {
+    const existing = await prisma.tournamentRegistration.findUnique({
+      where: {
+        tournamentId_playerId: { tournamentId, playerId }
+      }
+    });
+
+    if (!existing) {
+      await prisma.tournamentRegistration.create({
+        data: {
+          tournamentId,
+          playerId
+        }
+      });
     }
-  });
+  } catch (error) {
+    console.error("Error adding player to tournament:", error);
+  }
   revalidatePath(`/tournaments/${tournamentId}`);
 }
 
