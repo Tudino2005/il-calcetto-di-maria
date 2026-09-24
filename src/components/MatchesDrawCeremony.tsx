@@ -54,8 +54,8 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
   useEffect(() => {
     if (round1Matches.length === 0) {
       finishMatchesDrawAnimation(tournament.id).then(() => {
-         router.refresh();
-         router.push("/");
+         window.location.reload();
+         
       });
       return;
     }
@@ -66,8 +66,7 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
         // Wait 10 seconds on the final screen before moving to in_progress
         setTimeout(() => {
           finishMatchesDrawAnimation(tournament.id).then(() => {
-             router.refresh();
-             router.push("/");
+             window.location.reload();
           });
         }, 10000);
       }, 1000);

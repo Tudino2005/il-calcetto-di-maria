@@ -298,7 +298,7 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
 
       <audio ref={audioRef1} src="/seven-nation-army.mp3" preload="auto" loop />
       <audio ref={audioRef2} src="/song2-blur.mp3" preload="auto" loop />
-      <audio ref={audioRef3} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => router.refresh())} />
+      <audio ref={audioRef3} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => window.location.reload())} />
 
       {introState === "pending" && (
         <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center">
@@ -584,7 +584,7 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
               <div 
                 className="absolute w-[90%] text-center leading-relaxed pb-32"
                 style={{ animation: 'starWarsScroll 35s linear forwards' }}
-                onAnimationEnd={() => finishDrawAnimation(tournament.id).then(() => router.refresh())}
+                onAnimationEnd={() => finishDrawAnimation(tournament.id).then(() => window.location.reload())}
               >
                  <h2 className="text-5xl font-black mb-8 text-yellow-400 uppercase tracking-widest drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]">Regolamento Ufficiale</h2>
                  <p className="text-2xl font-bold mb-16 italic text-slate-300">Eliminazione diretta pura e spietata: un errore e il team è fuori.</p>
