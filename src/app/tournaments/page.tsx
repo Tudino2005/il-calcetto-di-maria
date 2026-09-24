@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import TournamentForm from "@/components/TournamentForm";
 import { getTournaments } from "@/app/actions/tournamentActions";
 import Link from "next/link";
+import DeleteTournamentButton from "@/components/DeleteTournamentButton";
 import { ArrowLeft, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -38,9 +39,12 @@ export default async function TournamentsPage() {
                   <div className="bg-slate-900 p-5 rounded-2xl border border-slate-700 hover:border-purple-500 transition-colors group">
                     <div className="flex justify-between items-center mb-2">
                       <h3 className="font-bold text-xl text-white group-hover:text-purple-400 transition-colors">{t.name}</h3>
-                      <span className="px-3 py-1 bg-slate-800 text-slate-300 rounded-lg text-xs uppercase tracking-wider font-medium border border-slate-700">
-                        {t.status === "completed" ? "Completato" : "In Corso"}
-                      </span>
+                      <div className="flex items-center">
+                        <span className="px-3 py-1 bg-slate-800 text-slate-300 rounded-lg text-xs uppercase tracking-wider font-medium border border-slate-700">
+                          {t.status === "completed" ? "Completato" : "In Corso"}
+                        </span>
+                        <DeleteTournamentButton tournamentId={t.id} />
+                      </div>
                     </div>
                     
                     <div className="flex flex-col gap-1 mb-4">

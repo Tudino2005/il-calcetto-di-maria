@@ -588,3 +588,32 @@ export async function recalculateTournamentAwards(tournamentId: string) {
   revalidatePath(`/tournaments/${tournamentId}`);
   return { ok: true, result };
 }
+
+export async function deleteTournament(tournamentId: string) {
+  try {
+    // Delete related matches first to avoid foreign key errors
+    await prisma.match.deleteMany({
+      where: { tournamentId }
+    });
+    
+    // Delete groups and standings
+    await prisma.tournamentGroup.deleteMany({
+      where: { tournamentId }
+    });
+
+    // Delete requests
+    await prisma.registrationRequest.deleteMany({
+      where: { tournamentId }
+    });
+
+    // Finally delete the tournament (registrations are cascaded)
+    await prisma.tournament.delete({
+      where: { id: tournamentId }
+    });
+    
+    revalidatePath('/tournaments');
+    revalidatePath('/admin');
+  } catch (error) {
+    console.error("Error deleting tournament:", error);
+  }
+}
