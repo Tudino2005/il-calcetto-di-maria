@@ -91,7 +91,7 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                         ))}
                       </div>
                     ) : (
-                      <span className="text-2xl font-bold text-slate-500 mt-10">TBD</span>
+                      <span className="text-2xl font-bold text-slate-500 mt-10">IN ATTESA</span>
                     )}
                   </div>
 
@@ -152,7 +152,7 @@ function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: a
                         ))}
                       </div>
                     ) : (
-                      <span className="text-2xl font-bold text-slate-500 mt-10">TBD</span>
+                      <span className="text-2xl font-bold text-slate-500 mt-10">IN ATTESA</span>
                     )}
                   </div>
                 </div>
@@ -1617,7 +1617,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                       </span>
                                     )}
                                     <span className={`text-base font-bold truncate leading-tight ${m.winnerTeamId === m.teamAId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
-                                      {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : "TBD"}
+                                      {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : getFeederMatchInfo(currentSlide.tournament, m.id, "A")}
                                     </span>
                                   </div>
 
@@ -1645,7 +1645,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                       </span>
                                     )}
                                     <span className={`text-base font-bold truncate leading-tight ${m.winnerTeamId === m.teamBId ? 'text-emerald-400 font-black' : 'text-slate-200'}`}>
-                                      {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : "TBD"}
+                                      {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : getFeederMatchInfo(currentSlide.tournament, m.id, "B")}
                                     </span>
                                   </div>
                                 </div>

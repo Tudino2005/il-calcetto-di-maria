@@ -33,8 +33,8 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
   const [spinTeamB, setSpinTeamB] = useState({ team: "???", players: "???" });
 
   const getTeamInfo = (teamId: string) => {
-    let teamName = "TBD";
-    let players = "TBD";
+    let teamName = "IN ATTESA";
+    let players = "IN ATTESA";
     
     if (tournament.teamNames && tournament.teamNames[teamId]) {
       teamName = tournament.teamNames[teamId];

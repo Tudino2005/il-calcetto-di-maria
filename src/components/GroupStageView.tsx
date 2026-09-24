@@ -114,7 +114,7 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                   <Link key={m.id} href={`/match/${m.id}`}>
                     <div className={clsx("flex items-center justify-between p-3 rounded-xl border transition-colors cursor-pointer", isFinished ? "bg-slate-900 border-slate-800 opacity-75" : "bg-slate-800 border-slate-700 hover:border-purple-500")}>
                       <div className="flex-1 flex justify-end pr-4 text-sm font-bold text-white">
-                        {teamA ? `${teamA.player1.name} & ${teamA.player2.name}` : "TBD"}
+                        {teamA ? `${teamA.player1.name} & ${teamA.player2.name}` : "IN ATTESA"}
                       </div>
                       <div className="px-4 py-1 bg-slate-950 rounded-lg font-black text-slate-300 flex flex-col items-center">
                         {m.scheduledAt && !m.winnerTeamId && (
@@ -130,7 +130,7 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                         )}
                       </div>
                       <div className="flex-1 flex justify-start pl-4 text-sm font-bold text-white">
-                        {teamB ? `${teamB.player1.name} & ${teamB.player2.name}` : "TBD"}
+                        {teamB ? `${teamB.player1.name} & ${teamB.player2.name}` : "IN ATTESA"}
                       </div>
                     </div>
                   </Link>

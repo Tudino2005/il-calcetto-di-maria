@@ -30,7 +30,7 @@ export default function DoubleEliminationBracket({ tournament }: { tournament: a
   const renderMatchNode = (m: any) => {
     if (!m) return (
       <div className="w-64 flex flex-col rounded-xl border-2 border-slate-800 bg-slate-900 p-3 opacity-50">
-        <span className="text-slate-500 font-bold text-center">TBD</span>
+        <span className="text-slate-500 font-bold text-center">IN ATTESA</span>
       </div>
     );
     

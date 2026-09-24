@@ -84,7 +84,7 @@ export function generateBracket(teams: { id: string }[]) {
 }
 
 export function getFeederMatchInfo(tournament: any, currentMatchId: string, slot: "A" | "B"): string {
-  if (!tournament || !tournament.bracketData) return "TBD";
+  if (!tournament || !tournament.bracketData) return "IN ATTESA";
   
   try {
     const bData = JSON.parse(tournament.bracketData);
@@ -133,5 +133,5 @@ export function getFeederMatchInfo(tournament: any, currentMatchId: string, slot
     }
   } catch(e) {}
   
-  return "TBD";
+  return "IN ATTESA";
 }
