@@ -436,13 +436,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                           <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
                             <div className="flex items-center gap-3 flex-1 justify-between pr-6">
                                                             <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
-                                                            {tp.preferredRole && (() => {
-                              const r = tp.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
-                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
-                              if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
-                              return null;
-                            })()}
+
                             </div>
                           </div>
                         ))}
@@ -482,13 +476,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                                     <div className="flex flex-col min-w-0 justify-center flex-1">
                             <div className="flex items-center gap-3 flex-1 justify-between pr-6">
                               <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                              {p.preferredRole && (() => {
-                              const r = p.preferredRole.toLowerCase();
-                              if (r === 'portiere' || r === 'difensore') return <span className="bg-blue-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Defender</span>;
-                              if (r === 'attaccante') return <span className="bg-red-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Striker</span>;
-                              if (r === 'entrambi') return <span className="bg-purple-600 text-white font-black px-3 py-1 rounded-md tracking-widest text-[10px] uppercase shadow-sm">Jolly</span>;
-                              return null;
-                            })()}
+
                             </div>
                           </div>
 
