@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { finishMatchesDrawAnimation } from "@/app/actions/tournamentActions";
 import { Swords } from "lucide-react";
 
 export default function MatchesDrawCeremony({ tournament }: { tournament: any }) {
   const round1Matches = tournament.matches || [];
+  const router = useRouter();
   
   const [revealedCount, setRevealedCount] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -51,7 +53,10 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
 
   useEffect(() => {
     if (round1Matches.length === 0) {
-      finishMatchesDrawAnimation(tournament.id);
+      finishMatchesDrawAnimation(tournament.id).then(() => {
+         router.refresh();
+         router.push("/");
+      });
       return;
     }
 
@@ -60,7 +65,10 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
         setIsFinished(true);
         // Wait 10 seconds on the final screen before moving to in_progress
         setTimeout(() => {
-          finishMatchesDrawAnimation(tournament.id);
+          finishMatchesDrawAnimation(tournament.id).then(() => {
+             router.refresh();
+             router.push("/");
+          });
         }, 10000);
       }, 1000);
       return;

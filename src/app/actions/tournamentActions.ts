@@ -558,6 +558,9 @@ export async function finishDrawAnimation(tournamentId: string) {
       where: { id: tournamentId },
       data: { status: "matches_drawing" }
     });
+    revalidatePath("/");
+    revalidatePath("/tournaments");
+    revalidatePath(`/tournaments/${tournamentId}`);
   } catch (error) {
     console.warn("finishDrawAnimation: Impossibile aggiornare il torneo (forse è stato eliminato nel frattempo?)", error);
   }
@@ -569,6 +572,9 @@ export async function finishMatchesDrawAnimation(tournamentId: string) {
       where: { id: tournamentId },
       data: { status: "in_progress" }
     });
+    revalidatePath("/");
+    revalidatePath("/tournaments");
+    revalidatePath(`/tournaments/${tournamentId}`);
   } catch (error) {
     console.warn("finishMatchesDrawAnimation: Impossibile aggiornare il torneo", error);
   }
