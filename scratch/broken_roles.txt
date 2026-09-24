@@ -1,0 +1,216 @@
+              </div>
+              
+              </div> {/* chiusura flex w-full flex-1 */}
+
+            </div>
+          )}
+
+          
+          {/* LEADERBOARD FREE MATCHES (SERIE A STYLE) */}
+{currentSlide.type === "leaderboard_roles" && (
+            <div className="flex flex-col w-full h-[85vh] gap-6">
+              
+              {/* HEADER LEGEND */}
+              <div className="flex justify-center shrink-0 w-full">
+                <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl flex items-center justify-between w-full backdrop-blur-md gap-4">
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Cosa si intende per "Sfida"</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni singola partita (Libera o Torneo) è sempre calcolata al meglio delle 3 partite.</span>
+                  </div>
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali partite contano</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Assolutamente tutte le partite giocate (Sia Tornei che Sfide Libere).</span>
+                  </div>
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Come sono calcolate</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ordinamento per numero di Vittorie Totali. A parità di vittorie, decide il Win Rate %.</span>
+                  </div>
+                  <div className="flex flex-col flex-1 px-4">
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore (o coppia) che abbia vinto almeno una volta.</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* TWO COLUMNS */}
+              <div className="flex w-full flex-1 min-h-0 gap-8 lg:gap-16">
+              
+              {/* TOP DEFENDERS FIXED CARD */}
+              <div className="flex-1 flex flex-col bg-slate-900/80 p-6 md:p-8 rounded-[3rem] border-2 border-blue-500/20 shadow-2xl backdrop-blur-sm relative min-h-0">
+                
+                <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
+                  {defenderStats[0] && (() => {
+                    const topPlayers = defenderStats.filter((p: any) => 
+                      p.winRate === defenderStats[0].winRate && 
+                      p.wins === defenderStats[0].wins && 
+                      p.played === defenderStats[0].played
+                    );
+                    return (
+                    <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-blue-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(59,130,246,0.15)] relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                        <Shield className="w-24 h-24 text-blue-500" />
+                      </div>
+                      <div className="w-16 flex-shrink-0 text-center font-black text-6xl text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)]">
+                        1
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
+                        {topPlayers.map((tp: any, idx: number) => (
+                          <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
+                            <div className="flex items-center gap-3">
+                              <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
+                        <div className="text-2xl font-black flex items-baseline gap-1">
+                          <span className="text-emerald-400">{defenderStats[0].wins} V</span>
+                          <span className="text-blue-400">/ {defenderStats[0].played} G</span>
+                        </div>
+                        <div className="text-blue-500 font-black text-xl">
+                          {defenderStats[0].winRate}%
+                        </div>
+                      </div>
+                    </div>
+                  );
+                  })()}
+                  <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
+                    <Medal className="w-10 h-10 text-blue-500" /> TOP DEFENDERS
+                  </h3>
+                </div>
+                
+                <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000}s` }}>
+                    {defenderStats.slice(defenderStats.filter((p: any) => p.winRate === defenderStats[0]?.winRate && p.wins === defenderStats[0]?.wins && p.played === defenderStats[0]?.played).length).map((p: any, i: number) => {
+                      const rank = i + 1 + defenderStats.filter((ps: any) => ps.winRate === defenderStats[0]?.winRate && ps.wins === defenderStats[0]?.wins && ps.played === defenderStats[0]?.played).length;
+                      return (
+                      <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                        <div className="flex items-center gap-6 min-w-0">
+                          <div className={`text-3xl font-black w-8 text-center shrink-0 ${
+                            rank === 1 ? "text-blue-500" :
+                            rank === 2 ? "text-slate-300" :
+                            rank === 3 ? "text-orange-400" :
+                            "text-slate-600"
+                          }`}>
+                            {rank}
+                          </div>
+                          <div className="flex flex-col min-w-0 justify-center">
+                            <div className="flex items-center gap-3">
+                              <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-col items-end shrink-0 ml-4">
+                          <div className="text-xl font-black flex items-baseline gap-1">
+                            <span className="text-emerald-400">{p.wins} V</span>
+                            <span className="text-blue-400">/ {p.played} G</span>
+                          </div>
+                          <div className="text-blue-500 font-black text-lg">
+                            {p.winRate}%
+                          </div>
+                        </div>
+                      </div>
+                    )})}
+                  </div>
+                </div>
+              </div>
+
+              {/* TOP STRIKERS FIXED CARD */}
+              <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[3rem] border-2 border-blue-500/20 shadow-2xl backdrop-blur-sm relative">
+                
+                <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
+                  {strikerStats[0] && (() => {
+                    const topTeams = strikerStats.filter((t: any) => 
+                      t.winRate === strikerStats[0].winRate && 
+                      t.wins === strikerStats[0].wins && 
+                      t.played === strikerStats[0].played
+                    );
+                    return (
+                    <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-red-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(239,68,68,0.15)] relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                        <Users className="w-24 h-24 text-blue-500" />
+                      </div>
+                      <div className="w-16 flex-shrink-0 text-center font-black text-6xl text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.6)]">
+                        1
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
+                        {topTeams.map((tt: any, idx: number) => (
+                           <div key={tt.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
+                             <div className="flex items-baseline gap-3 flex-wrap">
+                               <span className="text-3xl font-black text-white leading-tight truncate">{tt.player1?.name || "Giocatore 1"}</span>
+                               <span className="text-2xl font-black text-red-500/70">&</span>
+                               <span className="text-3xl font-black text-white leading-tight truncate">{tt.player2?.name || "Giocatore 2"}</span>
+                             </div>
+                           </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
+                        <div className="text-2xl font-black flex items-baseline gap-1">
+                          <span className="text-emerald-400">{strikerStats[0].wins} V</span>
+                          <span className="text-blue-400">/ {strikerStats[0].played} G</span>
+                        </div>
+                        <div className="text-red-500 font-black text-xl">
+                          {strikerStats[0].winRate}%
+                        </div>
+                      </div>
+                    </div>
+                  );
+                  })()}
+                  <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]">
+                    <Users className="w-10 h-10 text-blue-400" /> TOP STRIKERS
+                  </h3>
+                </div>
+                
+                <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000}s` }}>
+                    {strikerStats.slice(strikerStats.filter((t: any) => t.winRate === strikerStats[0]?.winRate && t.wins === strikerStats[0]?.wins && t.played === strikerStats[0]?.played).length).map((t: any, i: number) => {
+                      const rank = i + 1 + strikerStats.filter((ts: any) => ts.winRate === strikerStats[0]?.winRate && ts.wins === strikerStats[0]?.wins && ts.played === strikerStats[0]?.played).length;
+                      return (
+                      <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                        <div className="flex items-center gap-6 min-w-0">
+                          <div className={`text-3xl font-black w-8 text-center shrink-0 ${
+                            rank === 1 ? "text-red-500" :
+                            rank === 2 ? "text-slate-300" :
+                            rank === 3 ? "text-orange-400" :
+                            "text-slate-600"
+                          }`}>
+                            {rank}
+                          </div>
+                          <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
+                            <span className="text-xl font-bold text-white truncate leading-tight">{t.player1?.name || "Giocatore 1"}</span>
+                            <span className="text-base font-black text-red-500/70">&</span>
+                            <span className="text-xl font-bold text-white truncate leading-tight">{t.player2?.name || "Giocatore 2"}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-col items-end shrink-0 ml-4">
+                          <div className="text-xl font-black flex items-baseline gap-1">
+                            <span className="text-emerald-400">{t.wins} V</span>
+                            <span className="text-blue-400">/ {t.played} G</span>
+                          </div>
+                          <div className="text-red-500 font-black text-lg">
+                            {t.winRate}%
+                          </div>
+                        </div>
+                      </div>
+                    )})}
+                  </div>
+                </div>
+              </div>
+              
+              </div> {/* chiusura flex w-full flex-1 */}
+
+            </div>
+            );
+          })()}
+
+          {currentSlide.type === "leaderboard_free" && (
+            <div className="flex flex-col items-center w-full max-w-7xl h-[85vh] justify-start relative z-10 mx-auto px-4">
+              <div className="flex flex-col items-center gap-2 mb-4 shrink-0 w-full">
+                <div className="flex items-center gap-4 mb-2">
+                  <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
+                  <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg">
+                    Sfide Libere
+                  </h2>
+                  <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />

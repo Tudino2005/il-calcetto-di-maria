@@ -14,7 +14,7 @@ export default async function TVHomePage() {
   });
 
   const inProgressTournaments = await prisma.tournament.findMany({
-    where: { status: { in: ["in_progress", "drawing"] } },
+    where: { status: { in: ["in_progress", "drawing", "matches_drawing"] } },
     orderBy: { createdAt: "desc" },
     include: {
       matches: {

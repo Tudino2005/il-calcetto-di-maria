@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Trophy, Users, Goal, ShieldAlert, AlertTriangle, Calendar, Banknote, Medal, Crown, Activity, Swords, Clock, MonitorPlay, Shield } from "lucide-react";
 import QRCodeDisplay from "@/components/QRCodeDisplay";
 import SlotMachineDraw from "@/components/SlotMachineDraw";
+import MatchesDrawCeremony from "@/components/MatchesDrawCeremony";
 import TournamentRulebook from "@/components/TournamentRulebook";
 
 import { formatSetScores } from "@/lib/scoreUtils";
@@ -225,9 +226,10 @@ export default function TVSlideshow({ data }: { data: any }) {
   inProgressTournaments.forEach((t: any) => {
     if (t.status === "drawing") {
       slides.push({ type: "slot_machine", tournament: t, duration: 1200000 }); // 20 minutes max, the component will manually skip to next
+    } else if (t.status === "matches_drawing") {
+      slides.push({ type: "matches_draw", tournament: t, duration: 1200000 }); // Max 20 min, component will auto-skip
     } else {
       slides.push({ type: "bracket_tree", tournament: t, duration: 30000 });
-      
     }
   });
   
@@ -342,6 +344,14 @@ export default function TVSlideshow({ data }: { data: any }) {
       return (
         <div className="w-full h-screen bg-slate-950 text-white">
           <SlotMachineDraw tournament={currentSlide.tournament} advancedPlayerStats={data.advancedPlayerStats} />
+        </div>
+      );
+  }
+
+  if (currentSlide?.type === "matches_draw") {
+      return (
+        <div className="w-full h-screen bg-slate-950 text-white">
+          <MatchesDrawCeremony tournament={currentSlide.tournament} />
         </div>
       );
   }
