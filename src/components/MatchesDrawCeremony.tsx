@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { finishMatchesDrawAnimation } from "@/app/actions/tournamentActions";
 import { Swords } from "lucide-react";
 
@@ -12,27 +12,41 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
   const [flash, setFlash] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   
-  // Dummy names for the spinning effect
-  const dummyNames = [
-    "I Pinguini Tattici", "Le Tigri Bianche", "I Leoni Indomabili", "Gli Squaletti",
-    "I Draghi Rossi", "Le Pantere Nere", "I Lupi Solitari", "Gli Orsi Bruni",
-    "I Falchi Pellegrini", "Le Aquile Reali", "I Cobra Veloci", "I Tori Furiosi"
+  // NEW: State for the 5-second popup
+  const [showPopup, setShowPopup] = useState(false);
+  const currentMatch = round1Matches[revealedCount];
+  
+  const dummyTeams = [
+    { team: "I Pinguini Tattici", players: "Marco & Luca" },
+    { team: "Le Tigri Bianche", players: "Sofia & Giulia" },
+    { team: "I Leoni Indomabili", players: "Andrea & Matteo" },
+    { team: "Gli Squaletti", players: "Giovanni & Paolo" },
+    { team: "I Draghi Rossi", players: "Alessia & Martina" },
+    { team: "Le Pantere Nere", players: "Lorenzo & Simone" },
+    { team: "I Lupi Solitari", players: "Chiara & Sara" },
+    { team: "Gli Orsi Bruni", players: "Federico & Davide" }
   ];
 
-  const [spinNameA, setSpinNameA] = useState("???");
-  const [spinNameB, setSpinNameB] = useState("???");
+  const [spinTeamA, setSpinTeamA] = useState({ team: "???", players: "???" });
+  const [spinTeamB, setSpinTeamB] = useState({ team: "???", players: "???" });
 
-  const getTeamName = (teamId: string) => {
-    if (!teamId) return "TBD";
+  const getTeamInfo = (teamId: string) => {
+    let teamName = "TBD";
+    let players = "TBD";
+    
     if (tournament.teamNames && tournament.teamNames[teamId]) {
-      return tournament.teamNames[teamId];
+      teamName = tournament.teamNames[teamId];
     }
-    const match = tournament.matches.find((m: any) => m.teamAId === teamId || m.teamBId === teamId);
+    
+    const match = round1Matches.find((m: any) => m.teamAId === teamId || m.teamBId === teamId);
     if (match) {
-      if (match.teamAId === teamId && match.teamA) return `${match.teamA.player1.name} & ${match.teamA.player2.name}`;
-      if (match.teamBId === teamId && match.teamB) return `${match.teamB.player1.name} & ${match.teamB.player2.name}`;
+      if (match.teamAId === teamId && match.teamA) {
+        players = `${match.teamA.player1.name} & ${match.teamA.player2.name}`;
+      } else if (match.teamBId === teamId && match.teamB) {
+        players = `${match.teamB.player1.name} & ${match.teamB.player2.name}`;
+      }
     }
-    return "Team";
+    return { team: teamName, players };
   };
 
   useEffect(() => {
@@ -44,10 +58,11 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
     if (revealedCount >= round1Matches.length) {
       setTimeout(() => {
         setIsFinished(true);
+        // Wait 10 seconds on the final screen before moving to in_progress
         setTimeout(() => {
           finishMatchesDrawAnimation(tournament.id);
-        }, 3000);
-      }, 4000);
+        }, 10000);
+      }, 1000);
       return;
     }
 
@@ -56,30 +71,43 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
       setIsSpinning(true);
       
       let spinInterval = setInterval(() => {
-        setSpinNameA(dummyNames[Math.floor(Math.random() * dummyNames.length)]);
-        setSpinNameB(dummyNames[Math.floor(Math.random() * dummyNames.length)]);
-      }, 50);
+        setSpinTeamA(dummyTeams[Math.floor(Math.random() * dummyTeams.length)]);
+        setSpinTeamB(dummyTeams[Math.floor(Math.random() * dummyTeams.length)]);
+      }, 60); // Fast slot machine
 
-      // Stop spinning after 2.5 seconds
+      // Spin for 4 seconds
       setTimeout(() => {
         clearInterval(spinInterval);
         setIsSpinning(false);
         setFlash(true);
         
-        const currentMatch = round1Matches[revealedCount];
-        setSpinNameA(getTeamName(currentMatch.teamAId));
-        setSpinNameB(getTeamName(currentMatch.teamBId));
+        const cMatch = round1Matches[revealedCount];
+        setSpinTeamA(getTeamInfo(cMatch.teamAId));
+        setSpinTeamB(getTeamInfo(cMatch.teamBId));
         
-        setTimeout(() => setFlash(false), 500);
+        // Remove flash quickly
+        setTimeout(() => setFlash(false), 800);
 
-        // Wait 2 seconds showing the drawn match, then move to grid
+        // Wait 1.5s to let them read the final text, then SHOW POPUP
         setTimeout(() => {
-          setRevealedCount(prev => prev + 1);
-        }, 2000);
+          setShowPopup(true);
+          
+          // Hold popup for 5 seconds
+          setTimeout(() => {
+            setShowPopup(false);
+            
+            // Wait 1s for popup to animate out, then move to grid (revealedCount++)
+            setTimeout(() => {
+              setRevealedCount(prev => prev + 1);
+            }, 1000);
+            
+          }, 5000);
+          
+        }, 1500);
 
-      }, 2500);
+      }, 4000);
 
-    }, 1000); // Wait 1 second before starting next spin
+    }, 1000); // 1s pause between draws
 
     return () => clearTimeout(cycleTimer);
   }, [revealedCount, round1Matches]);
@@ -88,12 +116,90 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
   return (
     <div className="w-full h-screen bg-slate-950 flex overflow-hidden relative font-sans">
       
+      {/* THE HUGE PINK/GOLD POPUP (Fades in over everything) */}
+      <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 backdrop-blur-md pointer-events-none transition-all duration-700 ease-in-out ${showPopup ? 'opacity-100' : 'opacity-0'}`}>
+          <div className={`transform transition-transform duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${showPopup ? 'scale-100' : 'scale-50'} w-full max-w-[1200px]`}>
+              <div className="p-10 rounded-3xl border-4 flex flex-col justify-center items-center gap-4 relative shadow-[0_0_80px_rgba(236,72,153,0.6)] bg-slate-900 border-pink-500 mx-8">
+                  <div className="flex justify-between items-start w-full">
+                    
+                    {/* TEAM A */}
+                    <div className="flex-1 flex flex-col min-w-0 px-2 items-center">
+                      <span className="text-lg text-purple-400 font-black uppercase tracking-widest mb-6 text-center">
+                        "{spinTeamA.team}"
+                      </span>
+                      {currentMatch?.teamA ? (
+                        <div className="flex items-start justify-center gap-6 w-full">
+                          {[currentMatch.teamA.player1, currentMatch.teamA.player2].map((player, i) => (
+                              player && (
+                                <div key={i} className="flex flex-col items-center gap-4 flex-1">
+                                  {player.avatarUrl ? (
+                                    <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                                  ) : (
+                                    <div className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                      <span className="text-4xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                    </div>
+                                  )}
+                                  <span className="text-2xl font-bold leading-tight text-white text-center break-words w-full">
+                                    {player.name}
+                                  </span>
+                                </div>
+                              )
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    {/* VS BADGE */}
+                    <div className="shrink-0 flex flex-col items-center justify-center self-center mx-4 gap-6 mt-2">
+                      <div className="text-xl font-black text-white bg-pink-500 px-8 py-3 rounded-2xl shadow-lg border-2 border-pink-400 uppercase tracking-widest">
+                        MATCH {revealedCount + 1}
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="bg-slate-950 px-8 py-5 mx-2 rounded-3xl text-5xl font-black text-white shadow-inner flex flex-col items-center border-2 border-slate-800">
+                          <span>VS</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* TEAM B */}
+                    <div className="flex-1 flex flex-col min-w-0 px-2 items-center">
+                      <span className="text-lg text-purple-400 font-black uppercase tracking-widest mb-6 text-center">
+                        "{spinTeamB.team}"
+                      </span>
+                      {currentMatch?.teamB ? (
+                        <div className="flex items-start justify-center gap-6 w-full">
+                          {[currentMatch.teamB.player1, currentMatch.teamB.player2].map((player, i) => (
+                              player && (
+                                <div key={i} className="flex flex-col items-center gap-4 flex-1">
+                                  {player.avatarUrl ? (
+                                    <img src={`/players/${player.avatarUrl}`} alt={player.name} className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square rounded-full object-cover border-4 border-slate-500 shadow-2xl" />
+                                  ) : (
+                                    <div className="w-32 h-32 min-w-[128px] min-h-[128px] shrink-0 aspect-square bg-slate-800 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl">
+                                      <span className="text-4xl font-black text-slate-500 uppercase">{player.name.substring(0,2)}</span>
+                                    </div>
+                                  )}
+                                  <span className="text-2xl font-bold leading-tight text-white text-center break-words w-full">
+                                    {player.name}
+                                  </span>
+                                </div>
+                              )
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      
       {/* BACKGROUND EFFECTS (STADIUM SPOTLIGHTS) */}
-      <div className="absolute top-0 left-1/4 w-1/2 h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-500/10 via-slate-950/0 to-slate-950/0 pointer-events-none"></div>
-      <div className="absolute bottom-0 left-1/4 w-1/2 h-full bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-purple-600/10 via-slate-950/0 to-slate-950/0 pointer-events-none"></div>
+      <div className="absolute top-0 left-1/4 w-1/2 h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-500/15 via-slate-950/0 to-slate-950/0 pointer-events-none"></div>
+      <div className="absolute bottom-0 left-1/4 w-1/2 h-full bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-purple-600/15 via-slate-950/0 to-slate-950/0 pointer-events-none"></div>
 
       {/* FLASH EFFECT */}
-      <div className={`absolute inset-0 bg-white z-50 pointer-events-none transition-opacity duration-500 ${flash ? 'opacity-100' : 'opacity-0'}`}></div>
+      <div className={`absolute inset-0 bg-white z-[90] pointer-events-none transition-opacity duration-1000 ${flash ? 'opacity-100' : 'opacity-0'}`}></div>
 
       {/* LEFT COLUMN: THE BOWL / DRAWING AREA */}
       <div className="flex-1 flex flex-col items-center justify-center relative z-10 border-r border-slate-800/50">
@@ -103,14 +209,17 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
         </h2>
 
         {revealedCount < round1Matches.length ? (
-          <div className="relative w-full max-w-2xl px-12">
+          <div className="relative w-full max-w-3xl px-12">
             <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 via-yellow-400/5 to-transparent blur-3xl -z-10"></div>
             
             <div className="bg-slate-900 border-2 border-yellow-500/30 rounded-3xl p-12 shadow-[0_0_50px_rgba(234,179,8,0.15)] flex flex-col items-center gap-8 relative overflow-hidden">
               
-              <div className="w-full text-center h-24 flex items-center justify-center relative">
-                <span className={`text-4xl md:text-5xl font-black text-white uppercase tracking-wider ${isSpinning ? 'blur-sm opacity-50 scale-110 animate-pulse' : 'blur-0 opacity-100 scale-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'} transition-all duration-100`}>
-                  {spinNameA}
+              <div className="w-full text-center h-28 flex flex-col items-center justify-center relative">
+                <span className={`text-xl font-bold text-yellow-500/80 uppercase tracking-widest mb-2 ${isSpinning ? 'opacity-50 blur-sm' : 'opacity-100'} transition-all duration-75`}>
+                  "{spinTeamA.team}"
+                </span>
+                <span className={`text-4xl font-black text-white uppercase tracking-wider ${isSpinning ? 'blur-sm opacity-50 scale-105' : 'blur-0 opacity-100 scale-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'} transition-all duration-75`}>
+                  {spinTeamA.players}
                 </span>
               </div>
 
@@ -120,9 +229,12 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
                 <div className="h-px w-24 bg-gradient-to-l from-transparent to-yellow-500/50"></div>
               </div>
 
-              <div className="w-full text-center h-24 flex items-center justify-center relative">
-                <span className={`text-4xl md:text-5xl font-black text-white uppercase tracking-wider ${isSpinning ? 'blur-sm opacity-50 scale-110 animate-pulse' : 'blur-0 opacity-100 scale-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'} transition-all duration-100`}>
-                  {spinNameB}
+              <div className="w-full text-center h-28 flex flex-col items-center justify-center relative">
+                <span className={`text-xl font-bold text-yellow-500/80 uppercase tracking-widest mb-2 ${isSpinning ? 'opacity-50 blur-sm' : 'opacity-100'} transition-all duration-75`}>
+                  "{spinTeamB.team}"
+                </span>
+                <span className={`text-4xl font-black text-white uppercase tracking-wider ${isSpinning ? 'blur-sm opacity-50 scale-105' : 'blur-0 opacity-100 scale-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'} transition-all duration-75`}>
+                  {spinTeamB.players}
                 </span>
               </div>
 
@@ -150,12 +262,14 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
               <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">Match {idx + 1}</div>
               
               <div className="flex items-center justify-between">
-                <div className="flex-1 font-bold text-lg text-white uppercase truncate pr-4">
-                  {getTeamName(m.teamAId)}
+                <div className="flex-1 flex flex-col font-bold text-lg text-white uppercase truncate pr-4">
+                   <span className="text-xs text-purple-400 mb-1">"{getTeamInfo(m.teamAId).team}"</span>
+                   <span className="truncate">{getTeamInfo(m.teamAId).players}</span>
                 </div>
                 <div className="text-yellow-500 font-black text-xl italic px-4">VS</div>
-                <div className="flex-1 font-bold text-lg text-white uppercase truncate text-right pl-4">
-                  {getTeamName(m.teamBId)}
+                <div className="flex-1 flex flex-col font-bold text-lg text-white uppercase truncate text-right pl-4">
+                   <span className="text-xs text-purple-400 mb-1">"{getTeamInfo(m.teamBId).team}"</span>
+                   <span className="truncate">{getTeamInfo(m.teamBId).players}</span>
                 </div>
               </div>
             </div>
