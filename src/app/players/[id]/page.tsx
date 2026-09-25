@@ -174,7 +174,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         </div>
       </header>
 
-      <div className="bg-slate-800 rounded-3xl p-6 lg:p-8 mb-8 border border-slate-700 shadow-xl flex flex-col xl:flex-row gap-8 xl:items-center justify-between">
+      <div className="bg-slate-800 rounded-3xl p-6 lg:p-8 mb-8 border border-slate-700 shadow-xl flex flex-col xl:flex-row gap-8 xl:items-start justify-between">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
             <h2 className="text-4xl lg:text-5xl font-black text-white leading-none">{player.name}</h2>
@@ -193,9 +193,9 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         </div>
 
         {/* 4 Compact Stat Boxes */}
-        <div className="flex flex-wrap lg:flex-nowrap gap-4 w-full xl:w-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full xl:w-2/3">
           {/* GK Stats */}
-          <div className="bg-slate-900/50 border border-blue-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+          <div className="bg-slate-900/50 border border-blue-500/30 rounded-2xl p-4 w-full shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 bg-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center text-sm">🛡️</div>
               <div className="text-[10px] uppercase font-black tracking-wider text-blue-400 leading-tight">In Porta</div>
@@ -211,7 +211,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           </div>
 
           {/* Striker Stats */}
-          <div className="bg-slate-900/50 border border-red-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+          <div className="bg-slate-900/50 border border-red-500/30 rounded-2xl p-4 w-full shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 bg-red-500/20 text-red-400 rounded-lg flex items-center justify-center text-sm">⚔️</div>
               <div className="text-[10px] uppercase font-black tracking-wider text-red-400 leading-tight">In Attacco</div>
@@ -227,7 +227,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           </div>
 
           {/* Ideal Partner */}
-          <div className="bg-slate-900/50 border border-purple-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+          <div className="bg-slate-900/50 border border-purple-500/30 rounded-2xl p-4 w-full shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center"><Sparkles className="w-4 h-4" /></div>
               <div className="text-[10px] uppercase font-black tracking-wider text-purple-400 leading-tight">Partner</div>
@@ -242,7 +242,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           </div>
 
           {/* Total Stats */}
-          <div className="bg-slate-900/50 border border-emerald-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+          <div className="bg-slate-900/50 border border-emerald-500/30 rounded-2xl p-4 w-full shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center"><Trophy className="w-4 h-4" /></div>
               <div className="text-[10px] uppercase font-black tracking-wider text-emerald-400 leading-tight">Totale</div>
