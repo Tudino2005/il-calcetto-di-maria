@@ -410,6 +410,7 @@ export async function generatePlayoffSeeding(tournamentId: string, qualifiersPer
   });
 
   revalidatePath("/tournaments");
+  revalidatePath(`/tournaments/${tournamentId}`);
   return tournament;
 }
 

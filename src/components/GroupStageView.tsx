@@ -6,11 +6,13 @@ import Link from "next/link";
 import clsx from "clsx";
 import { formatSetScores } from "@/lib/scoreUtils";
 import TournamentAgenda from "./TournamentAgenda";
+import TournamentBracket from "./TournamentBracket";
 import { generatePlayoffSeeding } from "@/app/actions/tournamentActions";
 import { useRouter } from "next/navigation";
 
 export default function GroupStageView({ groups, qualifiersPerGroup, tournamentId, tournament }: { groups: any[], qualifiersPerGroup: number, tournamentId: string, tournament: any }) {
-  const [activeTab, setActiveTab] = useState<"bracket" | "agenda">("bracket");
+  const hasPlayoffs = !!(tournament.bracketData && JSON.parse(tournament.bracketData)?.rounds?.length > 0);
+  const [activeTab, setActiveTab] = useState<"bracket" | "playoff" | "agenda">(hasPlayoffs ? "playoff" : "bracket");
   const [isGenerating, setIsGenerating] = useState(false);
   const router = useRouter();
   const allGroupsFinished = groups.every(g => g.matches.every((m: any) => m.winnerTeamId !== null));
@@ -34,6 +36,14 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
         >
           <Swords className="w-5 h-5" /> Gironi
         </button>
+        {hasPlayoffs && (
+          <button 
+            onClick={() => setActiveTab("playoff")}
+            className={clsx("flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all", activeTab === "playoff" ? "bg-yellow-500 text-slate-950" : "bg-slate-800 text-yellow-400 hover:bg-slate-700")}
+          >
+            <Trophy className="w-5 h-5" /> Tabellone Playoff
+          </button>
+        )}
         <button 
           onClick={() => setActiveTab("agenda")}
           className={clsx("flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all", activeTab === "agenda" ? "bg-purple-500 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700")}
@@ -45,6 +55,13 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
       <div className="bg-slate-900 p-8 rounded-3xl border border-slate-700">
         {activeTab === "agenda" && (
           <TournamentAgenda tournament={tournament} />
+        )}
+
+        {activeTab === "playoff" && hasPlayoffs && (
+          <TournamentBracket tournament={{
+            ...tournament,
+            matches: tournament.matches.filter((m: any) => m.bracketType === "playoff")
+          }} />
         )}
 
         {activeTab === "bracket" && (
@@ -60,6 +77,7 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
               try {
                 await generatePlayoffSeeding(tournamentId, qualifiersPerGroup);
                 router.refresh();
+                setActiveTab("playoff");
               } finally {
                 setIsGenerating(false);
               }
