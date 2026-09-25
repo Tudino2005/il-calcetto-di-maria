@@ -282,6 +282,14 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
         }
       }
     }
+
+    // Gironi: go directly to drawing for team reveal ceremony, 
+    // then in_progress (no per-match draw ceremony needed)
+    await prisma.tournament.update({
+      where: { id: tournament.id },
+      data: { status: "drawing", teamNames: teamNamesMap }
+    });
+    redirect(`/tournaments/${tournamentId}?draw=true`);
   } else if (format === "doppia_eliminazione") {
     const initialMatchesData = generateDoubleEliminationStructure(createdTeams);
     const createdMatchIds: string[] = [];
@@ -323,17 +331,8 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
     });
     redirect(`/tournaments/${tournamentId}?draw=true`);
   }
-
-  await prisma.tournament.update({
-    where: { id: tournament.id },
-    data: { 
-      status: "drawing",
-      teamNames: teamNamesMap 
-    }
-  });
-  
-  redirect(`/tournaments/${tournamentId}?draw=true`);
 }
+
 
 export async function getTournaments() {
   return await prisma.tournament.findMany({
@@ -552,12 +551,14 @@ export async function respondToRegistrationRequest(requestId: string, status: st
   return req;
 }
 
-
 export async function finishDrawAnimation(tournamentId: string) {
   try {
+    const tournament = await prisma.tournament.findUnique({ where: { id: tournamentId }, select: { format: true } });
+    // For group stage tournaments, skip the per-match draw ceremony and go directly to in_progress
+    const nextStatus = tournament?.format === "gironi_eliminazione" ? "in_progress" : "matches_drawing";
     await prisma.tournament.update({
       where: { id: tournamentId },
-      data: { status: "matches_drawing" }
+      data: { status: nextStatus }
     });
     revalidatePath("/");
     revalidatePath("/tournaments");
