@@ -17,6 +17,20 @@ export default async function TVHomePage() {
     where: { status: { in: ["in_progress", "drawing", "matches_drawing"] } },
     orderBy: { createdAt: "desc" },
     include: {
+      groups: {
+        include: {
+          standings: {
+            include: { team: { include: { player1: true, player2: true } } },
+            orderBy: [{ points: 'desc' }, { won: 'desc' }]
+          },
+          matches: {
+            include: {
+              teamA: { include: { player1: true, player2: true } },
+              teamB: { include: { player1: true, player2: true } }
+            }
+          }
+        }
+      },
       matches: {
         include: {
           teamA: { include: { player1: true, player2: true } },
