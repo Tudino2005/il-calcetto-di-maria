@@ -288,6 +288,9 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
         const timer = setTimeout(() => setCountdownValue(prev => prev - 1), 1000);
         return () => clearTimeout(timer);
       } else {
+        if (tournament.type === "coppie_fisse") {
+          setRevealedIndex(teams.length);
+        }
         triggerPhaseChange("slot_machine");
       }
     }
@@ -659,7 +662,7 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
       
       <div className="absolute top-10 flex flex-col items-center animate-fade-in-down z-20">
         <div className="inline-flex items-center gap-3 px-8 py-3 bg-indigo-500/20 text-indigo-400 rounded-full font-bold uppercase tracking-widest border border-indigo-500/30 mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)] animate-pulse">
-          <Dices className="w-6 h-6" /> Cerimonia Sorteggio in Diretta
+          <Dices className="w-6 h-6" /> {tournament.type === "coppie_fisse" ? "Presentazione in Diretta" : "Cerimonia Sorteggio in Diretta"}
         </div>
         <h2 className="text-6xl font-black uppercase tracking-tight text-white mb-2 drop-shadow-2xl">
           {tournament.name}
@@ -843,7 +846,7 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
       ) : revealedIndex >= teams.length ? (
         <div className="flex flex-col items-center justify-center z-20 mt-20 gap-6 animate-in fade-in duration-700">
           <div className="text-5xl font-black text-emerald-400 uppercase tracking-widest animate-pulse text-center">
-            Sorteggio Completato!
+            {tournament.type === "coppie_fisse" ? "Presentazione in Arrivo!" : "Sorteggio Completato!"}
           </div>
           <div className="text-slate-400 font-bold uppercase tracking-widest">
             Preparazione presentazione squadre...
