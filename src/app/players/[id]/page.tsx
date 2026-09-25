@@ -174,221 +174,90 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         </div>
       </header>
 
-      <div className="bg-slate-800 rounded-3xl p-8 mb-8 border border-slate-700 shadow-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
+      <div className="bg-slate-800 rounded-3xl p-6 lg:p-8 mb-8 border border-slate-700 shadow-xl flex flex-col xl:flex-row gap-8 xl:items-center justify-between">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <h2 className="text-4xl lg:text-5xl font-black text-white leading-none">{player.name}</h2>
+            {myRank && (
+              <span className="text-3xl lg:text-4xl font-black text-purple-400">{myRank}°</span>
+            )}
+          </div>
+          <div className="flex items-center gap-4 mt-2">
+            <span className="px-4 py-2 bg-slate-900 text-slate-300 rounded-lg text-sm uppercase tracking-wider font-bold border border-slate-700">
+              {player.preferredRole}
+            </span>
+            <form action={handleDelete}>
+              <DeleteButton />
+            </form>
+          </div>
+        </div>
 
-            <div>
-              <div className="flex items-center gap-4 mb-2">
-                <h2 className="text-4xl font-black text-white">{player.name}</h2>
-                {myRank && (
-                  <span className="text-3xl font-black text-purple-400">{myRank}°</span>
-                )}
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="px-4 py-2 bg-slate-900 text-slate-300 rounded-lg text-sm uppercase tracking-wider font-bold border border-slate-700">
-                  {player.preferredRole}
-                </span>
-                <form action={handleDelete}>
-                  <DeleteButton />
-                </form>
-              </div>
+        {/* 4 Compact Stat Boxes */}
+        <div className="flex flex-wrap lg:flex-nowrap gap-4 w-full xl:w-auto">
+          {/* GK Stats */}
+          <div className="bg-slate-900/50 border border-blue-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-7 h-7 bg-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center text-sm">🛡️</div>
+              <div className="text-[10px] uppercase font-black tracking-wider text-blue-400 leading-tight">In Porta</div>
+            </div>
+            <div className="text-2xl font-black text-white mb-2 leading-none flex items-baseline gap-1">
+              {roleStats.defensiveIndex !== null ? roleStats.defensiveIndex : "-"} 
+              <span className="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Gol Sub.</span>
+            </div>
+            <div className="flex justify-between items-center text-xs font-bold border-t border-slate-700/50 pt-2.5 mt-1">
+              <span className="text-slate-400">{roleStats.gkMatches} G</span>
+              <span className="text-yellow-500">{roleStats.gkWinRate ? `${roleStats.gkWinRate}%` : "-"}</span>
             </div>
           </div>
-          <div className="flex gap-6 md:gap-8 text-right flex-wrap justify-end">
-            <div>
-              <div className="text-slate-400 font-bold mb-1">Partite Giocate</div>
-              <div className="text-3xl font-black text-white">{totalPlayed}</div>
+
+          {/* Striker Stats */}
+          <div className="bg-slate-900/50 border border-red-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-7 h-7 bg-red-500/20 text-red-400 rounded-lg flex items-center justify-center text-sm">⚔️</div>
+              <div className="text-[10px] uppercase font-black tracking-wider text-red-400 leading-tight">In Attacco</div>
             </div>
-            <div>
-              <div className="text-emerald-400 font-bold mb-1">Vittorie</div>
-              <div className="text-3xl font-black text-emerald-400">{totalWins}</div>
+            <div className="text-2xl font-black text-white mb-2 leading-none flex items-baseline gap-1">
+              {roleStats.offensiveIndex !== null ? roleStats.offensiveIndex : "-"} 
+              <span className="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Gol Fatti</span>
             </div>
-            <div>
-              <div className="text-yellow-500 font-bold mb-1">Win Rate</div>
-              <div className="text-3xl font-black text-yellow-500">{winRate}%</div>
+            <div className="flex justify-between items-center text-xs font-bold border-t border-slate-700/50 pt-2.5 mt-1">
+              <span className="text-slate-400">{roleStats.stMatches} G</span>
+              <span className="text-yellow-500">{roleStats.stWinRate ? `${roleStats.stWinRate}%` : "-"}</span>
+            </div>
+          </div>
+
+          {/* Ideal Partner */}
+          <div className="bg-slate-900/50 border border-purple-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-7 h-7 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center"><Sparkles className="w-4 h-4" /></div>
+              <div className="text-[10px] uppercase font-black tracking-wider text-purple-400 leading-tight">Partner</div>
+            </div>
+            <div className="text-xl font-black text-white mb-2 leading-none truncate">
+              {suggestedPartner ? suggestedPartner.partner.name : "-"}
+            </div>
+            <div className="flex justify-between items-center text-[11px] font-bold border-t border-slate-700/50 pt-2.5 mt-2">
+              <span className="text-slate-400">{suggestedPartner ? `${suggestedPartner.played} G` : "-"}</span>
+              <span className="text-emerald-400">{suggestedPartner ? `${suggestedPartner.winRate}% V` : "-"}</span>
+            </div>
+          </div>
+
+          {/* Total Stats */}
+          <div className="bg-slate-900/50 border border-emerald-500/30 rounded-2xl p-4 flex-1 min-w-[140px] shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-7 h-7 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center"><Trophy className="w-4 h-4" /></div>
+              <div className="text-[10px] uppercase font-black tracking-wider text-emerald-400 leading-tight">Totale</div>
+            </div>
+            <div className="text-3xl font-black text-white mb-1.5 leading-none flex items-baseline gap-1">
+              {totalPlayed}
+              <span className="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Partite</span>
+            </div>
+            <div className="flex justify-between items-center text-xs font-bold border-t border-slate-700/50 pt-2 mt-1">
+              <span className="text-emerald-400">{totalWins} Vinte</span>
+              <span className="text-yellow-500">{winRate}%</span>
             </div>
           </div>
         </div>
       </div>
-
-      {/* SPECIALIZZAZIONE PER RUOLO & INDICI DI RENDIMENTO */}
-      <section className="mb-8">
-        <h3 className="text-2xl font-black uppercase tracking-wider text-white mb-6 flex items-center gap-3">
-          <Shield className="w-7 h-7 text-emerald-400" /> SPECIALIZZAZIONE PER RUOLO & RENDIMENTO
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          {/* SCHEDA DIFENSORE */}
-          <div className="bg-slate-800/95 border border-blue-500/30 p-6 rounded-3xl shadow-xl flex flex-col justify-between gap-4">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center font-black text-2xl border border-blue-500/30">
-                    🛡️
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-black text-white">Rendimento in Porta</h4>
-                    <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Ruolo Difensivo</span>
-                  </div>
-                </div>
-                <span className="px-3 py-1 bg-blue-500/15 border border-blue-500/30 text-blue-300 font-black text-xs rounded-full uppercase">
-                  {roleStats.gkMatches} {roleStats.gkMatches === 1 ? "Partita" : "Partite"}
-                </span>
-              </div>
-
-              <div className="bg-slate-900/70 border border-slate-700/60 p-4 rounded-2xl mb-4 text-center">
-                <div className="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">
-                  Indice Difensivo (Media Gol Subiti)
-                </div>
-                <div className="text-4xl font-black text-blue-400">
-                  {roleStats.defensiveIndex !== null ? roleStats.defensiveIndex : "-"}
-                </div>
-                <div className="text-[11px] text-slate-400 mt-1">
-                  {roleStats.defensiveIndex !== null ? "Minore è la media, maggiore è la solidità difensiva" : "Nessuna partita giocata tra i pali"}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
-              <div>
-                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Gol Subiti</div>
-                <div className="text-lg font-black text-white">{roleStats.gkGoalsConceded}</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
-                <div className="text-lg font-black text-emerald-400">{roleStats.gkWins}</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider">Win Rate</div>
-                <div className="text-lg font-black text-yellow-400">
-                  {roleStats.gkWinRate ? `${roleStats.gkWinRate}%` : "-"}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* SCHEDA ATTACCANTE */}
-          <div className="bg-slate-800/95 border border-red-500/30 p-6 rounded-3xl shadow-xl flex flex-col justify-between gap-4">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-red-500/20 text-red-400 rounded-2xl flex items-center justify-center font-black text-2xl border border-red-500/30">
-                    ⚔️
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-black text-white">Rendimento in Attacco</h4>
-                    <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Ruolo Offensivo</span>
-                  </div>
-                </div>
-                <span className="px-3 py-1 bg-red-500/15 border border-red-500/30 text-red-300 font-black text-xs rounded-full uppercase">
-                  {roleStats.stMatches} {roleStats.stMatches === 1 ? "Partita" : "Partite"}
-                </span>
-              </div>
-
-              <div className="bg-slate-900/70 border border-slate-700/60 p-4 rounded-2xl mb-4 text-center">
-                <div className="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">
-                  Indice Offensivo (Media Gol Fatti)
-                </div>
-                <div className="text-4xl font-black text-red-400">
-                  {roleStats.offensiveIndex !== null ? roleStats.offensiveIndex : "-"}
-                </div>
-                <div className="text-[11px] text-slate-400 mt-1">
-                  {roleStats.offensiveIndex !== null ? "Maggiore è la media, più è prolifico l'attaccante" : "Nessuna partita giocata in attacco"}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
-              <div>
-                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Gol Fatti</div>
-                <div className="text-lg font-black text-white">{roleStats.stGoalsScored}</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Vinte</div>
-                <div className="text-lg font-black text-emerald-400">{roleStats.stWins}</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider">Win Rate</div>
-                <div className="text-lg font-black text-yellow-400">
-                  {roleStats.stWinRate ? `${roleStats.stWinRate}%` : "-"}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* VERDETTO ALCHIMIA */}
-        <div className="bg-gradient-to-r from-purple-950/40 via-slate-850 to-indigo-950/40 border border-purple-500/40 rounded-3xl p-6 shadow-xl flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center shrink-0 text-2xl">
-            🔄
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-black uppercase tracking-widest text-purple-400">Verdetto Alchimia Tattica</span>
-            </div>
-            <h4 className="text-xl font-black text-white mb-1.5">
-              {roleStats.verdettoAlchimia.titolo}
-            </h4>
-            <p className="text-sm text-slate-300 mb-2 leading-relaxed">
-              {roleStats.verdettoAlchimia.descrizione}
-            </p>
-            <p className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl inline-block">
-              💡 {roleStats.verdettoAlchimia.consiglio}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* IL PARTNER IDEALE */}
-      <section className="mb-8">
-        <div className="bg-gradient-to-r from-purple-900/40 to-slate-800/40 border border-purple-500/30 rounded-3xl p-6 relative overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.1)]">
-          <div className="absolute -right-10 -top-10 text-purple-500/10 pointer-events-none">
-            <Sparkles className="w-48 h-48" />
-          </div>
-          
-          <div className="relative z-10">
-            {suggestedPartner ? (
-              <>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-purple-500/20 p-2 rounded-xl">
-                    <Sparkles className="w-6 h-6 text-purple-400" />
-                  </div>
-                  <h3 className="text-xl font-black tracking-widest flex items-center gap-2 flex-wrap">
-                    <span className="uppercase text-white">
-                      PARTNER IDEALE:
-                    </span>
-                    <span className="text-yellow-400 normal-case drop-shadow-md text-3xl ml-1 capitalize">
-                      {suggestedPartner.partner.name}
-                    </span>
-                  </h3>
-                </div>
-                
-                <p className="text-slate-300 leading-relaxed text-lg">
-                  Maria consiglia: per il prossimo torneo iscriviti con <Link href={`/players/${suggestedPartner.partner.id}`} className="font-black text-white hover:text-purple-400 transition-colors underline decoration-purple-500/50 underline-offset-4">{suggestedPartner.partner.name}</Link>! 
-                  I numeri non mentono: insieme avete un formidabile <span className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">{suggestedPartner.winRate}%</span> di vittorie su <span className="font-bold text-white">{suggestedPartner.played}</span> incontri giocati 
-                  (con un bilancio di <span className="font-bold text-white">{suggestedPartner.setsWon}</span> set vinti e <span className="font-bold text-white">{suggestedPartner.setsLost}</span> persi).<br/>
-                  Avete un totale di <span className="font-bold text-emerald-400">{suggestedPartner.goalsScored}</span> gol fatti e <span className="font-bold text-rose-400">{suggestedPartner.goalsConceded}</span> gol subiti.
-                </p>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-purple-500/20 p-2 rounded-xl">
-                    <Sparkles className="w-6 h-6 text-purple-400" />
-                  </div>
-                  <h3 className="text-xl font-black text-white tracking-widest uppercase">
-                    PARTNER IDEALE
-                  </h3>
-                </div>
-                <p className="text-slate-400 italic text-base">
-                  Dati ancora insufficienti per consigliare un partner preciso (richieste almeno 3 partite giocate in coppia).
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-      </section>
 
       {/* RIEPILOGO PER COMPAGNO */}
       <section className="mb-8">
@@ -463,7 +332,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         <Calendar className="w-6 h-6 text-blue-400" /> Storico Partite Giocate
       </h3>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {allMatches.length === 0 ? (
           <div className="bg-slate-800 p-8 rounded-3xl text-center text-slate-400">
             Nessuna partita giocata finora.
