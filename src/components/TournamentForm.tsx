@@ -21,6 +21,7 @@ export default function TournamentForm() {
   const [targetGoals, setTargetGoals] = useState<number>(7);
   const [advantageThreshold, setAdvantageThreshold] = useState<number>(5);
   const [allowRoleSwaps, setAllowRoleSwaps] = useState<boolean>(false);
+  const [isBalancedDraw, setIsBalancedDraw] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -66,6 +67,7 @@ export default function TournamentForm() {
     if (pricePerPlayer) formData.append("pricePerPlayer", pricePerPlayer);
     if (prizes) formData.append("prizes", prizes);
     formData.append("allowRoleSwaps", type === "coppie_fisse" ? "false" : allowRoleSwaps.toString());
+    formData.append("isBalancedDraw", type === "coppie_fisse" ? "false" : isBalancedDraw.toString());
     formData.append("targetGoals", targetGoals.toString());
     formData.append("advantageThreshold", advantageThreshold.toString());
 
@@ -287,6 +289,31 @@ export default function TournamentForm() {
 
           <div className="flex flex-col justify-center flex-1">
             <div className={clsx("bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col justify-center items-center h-full gap-6 shadow-inner transition-all duration-300", type === "coppie_fisse" ? "opacity-0 pointer-events-none" : "opacity-100")}>
+              {type !== "coppie_fisse" && (
+                <div className="flex flex-col items-center text-center max-w-[250px] mb-6 border-b border-slate-700/50 pb-6 w-full">
+                  <div className="flex items-center justify-between w-full">
+                    <button
+                      type="button"
+                      onClick={() => setIsBalancedDraw(!isBalancedDraw)}
+                      className={`w-16 h-9 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner ${
+                        isBalancedDraw ? "bg-emerald-500" : "bg-slate-700"
+                      }`}
+                    >
+                      <div
+                        className={`w-7 h-7 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+                          isBalancedDraw ? "translate-x-7" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                    <div className="flex flex-col items-end">
+                      <label className="text-lg font-black tracking-wider text-emerald-400 block">
+                        Crea torneo equilibrato
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="flex flex-col items-center text-center max-w-[250px]">
                 <label className="text-xs font-black uppercase tracking-wider text-emerald-400 block mb-4">
                   Inversione Ruoli

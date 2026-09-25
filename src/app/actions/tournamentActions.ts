@@ -3,7 +3,8 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { drawTeams, drawTeamsRandom, generateBracket } from "@/lib/tournamentLogic";
+import { drawTeams, drawTeamsRandom, drawTeamsBalanced, drawTeamsRandomBalanced, generateBracket } from "@/lib/tournamentLogic";
+import { getLeaderboardData } from "@/lib/leaderboardData";
 import { generateRoundRobinSchedule, generateDoubleEliminationStructure, computeGroupStandings } from "@/lib/tournamentEngines";
 
 // New createTournament that only creates the Lobby
@@ -18,6 +19,7 @@ export async function createTournament(formData: FormData) {
   const prizes = formData.get("prizes") as string;
   const allowRoleSwapsStr = formData.get("allowRoleSwaps") as string;
   const allowRoleSwaps = allowRoleSwapsStr === "true";
+  const isBalancedDraw = formData.get("isBalancedDraw") === "true";
   const targetGoals = Number(formData.get("targetGoals") || 7);
   const advantageThreshold = Number(formData.get("advantageThreshold") || 5);
 
@@ -34,6 +36,7 @@ export async function createTournament(formData: FormData) {
       type, 
       format, 
       allowRoleSwaps,
+      isBalancedDraw,
       targetGoals,
       advantageThreshold,
       status: "setup",
@@ -196,7 +199,13 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
         };
       });
     } else {
-      teamsToInsert = drawTeamsRandom(players);
+      if (tournament.isBalancedDraw) {
+        const { playerStats } = await getLeaderboardData();
+        const statMap = new Map(playerStats.map(p => [p.id, p]));
+        teamsToInsert = drawTeamsRandomBalanced(players, statMap);
+      } else {
+        teamsToInsert = drawTeamsRandom(players);
+      }
     }
     createdTeams = await Promise.all(
       teamsToInsert.map(async (t) => {
@@ -213,7 +222,14 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
       })
     );
   } else {
-    const teamsToInsert = type === "sorteggio_integrale" ? drawTeamsRandom(players) : drawTeams(players);
+    let teamsToInsert: any[] = [];
+    if (tournament.isBalancedDraw) {
+      const { playerStats } = await getLeaderboardData();
+      const statMap = new Map(playerStats.map(p => [p.id, p]));
+      teamsToInsert = type === "sorteggio_integrale" ? drawTeamsRandomBalanced(players, statMap) : drawTeamsBalanced(players, statMap);
+    } else {
+      teamsToInsert = type === "sorteggio_integrale" ? drawTeamsRandom(players) : drawTeams(players);
+    }
     createdTeams = await Promise.all(
       teamsToInsert.map(async (t) => {
         const ids = [t.player1.id, t.player2.id].sort();
