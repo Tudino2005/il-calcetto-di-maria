@@ -6,9 +6,13 @@ import Link from "next/link";
 import clsx from "clsx";
 import { formatSetScores } from "@/lib/scoreUtils";
 import TournamentAgenda from "./TournamentAgenda";
+import { generatePlayoffSeeding } from "@/app/actions/tournamentActions";
+import { useRouter } from "next/navigation";
 
 export default function GroupStageView({ groups, qualifiersPerGroup, tournamentId, tournament }: { groups: any[], qualifiersPerGroup: number, tournamentId: string, tournament: any }) {
   const [activeTab, setActiveTab] = useState<"bracket" | "agenda">("bracket");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const router = useRouter();
   const allGroupsFinished = groups.every(g => g.matches.every((m: any) => m.winnerTeamId !== null));
 
   // Helper to format date for match cards
@@ -50,14 +54,23 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
           <Trophy className="w-12 h-12 text-emerald-400" />
           <h2 className="text-xl font-bold text-white">Tutti i gironi sono terminati!</h2>
           <p className="text-emerald-200">Le squadre qualificate sono pronte per il tabellone finale.</p>
-          <form action="/api/playoff" method="POST" className="mt-4">
-            <input type="hidden" name="tournamentId" value={tournamentId} />
-            <input type="hidden" name="qualifiers" value={qualifiersPerGroup} />
-            <button type="submit" className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-full transition-transform active:scale-95">
-              Genera Tabellone Playoff
-            </button>
-          </form>
+          <button
+            onClick={async () => {
+              setIsGenerating(true);
+              try {
+                await generatePlayoffSeeding(tournamentId, qualifiersPerGroup);
+                router.refresh();
+              } finally {
+                setIsGenerating(false);
+              }
+            }}
+            disabled={isGenerating}
+            className="mt-4 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-wait text-white font-bold py-3 px-8 rounded-full transition-transform active:scale-95"
+          >
+            {isGenerating ? "Generazione in corso..." : "Genera Tabellone Playoff"}
+          </button>
         </div>
+
       )}
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
