@@ -1582,9 +1582,18 @@ export default function TVSlideshow({ data }: { data: any }) {
                           </thead>
                           <tbody>
                             {[...group.standings].sort((a: any, b: any) => {
+                              // 1. Punti
                               if (a.points !== b.points) return b.points - a.points;
                               
-                              // In case of tie, check Head-to-Head first (Scontro Diretto)
+                              // 2. Differenza Set (DS)
+                              const diffA = (a.setsFor || 0) - (a.setsAgainst || 0);
+                              const diffB = (b.setsFor || 0) - (b.setsAgainst || 0);
+                              if (diffA !== diffB) return diffB - diffA;
+                              
+                              // 3. Sets Fatti
+                              if (a.setsFor !== b.setsFor) return (b.setsFor || 0) - (a.setsFor || 0);
+                              
+                              // 4. Scontro Diretto (H2H)
                               const h2h = group.matches?.find((m: any) => 
                                 (m.teamAId === a.teamId && m.teamBId === b.teamId) || 
                                 (m.teamAId === b.teamId && m.teamBId === a.teamId)
@@ -1592,11 +1601,6 @@ export default function TVSlideshow({ data }: { data: any }) {
                               if (h2h && h2h.winnerTeamId) {
                                 return h2h.winnerTeamId === a.teamId ? -1 : 1;
                               }
-
-                              // If no H2H or it was a draw (not possible in elimination, but just in case), use Set Difference
-                              const diffA = (a.setsFor || 0) - (a.setsAgainst || 0);
-                              const diffB = (b.setsFor || 0) - (b.setsAgainst || 0);
-                              if (diffA !== diffB) return diffB - diffA;
                               
                               return 0;
                             }).map((standing: any, index: number) => {
