@@ -191,12 +191,15 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
     
     // 10 second animation duration
     setTimeout(() => {
-       triggerPhaseChange("lineup_intro_text");
-       
-       // Hold the text for 3 seconds, then move to player lineup
-       setTimeout(() => {
-         triggerPhaseChange("player_lineup");
-       }, 3500); // 3.5 seconds total to allow for fade animations
+       const isSunday = tournament?.name?.toLowerCase().includes("domenica");
+       if (isSunday) {
+         triggerPhaseChange("draw_intro_text");
+       } else {
+         triggerPhaseChange("lineup_intro_text");
+         setTimeout(() => {
+           triggerPhaseChange("player_lineup");
+         }, 3500);
+       }
     }, 10000);
   };
 
@@ -214,10 +217,15 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
             setIntroState("playing_intro");
             
             setTimeout(() => {
-               triggerPhaseChange("lineup_intro_text");
-               setTimeout(() => {
-                 triggerPhaseChange("player_lineup");
-               }, 3500);
+               const isSunday = tournament?.name?.toLowerCase().includes("domenica");
+               if (isSunday) {
+                 triggerPhaseChange("draw_intro_text");
+               } else {
+                 triggerPhaseChange("lineup_intro_text");
+                 setTimeout(() => {
+                   triggerPhaseChange("player_lineup");
+                 }, 3500);
+               }
             }, 10000);
           } catch (err) {
             // Autoplay blocked, wait for user click

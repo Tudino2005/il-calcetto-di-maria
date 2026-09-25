@@ -280,17 +280,12 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
     await prisma.tournament.update({
       where: { id: tournament.id },
       data: { 
-        status: type === "coppie_fisse" ? "in_progress" : "drawing",
+        status: "drawing",
         bracketData: JSON.stringify({ wbRounds: [createdMatchIds], lbRounds: [] }),
         teamNames: teamNamesMap
       }
     });
-    if (type === "sorteggio_ruoli") {
-      redirect(`/tournaments/${tournamentId}?draw=true`);
-    } else {
-      revalidatePath(`/tournaments/${tournamentId}`);
-      redirect(`/tournaments/${tournamentId}`);
-    }
+    redirect(`/tournaments/${tournamentId}?draw=true`);
   } else {
     const initialMatchesData = generateBracket(createdTeams);
     const createdMatchIds: string[] = [];
@@ -305,33 +300,23 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
     await prisma.tournament.update({
       where: { id: tournament.id },
       data: { 
-        status: type === "coppie_fisse" ? "in_progress" : "drawing",
+        status: "drawing",
         bracketData: JSON.stringify({ rounds: [createdMatchIds] }),
         teamNames: teamNamesMap
       }
     });
-    if (type === "sorteggio_ruoli") {
-      redirect(`/tournaments/${tournamentId}?draw=true`);
-    } else {
-      revalidatePath(`/tournaments/${tournamentId}`);
-      redirect(`/tournaments/${tournamentId}`);
-    }
+    redirect(`/tournaments/${tournamentId}?draw=true`);
   }
 
   await prisma.tournament.update({
     where: { id: tournament.id },
     data: { 
-      status: type === "coppie_fisse" ? "in_progress" : "drawing",
+      status: "drawing",
       teamNames: teamNamesMap 
     }
   });
   
-  if (type === "sorteggio_ruoli") {
-    redirect(`/tournaments/${tournamentId}?draw=true`);
-  } else {
-    revalidatePath(`/tournaments/${tournamentId}`);
-    redirect(`/tournaments/${tournamentId}`);
-  }
+  redirect(`/tournaments/${tournamentId}?draw=true`);
 }
 
 export async function getTournaments() {

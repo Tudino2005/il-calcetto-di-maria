@@ -30,7 +30,7 @@ export default async function TournamentPage({ params, searchParams }: { params:
   }
 
   // If we are in the draw ceremony
-  if (draw === "true" && tournament.format !== "coppie_fisse" && tournament.format !== "sorteggio_integrale") {
+  if (draw === "true" && tournament.status !== "in_progress") {
     return <TournamentDrawCeremony tournamentId={tournament.id} matches={tournament.matches} />;
   }
 
