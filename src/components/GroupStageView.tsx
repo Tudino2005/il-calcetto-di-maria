@@ -80,7 +80,14 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
-                  {g.standings.map((s: any, idx: number) => {
+                  {[...g.standings].sort((a: any, b: any) => {
+                    if (a.points !== b.points) return b.points - a.points;
+                    const diffA = (a.setsFor || 0) - (a.setsAgainst || 0);
+                    const diffB = (b.setsFor || 0) - (b.setsAgainst || 0);
+                    if (diffA !== diffB) return diffB - diffA;
+                    if (a.setsFor !== b.setsFor) return (b.setsFor || 0) - (a.setsFor || 0);
+                    return 0;
+                  }).map((s: any, idx: number) => {
                     const isQualified = idx < qualifiersPerGroup;
                     return (
                       <tr key={s.id} className={clsx("transition-colors hover:bg-slate-800/50", isQualified ? "bg-emerald-900/10" : "")}>

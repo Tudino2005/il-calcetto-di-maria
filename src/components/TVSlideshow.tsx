@@ -1581,7 +1581,25 @@ export default function TVSlideshow({ data }: { data: any }) {
                             </tr>
                           </thead>
                           <tbody>
-                            {group.standings.map((standing: any, index: number) => {
+                            {[...group.standings].sort((a: any, b: any) => {
+                              if (a.points !== b.points) return b.points - a.points;
+                              
+                              // In case of tie, check Head-to-Head first (Scontro Diretto)
+                              const h2h = group.matches?.find((m: any) => 
+                                (m.teamAId === a.teamId && m.teamBId === b.teamId) || 
+                                (m.teamAId === b.teamId && m.teamBId === a.teamId)
+                              );
+                              if (h2h && h2h.winnerTeamId) {
+                                return h2h.winnerTeamId === a.teamId ? -1 : 1;
+                              }
+
+                              // If no H2H or it was a draw (not possible in elimination, but just in case), use Set Difference
+                              const diffA = (a.setsFor || 0) - (a.setsAgainst || 0);
+                              const diffB = (b.setsFor || 0) - (b.setsAgainst || 0);
+                              if (diffA !== diffB) return diffB - diffA;
+                              
+                              return 0;
+                            }).map((standing: any, index: number) => {
                               const isQualifying = index < 2; // Assuming top 2 qualify
                               const ds = (standing.setsFor || 0) - (standing.setsAgainst || 0);
                               return (
