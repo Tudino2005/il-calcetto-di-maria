@@ -174,7 +174,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         </div>
       </header>
 
-      <div className="bg-slate-800 rounded-3xl p-6 lg:p-8 mb-8 border border-slate-700 shadow-xl flex flex-col xl:flex-row gap-8 xl:items-start justify-between">
+      <div className="bg-slate-800 rounded-3xl p-6 lg:p-8 mb-8 border border-slate-700 shadow-xl flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
             <h2 className="text-4xl lg:text-5xl font-black text-white leading-none">{player.name}</h2>
@@ -193,7 +193,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         </div>
 
         {/* 4 Compact Stat Boxes */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full xl:w-2/3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
           {/* GK Stats */}
           <div className="bg-slate-900/50 border border-blue-500/30 rounded-2xl p-4 w-full shadow-sm">
             <div className="flex items-center gap-2 mb-3">
