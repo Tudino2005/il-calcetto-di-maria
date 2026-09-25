@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { advanceDoubleElimination } from "@/lib/doubleEliminationEngine";
 import { finalizeTournamentAwards } from "@/lib/tournamentAwards";
+import { computeGroupStandings } from "@/lib/tournamentEngines";
 
 export async function createPlayer(name: string, preferredRole: string, mediaUrl?: string, avatarUrl?: string) {
   const allPlayers = await prisma.player.findMany();
@@ -205,20 +206,50 @@ export async function scheduleMatch(matchId: string, scheduledAt: Date) {
 async function advanceTournament(tournamentId: string, matchId: string, winnerTeamId: string, bracketType: string) {
   const tournament = await prisma.tournament.findUnique({
     where: { id: tournamentId },
-    include: { matches: true, groups: { include: { matches: true } } }
+    include: {
+      matches: true,
+      groups: {
+        include: {
+          standings: { include: { team: { include: { player1: true, player2: true } } } },
+          matches: true
+        }
+      }
+    }
   });
   if (!tournament) return;
 
   if (tournament.format === "gironi_eliminazione") {
-    // We only update standings dynamically on read. For group stage progression:
-    // Check if ALL group matches are finished
-    const allFinished = tournament.matches.every(m => m.winnerTeamId !== null);
-    if (allFinished && tournament.status !== "completed") {
-      // Logic for converting group stage qualifiers into playoffs will be manually triggered
-      // by the user via a button "Generate Playoff Seeding" in the UI.
-      // So we don't automatically generate it here.
+    // Find the group this match belongs to
+    const completedMatch = tournament.matches.find(m => m.id === matchId);
+    const affectedGroup = tournament.groups.find(g => g.matches.some(m => m.id === matchId));
+
+    if (affectedGroup) {
+      // Recompute standings for this group using all its matches (including the one just finished)
+      const groupMatches = await prisma.match.findMany({ where: { groupId: affectedGroup.id } });
+      const teams = affectedGroup.standings.map(s => s.team);
+      const computed = computeGroupStandings(teams as any, groupMatches as any);
+
+      // Persist updated standings to DB
+      for (const s of computed) {
+        await prisma.groupStanding.updateMany({
+          where: { groupId: affectedGroup.id, teamId: s.teamId },
+          data: {
+            played: s.played,
+            won: s.won,
+            lost: s.lost,
+            setsFor: s.setsFor,
+            setsAgainst: s.setsAgainst,
+            points: s.points,
+          }
+        });
+      }
     }
+
+    // Check if ALL group matches are finished → optionally mark as needing playoff seeding
+    const allFinished = tournament.matches.every(m => m.id === matchId ? true : m.winnerTeamId !== null);
+    // (Playoff generation is triggered manually by the admin)
   } else if (tournament.format === "doppia_eliminazione") {
+
     if (!tournament.bracketData) return;
     const bracket = JSON.parse(tournament.bracketData);
     await advanceDoubleElimination(tournament, matchId, winnerTeamId, bracket);
