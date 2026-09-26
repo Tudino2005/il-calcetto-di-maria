@@ -371,7 +371,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
                   }
                 }}
                 className={clsx(
-                  "cursor-pointer border-2 rounded-xl p-4 transition-all flex flex-col items-center justify-center gap-2 text-center select-none",
+                  "cursor-pointer border-2 rounded-xl p-4 transition-all flex flex-col items-center justify-center gap-2 text-center select-none aspect-[9/16]",
                   !isReady && "active:scale-95",
                   isReady && !isSelected && "opacity-30 cursor-not-allowed",
                   colorClass
@@ -454,7 +454,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
                         }
                       }}
                       className={clsx(
-                        "cursor-pointer border-2 rounded-xl p-4 transition-all flex flex-col items-center justify-center gap-2 text-center select-none active:scale-95",
+                        "cursor-pointer border-2 rounded-xl p-4 transition-all flex flex-col items-center justify-center gap-2 text-center select-none active:scale-95 aspect-[9/16]",
                         isSelected ? "border-solid" : "border-dashed border-slate-700 hover:border-slate-500 bg-slate-800/50"
                       )}
                       style={pairColorValue ? { 
