@@ -1645,14 +1645,15 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* HALL OF FAME SLIDE */}
           {currentSlide.type === "hall_of_fame" && (
-            <div className="flex flex-col items-center w-full">
-              <Crown className="w-20 h-20 text-yellow-500 mb-6 drop-shadow-[0_0_20px_rgba(250,204,21,0.6)] animate-pulse" />
-              <h2 className="text-6xl font-black uppercase tracking-widest text-yellow-400 mb-14 drop-shadow-lg">
+            <div className="flex flex-col items-center w-full h-full pb-8">
+              <Crown className="w-20 h-20 text-yellow-500 mb-6 drop-shadow-[0_0_20px_rgba(250,204,21,0.6)] animate-pulse shrink-0" />
+              <h2 className="text-6xl font-black uppercase tracking-widest text-yellow-400 mb-14 drop-shadow-lg shrink-0">
                 Albo d'Oro Tornei
               </h2>
               
-              <div className="flex flex-col gap-6 w-full">
-                {completedTournaments.slice(0, 5).map((t: any) => {
+              <div className="flex-1 w-full overflow-hidden relative mask-edges px-4">
+                <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 15000) / 1000}s` }}>
+                  {completedTournaments.map((t: any) => {
                   const formatLabel = t.format === "eliminazione_diretta" 
                     ? "Eliminazione Diretta" 
                     : t.format === "doppia_eliminazione" 
