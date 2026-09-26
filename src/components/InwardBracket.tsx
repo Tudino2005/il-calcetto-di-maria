@@ -37,7 +37,15 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
   }
   
   const finalRound = paddedRounds[paddedRounds.length - 1];
-  const finalMatch = finalRound ? finalRound[0] : null;
+  let finalMatch = finalRound ? finalRound[0] : null;
+  
+  if (!finalMatch && paddedRounds.length > 1) {
+     const leftFeeder = leftRounds[leftRounds.length - 1]?.[0];
+     const rightFeeder = rightRounds[rightRounds.length - 1]?.[0];
+     if (leftFeeder?.winnerTeamId || rightFeeder?.winnerTeamId) {
+        finalMatch = { id: 'mock', teamAId: leftFeeder?.winnerTeamId, teamBId: rightFeeder?.winnerTeamId };
+     }
+  }
 
   const renderSlimCard = (m: any) => {
     if (!m) return <div className="w-48 xl:w-56 h-16 bg-slate-800/30 border border-slate-700/50 rounded-xl" />;
@@ -51,12 +59,12 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
         <div className={`w-48 xl:w-56 h-16 bg-slate-900 border-2 rounded-xl flex flex-col justify-center shadow-lg relative z-10 transition-all duration-700 ${isActive ? 'border-pink-500' : 'border-slate-600'} ${opacityClass}`}>
           <div className="flex flex-col px-3 justify-center h-full relative z-10 rounded-xl bg-slate-900">
             <div className="flex justify-between items-center text-[11px] xl:text-xs font-bold text-slate-300">
-              <span className="truncate pr-2">{m.teamAId && tournament.teamNames ? tournament.teamNames[m.teamAId] : (m.teamA ? m.teamA.player1.name : "TBD")}</span>
+              <span className={`truncate pr-2 ${!m.teamAId && !m.teamA ? 'text-slate-500 italic' : 'text-slate-200'}`}>{m.teamAId && tournament.teamNames ? tournament.teamNames[m.teamAId] : (m.teamA ? m.teamA.player1.name : "IN ATTESA...")}</span>
               <span className={`shrink-0 ${m.winnerTeamId === m.teamAId ? 'text-emerald-400 font-black text-sm' : ''}`}>{m.winnerTeamId ? m.scoreTeamA : ''}</span>
             </div>
             <div className="h-px w-full bg-slate-700/50 my-1" />
             <div className="flex justify-between items-center text-[11px] xl:text-xs font-bold text-slate-300">
-              <span className="truncate pr-2">{m.teamBId && tournament.teamNames ? tournament.teamNames[m.teamBId] : (m.teamB ? m.teamB.player1.name : "TBD")}</span>
+              <span className={`truncate pr-2 ${!m.teamBId && !m.teamB ? 'text-slate-500 italic' : 'text-slate-200'}`}>{m.teamBId && tournament.teamNames ? tournament.teamNames[m.teamBId] : (m.teamB ? m.teamB.player1.name : "IN ATTESA...")}</span>
               <span className={`shrink-0 ${m.winnerTeamId === m.teamBId ? 'text-emerald-400 font-black text-sm' : ''}`}>{m.winnerTeamId ? m.scoreTeamB : ''}</span>
             </div>
           </div>
@@ -70,6 +78,11 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
     const prevRound = leftRounds[roundIndex - 1];
     const feeder1 = prevRound ? prevRound[matchIndex * 2] : null;
     const feeder2 = prevRound ? prevRound[matchIndex * 2 + 1] : null;
+
+    let displayMatch = match;
+    if (!displayMatch && (feeder1?.winnerTeamId || feeder2?.winnerTeamId)) {
+       displayMatch = { id: 'mock', teamAId: feeder1?.winnerTeamId, teamBId: feeder2?.winnerTeamId };
+    }
 
 
 
@@ -88,7 +101,7 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
         </div>
         <div className="pl-4 xl:pl-6 relative">
           <div className="absolute left-0 top-1/2 w-4 xl:w-6 border-t-2 border-slate-600/50" />
-          {renderSlimCard(match)}
+          {renderSlimCard(displayMatch)}
         </div>
       </div>
     );
@@ -100,13 +113,16 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
     const feeder1 = prevRound ? prevRound[matchIndex * 2] : null;
     const feeder2 = prevRound ? prevRound[matchIndex * 2 + 1] : null;
     
-
+    let displayMatch = match;
+    if (!displayMatch && (feeder1?.winnerTeamId || feeder2?.winnerTeamId)) {
+       displayMatch = { id: 'mock', teamAId: feeder1?.winnerTeamId, teamBId: feeder2?.winnerTeamId };
+    }
 
     return (
       <div className="flex items-center h-full">
         <div className="pr-4 xl:pr-6 relative">
           <div className="absolute right-0 top-1/2 w-4 xl:w-6 border-t-2 border-slate-600/50" />
-          {renderSlimCard(match)}
+          {renderSlimCard(displayMatch)}
         </div>
         <div className="flex flex-col justify-around h-full relative w-full">
           <div className="flex-1 flex items-center justify-start relative pl-4 xl:pl-6">
