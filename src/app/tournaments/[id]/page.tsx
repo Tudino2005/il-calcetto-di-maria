@@ -6,6 +6,7 @@ import TournamentDrawCeremony from "@/components/TournamentDrawCeremony";
 import GroupStageView from "@/components/GroupStageView";
 import DoubleEliminationBracket from "@/components/DoubleEliminationBracket";
 import TournamentLobby from "@/components/TournamentLobby";
+import SchedulingPanel from "@/components/SchedulingPanel";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -63,6 +64,29 @@ export default async function TournamentPage({ params, searchParams }: { params:
       ) : (
         <TournamentBracket tournament={tournament} />
       )}
+
+      {/* Scheduling Panel — always visible for in-progress tournaments */}
+      {tournament.status === "in_progress" && (() => {
+        const allGroupMatches = tournament.groups?.flatMap((g: any) => g.matches) ?? [];
+        const directMatches = tournament.matches ?? [];
+        const totalMatches = tournament.format === "gironi_eliminazione"
+          ? allGroupMatches.length + directMatches.filter((m: any) => m.bracketType === "playoff").length
+          : directMatches.length;
+
+        return (
+          <div className="mt-8">
+            <SchedulingPanel
+              tournamentId={tournament.id}
+              currentStartDate={tournament.startDate?.toISOString() ?? null}
+              currentScheduleStartTime={(tournament as any).scheduleStartTime ?? null}
+              currentScheduleDays={(tournament as any).scheduleDays as number[] ?? null}
+              currentNumTables={(tournament as any).numTables ?? null}
+              currentMaxMatchesPerDay={(tournament as any).maxMatchesPerDay ?? null}
+              totalMatches={totalMatches}
+            />
+          </div>
+        );
+      })()}
     </main>
   );
 }

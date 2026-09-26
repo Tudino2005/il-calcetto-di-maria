@@ -3,17 +3,18 @@ import re
 with open('prisma/schema.prisma', 'r') as f:
     content = f.read()
 
-# Add allowRoleSwapping to Tournament model
-old_model = """  maxTeams       Int                      @default(8)
-  pricePerPlayer Float?"""
+old_fields = """  allowRoleSwaps     Boolean  @default(true)
+  targetGoals        Int      @default(10)
+  advantageThreshold Int      @default(2)"""
 
-new_model = """  maxTeams       Int                      @default(8)
-  allowRoleSwaps Boolean                  @default(false)
-  pricePerPlayer Float?"""
+new_fields = """  allowRoleSwaps     Boolean  @default(true)
+  isBalancedDraw     Boolean  @default(false)
+  targetGoals        Int      @default(10)
+  advantageThreshold Int      @default(2)"""
 
-content = content.replace(old_model, new_model)
+content = content.replace(old_fields, new_fields)
 
 with open('prisma/schema.prisma', 'w') as f:
     f.write(content)
 
-print("Patched schema")
+print("Patched schema!")

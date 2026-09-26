@@ -615,7 +615,7 @@ export async function deleteTournament(tournamentId: string) {
       where: { tournamentId }
     });
 
-    // Finally delete the tournament (registrations are cascaded)
+    // Finally delete the tournament (registrations are cascaded)\
     await prisma.tournament.delete({
       where: { id: tournamentId }
     });
@@ -625,4 +625,140 @@ export async function deleteTournament(tournamentId: string) {
   } catch (error) {
     console.error("Error deleting tournament:", error);
   }
+}
+
+// ─── Scheduling Actions ────────────────────────────────────────────────────────
+
+import {
+  scheduleTournamentMatches,
+  formatScheduleReport,
+  ScheduleConfig,
+  SchedulableMatch,
+} from "@/lib/tournamentScheduler";
+
+/**
+ * Saves the scheduling configuration to the tournament record.
+ */
+export async function saveSchedulingConfig(
+  tournamentId: string,
+  config: {
+    numTables: number;
+    scheduleStartTime: string;
+    scheduleDays: number[];
+    maxMatchesPerDay: number;
+    scheduleStartDate: string;
+  }
+) {
+  await prisma.tournament.update({
+    where: { id: tournamentId },
+    data: {
+      numTables: config.numTables,
+      scheduleStartTime: config.scheduleStartTime,
+      scheduleDays: config.scheduleDays,
+      maxMatchesPerDay: config.maxMatchesPerDay,
+      startDate: config.scheduleStartDate ? new Date(config.scheduleStartDate) : undefined,
+    },
+  });
+  revalidatePath(`/tournaments/${tournamentId}`);
+  return { ok: true };
+}
+
+/**
+ * Core scheduling action: computes and writes scheduledAt to every match.
+ */
+export async function generateSchedule(tournamentId: string): Promise<{
+  ok: boolean;
+  report?: string;
+  error?: string;
+}> {
+  const tournament = await prisma.tournament.findUnique({
+    where: { id: tournamentId },
+    include: {
+      matches: { orderBy: { playedAt: "asc" } },
+      groups: { include: { matches: { orderBy: { playedAt: "asc" } } } },
+    },
+  });
+
+  if (!tournament) return { ok: false, error: "Torneo non trovato." };
+  if (!tournament.startDate) return { ok: false, error: "Inserisci una data di inizio torneo." };
+  if (!tournament.scheduleStartTime) return { ok: false, error: "Inserisci un orario di inizio partite." };
+  if (!tournament.scheduleDays || (tournament.scheduleDays as number[]).length === 0)
+    return { ok: false, error: "Seleziona almeno un giorno della settimana." };
+  if (!tournament.numTables || tournament.numTables < 1)
+    return { ok: false, error: "Inserisci il numero di biliardini disponibili." };
+  if (!tournament.maxMatchesPerDay || tournament.maxMatchesPerDay < 1)
+    return { ok: false, error: "Inserisci il numero massimo di partite al giorno." };
+
+  const config: ScheduleConfig = {
+    startDate: tournament.startDate,
+    scheduleStartTime: tournament.scheduleStartTime,
+    scheduleDays: tournament.scheduleDays as number[],
+    numTables: tournament.numTables,
+    maxMatchesPerDay: tournament.maxMatchesPerDay,
+    matchDurationMinutes: 30,
+  };
+
+  const schedulableMatches: SchedulableMatch[] = [];
+
+  if (tournament.format === "gironi_eliminazione" && tournament.groups.length > 0) {
+    const groupMatchQueues = tournament.groups.map((g) => [...g.matches]);
+    const maxRoundsPerGroup = Math.max(...groupMatchQueues.map((q) => q.length));
+
+    for (let roundIdx = 0; roundIdx < maxRoundsPerGroup; roundIdx++) {
+      for (const queue of groupMatchQueues) {
+        const m = queue[roundIdx];
+        if (!m) continue;
+        schedulableMatches.push({ id: m.id, teamAId: m.teamAId, teamBId: m.teamBId, round: roundIdx });
+      }
+    }
+
+    const playoffMatches = tournament.matches.filter((m) => m.bracketType === "playoff");
+    const baseRound = maxRoundsPerGroup + 1;
+    let playoffRound = baseRound;
+    let playoffsInCurrentRound = 0;
+    const playoffsPerRound = Math.max(1, Math.floor(playoffMatches.length / 2));
+
+    for (const m of playoffMatches) {
+      schedulableMatches.push({ id: m.id, teamAId: m.teamAId, teamBId: m.teamBId, round: playoffRound });
+      playoffsInCurrentRound++;
+      if (playoffsInCurrentRound >= playoffsPerRound) { playoffRound++; playoffsInCurrentRound = 0; }
+    }
+  } else {
+    const allMatches = [...tournament.matches];
+    let roundIdx = 0;
+    let remaining = [...allMatches];
+    let chunkSize = Math.ceil(remaining.length / 2) || 1;
+    while (remaining.length > 0) {
+      const chunk = remaining.splice(0, Math.max(1, chunkSize));
+      for (const m of chunk) {
+        schedulableMatches.push({ id: m.id, teamAId: m.teamAId, teamBId: m.teamBId, round: roundIdx });
+      }
+      roundIdx++;
+      chunkSize = Math.max(1, Math.floor(chunkSize / 2));
+    }
+  }
+
+  const schedulable = schedulableMatches.filter((m) => m.teamAId && m.teamBId);
+  if (schedulable.length === 0)
+    return { ok: false, error: "Nessuna partita con squadre definite. Genera prima il tabellone o i gironi." };
+
+  let summary;
+  try {
+    summary = scheduleTournamentMatches(schedulable, config);
+  } catch (err: any) {
+    return { ok: false, error: err.message };
+  }
+
+  for (const result of summary.results) {
+    await prisma.match.update({ where: { id: result.matchId }, data: { scheduledAt: result.scheduledAt } });
+  }
+
+  await prisma.tournament.update({
+    where: { id: tournamentId },
+    data: { endDate: summary.estimatedEndDate },
+  });
+
+  revalidatePath(`/tournaments/${tournamentId}`);
+  const report = formatScheduleReport(summary);
+  return { ok: true, report };
 }

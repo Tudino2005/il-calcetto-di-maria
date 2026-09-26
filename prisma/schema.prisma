@@ -103,6 +103,7 @@ model Tournament {
   targetGoals    Int                      @default(7)
   advantageThreshold Int                  @default(5)
   allowRoleSwaps Boolean                  @default(false)
+  isBalancedDraw Boolean                  @default(false)
   pricePerPlayer Float?
   prizes         String?
   registrations  TournamentRegistration[]
@@ -111,6 +112,12 @@ model Tournament {
   teamNames      Json?
   awardsData     Json?
   createdAt      DateTime                 @default(now())
+
+  // --- Scheduling fields ---
+  numTables        Int?     // Number of foosball tables available
+  scheduleStartTime String? // HH:MM string, e.g. "20:30"
+  scheduleDays     Json?    // Array of 0-6 (0=Sunday), e.g. [2,4] = Tue+Thu
+  maxMatchesPerDay Int?     // Max matches per day (hard cap)
 
   winnerTeam Team?             @relation("TournamentWinner", fields: [winnerTeamId], references: [id])
   matches    Match[]
