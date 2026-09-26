@@ -277,7 +277,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               </div>
 
               {/* TWO COLUMNS */}
-              <div className="flex w-full flex-1 min-h-0 gap-8 lg:gap-16">
+              <div className="flex w-2/3 mx-auto flex-1 min-h-0 gap-8 lg:gap-16">
               
               {/* TOP SINGLES FIXED CARD */}
               <div className="flex-1 flex flex-col bg-slate-900/80 p-6 md:p-8 rounded-[3rem] border-2 border-yellow-500/20 shadow-2xl backdrop-blur-sm relative min-h-0">
@@ -479,7 +479,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               </div>
 
               {/* TWO COLUMNS */}
-              <div className="flex w-full flex-1 min-h-0 gap-8 lg:gap-16">
+              <div className="flex w-2/3 mx-auto flex-1 min-h-0 gap-8 lg:gap-16">
               
               {/* TOP DEFENDERS FIXED CARD */}
               <div className="flex-1 flex flex-col bg-slate-900/80 p-6 md:p-8 rounded-[3rem] border-2 border-blue-500/20 shadow-2xl backdrop-blur-sm relative min-h-0">
