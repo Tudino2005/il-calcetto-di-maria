@@ -1514,9 +1514,9 @@ export default function TVSlideshow({ data }: { data: any }) {
             try {
                const bData = t.bracketData ? JSON.parse(t.bracketData) : null;
                if (bData && bData.rounds) {
-                 rounds = bData.rounds.map((roundMatchIds: string[]) => 
-                   roundMatchIds.map(id => t.matches?.find((m: any) => m.id === id)).filter(Boolean)
-                 ).filter((r: any[]) => r.length > 0);
+                 rounds = bData.rounds.map((roundMatchIds: any[]) => 
+                   roundMatchIds.map((id: any) => id ? (t.matches?.find((m: any) => m.id === id) || null) : null)
+                 );
                }
             } catch (e) {}
 

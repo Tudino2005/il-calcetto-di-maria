@@ -7,7 +7,7 @@ export function BracketWithSpotlight({ rounds, tournament, matchProbs }: { round
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
-    const toAnimate = rounds.flat().filter(m => !m?.winnerTeamId);
+    const toAnimate = rounds.flat().filter(m => m && !m.winnerTeamId);
     if (toAnimate.length === 0) return;
 
     let idx = 0;

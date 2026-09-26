@@ -3,18 +3,40 @@ import React from 'react';
 export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isFading }: { rounds: any[][], tournament: any, matchProbs: any, activeMatch?: any, isFading?: boolean }) {
   if (!rounds || rounds.length === 0) return null;
 
-  // Split rounds into left and right
+  // 1. RECONSTRUCT FULL TREE SHAPE
+  // Find out how many matches are in the first round to determine the tree depth.
+  // Because rounds might be filtered, we look at rounds[0].
+  const firstRoundCount = rounds[0]?.length || 0;
+  if (firstRoundCount === 0) return null;
+  
+  let expectedFirstRound = 1;
+  while (expectedFirstRound < firstRoundCount) expectedFirstRound *= 2;
+  const totalRounds = Math.log2(expectedFirstRound) + 1;
+
+  const paddedRounds: any[][] = [];
+  let currentRoundSize = expectedFirstRound;
+  for (let r = 0; r < totalRounds; r++) {
+    const originalRound = rounds[r] || [];
+    const paddedRound = [];
+    for (let i = 0; i < currentRoundSize; i++) {
+       paddedRound.push(originalRound[i] || null);
+    }
+    paddedRounds.push(paddedRound);
+    currentRoundSize /= 2;
+  }
+
+  // Split paddedRounds into left and right
   const leftRounds: any[][] = [];
   const rightRounds: any[][] = [];
   
-  for (let i = 0; i < rounds.length - 1; i++) {
-    const round = rounds[i];
+  for (let i = 0; i < paddedRounds.length - 1; i++) {
+    const round = paddedRounds[i];
     const half = Math.max(1, Math.floor(round.length / 2));
     leftRounds.push(round.slice(0, half));
     rightRounds.push(round.slice(half));
   }
   
-  const finalRound = rounds[rounds.length - 1];
+  const finalRound = paddedRounds[paddedRounds.length - 1];
   const finalMatch = finalRound ? finalRound[0] : null;
 
   const renderSlimCard = (m: any) => {
@@ -55,11 +77,11 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
       <div className="flex items-center h-full">
         <div className="flex flex-col justify-around h-full relative w-full">
           <div className="flex-1 flex items-center justify-end relative pr-4 xl:pr-6">
-            {feeder1 && <LeftNode match={feeder1} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2} />}
+            <LeftNode match={feeder1} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2} />
             <div className="absolute right-0 top-1/2 w-4 xl:w-6 border-t-2 border-slate-600/50" />
           </div>
           <div className="flex-1 flex items-center justify-end relative pr-4 xl:pr-6">
-            {feeder2 && <LeftNode match={feeder2} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2 + 1} />}
+            <LeftNode match={feeder2} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2 + 1} />
             <div className="absolute right-0 top-1/2 w-4 xl:w-6 border-t-2 border-slate-600/50" />
           </div>
           <div className="absolute right-0 top-1/4 bottom-1/4 w-4 xl:w-6 border-r-2 border-slate-600/50 rounded-r-lg" />
@@ -88,11 +110,11 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
         </div>
         <div className="flex flex-col justify-around h-full relative w-full">
           <div className="flex-1 flex items-center justify-start relative pl-4 xl:pl-6">
-            {feeder1 && <RightNode match={feeder1} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2} />}
+            <RightNode match={feeder1} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2} />
             <div className="absolute left-0 top-1/2 w-4 xl:w-6 border-t-2 border-slate-600/50" />
           </div>
           <div className="flex-1 flex items-center justify-start relative pl-4 xl:pl-6">
-            {feeder2 && <RightNode match={feeder2} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2 + 1} />}
+            <RightNode match={feeder2} roundIndex={roundIndex - 1} matchIndex={matchIndex * 2 + 1} />
             <div className="absolute left-0 top-1/2 w-4 xl:w-6 border-t-2 border-slate-600/50" />
           </div>
           <div className="absolute left-0 top-1/4 bottom-1/4 w-4 xl:w-6 border-l-2 border-slate-600/50 rounded-l-lg" />
