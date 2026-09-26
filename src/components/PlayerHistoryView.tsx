@@ -64,7 +64,7 @@ export default function PlayerHistoryView({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-            {filteredPartners.map(({ partner, played, wins, winRate, teamId, partnerRank, teamRank }) => {
+            {filteredPartners.map(({ partner, played, wins, winRate, teamId, partnerRank, teamRank, goalsScored, goalsConceded }) => {
               const winRateNum = Number(winRate);
               const isHigh = winRateNum >= 60;
               const isMid = winRateNum >= 40 && winRateNum < 60;
@@ -90,7 +90,7 @@ export default function PlayerHistoryView({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-2 pt-3 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
+                  <div className="grid grid-cols-3 gap-y-3 gap-x-2 pt-3 border-t border-slate-700/60 text-center bg-slate-900/40 p-2.5 rounded-xl">
                     <div>
                       <div className="text-[10px] sm:text-[11px] text-purple-400 font-bold uppercase tracking-wider">Classifica</div>
                       <div className="text-lg font-black text-purple-400">{teamRank ? `${teamRank}°` : "-"}</div>
@@ -110,6 +110,14 @@ export default function PlayerHistoryView({
                       }`}>
                         {winRate}%
                       </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] sm:text-[11px] text-blue-400 font-bold uppercase tracking-wider">Gol Fatti</div>
+                      <div className="text-lg font-black text-white">{goalsScored}</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] sm:text-[11px] text-red-400 font-bold uppercase tracking-wider">Gol Subiti</div>
+                      <div className="text-lg font-black text-white">{goalsConceded}</div>
                     </div>
                   </div>
                 </div>
