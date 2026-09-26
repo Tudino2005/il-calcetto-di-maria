@@ -1510,7 +1510,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     return (
                       <div key={m.id} className={`flex flex-col rounded-3xl border-2 p-5 ${isFinished ? 'bg-slate-800/60 border-slate-700 opacity-60' : 'bg-slate-900 border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.15)]'}`}>
                         <div className="text-sm text-slate-400 font-bold mb-4 uppercase tracking-widest flex justify-between items-center">
-                          <span>{isFinished ? "Completata" : (m.scheduledAt ? new Date(m.scheduledAt).toLocaleDateString('it-IT') : "Da Pianificare")}</span>
+                          <span>{isFinished ? "Completata" : (m.scheduledAt ? `${new Date(m.scheduledAt).toLocaleDateString('it-IT')} ${new Date(m.scheduledAt).toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'})}` : "Da Pianificare")}</span>
                           <Calendar className="w-4 h-4 text-purple-400" />
                         </div>
                         
