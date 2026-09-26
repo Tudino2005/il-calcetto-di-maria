@@ -970,6 +970,13 @@ export default function TVSlideshow({ data }: { data: any }) {
                         >
                           {displayRank === 1 && <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none text-8xl">👑</div>}
                           
+                          {/* POINTS IN TOP RIGHT */}
+                          <div className="absolute top-4 right-4 z-20 flex flex-col items-end">
+                            <div className="text-3xl font-black text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]">
+                              {ps.points} <span className="text-lg">PT</span>
+                            </div>
+                          </div>
+
                           {/* TOP ROW: Profile, Name, Role */}
                           <div className="flex items-center gap-4 z-10">
                             {player.avatarUrl ? (

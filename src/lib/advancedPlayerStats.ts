@@ -21,7 +21,7 @@ export async function getAdvancedPlayerStatsForTV() {
 
   const advancedStats = allPlayers.map(player => {
     const rank = playerRankMap.get(player.id) || null;
-    const basicStats = playerStats.find(p => p.id === player.id) || { played: 0, wins: 0, winRate: 0 };
+    const basicStats = playerStats.find(p => p.id === player.id) || { played: 0, wins: 0, winRate: 0, points: 0 };
     
     // Skip players with 0 matches
     if (basicStats.played === 0) return null;
@@ -61,6 +61,7 @@ export async function getAdvancedPlayerStatsForTV() {
       played: basicStats.played,
       wins: basicStats.wins,
       winRate: basicStats.winRate,
+      points: basicStats.points,
       totalGoalsScored,
       avgGoalsPerMatch,
       roleStats,
