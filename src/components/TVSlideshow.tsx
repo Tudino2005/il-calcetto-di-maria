@@ -231,8 +231,18 @@ export default function TVSlideshow({ data }: { data: any }) {
     } else {
       if (t.format === "gironi_eliminazione") {
         slides.push({ type: "group_stage", tournament: t, duration: 30000 });
+        // If there are playoff matches, also push the bracket_tree slide
+        const playoffMatches = (t.matches || []).filter((m: any) => m.bracketType === "playoff" || m.bracketType?.startsWith("Quarti") || m.bracketType?.startsWith("Semifinal") || m.bracketType?.startsWith("Final") || m.bracketType?.startsWith("Ottavi"));
+        if (playoffMatches.length > 0) {
+          const matchesToAnimate = playoffMatches.filter((m: any) => !m.winnerTeamId).length;
+          const calcDuration = matchesToAnimate > 0 ? 1500 + (matchesToAnimate * 5000) + 6000 : 30000;
+          slides.push({ type: "bracket_tree", tournament: t, duration: Math.max(30000, calcDuration) });
+        }
       } else {
-        slides.push({ type: "bracket_tree", tournament: t, duration: 30000 });
+        const matchesToAnimate = (t.matches || []).filter((m: any) => !m.winnerTeamId).length;
+        // 1.5s initial delay + 5s per match + 6s persistence at the end
+        const calcDuration = matchesToAnimate > 0 ? 1500 + (matchesToAnimate * 5000) + 6000 : 30000;
+        slides.push({ type: "bracket_tree", tournament: t, duration: Math.max(30000, calcDuration) });
       }
     }
   });
