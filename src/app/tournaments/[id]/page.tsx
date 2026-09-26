@@ -69,9 +69,11 @@ export default async function TournamentPage({ params, searchParams }: { params:
       {!["setup", "ready_to_draw", "completed"].includes(tournament.status) && (() => {
         const allGroupMatches = tournament.groups?.flatMap((g: any) => g.matches) ?? [];
         const directMatches = tournament.matches ?? [];
-        const totalMatches = tournament.format === "gironi_eliminazione"
-          ? allGroupMatches.length + directMatches.filter((m: any) => m.bracketType === "playoff").length
-          : directMatches.length;
+        const allMatches = tournament.format === "gironi_eliminazione"
+          ? [...allGroupMatches, ...directMatches.filter((m: any) => m.bracketType === "playoff")]
+          : directMatches;
+        const totalMatches = allMatches.length;
+        const scheduledMatchesCount = allMatches.filter((m: any) => !!m.scheduledAt).length;
 
         return (
           <div className="mt-8">
@@ -83,6 +85,7 @@ export default async function TournamentPage({ params, searchParams }: { params:
               currentNumTables={(tournament as any).numTables ?? null}
               currentMaxMatchesPerDay={(tournament as any).maxMatchesPerDay ?? null}
               totalMatches={totalMatches}
+              scheduledMatchesCount={scheduledMatchesCount}
             />
           </div>
         );

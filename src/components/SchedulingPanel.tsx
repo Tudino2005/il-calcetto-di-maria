@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Clock, Cpu, Hash, CheckSquare, Square, Play, Loader2, Info, AlertCircle } from "lucide-react";
+import { Calendar, Clock, Cpu, Hash, CheckSquare, Square, Play, Loader2, Info, AlertCircle, CheckCircle2, RefreshCw, ChevronDown } from "lucide-react";
 import { saveSchedulingConfig, generateSchedule } from "@/app/actions/tournamentActions";
 import clsx from "clsx";
 
@@ -23,6 +23,7 @@ interface Props {
   currentNumTables?: number | null;
   currentMaxMatchesPerDay?: number | null;
   totalMatches: number;
+  scheduledMatchesCount?: number; // How many matches already have scheduledAt set
 }
 
 export default function SchedulingPanel({
@@ -33,7 +34,12 @@ export default function SchedulingPanel({
   currentNumTables,
   currentMaxMatchesPerDay,
   totalMatches,
+  scheduledMatchesCount = 0,
 }: Props) {
+  // If all matches are already scheduled, start in collapsed "done" mode
+  const alreadyScheduled = scheduledMatchesCount > 0 && scheduledMatchesCount >= totalMatches;
+  const [collapsed, setCollapsed] = useState(alreadyScheduled);
+
   const [startDate, setStartDate] = useState(
     currentStartDate ? currentStartDate.slice(0, 10) : ""
   );
@@ -100,6 +106,7 @@ export default function SchedulingPanel({
       const result = await generateSchedule(tournamentId);
       if (result.ok && result.report) {
         setReport(result.report);
+        setCollapsed(false); // Show report after regeneration
       } else {
         setError(result.error || "Errore sconosciuto.");
       }
@@ -110,17 +117,54 @@ export default function SchedulingPanel({
     }
   };
 
+  // ─── COLLAPSED / DONE STATE ────────────────────────────────────────────────
+  if (collapsed) {
+    return (
+      <div className="bg-slate-900 border border-emerald-500/30 rounded-3xl px-6 py-4 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+          </div>
+          <div>
+            <p className="text-white font-black text-sm uppercase tracking-wider">Calendario Generato</p>
+            <p className="text-slate-400 text-xs">
+              {scheduledMatchesCount} / {totalMatches} partite con orario assegnato
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition font-bold border border-slate-700 hover:border-slate-500 px-4 py-2 rounded-xl"
+        >
+          <RefreshCw className="w-3.5 h-3.5" /> Rigenera
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-slate-900 border border-indigo-500/30 rounded-3xl p-6 flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
-          <Calendar className="w-5 h-5 text-indigo-400" />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
+            <Calendar className="w-5 h-5 text-indigo-400" />
+          </div>
+          <div>
+            <h3 className="text-white font-black text-lg uppercase tracking-wider">Genera Calendario Automatico</h3>
+            <p className="text-slate-400 text-sm">{totalMatches} partite da schedulare · 30 min/partita</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-white font-black text-lg uppercase tracking-wider">Genera Calendario Automatico</h3>
-          <p className="text-slate-400 text-sm">{totalMatches} partite da schedulare · 30 min/partita</p>
-        </div>
+        {scheduledMatchesCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setCollapsed(true)}
+            className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 transition"
+          >
+            <ChevronDown className="w-4 h-4" /> Comprimi
+          </button>
+        )}
       </div>
 
       {/* Estimation banner */}
