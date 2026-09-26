@@ -66,7 +66,7 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
 
         {activeTab === "bracket" && (
           <div className="flex flex-col gap-8">
-            {allGroupsFinished && (
+            {allGroupsFinished && !hasPlayoffs && (
         <div className="bg-emerald-900/50 border border-emerald-500 rounded-xl p-6 flex flex-col items-center justify-center gap-4 text-center">
           <Trophy className="w-12 h-12 text-emerald-400" />
           <h2 className="text-xl font-bold text-white">Tutti i gironi sono terminati!</h2>
