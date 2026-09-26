@@ -65,8 +65,8 @@ export default async function TournamentPage({ params, searchParams }: { params:
         <TournamentBracket tournament={tournament} />
       )}
 
-      {/* Scheduling Panel — always visible for in-progress tournaments */}
-      {tournament.status === "in_progress" && (() => {
+      {/* Scheduling Panel — visible for any active tournament (not setup/lobby) */}
+      {!["setup", "ready_to_draw", "completed"].includes(tournament.status) && (() => {
         const allGroupMatches = tournament.groups?.flatMap((g: any) => g.matches) ?? [];
         const directMatches = tournament.matches ?? [];
         const totalMatches = tournament.format === "gironi_eliminazione"
