@@ -71,7 +71,7 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
     const feeder1 = prevRound ? prevRound[matchIndex * 2] : null;
     const feeder2 = prevRound ? prevRound[matchIndex * 2 + 1] : null;
 
-    if (!feeder1 && !feeder2) return renderSlimCard(match);
+
 
     return (
       <div className="flex items-center h-full">
@@ -100,7 +100,7 @@ export function InwardBracket({ rounds, tournament, matchProbs, activeMatch, isF
     const feeder1 = prevRound ? prevRound[matchIndex * 2] : null;
     const feeder2 = prevRound ? prevRound[matchIndex * 2 + 1] : null;
     
-    if (!feeder1 && !feeder2) return renderSlimCard(match);
+
 
     return (
       <div className="flex items-center h-full">
