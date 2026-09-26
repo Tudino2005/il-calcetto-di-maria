@@ -28,7 +28,14 @@ export async function createTournament(formData: FormData) {
   const startDate = startDateStr ? new Date(startDateStr) : null;
   const endDate = endDateStr ? new Date(endDateStr) : null;
   const pricePerPlayer = pricePerPlayerStr ? parseFloat(pricePerPlayerStr) : null;
-  
+
+  // Scheduling fields
+  const numTables = Number(formData.get("numTables") || 1);
+  const scheduleStartTime = (formData.get("scheduleStartTime") as string) || "20:00";
+  const scheduleDaysStr = formData.get("scheduleDays") as string;
+  const scheduleDays: number[] = scheduleDaysStr ? JSON.parse(scheduleDaysStr) : [2, 4];
+  const maxMatchesPerDay = Number(formData.get("maxMatchesPerDay") || 6);
+
   // Create tournament in setup mode
   const tournament = await prisma.tournament.create({
     data: { 
@@ -45,7 +52,12 @@ export async function createTournament(formData: FormData) {
       drawDate,
       maxTeams,
       pricePerPlayer,
-      prizes: prizes || null
+      prizes: prizes || null,
+      // Scheduling
+      numTables,
+      scheduleStartTime,
+      scheduleDays,
+      maxMatchesPerDay,
     }
   });
 
