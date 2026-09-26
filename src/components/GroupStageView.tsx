@@ -8,6 +8,7 @@ import { formatSetScores } from "@/lib/scoreUtils";
 import TournamentAgenda from "./TournamentAgenda";
 import TournamentBracket from "./TournamentBracket";
 import { generatePlayoffSeeding } from "@/app/actions/tournamentActions";
+import { computeGroupStandings } from "@/lib/tournamentEngines";
 import { useRouter } from "next/navigation";
 
 export default function GroupStageView({ groups, qualifiersPerGroup, tournamentId, tournament }: { groups: any[], qualifiersPerGroup: number, tournamentId: string, tournament: any }) {
@@ -111,7 +112,12 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
-                  {[...g.standings].sort((a: any, b: any) => {
+                  {(() => {
+                    const teamsFromMatches = g.matches ? Array.from(new Map(g.matches.map((m: any) => m.teamA).concat(g.matches.map((m: any) => m.teamB)).filter(Boolean).map((team: any) => [team.id, team])).values()) : [];
+                    const teamsFromStandings = g.standings ? g.standings.map((s: any) => s.team).filter(Boolean) : [];
+                    const teamsToUse = teamsFromStandings.length > 0 ? teamsFromStandings : teamsFromMatches;
+                    const computedStandings = computeGroupStandings(teamsToUse as any, g.matches || []);
+                    return [...computedStandings].sort((a: any, b: any) => {
                     // 1. Punti
                     if (a.points !== b.points) return b.points - a.points;
                     
@@ -136,14 +142,14 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                   }).map((s: any, idx: number) => {
                     const isQualified = idx < qualifiersPerGroup;
                     return (
-                      <tr key={s.id} className={clsx("transition-colors hover:bg-slate-800/50", isQualified ? "bg-emerald-900/10" : "")}>
+                      <tr key={s.id || s.teamId} className={clsx("transition-colors hover:bg-slate-800/50", isQualified ? "bg-emerald-900/10" : "")}>
                         <td className="p-4 text-center font-black">
                           <span className={clsx("flex items-center justify-center w-8 h-8 rounded-full", isQualified ? "bg-emerald-500/20 text-emerald-400" : "text-slate-500")}>
                             {idx + 1}
                           </span>
                         </td>
                         <td className="p-4 font-bold text-white">
-                          {s.team.player1.name} & {s.team.player2.name}
+                          {s.team?.player1?.name} & {s.team?.player2?.name}
                         </td>
                         <td className="p-4 text-center text-slate-400 font-medium">{s.played}</td>
                         <td className="p-4 text-center text-slate-400 font-medium">{s.won}</td>
@@ -151,7 +157,7 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                         <td className="p-4 text-center font-black text-purple-400 text-lg">{s.points}</td>
                       </tr>
                     );
-                  })}
+                  })})()}
                 </tbody>
               </table>
             </div>

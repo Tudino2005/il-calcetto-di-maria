@@ -11,6 +11,7 @@ import TournamentRulebook from "@/components/TournamentRulebook";
 import { formatSetScores } from "@/lib/scoreUtils";
 import { calculateTournamentProbabilities, calculateMatchProbabilities } from "@/lib/probabilityUtils";
 import { getFeederMatchInfo } from "@/lib/tournamentLogic";
+import { computeGroupStandings } from "@/lib/tournamentEngines";
 
 
 function BracketSpotlightManager({ rounds, tournament, matchProbs }: { rounds: any[][], tournament: any, matchProbs: any }) {
@@ -1562,7 +1563,13 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </h2>
                 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full max-w-[1600px] h-auto max-h-[70vh] overflow-hidden px-4">
-                  {t.groups && t.groups.map((group: any) => (
+                  {t.groups && t.groups.map((group: any) => {
+                    const teamsFromMatches = group.matches ? Array.from(new Map(group.matches.map((m: any) => m.teamA).concat(group.matches.map((m: any) => m.teamB)).filter(Boolean).map((team: any) => [team.id, team])).values()) : [];
+                    const teamsFromStandings = group.standings ? group.standings.map((s: any) => s.team).filter(Boolean) : [];
+                    const teamsToUse = teamsFromStandings.length > 0 ? teamsFromStandings : teamsFromMatches;
+                    const computedStandings = computeGroupStandings(teamsToUse as any, group.matches || []);
+                    
+                    return (
                     <div key={group.id} className="bg-[#151927] border border-slate-700/60 rounded-2xl overflow-hidden shadow-2xl flex flex-col h-full">
                       <div className="bg-[#1e2436] py-5 px-6 border-b border-slate-700/60 flex items-center justify-between">
                         <h3 className="text-2xl font-bold text-white uppercase tracking-widest">{group.name}</h3>
@@ -1581,7 +1588,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                             </tr>
                           </thead>
                           <tbody>
-                            {[...group.standings].sort((a: any, b: any) => {
+                            {[...computedStandings].sort((a: any, b: any) => {
                               // 1. Punti
                               if (a.points !== b.points) return b.points - a.points;
                               
@@ -1607,7 +1614,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               const isQualifying = index < 2; // Assuming top 2 qualify
                               const ds = (standing.setsFor || 0) - (standing.setsAgainst || 0);
                               return (
-                                <tr key={standing.id} className="border-b border-slate-800/40 last:border-0 hover:bg-slate-800/20 transition-colors">
+                                <tr key={standing.id || standing.teamId} className="border-b border-slate-800/40 last:border-0 hover:bg-slate-800/20 transition-colors">
                                   <td className="py-4 px-6">
                                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${isQualifying ? 'bg-emerald-500/20 text-emerald-400' : 'text-slate-500'}`}>
                                       {index + 1}
@@ -1631,7 +1638,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </table>
                       </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               </div>
             );
