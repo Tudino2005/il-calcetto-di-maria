@@ -397,7 +397,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
                       handleTogglePayment(p.id, registration.hasPaid); 
                     }}
                     className={clsx(
-                      "mt-2 w-full flex justify-center items-center gap-1 py-1 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all border",
+                      "mt-2 w-2/3 mx-auto flex justify-center items-center gap-1 py-1 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all border",
                       registration.hasPaid 
                         ? "bg-emerald-900/50 border-emerald-500/30 text-emerald-400 hover:bg-emerald-800/60" 
                         : "bg-red-900/50 border-red-500/30 text-red-400 hover:bg-red-800/60"
