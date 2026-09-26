@@ -285,9 +285,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   {playerStats[0] && (() => {
                     const topPlayers = playerStats.filter((p: any) => 
-                      p.winRate === playerStats[0].winRate && 
+                      p.points === playerStats[0].points && 
                       p.wins === playerStats[0].wins && 
-                      p.played === playerStats[0].played
+                      p.winRate === playerStats[0].winRate
                     );
                     return (
                     <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-yellow-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(234,179,8,0.15)] relative overflow-hidden">
@@ -308,12 +308,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                         ))}
                       </div>
                       <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
-                        <div className="text-2xl font-black flex items-baseline gap-1">
-                          <span className="text-emerald-400">{playerStats[0].wins} V</span>
-                          <span className="text-blue-400">/ {playerStats[0].played} G</span>
+                        <div className="text-3xl font-black text-yellow-500 flex items-baseline gap-1">
+                          {playerStats[0].points} <span className="text-xl">PT</span>
                         </div>
-                        <div className="text-yellow-500 font-black text-xl">
-                          {playerStats[0].winRate}%
+                        <div className="text-lg font-bold text-slate-400">
+                          {playerStats[0].wins} V / {playerStats[0].played} G
                         </div>
                       </div>
                     </div>
@@ -326,8 +325,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000}s` }}>
-                    {playerStats.slice(playerStats.filter((p: any) => p.winRate === playerStats[0]?.winRate && p.wins === playerStats[0]?.wins && p.played === playerStats[0]?.played).length).map((p: any, i: number) => {
-                      const rank = i + 1 + playerStats.filter((ps: any) => ps.winRate === playerStats[0]?.winRate && ps.wins === playerStats[0]?.wins && ps.played === playerStats[0]?.played).length;
+                    {playerStats.slice(playerStats.filter((p: any) => p.points === playerStats[0]?.points && p.wins === playerStats[0]?.wins && p.winRate === playerStats[0]?.winRate).length).map((p: any, i: number) => {
+                      const rank = i + 1 + playerStats.filter((ps: any) => ps.points === playerStats[0]?.points && ps.wins === playerStats[0]?.wins && ps.winRate === playerStats[0]?.winRate).length;
                       return (
                       <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 flex-1">
@@ -349,12 +348,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                         
                         <div className="flex flex-col items-end shrink-0 ml-4">
-                          <div className="text-xl font-black flex items-baseline gap-1">
-                            <span className="text-emerald-400">{p.wins} V</span>
-                            <span className="text-blue-400">/ {p.played} G</span>
+                          <div className="text-2xl font-black text-yellow-500 flex items-baseline gap-1">
+                            {p.points} <span className="text-sm">PT</span>
                           </div>
-                          <div className="text-yellow-500 font-black text-lg">
-                            {p.winRate}%
+                          <div className="text-sm font-bold text-slate-400 text-right">
+                            {p.wins} V / {p.played} G
                           </div>
                         </div>
                       </div>
@@ -369,9 +367,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   {teamStats[0] && (() => {
                     const topTeams = teamStats.filter((t: any) => 
-                      t.winRate === teamStats[0].winRate && 
+                      t.points === teamStats[0].points && 
                       t.wins === teamStats[0].wins && 
-                      t.played === teamStats[0].played
+                      t.winRate === teamStats[0].winRate
                     );
                     return (
                     <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-yellow-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(234,179,8,0.15)] relative overflow-hidden">
@@ -393,12 +391,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                         ))}
                       </div>
                       <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
-                        <div className="text-2xl font-black flex items-baseline gap-1">
-                          <span className="text-emerald-400">{teamStats[0].wins} V</span>
-                          <span className="text-blue-400">/ {teamStats[0].played} G</span>
+                        <div className="text-3xl font-black text-yellow-500 flex items-baseline gap-1">
+                          {teamStats[0].points} <span className="text-xl">PT</span>
                         </div>
-                        <div className="text-yellow-500 font-black text-xl">
-                          {teamStats[0].winRate}%
+                        <div className="text-lg font-bold text-slate-400">
+                          {teamStats[0].wins} V / {teamStats[0].played} G
                         </div>
                       </div>
                     </div>
@@ -411,8 +408,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000}s` }}>
-                    {teamStats.slice(teamStats.filter((t: any) => t.winRate === teamStats[0]?.winRate && t.wins === teamStats[0]?.wins && t.played === teamStats[0]?.played).length).map((t: any, i: number) => {
-                      const rank = i + 1 + teamStats.filter((ts: any) => ts.winRate === teamStats[0]?.winRate && ts.wins === teamStats[0]?.wins && ts.played === teamStats[0]?.played).length;
+                    {teamStats.slice(teamStats.filter((t: any) => t.points === teamStats[0]?.points && t.wins === teamStats[0]?.wins && t.winRate === teamStats[0]?.winRate).length).map((t: any, i: number) => {
+                      const rank = i + 1 + teamStats.filter((ts: any) => ts.points === teamStats[0]?.points && ts.wins === teamStats[0]?.wins && ts.winRate === teamStats[0]?.winRate).length;
                       return (
                       <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 flex-1">
@@ -432,12 +429,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                         
                         <div className="flex flex-col items-end shrink-0 ml-4">
-                          <div className="text-xl font-black flex items-baseline gap-1">
-                            <span className="text-emerald-400">{t.wins} V</span>
-                            <span className="text-blue-400">/ {t.played} G</span>
+                          <div className="text-2xl font-black text-yellow-500 flex items-baseline gap-1">
+                            {t.points} <span className="text-sm">PT</span>
                           </div>
-                          <div className="text-yellow-500 font-black text-lg">
-                            {t.winRate}%
+                          <div className="text-sm font-bold text-slate-400 text-right">
+                            {t.wins} V / {t.played} G
                           </div>
                         </div>
                       </div>
@@ -531,12 +527,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                         ))}
                       </div>
                       <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
-                        <div className="text-2xl font-black flex items-baseline gap-1">
-                          <span className="text-emerald-400">{defenderStats[0].wins} V</span>
-                          <span className="text-blue-400">/ {defenderStats[0].played} G</span>
+                        <div className="text-3xl font-black text-blue-500 flex items-baseline gap-1">
+                          {defenderStats[0].points} <span className="text-xl">PT</span>
                         </div>
-                        <div className="text-blue-500 font-black text-xl">
-                          {defenderStats[0].winRate}%
+                        <div className="text-lg font-bold text-slate-400">
+                          {defenderStats[0].wins} V / {defenderStats[0].played} G
                         </div>
                       </div>
                     </div>
@@ -589,12 +584,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                           })()}
                         </div>
                         <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
-                          <div className="text-xl font-black flex items-baseline gap-1">
-                            <span className="text-emerald-400">{p.wins} V</span>
-                            <span className="text-blue-400">/ {p.played} G</span>
+                          <div className="text-2xl font-black text-blue-500 flex items-baseline gap-1">
+                            {p.points} <span className="text-sm">PT</span>
                           </div>
-                          <div className="text-blue-500 font-black text-lg">
-                            {p.winRate}%
+                          <div className="text-sm font-bold text-slate-400 text-right">
+                            {p.wins} V / {p.played} G
                           </div>
                         </div>
                       </div>
@@ -649,12 +643,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                         ))}
                       </div>
                       <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
-                        <div className="text-2xl font-black flex items-baseline gap-1">
-                          <span className="text-emerald-400">{strikerStats[0].wins} V</span>
-                          <span className="text-blue-400">/ {strikerStats[0].played} G</span>
+                        <div className="text-3xl font-black text-red-500 flex items-baseline gap-1">
+                          {strikerStats[0].points} <span className="text-xl">PT</span>
                         </div>
-                        <div className="text-red-500 font-black text-xl">
-                          {strikerStats[0].winRate}%
+                        <div className="text-lg font-bold text-slate-400">
+                          {strikerStats[0].wins} V / {strikerStats[0].played} G
                         </div>
                       </div>
                     </div>
@@ -705,12 +698,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                           })()}
                         </div>
                         <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
-                          <div className="text-xl font-black flex items-baseline gap-1">
-                            <span className="text-emerald-400">{t.wins} V</span>
-                            <span className="text-blue-400">/ {t.played} G</span>
+                          <div className="text-2xl font-black text-red-500 flex items-baseline gap-1">
+                            {t.points} <span className="text-sm">PT</span>
                           </div>
-                          <div className="text-red-500 font-black text-lg">
-                            {t.winRate}%
+                          <div className="text-sm font-bold text-slate-400 text-right">
+                            {t.wins} V / {t.played} G
                           </div>
                         </div>
                       </div>

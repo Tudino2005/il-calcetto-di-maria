@@ -50,8 +50,8 @@ export default function LeaderboardView({ playerStats, teamStats }: { playerStat
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-black text-emerald-400 text-xl">{p.wins} V <span className="text-slate-600 text-sm">/ {p.played} G</span></div>
-                  <div className="text-sm text-yellow-500 font-bold">{p.winRate}% WR</div>
+                  <div className="font-black text-yellow-500 text-2xl">{p.points} <span className="text-sm">PT</span></div>
+                  <div className="text-sm text-slate-400 font-bold">{p.wins} V / {p.played} G</div>
                 </div>
               </div>
             ))}
@@ -75,8 +75,8 @@ export default function LeaderboardView({ playerStats, teamStats }: { playerStat
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-black text-emerald-400 text-xl">{t.wins} V <span className="text-slate-600 text-sm">/ {t.played} G</span></div>
-                  <div className="text-sm text-yellow-500 font-bold">{t.winRate}% WR</div>
+                  <div className="font-black text-yellow-500 text-2xl">{t.points} <span className="text-sm">PT</span></div>
+                  <div className="text-sm text-slate-400 font-bold">{t.wins} V / {t.played} G</div>
                 </div>
               </div>
             ))}
