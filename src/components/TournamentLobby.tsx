@@ -344,7 +344,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
         </div>
 
 
-        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-4 max-h-[50vh] overflow-y-auto pr-4 custom-scrollbar">
+        <div className="flex flex-wrap justify-center gap-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
           {allPlayers.map(p => {
             const registration = registrations.find((r: any) => r.playerId === p.id);
             const isSelected = !!registration;
@@ -371,7 +371,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
                   }
                 }}
                 className={clsx(
-                  "cursor-pointer transition-all duration-300 flex flex-col items-center justify-start gap-1 text-center select-none py-2",
+                  "cursor-pointer transition-all duration-300 flex flex-col items-center justify-start gap-1 text-center select-none py-2 w-28",
                   !isReady && "active:scale-90",
                   isReady && !isSelected && "opacity-20 cursor-not-allowed",
                   containerClass
@@ -417,7 +417,7 @@ export default function TournamentLobby({ tournament, allPlayers }: { tournament
                 <Users className="text-orange-400" /> Forma le Squadre (Tocca 2 giocatori per accoppiarli)
               </h3>
               
-              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-4 mb-4">
+              <div className="flex flex-wrap justify-center gap-4 mb-4">
                 {registrations.map((r: any) => {
                   const p = r.player;
                   let isSelected = false;
