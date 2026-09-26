@@ -757,38 +757,40 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
           })()}
 
           {/* Already shown teams stacking below */}
-          <div className="mt-10 flex flex-wrap gap-4 justify-center w-full max-w-7xl px-4">
-            {teams.slice(0, showcaseIndex).map((t, i) => (
-              <div key={i} className="bg-slate-900 border-2 border-yellow-400/50 rounded-3xl p-5 flex flex-col items-center gap-3 shadow-[0_0_20px_rgba(250,204,21,0.15)] animate-in fade-in zoom-in duration-300 min-w-[240px]">
-                {tournament.teamNames?.[t.id] && (
-                  <span className="text-sm font-black text-yellow-400 uppercase tracking-widest">
-                    "{tournament.teamNames[t.id]}"
-                  </span>
-                )}
-                <div className="flex items-center gap-4 w-full justify-center">
-                  <div className="flex flex-col items-center flex-1 relative">
-                    {t.player1?.avatarUrl ? (
-                      <div className="relative w-24 h-28 -mb-2 flex justify-center items-end">
-                         <img 
-                           src={`/players/${t.player1.avatarUrl}`} 
-                           className="absolute bottom-0 w-full h-full object-cover object-top" 
-                           style={{ 
-                             WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', 
-                             maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' 
-                           }} 
-                         />
-                      </div>
-                    ) : (
-                      <RoleIcon role={t.player1?.preferredRole || "entrambi"} className="w-10 h-10 text-yellow-400 mb-1" />
-                    )}
-                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap relative z-10 drop-shadow-md">{t.player1?.name}</span>
-                  </div>
-                  
-                  <span className="text-xl font-black text-slate-500 relative z-10">&</span>
+          <div className={`mt-6 flex flex-wrap justify-center w-full max-w-[1600px] px-4 ${teams.length > 8 ? 'gap-3' : 'gap-4 mt-10'}`}>
+            {teams.slice(0, showcaseIndex).map((t, i) => {
+              const isCompact = teams.length > 8;
+              return (
+                <div key={i} className={`bg-slate-900 border-2 border-yellow-400/50 rounded-2xl flex flex-col items-center shadow-[0_0_20px_rgba(250,204,21,0.15)] animate-in fade-in zoom-in duration-300 ${isCompact ? 'p-3 min-w-[180px] gap-2' : 'p-5 min-w-[240px] gap-3 rounded-3xl'}`}>
+                  {tournament.teamNames?.[t.id] && (
+                    <span className={`${isCompact ? 'text-[11px]' : 'text-sm'} font-black text-yellow-400 uppercase tracking-widest text-center`}>
+                      "{tournament.teamNames[t.id]}"
+                    </span>
+                  )}
+                  <div className="flex items-center w-full justify-center">
+                    <div className="flex flex-col items-center flex-1 relative">
+                      {t.player1?.avatarUrl ? (
+                        <div className={`relative flex justify-center items-end ${isCompact ? 'w-16 h-20 -mb-1' : 'w-24 h-28 -mb-2'}`}>
+                           <img 
+                             src={`/players/${t.player1.avatarUrl}`} 
+                             className="absolute bottom-0 w-full h-full object-cover object-top" 
+                             style={{ 
+                               WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', 
+                               maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' 
+                             }} 
+                           />
+                        </div>
+                      ) : (
+                        <RoleIcon role={t.player1?.preferredRole || "entrambi"} className={`${isCompact ? 'w-7 h-7' : 'w-10 h-10'} text-yellow-400 mb-1`} />
+                      )}
+                      <span className={`${isCompact ? 'text-sm' : 'text-xl'} font-black text-white text-center leading-tight whitespace-nowrap relative z-10 drop-shadow-md`}>{t.player1?.name}</span>
+                    </div>
+                    
+                    <span className={`${isCompact ? 'text-sm mx-1' : 'text-xl mx-4'} font-black text-slate-500 relative z-10`}>&</span>
                   
                   <div className="flex flex-col items-center flex-1 relative">
                     {t.player2?.avatarUrl ? (
-                      <div className="relative w-24 h-28 -mb-2 flex justify-center items-end">
+                      <div className={`relative flex justify-center items-end ${isCompact ? 'w-16 h-20 -mb-1' : 'w-24 h-28 -mb-2'}`}>
                          <img 
                            src={`/players/${t.player2.avatarUrl}`} 
                            className="absolute bottom-0 w-full h-full object-cover object-top" 
@@ -799,21 +801,22 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
                          />
                       </div>
                     ) : (
-                      <RoleIcon role={t.player2?.preferredRole || "entrambi"} className="w-10 h-10 text-emerald-400 mb-1" />
+                      <RoleIcon role={t.player2?.preferredRole || "entrambi"} className={`${isCompact ? 'w-7 h-7' : 'w-10 h-10'} text-emerald-400 mb-1`} />
                     )}
-                    <span className="text-xl font-black text-white text-center leading-tight whitespace-nowrap relative z-10 drop-shadow-md">{t.player2?.name}</span>
+                    <span className={`${isCompact ? 'text-sm' : 'text-xl'} font-black text-white text-center leading-tight whitespace-nowrap relative z-10 drop-shadow-md`}>{t.player2?.name}</span>
                   </div>
                 </div>
                 
                 {teamProbabilities.has(t.id) && (
-                  <div className="mt-1 bg-slate-950/60 px-3 py-1 rounded border border-yellow-500/20">
-                     <span className="text-yellow-400 font-bold text-xs uppercase tracking-wider">
+                  <div className={`mt-1 bg-slate-950/60 rounded border border-yellow-500/20 ${isCompact ? 'px-2 py-0.5' : 'px-3 py-1'}`}>
+                     <span className={`${isCompact ? 'text-[9px]' : 'text-xs'} text-yellow-400 font-bold uppercase tracking-wider`}>
                        Vittoria: {teamProbabilities.get(t.id).toFixed(1)}%
                      </span>
                   </div>
                 )}
               </div>
-            ))}
+            );
+          })}
           </div>
 
           {/* TESTO FINALE SOTTO LA GRIGLIA (Format, Titolo, Data) */}
