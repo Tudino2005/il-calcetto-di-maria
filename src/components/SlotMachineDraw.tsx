@@ -45,6 +45,35 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
   const [countdownValue, setCountdownValue] = useState(3);
   const [isFadingOutPlayer, setIsFadingOutPlayer] = useState(false);
   const [flipState, setFlipState] = useState<"none" | "out" | "in">("none");
+  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const [gridScale, setGridScale] = useState(1);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (gridContainerRef.current) {
+        const container = gridContainerRef.current;
+        const rect = container.getBoundingClientRect();
+        const availableHeight = window.innerHeight - rect.top - 40; // 40px padding at bottom
+        const originalHeight = container.scrollHeight;
+        
+        if (originalHeight > availableHeight && availableHeight > 0) {
+           setGridScale(availableHeight / originalHeight);
+        } else {
+           setGridScale(1);
+        }
+      }
+    };
+    
+    handleResize();
+    const t1 = setTimeout(handleResize, 50);
+    const t2 = setTimeout(handleResize, 300);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [showcaseIndex, teams]);
   const audioRef1 = useRef<HTMLAudioElement | null>(null);
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
   const audioRef3 = useRef<HTMLAudioElement | null>(null);
@@ -757,7 +786,11 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
           })()}
 
           {/* Already shown teams stacking below */}
-          <div className={`mt-6 flex flex-wrap justify-center w-full max-w-[1600px] px-4 ${teams.length > 8 ? 'gap-3' : 'gap-4 mt-10'}`}>
+          <div className="w-full flex justify-center flex-1 overflow-visible" ref={gridContainerRef}>
+            <div 
+               className={`mt-6 flex flex-wrap justify-center w-full max-w-[1600px] px-4 transition-transform duration-500 ease-out origin-top ${teams.length > 8 ? 'gap-3' : 'gap-4 mt-10'}`}
+               style={{ transform: `scale(${gridScale})` }}
+            >
             {teams.slice(0, showcaseIndex).map((t, i) => {
               const isCompact = teams.length > 8;
               return (
@@ -817,6 +850,7 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
               </div>
             );
           })}
+            </div>
           </div>
 
           {/* TESTO FINALE SOTTO LA GRIGLIA (Format, Titolo, Data) */}
