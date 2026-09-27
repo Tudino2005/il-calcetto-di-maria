@@ -634,12 +634,21 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
                 onAnimationEnd={() => finishDrawAnimation(tournament.id).then(() => window.location.reload())}
               >
                  <h2 className="text-5xl font-black mb-8 text-yellow-400 uppercase tracking-widest drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]">Regolamento Ufficiale</h2>
-                 <p className="text-2xl font-bold mb-16 italic text-slate-300">Eliminazione diretta pura e spietata: un errore e il team è fuori.</p>
+                 <p className="text-2xl font-bold mb-16 italic text-slate-300">
+                   {tournament.format === 'gironi_eliminazione' ? 'Fase a gironi seguita da eliminazione diretta.' : 
+                    tournament.format === 'doppia_eliminazione' ? 'Tabellone a doppia eliminazione (Winners & Losers bracket).' : 
+                    'Eliminazione diretta pura e spietata: un errore e il team è fuori.'}
+                 </p>
                  
                  <div className="text-left space-y-16">
                     <div>
                        <h3 className="text-3xl font-black text-yellow-400 mb-6">1. Formato del Match</h3>
-                       <p className="text-2xl text-slate-100 leading-relaxed">Il torneo si disputa con la formula dell'eliminazione diretta. Ogni partita si gioca al meglio dei 3 set (vince chi se ne aggiudica 2). Vince il singolo set la squadra che per prima raggiunge i 6 gol. È obbligatorio uno scarto di due reti per la vittoria: in caso di parità sul 6-6, si andrà ai vantaggi ad oltranza finché una delle due squadre non otterrà un doppio vantaggio consecutivo (es. 7-5, 8-6, 12-10).</p>
+                       <p className="text-2xl text-slate-100 leading-relaxed">
+                         {tournament.format === 'gironi_eliminazione' ? "Il torneo inizia con una fase a gironi all'italiana. Le migliori squadre accederanno alla fase ad eliminazione diretta." :
+                          tournament.format === 'doppia_eliminazione' ? "Il torneo prevede un tabellone principale (Winners) e uno di ripescaggio (Losers). Una sconfitta non ti elimina definitivamente!" :
+                          "Il torneo si disputa con la formula dell'eliminazione diretta."} 
+                         Ogni partita si gioca al meglio dei 3 set (vince chi se ne aggiudica 2). Vince il singolo set la squadra che per prima raggiunge i {tournament.targetGoals || 6} gol. È obbligatorio uno scarto di due reti per la vittoria: in caso di parità, si andrà ai vantaggi ad oltranza finché una squadra non otterrà un doppio vantaggio consecutivo.
+                       </p>
                     </div>
                     <div>
                        <h3 className="text-3xl font-black text-yellow-400 mb-6">2. Zero Rullate (Spinning)</h3>

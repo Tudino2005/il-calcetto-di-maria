@@ -17,23 +17,39 @@ export function TVDoubleEliminationBracket({
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
-  const bracket = tournament.bracketData ? JSON.parse(tournament.bracketData) : {};
-  const wbRounds: string[][] = bracket.wbRounds || [];
-  const lbRounds: string[][] = bracket.lbRounds || [];
-  const gfMatches: string[] = bracket.gfMatches || [];
+  // ─── Parse bracketData ONCE (stable refs) ──────────────────────────────────
+  const { wbRounds, lbRounds, gfMatches } = useMemo(() => {
+    try {
+      const b = tournament.bracketData ? JSON.parse(tournament.bracketData) : {};
+      return {
+        wbRounds: (b.wbRounds ?? []) as string[][],
+        lbRounds: (b.lbRounds ?? []) as string[][],
+        gfMatches: (b.gfMatches ?? []) as string[],
+      };
+    } catch {
+      return { wbRounds: [] as string[][], lbRounds: [] as string[][], gfMatches: [] as string[] };
+    }
+  }, [tournament.bracketData]);
 
-  const getMatch = (id: string) => tournament.matches?.find((m: any) => m.id === id);
+  // ─── Match lookup ─────────────────────────────────────────────────────────
+  const matchMap = useMemo(() => {
+    const map = new Map<string, any>();
+    (tournament.matches ?? []).forEach((m: any) => map.set(m.id, m));
+    return map;
+  }, [tournament.matches]);
 
+  const getMatch = (id: string) => matchMap.get(id);
+
+  // ─── Spotlight ────────────────────────────────────────────────────────────
   // Flatten all match IDs → resolve to actual match objects for spotlight
   const allMatchObjects = useMemo(() => {
     const ids = [...wbRounds.flat(), ...lbRounds.flat(), ...gfMatches];
-    return ids.map((id) => getMatch(id)).filter(Boolean);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wbRounds, lbRounds, gfMatches, tournament.matches]);
+    return ids.map((id) => matchMap.get(id)).filter(Boolean);
+  }, [wbRounds, lbRounds, gfMatches, matchMap]);
 
   const { activeMatch, isFading } = useMatchSpotlight(allMatchObjects);
 
-  // Dynamic scale to fit the full bracket in the available screen space
+  // ─── Dynamic scale ────────────────────────────────────────────────────────
   useEffect(() => {
     const handleResize = () => {
       if (!containerRef.current) return;
@@ -42,28 +58,26 @@ export function TVDoubleEliminationBracket({
       if (!parent) return;
       const scaleX = parent.clientWidth / container.scrollWidth;
       const scaleY = parent.clientHeight / container.scrollHeight;
-      const minScale = Math.min(scaleX, scaleY, 1);
-      setScale(minScale * 0.92);
+      setScale(Math.min(scaleX, scaleY, 1) * 0.92);
     };
-
     handleResize();
     window.addEventListener("resize", handleResize);
-    const t = setTimeout(handleResize, 120);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(t);
-    };
+    const tid = setTimeout(handleResize, 150);
+    return () => { window.removeEventListener("resize", handleResize); clearTimeout(tid); };
   }, [wbRounds, lbRounds, gfMatches]);
 
-  // Adaptive font/card size based on match count
-  const wbMatchCount = wbRounds[0]?.length ?? 0;
-  const isLarge = wbMatchCount > 8; // 32+ squadre
+  // ─── Adaptive sizing based on bracket size ────────────────────────────────
+  const wbR1Count = wbRounds[0]?.length ?? 0;
+  const isLarge = wbR1Count > 8;
   const cardW = isLarge ? "w-36" : "w-52";
   const textSize = isLarge ? "text-[9px]" : "text-xs";
+  const rowH = isLarge ? 72 : 100;
+  const colW = isLarge ? "9.5rem" : "14rem";
 
+  // ─── Match card renderer ──────────────────────────────────────────────────
   const renderMatchNode = (id: string) => {
     const m = getMatch(id);
-    const isActive = activeMatch?.id === id;
+    const isSpotlit = activeMatch?.id === id && isFading;
 
     if (!m) {
       return (
@@ -74,7 +88,6 @@ export function TVDoubleEliminationBracket({
     }
 
     const isFinished = !!m.winnerTeamId;
-    const isSpotlit = isActive && isFading;
 
     return (
       <div
@@ -82,42 +95,30 @@ export function TVDoubleEliminationBracket({
           cardW,
           "flex flex-col rounded-xl border-2 p-2 transition-all duration-700",
           isFinished
-            ? "bg-slate-800/60 border-slate-700/60 opacity-70"
+            ? "bg-slate-800/60 border-slate-700/60 opacity-60"
             : isSpotlit
-            ? "bg-slate-900 border-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.7)] scale-105"
-            : "bg-slate-900 border-purple-500/80 shadow-md"
+            ? "bg-slate-900 border-pink-500 shadow-[0_0_24px_rgba(236,72,153,0.8)] scale-105 z-10 relative"
+            : "bg-slate-900 border-purple-500/70 shadow-sm"
         )}
       >
         <div className="flex flex-col gap-1 h-full justify-center">
           {/* Team A */}
-          <div
-            className={clsx(
-              "flex justify-between items-center px-1.5 py-1 rounded-lg",
-              m.winnerTeamId === m.teamA?.id
-                ? "bg-emerald-500/25 text-emerald-400 font-bold"
-                : "bg-slate-900/40 text-slate-300"
-            )}
-          >
+          <div className={clsx(
+            "flex justify-between items-center px-1.5 py-1 rounded-lg",
+            m.winnerTeamId === m.teamA?.id ? "bg-emerald-500/25 text-emerald-400 font-bold" : "bg-slate-900/40 text-slate-300"
+          )}>
             <span className={clsx("truncate", textSize)} title={!m.teamA ? getFeederMatchInfo(tournament, m.id, "A") : ""}>
-              {m.teamA
-                ? `${m.teamA.player1.name} & ${m.teamA.player2.name}`
-                : getFeederMatchInfo(tournament, m.id, "A")}
+              {m.teamA ? `${m.teamA.player1.name} & ${m.teamA.player2.name}` : getFeederMatchInfo(tournament, m.id, "A")}
             </span>
             <span className="font-black ml-1 text-sm">{m.scoreTeamA ?? ""}</span>
           </div>
           {/* Team B */}
-          <div
-            className={clsx(
-              "flex justify-between items-center px-1.5 py-1 rounded-lg",
-              m.winnerTeamId === m.teamB?.id
-                ? "bg-emerald-500/25 text-emerald-400 font-bold"
-                : "bg-slate-900/40 text-slate-300"
-            )}
-          >
+          <div className={clsx(
+            "flex justify-between items-center px-1.5 py-1 rounded-lg",
+            m.winnerTeamId === m.teamB?.id ? "bg-emerald-500/25 text-emerald-400 font-bold" : "bg-slate-900/40 text-slate-300"
+          )}>
             <span className={clsx("truncate", textSize)} title={!m.teamB ? getFeederMatchInfo(tournament, m.id, "B") : ""}>
-              {m.teamB
-                ? `${m.teamB.player1.name} & ${m.teamB.player2.name}`
-                : getFeederMatchInfo(tournament, m.id, "B")}
+              {m.teamB ? `${m.teamB.player1.name} & ${m.teamB.player2.name}` : getFeederMatchInfo(tournament, m.id, "B")}
             </span>
             <span className="font-black ml-1 text-sm">{m.scoreTeamB ?? ""}</span>
           </div>
@@ -132,42 +133,41 @@ export function TVDoubleEliminationBracket({
     );
   };
 
-  const renderRound = (round: string[], label: string, rIndex: number) => {
-    const rowHeight = isLarge ? 72 : 96;
-    return (
-      <div
-        key={label + rIndex}
-        className="flex flex-col justify-around"
-        style={{ height: `${round.length * rowHeight}px`, minWidth: isLarge ? "9.5rem" : "14rem" }}
-      >
-        <div className="text-center text-slate-500 font-bold mb-1 uppercase tracking-widest text-[9px]">
-          {label} {rIndex + 1}
-        </div>
-        {round.map((matchId, mIndex) => (
-          <div key={`${label}-m-${mIndex}`} className="my-auto">
-            {renderMatchNode(matchId)}
-          </div>
-        ))}
+  // ─── Round column renderer ────────────────────────────────────────────────
+  const renderRound = (round: string[], label: string, rIdx: number) => (
+    <div
+      key={`${label}-${rIdx}`}
+      className="flex flex-col justify-around flex-shrink-0"
+      style={{ height: `${round.length * rowH}px`, minWidth: colW }}
+    >
+      <div className="text-center text-slate-500 font-bold mb-1 uppercase tracking-widest text-[9px]">
+        {label} {rIdx + 1}
       </div>
-    );
-  };
+      {round.map((matchId, mIdx) => (
+        <div key={`${label}-m-${mIdx}`} className="my-auto">
+          {renderMatchNode(matchId)}
+        </div>
+      ))}
+    </div>
+  );
 
+  // ─── Render ───────────────────────────────────────────────────────────────
   return (
     <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
       {/* SCALED BRACKET */}
       <div
         ref={containerRef}
-        className="flex flex-col gap-6 transition-transform duration-500 ease-out origin-center"
-        style={{ transform: `scale(${scale})` }}
+        className="flex flex-col gap-6 origin-center"
+        style={{ transform: `scale(${scale})`, transition: "transform 0.5s ease-out" }}
       >
         {/* WINNERS BRACKET */}
         {wbRounds.length > 0 && (
-          <div className="bg-purple-900/10 p-4 rounded-2xl border border-purple-800/30">
-            <h2 className="text-sm font-black text-purple-400 uppercase tracking-widest mb-3">
-              ⚔ Winners Bracket
+          <div className="bg-purple-900/10 p-4 rounded-2xl border border-purple-700/40">
+            <h2 className="text-base font-black text-purple-400 uppercase tracking-widest mb-3">
+              ⚔️ Winners Bracket
             </h2>
-            <div className="flex gap-5 items-center">
-              {wbRounds.map((round, rIdx) => renderRound(round, "WB Round", rIdx))}
+            <div className="flex gap-5 items-start overflow-x-auto">
+              {wbRounds.map((round, rIdx) => renderRound(round, "WB R", rIdx))}
             </div>
           </div>
         )}
@@ -175,28 +175,35 @@ export function TVDoubleEliminationBracket({
         {/* LOSERS BRACKET + GRAND FINAL */}
         <div className="flex gap-5 items-start">
           {/* LOSERS */}
-          {lbRounds.length > 0 && (
-            <div className="bg-orange-900/10 p-4 rounded-2xl border border-orange-800/30 flex-1">
-              <h2 className="text-sm font-black text-orange-400 uppercase tracking-widest mb-3">
+          {lbRounds.length > 0 ? (
+            <div className="bg-orange-900/10 p-4 rounded-2xl border border-orange-700/40 flex-1">
+              <h2 className="text-base font-black text-orange-400 uppercase tracking-widest mb-3">
                 🔥 Losers Bracket
               </h2>
-              <div className="flex gap-5 items-center">
-                {lbRounds.map((round, rIdx) => renderRound(round, "LB Round", rIdx))}
+              <div className="flex gap-5 items-start overflow-x-auto">
+                {lbRounds.map((round, rIdx) => renderRound(round, "LB R", rIdx))}
               </div>
+            </div>
+          ) : (
+            <div className="bg-orange-900/10 p-4 rounded-2xl border border-orange-700/40 flex-1">
+              <h2 className="text-base font-black text-orange-400 uppercase tracking-widest mb-2">
+                🔥 Losers Bracket
+              </h2>
+              <p className="text-slate-500 italic text-xs">In attesa dei primi risultati...</p>
             </div>
           )}
 
           {/* GRAND FINAL */}
           {gfMatches.length > 0 && (
-            <div className="bg-yellow-900/10 p-4 rounded-2xl border border-yellow-700/40">
-              <h2 className="text-sm font-black text-yellow-400 uppercase tracking-widest mb-3">
+            <div className="bg-yellow-900/10 p-4 rounded-2xl border border-yellow-600/40">
+              <h2 className="text-base font-black text-yellow-400 uppercase tracking-widest mb-3">
                 🏆 Grand Final
               </h2>
-              <div className="flex gap-5 items-center h-full">
-                {gfMatches.map((matchId, mIndex) => (
-                  <div key={`gf-m-${mIndex}`} className="flex flex-col" style={{ minWidth: isLarge ? "9.5rem" : "14rem" }}>
+              <div className="flex gap-5 items-center">
+                {gfMatches.map((matchId, mIdx) => (
+                  <div key={`gf-${mIdx}`} className="flex flex-col flex-shrink-0" style={{ minWidth: colW }}>
                     <div className="text-center text-slate-500 font-bold mb-1 uppercase tracking-widest text-[9px]">
-                      {mIndex === 0 ? "Grand Final" : "Spareggio"}
+                      {mIdx === 0 ? "Grand Final" : "Spareggio"}
                     </div>
                     {renderMatchNode(matchId)}
                   </div>
@@ -205,16 +212,6 @@ export function TVDoubleEliminationBracket({
             </div>
           )}
         </div>
-
-        {/* PLACEHOLDER: Losers bracket pending */}
-        {lbRounds.length === 0 && (
-          <div className="bg-orange-900/10 p-4 rounded-2xl border border-orange-800/30">
-            <h2 className="text-sm font-black text-orange-400 uppercase tracking-widest mb-2">
-              🔥 Losers Bracket
-            </h2>
-            <p className="text-slate-500 italic text-xs">In attesa dei primi risultati...</p>
-          </div>
-        )}
       </div>
 
       {/* SPOTLIGHT POPUP — floats above everything */}

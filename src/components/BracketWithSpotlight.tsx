@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { InwardBracket } from './InwardBracket';
 import { useMatchSpotlight } from '@/hooks/useMatchSpotlight';
 import { SpotlightPopup } from './SpotlightPopup';
 
 export function BracketWithSpotlight({ rounds, tournament, matchProbs }: { rounds: any[][], tournament: any, matchProbs: any }) {
-  const allMatches = rounds.flat().filter(Boolean);
+  // Memoize so the array reference is stable between renders
+  const allMatches = useMemo(() => rounds.flat().filter(Boolean), [rounds]);
   const { activeMatch, isFading } = useMatchSpotlight(allMatches);
 
   return (
