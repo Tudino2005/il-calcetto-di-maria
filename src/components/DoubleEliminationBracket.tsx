@@ -119,10 +119,10 @@ export default function DoubleEliminationBracket({ tournament }: { tournament: a
           <p className="text-slate-500 italic sticky left-0">Il Losers Bracket inizierà a popolarsi dopo il primo turno del Winners Bracket.</p>
         ) : (
           <div className="flex gap-12 items-center">
-            {lbRounds.map((round: string[], rIndex: number) => (
+            {lbRounds.filter((round: any) => Array.isArray(round)).map((round: string[], rIndex: number) => (
               <div key={`lb-${rIndex}`} className="flex flex-col justify-around min-w-[16rem]" style={{ height: `${Math.max(4, lbRounds[0]?.length || 1) * 160}px` }}>
                 <div className="text-center text-slate-500 font-bold mb-4 uppercase tracking-widest text-xs">LB Round {rIndex + 1}</div>
-                {round.map((matchId: string, mIndex: number) => (
+                {round.filter((matchId: any) => matchId != null).map((matchId: string, mIndex: number) => (
                   <div key={`lb-m-${mIndex}`} className="my-auto">
                     {renderMatchNode(getMatch(matchId))}
                   </div>

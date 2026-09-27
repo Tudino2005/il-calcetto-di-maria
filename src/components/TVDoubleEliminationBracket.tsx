@@ -143,7 +143,7 @@ export function TVDoubleEliminationBracket({
       <div className="text-center text-slate-500 font-bold mb-1 uppercase tracking-widest text-[9px]">
         {label} {rIdx + 1}
       </div>
-      {round.map((matchId, mIdx) => (
+      {round.filter((matchId) => matchId != null).map((matchId, mIdx) => (
         <div key={`${label}-m-${mIdx}`} className="my-auto">
           {renderMatchNode(matchId)}
         </div>
@@ -167,7 +167,7 @@ export function TVDoubleEliminationBracket({
               ⚔️ Winners Bracket
             </h2>
             <div className="flex gap-5 items-start overflow-x-auto">
-              {wbRounds.map((round, rIdx) => renderRound(round, "WB R", rIdx))}
+              {wbRounds.filter((r: any) => Array.isArray(r)).map((round, rIdx) => renderRound(round, "WB R", rIdx))}
             </div>
           </div>
         )}
@@ -181,7 +181,7 @@ export function TVDoubleEliminationBracket({
                 🔥 Losers Bracket
               </h2>
               <div className="flex gap-5 items-start overflow-x-auto">
-                {lbRounds.map((round, rIdx) => renderRound(round, "LB R", rIdx))}
+                {lbRounds.filter((r: any) => Array.isArray(r)).map((round, rIdx) => renderRound(round, "LB R", rIdx))}
               </div>
             </div>
           ) : (
