@@ -221,98 +221,101 @@ export default function TournamentForm() {
         )}
       </div>
 
-      {/* ROW 1 */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <div className="md:col-span-5">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Nome Torneo</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="es. Coppa dei Campioni 2026"
-            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors"
-            required
-          />
+      <div className="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 shadow-inner flex flex-col gap-6">
+        <h3 className="text-lg font-black text-slate-300 mb-2">Informazioni Generali</h3>
+        {/* ROW 1 */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-5">
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">Nome Torneo</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="es. Coppa dei Campioni 2026"
+              className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors shadow-inner"
+              required
+            />
+          </div>
+          <div className="md:col-span-4">
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">N° Squadre</label>
+            <select value={maxTeams} onChange={(e) => setMaxTeams(Number(e.target.value))} className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 shadow-inner">
+              <option value={4}>4 Squadre (8 Giocatori)</option>
+              <option value={8}>8 Squadre (16 Giocatori)</option>
+              <option value={16}>16 Squadre (32 Giocatori)</option>
+              <option value={32}>32 Squadre (64 Giocatori)</option>
+              <option value={64}>64 Squadre (128 Giocatori)</option>
+            </select>
+          </div>
+          <div className="md:col-span-3">
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">Costo a Persona</label>
+            <input
+              type="number"
+              min="0"
+              step="0.5"
+              value={pricePerPlayer}
+              onChange={(e) => setPricePerPlayer(e.target.value)}
+              placeholder="es. 10"
+              className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 shadow-inner"
+            />
+          </div>
         </div>
-        <div className="md:col-span-4">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">N° Squadre</label>
-          <select value={maxTeams} onChange={(e) => setMaxTeams(Number(e.target.value))} className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500">
-            <option value={4}>4 Squadre (8 Giocatori)</option>
-            <option value={8}>8 Squadre (16 Giocatori)</option>
-            <option value={16}>16 Squadre (32 Giocatori)</option>
-            <option value={32}>32 Squadre (64 Giocatori)</option>
-            <option value={64}>64 Squadre (128 Giocatori)</option>
-          </select>
-        </div>
-        <div className="md:col-span-3">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo a Persona</label>
-          <input
-            type="number"
-            min="0"
-            step="0.5"
-            value={pricePerPlayer}
-            onChange={(e) => setPricePerPlayer(e.target.value)}
-            placeholder="es. 10"
-            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-          />
-        </div>
-      </div>
 
-      {/* ROW 2 */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <div className="md:col-span-3">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Inizio</label>
-          <input
-            type="datetime-local"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-          />
-        </div>
-        <div className="md:col-span-3">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Fine</label>
-          <input
-            type="datetime-local"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-          />
-        </div>
-        
-        {type !== "coppie_fisse" ? (
-          <>
-            <div className="md:col-span-3">
-              <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Sorteggio</label>
-              <input
-                type="datetime-local"
-                value={drawDate}
-                onChange={(e) => setDrawDate(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-              />
-            </div>
-            <div className="md:col-span-3">
-              <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Premi</label>
+        {/* ROW 2 */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-3">
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">Inizio</label>
+            <input
+              type="datetime-local"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 shadow-inner"
+            />
+          </div>
+          <div className="md:col-span-3">
+            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">Fine</label>
+            <input
+              type="datetime-local"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 shadow-inner"
+            />
+          </div>
+          
+          {type !== "coppie_fisse" ? (
+            <>
+              <div className="md:col-span-3">
+                <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">Sorteggio</label>
+                <input
+                  type="datetime-local"
+                  value={drawDate}
+                  onChange={(e) => setDrawDate(e.target.value)}
+                  className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 shadow-inner"
+                />
+              </div>
+              <div className="md:col-span-3">
+                <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">Premi</label>
+                <input
+                  type="text"
+                  value={prizes}
+                  onChange={(e) => setPrizes(e.target.value)}
+                  placeholder="es. 1° Coppa, 2° Cena"
+                  className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 shadow-inner"
+                />
+              </div>
+            </>
+          ) : (
+            <div className="md:col-span-6">
+              <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-xs">Premi</label>
               <input
                 type="text"
                 value={prizes}
                 onChange={(e) => setPrizes(e.target.value)}
                 placeholder="es. 1° Coppa, 2° Cena"
-                className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
+                className="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500 shadow-inner"
               />
             </div>
-          </>
-        ) : (
-          <div className="md:col-span-6">
-            <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Premi</label>
-            <input
-              type="text"
-              value={prizes}
-              onChange={(e) => setPrizes(e.target.value)}
-              placeholder="es. 1° Coppa, 2° Cena"
-              className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500"
-            />
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <div>
@@ -322,7 +325,7 @@ export default function TournamentForm() {
             <label className="flex items-center justify-between w-full cursor-pointer group">
               <input type="radio" name="formatRadio" value="eliminazione_diretta" checked={format === "eliminazione_diretta"} onChange={() => setFormat("eliminazione_diretta")} className="w-5 h-5 accent-emerald-500 shrink-0 cursor-pointer" />
               <div className="flex flex-col items-end pl-4">
-                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", format === "eliminazione_diretta" ? "text-emerald-400" : "text-slate-300 group-hover:text-white")}>Eliminazione Diretta</span>
+                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-emerald-400"}>Eliminazione Diretta</span>
                 <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Tabellone classico. Chi perde è fuori.</span>
               </div>
             </label>
@@ -330,7 +333,7 @@ export default function TournamentForm() {
             <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="formatRadio" value="doppia_eliminazione" checked={format === "doppia_eliminazione"} onChange={() => setFormat("doppia_eliminazione")} className="w-5 h-5 accent-amber-500 shrink-0 cursor-pointer" />
               <div className="flex flex-col items-end pl-4">
-                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", format === "doppia_eliminazione" ? "text-amber-400" : "text-slate-300 group-hover:text-white")}>Doppia Eliminazione</span>
+                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-amber-400"}>Doppia Eliminazione</span>
                 <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Tabellone Winners e Losers Bracket.</span>
               </div>
             </label>
@@ -338,7 +341,7 @@ export default function TournamentForm() {
             <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="formatRadio" value="gironi_eliminazione" checked={format === "gironi_eliminazione"} onChange={() => setFormat("gironi_eliminazione")} className="w-5 h-5 accent-blue-500 shrink-0 cursor-pointer" />
               <div className="flex flex-col items-end pl-4">
-                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", format === "gironi_eliminazione" ? "text-blue-400" : "text-slate-300 group-hover:text-white")}>Gironi + Eliminazione</span>
+                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-blue-400"}>Gironi + Eliminazione</span>
                 <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Fase a gruppi seguita da playoff stile Mondiali.</span>
               </div>
             </label>
@@ -413,7 +416,7 @@ export default function TournamentForm() {
             <label className="flex items-center justify-between w-full cursor-pointer group">
               <input type="radio" name="typeRadio" value="sorteggio_ruoli" checked={type === "sorteggio_ruoli"} onChange={() => setType("sorteggio_ruoli")} className="w-5 h-5 accent-emerald-500 shrink-0 cursor-pointer" />
               <div className="flex flex-col items-end pl-4">
-                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", type === "sorteggio_ruoli" ? "text-emerald-400" : "text-slate-300 group-hover:text-white")}>Sorteggio per Ruoli</span>
+                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-emerald-400"}>Sorteggio per Ruoli</span>
                 <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Crea coppie unendo un attaccante e un difensore.</span>
               </div>
             </label>
@@ -421,7 +424,7 @@ export default function TournamentForm() {
             <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="typeRadio" value="sorteggio_integrale" checked={type === "sorteggio_integrale"} onChange={() => setType("sorteggio_integrale")} className="w-5 h-5 accent-amber-500 shrink-0 cursor-pointer" />
               <div className="flex flex-col items-end pl-4">
-                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", type === "sorteggio_integrale" ? "text-amber-400" : "text-slate-300 group-hover:text-white")}>Sorteggio Integrale</span>
+                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-amber-400"}>Sorteggio Integrale</span>
                 <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Composizione puramente casuale.</span>
               </div>
             </label>
@@ -429,7 +432,7 @@ export default function TournamentForm() {
             <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="typeRadio" value="coppie_fisse" checked={type === "coppie_fisse"} onChange={() => setType("coppie_fisse")} className="w-5 h-5 accent-blue-500 shrink-0 cursor-pointer" />
               <div className="flex flex-col items-end pl-4">
-                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", type === "coppie_fisse" ? "text-blue-400" : "text-slate-300 group-hover:text-white")}>Coppie Fisse</span>
+                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-blue-400"}>Coppie Fisse</span>
                 <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Squadre già formate a priori.</span>
               </div>
             </label>
