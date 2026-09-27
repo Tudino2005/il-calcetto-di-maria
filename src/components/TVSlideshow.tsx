@@ -104,7 +104,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   }
 
   
-  const drawSlideIndex = slides.findIndex(s => s.type === "slot_machine");
+  const drawSlideIndex = slides.findIndex(s => s.type === "slot_machine" || s.type === "matches_draw");
   const [currentIndex, setCurrentIndex] = useState(drawSlideIndex !== -1 ? drawSlideIndex : 0);
   const [spotlightPlayerIdx, setSpotlightPlayerIdx] = useState<number | null>(null);
 
