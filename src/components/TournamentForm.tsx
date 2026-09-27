@@ -233,7 +233,7 @@ export default function TournamentForm() {
           />
         </div>
         <div className="md:col-span-4">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Numero Max Squadre</label>
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">N° Squadre</label>
           <select value={maxTeams} onChange={(e) => setMaxTeams(Number(e.target.value))} className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-purple-500">
             <option value={4}>4 Squadre (8 Giocatori)</option>
             <option value={8}>8 Squadre (16 Giocatori)</option>
@@ -243,7 +243,7 @@ export default function TournamentForm() {
           </select>
         </div>
         <div className="md:col-span-3">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo Iscrizione a Persona (€)</label>
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Costo a Persona</label>
           <input
             type="number"
             min="0"
@@ -259,7 +259,7 @@ export default function TournamentForm() {
       {/* ROW 2 */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <div className="md:col-span-3">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Inizio</label>
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Inizio</label>
           <input
             type="datetime-local"
             value={startDate}
@@ -268,7 +268,7 @@ export default function TournamentForm() {
           />
         </div>
         <div className="md:col-span-3">
-          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data di Fine</label>
+          <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Fine</label>
           <input
             type="datetime-local"
             value={endDate}
@@ -280,7 +280,7 @@ export default function TournamentForm() {
         {type !== "coppie_fisse" ? (
           <>
             <div className="md:col-span-3">
-              <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Data Sorteggio</label>
+              <label className="block text-slate-400 font-bold mb-2 uppercase tracking-wider text-sm">Sorteggio</label>
               <input
                 type="datetime-local"
                 value={drawDate}
