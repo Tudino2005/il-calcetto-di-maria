@@ -3,7 +3,7 @@ import TournamentForm from "@/components/TournamentForm";
 import { getTournaments } from "@/app/actions/tournamentActions";
 import Link from "next/link";
 import DeleteTournamentButton from "@/components/DeleteTournamentButton";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, Archive } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function TournamentsPage() {
@@ -29,12 +29,17 @@ export default async function TournamentsPage() {
         </section>
 
         <section className="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-lg h-fit">
-          <h2 className="text-2xl font-bold text-white mb-6">Tornei Recenti</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-white uppercase tracking-widest">Tornei in Corso</h2>
+            <Link href="/tournaments/history" className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-xl text-sm font-bold text-slate-300 transition-colors shadow-lg">
+              <Archive className="w-4 h-4" /> Archivio
+            </Link>
+          </div>
           <div className="flex flex-col gap-4 w-full md:w-1/2">
-            {tournaments.length === 0 ? (
-              <p className="text-slate-400 text-center py-8">Nessun torneo creato.</p>
+            {tournaments.filter(t => t.status !== 'completed').length === 0 ? (
+              <p className="text-slate-400 text-center py-8">Nessun torneo in corso.</p>
             ) : (
-              tournaments.map((t) => (
+              tournaments.filter(t => t.status !== 'completed').map((t) => (
                 <Link key={t.id} href={`/tournaments/${t.id}`}>
                   <div className="bg-slate-900 p-5 rounded-2xl border border-slate-700 hover:border-purple-500 transition-colors group">
                     <div className="flex justify-between items-center mb-2">
