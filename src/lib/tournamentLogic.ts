@@ -1,3 +1,82 @@
+
+function calculateTeamCost(p1: any, p2: any, historicalPairCounts: Map<string, number> | undefined) {
+  if (!historicalPairCounts) return 0;
+  const ids = [p1.id, p2.id].sort();
+  const key = `${ids[0]}_${ids[1]}`;
+  const played = historicalPairCounts.get(key) || 0;
+  // If they played > 0 times, add a small penalty. If > 2, add a huge penalty.
+  if (played > 2) return 1000 + played;
+  if (played > 0) return 10 * played;
+  return 0;
+}
+
+function optimizeTeamsByCost(
+  teams: { player1: any; player2: any }[],
+  historicalPairCounts: Map<string, number> | undefined,
+  enforceRoles: boolean
+) {
+  if (!historicalPairCounts) return teams;
+  
+  // Hill climbing: try swapping players between teams to reduce total cost
+  let improved = true;
+  let iterations = 0;
+  while (improved && iterations < 1000) {
+    improved = false;
+    iterations++;
+    
+    for (let i = 0; i < teams.length; i++) {
+      for (let j = i + 1; j < teams.length; j++) {
+        const t1 = teams[i];
+        const t2 = teams[j];
+        
+        // Current cost
+        const currentCost = calculateTeamCost(t1.player1, t1.player2, historicalPairCounts) + 
+                            calculateTeamCost(t2.player1, t2.player2, historicalPairCounts);
+                            
+        // Option A: swap player2s
+        const swapACost = calculateTeamCost(t1.player1, t2.player2, historicalPairCounts) + 
+                          calculateTeamCost(t2.player1, t1.player2, historicalPairCounts);
+                          
+        // Option B: swap player1s
+        const swapBCost = calculateTeamCost(t2.player1, t1.player2, historicalPairCounts) + 
+                          calculateTeamCost(t1.player1, t2.player2, historicalPairCounts);
+
+        if (enforceRoles) {
+          // If roles are enforced, player1 is always Attaccante, player2 is always Portiere.
+          // We can only swap player2s (Portieri) or player1s (Attaccanti).
+          if (swapACost < currentCost) {
+            const temp = t1.player2;
+            t1.player2 = t2.player2;
+            t2.player2 = temp;
+            improved = true;
+          }
+        } else {
+          // If no roles, we can swap anything. 
+          // Option A (swap p2s):
+          if (swapACost < currentCost) {
+            const temp = t1.player2;
+            t1.player2 = t2.player2;
+            t2.player2 = temp;
+            improved = true;
+          } 
+          // Option B (swap p1 from t1 with p2 from t2)
+          else {
+            const swapCrossCost = calculateTeamCost(t1.player1, t2.player1, historicalPairCounts) + 
+                                  calculateTeamCost(t1.player2, t2.player2, historicalPairCounts);
+            if (swapCrossCost < currentCost) {
+               const temp = t1.player2;
+               t1.player2 = t2.player1;
+               t2.player1 = temp;
+               improved = true;
+            }
+          }
+        }
+      }
+    }
+  }
+  return teams;
+}
+
 import { Player } from "@prisma/client";
 
 export function shuffleArray<T>(array: T[]): T[] {
@@ -9,7 +88,7 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export function drawTeamsRandom(players: Player[]): { player1: Player; player2: Player }[] {
+export function drawTeamsRandom(players: Player[], historicalPairCounts?: Map<string, number>): { player1: Player; player2: Player }[] {
   const shuffled = shuffleArray(players);
   const teams: { player1: Player; player2: Player }[] = [];
   
@@ -22,10 +101,10 @@ export function drawTeamsRandom(players: Player[]): { player1: Player; player2: 
     }
   }
   
-  return teams;
+  return optimizeTeamsByCost(teams, historicalPairCounts, false);
 }
 
-export function drawTeams(players: Player[]): { player1: Player; player2: Player }[] {
+export function drawTeams(players: Player[], historicalPairCounts?: Map<string, number>): { player1: Player; player2: Player }[] {
   const attackers = players.filter((p) => p.preferredRole === "attaccante");
   const goalkeepers = players.filter((p) => p.preferredRole === "portiere");
   const both = players.filter((p) => p.preferredRole === "entrambi");
@@ -65,7 +144,7 @@ export function drawTeams(players: Player[]): { player1: Player; player2: Player
     });
   }
 
-  return teams;
+  return optimizeTeamsByCost(teams, historicalPairCounts, true);
 }
 
 export function generateBracket(teams: { id: string }[]) {
@@ -184,7 +263,7 @@ export function getFeederMatchInfo(tournament: any, currentMatchId: string, slot
   return "IN ATTESA";
 }
 
-export function drawTeamsRandomBalanced(players: any[], playerStatsMap: Map<string, any>): { player1: any; player2: any }[] {
+export function drawTeamsRandomBalanced(players: any[], playerStatsMap: Map<string, any>, historicalPairCounts?: Map<string, number>): { player1: any; player2: any }[] {
   // Sort players by winRate descending
   const sorted = [...players].sort((a, b) => {
     const aStats = playerStatsMap.get(a.id);
@@ -204,10 +283,10 @@ export function drawTeamsRandomBalanced(players: any[], playerStatsMap: Map<stri
     });
   }
   
-  return teams;
+  return optimizeTeamsByCost(teams, historicalPairCounts, false);
 }
 
-export function drawTeamsBalanced(players: any[], playerStatsMap: Map<string, any>): { player1: any; player2: any }[] {
+export function drawTeamsBalanced(players: any[], playerStatsMap: Map<string, any>, historicalPairCounts?: Map<string, number>): { player1: any; player2: any }[] {
   const attackers = players.filter((p) => p.preferredRole === "attaccante");
   const goalkeepers = players.filter((p) => p.preferredRole === "portiere");
   const both = players.filter((p) => p.preferredRole === "entrambi");
@@ -253,5 +332,5 @@ export function drawTeamsBalanced(players: any[], playerStatsMap: Map<string, an
     });
   }
 
-  return teams;
+  return optimizeTeamsByCost(teams, historicalPairCounts, true);
 }

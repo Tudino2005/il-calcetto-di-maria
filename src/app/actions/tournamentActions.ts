@@ -20,6 +20,7 @@ export async function createTournament(formData: FormData) {
   const allowRoleSwapsStr = formData.get("allowRoleSwaps") as string;
   const allowRoleSwaps = allowRoleSwapsStr === "true";
   const isBalancedDraw = formData.get("isBalancedDraw") === "true";
+  const avoidRepeatedPairs = formData.get("avoidRepeatedPairs") === "true";
   const targetGoals = Number(formData.get("targetGoals") || 7);
   const advantageThreshold = Number(formData.get("advantageThreshold") || 5);
 
@@ -44,6 +45,7 @@ export async function createTournament(formData: FormData) {
       format, 
       allowRoleSwaps,
       isBalancedDraw,
+      avoidRepeatedPairs,
       targetGoals,
       advantageThreshold,
       status: "setup",
@@ -199,6 +201,25 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
   const type = tournament.type;
   const format = tournament.format;
   const players = tournament.registrations.map((r: any) => r.player);
+
+  let historicalPairCounts = new Map<string, number>();
+  if (tournament.avoidRepeatedPairs) {
+    const allTeams = await prisma.team.findMany({
+      include: {
+        _count: {
+          select: {
+            matchesAsTeamA: true,
+            matchesAsTeamB: true
+          }
+        }
+      }
+    });
+    allTeams.forEach(t => {
+      const totalMatches = t._count.matchesAsTeamA + t._count.matchesAsTeamB;
+      historicalPairCounts.set(t.uniqueTeamKey, totalMatches);
+    });
+  }
+
   let createdTeams: any[] = [];
 
   if (type === "coppie_fisse") {
@@ -214,9 +235,9 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
       if (tournament.isBalancedDraw) {
         const { playerStats } = await getLeaderboardData();
         const statMap = new Map(playerStats.map(p => [p.id, p]));
-        teamsToInsert = drawTeamsRandomBalanced(players, statMap);
+        teamsToInsert = drawTeamsRandomBalanced(players, statMap, historicalPairCounts);
       } else {
-        teamsToInsert = drawTeamsRandom(players);
+        teamsToInsert = drawTeamsRandom(players, historicalPairCounts);
       }
     }
     createdTeams = await Promise.all(
@@ -238,9 +259,9 @@ export async function startTournament(tournamentId: string, config?: { teamsPerG
     if (tournament.isBalancedDraw) {
       const { playerStats } = await getLeaderboardData();
       const statMap = new Map(playerStats.map(p => [p.id, p]));
-      teamsToInsert = type === "sorteggio_integrale" ? drawTeamsRandomBalanced(players, statMap) : drawTeamsBalanced(players, statMap);
+      teamsToInsert = type === "sorteggio_integrale" ? drawTeamsRandomBalanced(players, statMap, historicalPairCounts) : drawTeamsBalanced(players, statMap, historicalPairCounts);
     } else {
-      teamsToInsert = type === "sorteggio_integrale" ? drawTeamsRandom(players) : drawTeams(players);
+      teamsToInsert = type === "sorteggio_integrale" ? drawTeamsRandom(players, historicalPairCounts) : drawTeams(players, historicalPairCounts);
     }
     createdTeams = await Promise.all(
       teamsToInsert.map(async (t) => {

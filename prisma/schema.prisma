@@ -104,6 +104,7 @@ model Tournament {
   advantageThreshold Int                  @default(5)
   allowRoleSwaps Boolean                  @default(false)
   isBalancedDraw Boolean                  @default(false)
+  avoidRepeatedPairs Boolean              @default(false)
   pricePerPlayer Float?
   prizes         String?
   registrations  TournamentRegistration[]

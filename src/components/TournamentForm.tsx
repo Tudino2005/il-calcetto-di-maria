@@ -32,6 +32,7 @@ export default function TournamentForm() {
   const [advantageThreshold, setAdvantageThreshold] = useState<number>(5);
   const [allowRoleSwaps, setAllowRoleSwaps] = useState<boolean>(false);
   const [isBalancedDraw, setIsBalancedDraw] = useState<boolean>(false);
+  const [avoidRepeatedPairs, setAvoidRepeatedPairs] = useState<boolean>(false);
 
   // Scheduling
   const [numTables, setNumTables] = useState<number>(1);
@@ -91,6 +92,7 @@ export default function TournamentForm() {
     if (prizes) formData.append("prizes", prizes);
     formData.append("allowRoleSwaps", type === "coppie_fisse" ? "false" : allowRoleSwaps.toString());
     formData.append("isBalancedDraw", type === "coppie_fisse" ? "false" : isBalancedDraw.toString());
+    formData.append("avoidRepeatedPairs", avoidRepeatedPairs.toString());
     formData.append("targetGoals", targetGoals.toString());
     formData.append("advantageThreshold", advantageThreshold.toString());
 
@@ -454,6 +456,30 @@ export default function TournamentForm() {
                       </label>
                     </div>
                   </div>
+                  
+                  {isBalancedDraw && (
+                    <div className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50">
+                      <button
+                        type="button"
+                        onClick={() => setAvoidRepeatedPairs(!avoidRepeatedPairs)}
+                        className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner ${
+                          avoidRepeatedPairs ? "bg-amber-500" : "bg-slate-700"
+                        }`}
+                      >
+                        <div
+                          className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+                            avoidRepeatedPairs ? "translate-x-5" : "translate-x-0"
+                          }`}
+                        />
+                      </button>
+                      <div className="flex flex-col items-end">
+                        <label className="text-sm font-bold tracking-wider text-amber-400 block">
+                          Evita coppie ripetute
+                        </label>
+                        <span className="text-[10px] text-slate-400 max-w-[120px] text-right leading-tight">Penalizza coppie già formate in passato</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
