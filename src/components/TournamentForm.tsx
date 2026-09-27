@@ -319,26 +319,28 @@ export default function TournamentForm() {
         <label className="block text-slate-400 font-bold uppercase tracking-wider text-sm mb-4">Formato Torneo</label>
         
         <div className="flex flex-col lg:flex-row gap-6">
-          <div className="flex flex-col gap-3 flex-1">
-            <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", format === "eliminazione_diretta" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
-              <input type="radio" name="formatRadio" value="eliminazione_diretta" checked={format === "eliminazione_diretta"} onChange={() => setFormat("eliminazione_diretta")} className="w-5 h-5 accent-purple-500" />
-              <div>
-                <span className="text-white font-bold block">Eliminazione Diretta</span>
-                <span className="text-slate-500 text-sm">Tabellone classico. Chi perde è fuori.</span>
+          <div className="flex flex-col flex-1 bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 shadow-inner">
+            <label className="flex items-center justify-between w-full cursor-pointer group">
+              <input type="radio" name="formatRadio" value="eliminazione_diretta" checked={format === "eliminazione_diretta"} onChange={() => setFormat("eliminazione_diretta")} className="w-5 h-5 accent-purple-500 shrink-0 cursor-pointer" />
+              <div className="flex flex-col items-end pl-4">
+                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", format === "eliminazione_diretta" ? "text-purple-400" : "text-slate-300 group-hover:text-white")}>Eliminazione Diretta</span>
+                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Tabellone classico. Chi perde è fuori.</span>
               </div>
             </label>
-            <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", format === "doppia_eliminazione" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
-              <input type="radio" name="formatRadio" value="doppia_eliminazione" checked={format === "doppia_eliminazione"} onChange={() => setFormat("doppia_eliminazione")} className="w-5 h-5 accent-purple-500" />
-              <div>
-                <span className="text-white font-bold block">Doppia Eliminazione</span>
-                <span className="text-slate-500 text-sm">Tabellone Winners e Losers Bracket.</span>
+            
+            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+              <input type="radio" name="formatRadio" value="doppia_eliminazione" checked={format === "doppia_eliminazione"} onChange={() => setFormat("doppia_eliminazione")} className="w-5 h-5 accent-purple-500 shrink-0 cursor-pointer" />
+              <div className="flex flex-col items-end pl-4">
+                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", format === "doppia_eliminazione" ? "text-purple-400" : "text-slate-300 group-hover:text-white")}>Doppia Eliminazione</span>
+                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Tabellone Winners e Losers Bracket.</span>
               </div>
             </label>
-            <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", format === "gironi_eliminazione" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
-              <input type="radio" name="formatRadio" value="gironi_eliminazione" checked={format === "gironi_eliminazione"} onChange={() => setFormat("gironi_eliminazione")} className="w-5 h-5 accent-purple-500" />
-              <div>
-                <span className="text-white font-bold block">Gironi + Eliminazione</span>
-                <span className="text-slate-500 text-sm">Fase a gruppi seguita da playoff stile Mondiali.</span>
+            
+            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+              <input type="radio" name="formatRadio" value="gironi_eliminazione" checked={format === "gironi_eliminazione"} onChange={() => setFormat("gironi_eliminazione")} className="w-5 h-5 accent-purple-500 shrink-0 cursor-pointer" />
+              <div className="flex flex-col items-end pl-4">
+                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", format === "gironi_eliminazione" ? "text-purple-400" : "text-slate-300 group-hover:text-white")}>Gironi + Eliminazione</span>
+                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Fase a gruppi seguita da playoff stile Mondiali.</span>
               </div>
             </label>
           </div>
@@ -408,26 +410,28 @@ export default function TournamentForm() {
       <div>
         <label className="block text-slate-400 font-bold mb-4 uppercase tracking-wider text-sm">Modalità Composizione Squadre</label>
         <div className="flex flex-col lg:flex-row gap-6">
-          <div className="flex flex-col gap-3 flex-1">
-            <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", type === "sorteggio_ruoli" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
-              <input type="radio" name="typeRadio" value="sorteggio_ruoli" checked={type === "sorteggio_ruoli"} onChange={() => setType("sorteggio_ruoli")} className="w-5 h-5 accent-purple-500" />
-              <div>
-                <span className="text-white font-bold block">Sorteggio per Ruoli</span>
-                <span className="text-slate-500 text-sm">Crea coppie equilibrate unendo un attaccante e un difensore.</span>
+          <div className="flex flex-col flex-1 bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 shadow-inner">
+            <label className="flex items-center justify-between w-full cursor-pointer group">
+              <input type="radio" name="typeRadio" value="sorteggio_ruoli" checked={type === "sorteggio_ruoli"} onChange={() => setType("sorteggio_ruoli")} className="w-5 h-5 accent-purple-500 shrink-0 cursor-pointer" />
+              <div className="flex flex-col items-end pl-4">
+                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", type === "sorteggio_ruoli" ? "text-purple-400" : "text-slate-300 group-hover:text-white")}>Sorteggio per Ruoli</span>
+                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Crea coppie unendo un attaccante e un difensore.</span>
               </div>
             </label>
-            <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", type === "sorteggio_integrale" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
-              <input type="radio" name="typeRadio" value="sorteggio_integrale" checked={type === "sorteggio_integrale"} onChange={() => setType("sorteggio_integrale")} className="w-5 h-5 accent-purple-500" />
-              <div>
-                <span className="text-white font-bold block">Sorteggio Integrale</span>
-                <span className="text-slate-500 text-sm">Composizione puramente casuale.</span>
+            
+            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+              <input type="radio" name="typeRadio" value="sorteggio_integrale" checked={type === "sorteggio_integrale"} onChange={() => setType("sorteggio_integrale")} className="w-5 h-5 accent-purple-500 shrink-0 cursor-pointer" />
+              <div className="flex flex-col items-end pl-4">
+                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", type === "sorteggio_integrale" ? "text-purple-400" : "text-slate-300 group-hover:text-white")}>Sorteggio Integrale</span>
+                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Composizione puramente casuale.</span>
               </div>
             </label>
-            <label className={clsx("flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors", type === "coppie_fisse" ? "bg-purple-900/20 border-purple-500" : "bg-slate-900 border-slate-700 hover:border-slate-500")}>
-              <input type="radio" name="typeRadio" value="coppie_fisse" checked={type === "coppie_fisse"} onChange={() => setType("coppie_fisse")} className="w-5 h-5 accent-purple-500" />
-              <div>
-                <span className="text-white font-bold block">Coppie Fisse</span>
-                <span className="text-slate-500 text-sm">Squadre già formate a priori.</span>
+            
+            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+              <input type="radio" name="typeRadio" value="coppie_fisse" checked={type === "coppie_fisse"} onChange={() => setType("coppie_fisse")} className="w-5 h-5 accent-purple-500 shrink-0 cursor-pointer" />
+              <div className="flex flex-col items-end pl-4">
+                <span className={clsx("text-sm font-bold tracking-wider block text-right transition-colors", type === "coppie_fisse" ? "text-purple-400" : "text-slate-300 group-hover:text-white")}>Coppie Fisse</span>
+                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Squadre già formate a priori.</span>
               </div>
             </label>
           </div>
@@ -435,79 +439,77 @@ export default function TournamentForm() {
           <div className="flex flex-col justify-center flex-1">
             <div className={clsx("bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col justify-center items-center h-full gap-6 shadow-inner transition-all duration-300", type === "coppie_fisse" ? "opacity-0 pointer-events-none" : "opacity-100")}>
               {type !== "coppie_fisse" && (
-                <div className="flex flex-col items-center text-center max-w-[250px] mb-6 border-b border-slate-700/50 pb-6 w-full">
+                <div className="w-full max-w-[250px] flex flex-col items-center">
                   <div className="flex items-center justify-between w-full">
                     <button
                       type="button"
                       onClick={() => setIsBalancedDraw(!isBalancedDraw)}
-                      className={`w-16 h-9 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner ${
+                      className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner shrink-0 ${
                         isBalancedDraw ? "bg-emerald-500" : "bg-slate-700"
                       }`}
                     >
                       <div
-                        className={`w-7 h-7 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
-                          isBalancedDraw ? "translate-x-7" : "translate-x-0"
+                        className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+                          isBalancedDraw ? "translate-x-5" : "translate-x-0"
                         }`}
                       />
                     </button>
-                    <div className="flex flex-col items-end">
-                      <label className="text-lg font-black tracking-wider text-emerald-400 block">
-                        Crea torneo equilibrato
+                    <div className="flex flex-col items-end pl-4">
+                      <label className="text-sm font-bold tracking-wider text-emerald-400 block text-right">
+                        Torneo Equilibrato
                       </label>
+                      <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Associa giocatori forti a giocatori deboli</span>
                     </div>
                   </div>
                   
                   <div className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50">
-                      <button
-                        type="button"
-                        onClick={() => setAvoidRepeatedPairs(!avoidRepeatedPairs)}
-                        className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner ${
-                          avoidRepeatedPairs ? "bg-amber-500" : "bg-slate-700"
+                    <button
+                      type="button"
+                      onClick={() => setAvoidRepeatedPairs(!avoidRepeatedPairs)}
+                      className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner shrink-0 ${
+                        avoidRepeatedPairs ? "bg-amber-500" : "bg-slate-700"
+                      }`}
+                    >
+                      <div
+                        className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+                          avoidRepeatedPairs ? "translate-x-5" : "translate-x-0"
                         }`}
-                      >
-                        <div
-                          className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
-                            avoidRepeatedPairs ? "translate-x-5" : "translate-x-0"
-                          }`}
-                        />
-                      </button>
-                      <div className="flex flex-col items-end">
-                        <label className="text-sm font-bold tracking-wider text-amber-400 block">
-                          Evita coppie ripetute
-                        </label>
-                        <span className="text-[10px] text-slate-400 max-w-[120px] text-right leading-tight">Penalizza coppie già formate in passato</span>
-                      </div>
+                      />
+                    </button>
+                    <div className="flex flex-col items-end pl-4">
+                      <label className="text-sm font-bold tracking-wider text-amber-400 block text-right">
+                        Evita coppie ripetute
+                      </label>
+                      <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Penalizza coppie già formate in passato</span>
                     </div>
+                  </div>
                 </div>
               )}
 
-              <div className="flex flex-col items-center text-center max-w-[250px]">
-                <label className="text-xs font-black uppercase tracking-wider text-emerald-400 block mb-4">
-                  Inversione Ruoli
-                </label>
-                <div className="flex flex-col items-center gap-3 w-full">
-                  <button
-                    type="button"
-                    onClick={() => setAllowRoleSwaps(!allowRoleSwaps)}
+              <div className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 max-w-[250px]">
+                <button
+                  type="button"
+                  onClick={() => setAllowRoleSwaps(!allowRoleSwaps)}
+                  className={clsx(
+                    "w-12 h-7 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner shrink-0",
+                    allowRoleSwaps ? "bg-blue-500" : "bg-slate-700"
+                  )}
+                >
+                  <div
                     className={clsx(
-                      "w-16 h-9 rounded-full p-1 transition-colors duration-300 ease-in-out relative flex items-center shadow-inner",
-                      allowRoleSwaps ? "bg-emerald-500" : "bg-slate-700"
+                      "w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out",
+                      allowRoleSwaps ? "translate-x-5" : "translate-x-0"
                     )}
-                  >
-                    <div
-                      className={clsx(
-                        "w-7 h-7 bg-white rounded-full shadow-md transform transition-transform duration-300 ease-in-out",
-                        allowRoleSwaps ? "translate-x-7" : "translate-x-0"
-                      )}
-                    />
-                  </button>
-                  <span className={clsx("text-sm font-bold", allowRoleSwaps ? "text-emerald-400" : "text-slate-400")}>
-                    {allowRoleSwaps ? "SÌ, CONSENTITA" : "NO, BLOCCATA"}
-                  </span>
-                  <span className="text-xs text-slate-500 leading-tight">
+                  />
+                </button>
+                <div className="flex flex-col items-end pl-4">
+                  <label className={clsx("text-sm font-bold tracking-wider block text-right", allowRoleSwaps ? "text-blue-400" : "text-slate-400")}>
+                    Inversione Ruoli
+                  </label>
+                  <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">
                     {allowRoleSwaps 
-                      ? "I giocatori potranno scambiarsi i ruoli durante il torneo."
-                      : "I giocatori dovranno mantenere il loro ruolo originario."}
+                      ? "Ruoli interscambiabili in partita"
+                      : "I giocatori mantengono il ruolo"}
                   </span>
                 </div>
               </div>
