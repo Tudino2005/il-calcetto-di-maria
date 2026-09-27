@@ -339,8 +339,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
-                    {teamStats.slice(teamStats.filter((t: any) => t.points === teamStats[0]?.points && t.wins === teamStats[0]?.wins && t.winRate === teamStats[0]?.winRate).length).map((t: any, i: number) => {
-                      const rank = i + 1 + teamStats.filter((ts: any) => ts.points === teamStats[0]?.points && ts.wins === teamStats[0]?.wins && ts.winRate === teamStats[0]?.winRate).length;
+                    {teamStats.map((t: any, i: number) => {
+                      const rank = i + 1;
                       return (
                       <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 flex-1">
@@ -416,58 +416,6 @@ export default function TVSlideshow({ data }: { data: any }) {
               <div className="flex-1 flex flex-col bg-slate-900/80 p-6 md:p-8 rounded-[3rem] border-2 border-blue-500/20 shadow-2xl backdrop-blur-sm relative min-h-0">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
-                  {defenderStats[0] && (() => {
-                    const topPlayers = defenderStats.filter((p: any) => 
-                      p.winRate === defenderStats[0].winRate && 
-                      p.wins === defenderStats[0].wins && 
-                      p.played === defenderStats[0].played
-                    );
-                    return (
-                    <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-blue-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(59,130,246,0.15)] relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                        <Shield className="w-24 h-24 text-blue-500" />
-                      </div>
-                      <div className="w-16 flex-shrink-0 text-center font-black text-6xl text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)]">
-                        1
-                      </div>
-                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
-                        {topPlayers.map((tp: any, idx: number) => (
-                          <div key={tp.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
-                            <div className="flex items-center gap-3">
-                                                            <div className="text-3xl font-black text-white truncate leading-tight">{tp.name}</div>
-                              {(() => {
-                                const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === tp.id);
-                                const rStats = advStats?.roleStats;
-                                const tSubiti = rStats?.gkGoalsConceded || 0;
-                                const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
-                                return (
-                                  <div className="flex items-center gap-6 shrink-0 ml-8">
-                                    <div className="flex flex-col items-center gap-1">
-                                      <span className="text-[13px] text-blue-400 font-bold tracking-widest uppercase">Tot Subiti</span>
-                                      <span className="text-3xl font-black text-white leading-none">{tSubiti}</span>
-                                    </div>
-                                    <div className="flex flex-col items-center gap-1">
-                                      <span className="text-[13px] text-blue-400 font-bold tracking-widest uppercase">Media</span>
-                                      <span className="text-3xl font-black text-white leading-none">{mSubiti}</span>
-                                    </div>
-                                  </div>
-                                );
-                              })()}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
-                        <div className="text-3xl font-black text-blue-500 flex items-baseline gap-1">
-                          {defenderStats[0].points} <span className="text-xl">PT</span>
-                        </div>
-                        <div className="text-lg font-bold text-slate-400">
-                          {defenderStats[0].wins} V / {defenderStats[0].played} G
-                        </div>
-                      </div>
-                    </div>
-                  );
-                  })()}
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
                     <Shield className="w-10 h-10 text-blue-500" /> TOP DEFENDERS
                   </h3>
@@ -475,8 +423,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
-                    {defenderStats.slice(defenderStats.filter((p: any) => p.winRate === defenderStats[0]?.winRate && p.wins === defenderStats[0]?.wins && p.played === defenderStats[0]?.played).length).map((p: any, i: number) => {
-                      const rank = i + 1 + defenderStats.filter((ps: any) => ps.winRate === defenderStats[0]?.winRate && ps.wins === defenderStats[0]?.wins && ps.played === defenderStats[0]?.played).length;
+                    {defenderStats.map((p: any, i: number) => {
+                      const rank = i + 1;
                       return (
                       <div key={p.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
@@ -532,58 +480,6 @@ export default function TVSlideshow({ data }: { data: any }) {
               <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[3rem] border-2 border-blue-500/20 shadow-2xl backdrop-blur-sm relative">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
-                  {strikerStats[0] && (() => {
-                    const topTeams = strikerStats.filter((t: any) => 
-                      t.winRate === strikerStats[0].winRate && 
-                      t.wins === strikerStats[0].wins && 
-                      t.played === strikerStats[0].played
-                    );
-                    return (
-                    <div className="mb-6 flex items-center gap-6 bg-slate-900 border-2 border-red-500/50 p-6 rounded-3xl w-full shadow-[0_0_30px_rgba(239,68,68,0.15)] relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                        <Users className="w-24 h-24 text-blue-500" />
-                      </div>
-                      <div className="w-16 flex-shrink-0 text-center font-black text-6xl text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.6)]">
-                        1
-                      </div>
-                      <div className="flex-1 flex flex-col justify-center min-w-0 z-10 gap-3">
-                        {topTeams.map((tt: any, idx: number) => (
-                           <div key={tt.id} className={idx > 0 ? "pt-3 border-t border-slate-700/50" : ""}>
-                             <div className="flex items-baseline gap-3 flex-wrap">
-                                                             <span className="text-3xl font-black text-white leading-tight truncate flex-1">{tt.name}</span>
-                              {(() => {
-                                const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === tt.id);
-                                const rStats = advStats?.roleStats;
-                                const tFatti = rStats?.stGoalsScored || 0;
-                                const mFatti = rStats?.stMatches > 0 ? (tFatti / rStats.stMatches).toFixed(2) : '-';
-                                return (
-                                  <div className="flex items-center gap-6 shrink-0 ml-8">
-                                    <div className="flex flex-col items-center gap-1">
-                                      <span className="text-[13px] text-red-400 font-bold tracking-widest uppercase">Tot Fatti</span>
-                                      <span className="text-3xl font-black text-white leading-none">{tFatti}</span>
-                                    </div>
-                                    <div className="flex flex-col items-center gap-1">
-                                      <span className="text-[13px] text-red-400 font-bold tracking-widest uppercase">Media</span>
-                                      <span className="text-3xl font-black text-white leading-none">{mFatti}</span>
-                                    </div>
-                                  </div>
-                                );
-                              })()}
-                             </div>
-                           </div>
-                        ))}
-                      </div>
-                      <div className="flex flex-col items-end shrink-0 ml-4 z-10 justify-center">
-                        <div className="text-3xl font-black text-red-500 flex items-baseline gap-1">
-                          {strikerStats[0].points} <span className="text-xl">PT</span>
-                        </div>
-                        <div className="text-lg font-bold text-slate-400">
-                          {strikerStats[0].wins} V / {strikerStats[0].played} G
-                        </div>
-                      </div>
-                    </div>
-                  );
-                  })()}
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]">
                     <Swords className="w-10 h-10 text-red-500" /> TOP STRIKERS
                   </h3>
@@ -591,8 +487,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
                   <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
-                    {strikerStats.slice(strikerStats.filter((t: any) => t.winRate === strikerStats[0]?.winRate && t.wins === strikerStats[0]?.wins && t.played === strikerStats[0]?.played).length).map((t: any, i: number) => {
-                      const rank = i + 1 + strikerStats.filter((ts: any) => ts.winRate === strikerStats[0]?.winRate && ts.wins === strikerStats[0]?.wins && ts.played === strikerStats[0]?.played).length;
+                    {strikerStats.map((t: any, i: number) => {
+                      const rank = i + 1;
                       return (
                       <div key={t.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
