@@ -338,7 +338,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (teamStats.length / Math.max(1, playerStats.length))}s` }}>
                     {teamStats.map((t: any, i: number) => {
                       const rank = i + 1;
                       return (
@@ -422,7 +422,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (defenderStats.length / Math.max(1, playerStats.length))}s` }}>
                     {defenderStats.map((p: any, i: number) => {
                       const rank = i + 1;
                       return (
@@ -486,7 +486,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (strikerStats.length / Math.max(1, playerStats.length))}s` }}>
                     {strikerStats.map((t: any, i: number) => {
                       const rank = i + 1;
                       return (
