@@ -457,8 +457,7 @@ export default function TournamentForm() {
                     </div>
                   </div>
                   
-                  {isBalancedDraw && (
-                    <div className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50">
+                  <div className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50">
                       <button
                         type="button"
                         onClick={() => setAvoidRepeatedPairs(!avoidRepeatedPairs)}
@@ -479,7 +478,6 @@ export default function TournamentForm() {
                         <span className="text-[10px] text-slate-400 max-w-[120px] text-right leading-tight">Penalizza coppie già formate in passato</span>
                       </div>
                     </div>
-                  )}
                 </div>
               )}
 
