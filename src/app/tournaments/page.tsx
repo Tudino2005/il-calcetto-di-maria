@@ -30,7 +30,7 @@ export default async function TournamentsPage() {
 
         <section className="bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-lg h-fit">
           <h2 className="text-2xl font-bold text-white mb-6">Tornei Recenti</h2>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-full md:w-1/2">
             {tournaments.length === 0 ? (
               <p className="text-slate-400 text-center py-8">Nessun torneo creato.</p>
             ) : (
