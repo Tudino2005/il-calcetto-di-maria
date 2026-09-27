@@ -13,6 +13,7 @@ import { calculateTournamentProbabilities, calculateMatchProbabilities } from "@
 import { getFeederMatchInfo } from "@/lib/tournamentLogic";
 import { computeGroupStandings } from "@/lib/tournamentEngines";
 import { BracketWithSpotlight } from "@/components/BracketWithSpotlight";
+import { TVDoubleEliminationBracket } from "@/components/TVDoubleEliminationBracket";
 
 
 export default function TVSlideshow({ data }: { data: any }) {
@@ -1366,7 +1367,11 @@ export default function TVSlideshow({ data }: { data: any }) {
               <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tight text-white mb-8 text-center">
                 Turni {t.name}
               </h2>
-              <BracketWithSpotlight rounds={rounds} tournament={t} matchProbs={matchProbs} />
+              {t.format === "doppia_eliminazione" ? (
+                <TVDoubleEliminationBracket tournament={t} />
+              ) : (
+                <BracketWithSpotlight rounds={rounds} tournament={t} matchProbs={matchProbs} />
+              )}
             </div>
             );
           })()}
