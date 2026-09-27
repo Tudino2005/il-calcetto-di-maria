@@ -1368,7 +1368,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 Turni {t.name}
               </h2>
               {t.format === "doppia_eliminazione" ? (
-                <TVDoubleEliminationBracket tournament={t} />
+                <TVDoubleEliminationBracket tournament={t} matchProbs={matchProbs} />
               ) : (
                 <BracketWithSpotlight rounds={rounds} tournament={t} matchProbs={matchProbs} />
               )}

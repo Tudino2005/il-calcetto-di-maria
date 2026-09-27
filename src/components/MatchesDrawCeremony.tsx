@@ -61,16 +61,21 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
     }
 
     if (revealedCount >= round1Matches.length) {
-      setTimeout(() => {
+      if (isFinished) return; // Prevent multiple executions
+      const t1 = setTimeout(() => {
         setIsFinished(true);
         // Wait 10 seconds on the final screen before moving to in_progress
-        setTimeout(() => {
-          finishMatchesDrawAnimation(tournament.id).then(() => {
-             window.location.reload();
-          });
+        setTimeout(async () => {
+          try {
+            await finishMatchesDrawAnimation(tournament.id);
+          } catch (e) {
+            console.error(e);
+          } finally {
+            window.location.assign(window.location.href);
+          }
         }, 10000);
       }, 1000);
-      return;
+      return () => clearTimeout(t1);
     }
 
     // Start a draw cycle
