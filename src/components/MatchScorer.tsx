@@ -462,7 +462,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
           <div className="flex items-center gap-4 flex-wrap">
             <div>
               <label className="text-[11px] font-black uppercase tracking-wider text-purple-300 block mb-1">
-                Gol per vincere ogni Set
+                Gol per vincere ogni Partita
               </label>
               <div className="flex gap-1.5">
                 {[5, 6, 7, 8, 9, 10].map(val => (

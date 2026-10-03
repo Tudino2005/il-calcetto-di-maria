@@ -308,7 +308,7 @@ export default function TournamentForm() {
             <div className="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col gap-6 shadow-inner h-full">
               <div className="flex flex-col items-center text-center mt-2">
                 <label className="text-xs font-black uppercase tracking-wider text-purple-300 block mb-3">
-                  Gol per vincere ogni Set
+                  Gol per vincere ogni Partita
                 </label>
                 <div className="flex gap-2">
                   {[5, 6, 7, 8, 9, 10].map(val => (
