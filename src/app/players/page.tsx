@@ -28,7 +28,7 @@ export default async function PlayersPage() {
         </div>
 
         <section className="lg:col-span-8 xl:col-span-8 bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-lg">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-start md:gap-10 gap-4 mb-8">
             <h2 className="text-xl font-bold text-white whitespace-nowrap">Giocatori Registrati ({players.length})</h2>
             <div className="flex flex-wrap items-center gap-4 sm:gap-6">
               <div className="flex items-center gap-2">
