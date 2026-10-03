@@ -275,38 +275,38 @@ export default function TournamentForm() {
         </div>
       </div>
 
-      <div>
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="flex flex-col flex-1 bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 shadow-inner">
+      <div className="flex justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full max-w-5xl">
+          <div className="flex flex-col bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 shadow-inner">
             <h3 className="text-lg font-black text-slate-300 mb-6">Formato</h3>
-            <label className="flex items-center justify-between w-full cursor-pointer group">
+            <label className="flex items-center justify-start gap-4 w-full cursor-pointer group">
               <input type="radio" name="formatRadio" value="eliminazione_diretta" checked={format === "eliminazione_diretta"} onChange={() => setFormat("eliminazione_diretta")} className="w-5 h-5 accent-emerald-500 shrink-0 cursor-pointer" />
-              <div className="flex flex-col items-end pl-4">
-                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-emerald-400"}>Eliminazione Diretta</span>
-                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Tabellone classico. Chi perde è fuori.</span>
+              <div className="flex flex-col items-start">
+                <span className={"text-sm font-bold tracking-wider block text-left transition-colors text-emerald-400"}>Eliminazione Diretta</span>
+                <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Tabellone classico. Chi perde è fuori.</span>
               </div>
             </label>
             
-            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+            <label className="flex items-center justify-start gap-4 w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="formatRadio" value="doppia_eliminazione" checked={format === "doppia_eliminazione"} onChange={() => setFormat("doppia_eliminazione")} className="w-5 h-5 accent-amber-500 shrink-0 cursor-pointer" />
-              <div className="flex flex-col items-end pl-4">
-                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-amber-400"}>Doppia Eliminazione</span>
-                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Tabellone Winners e Losers Bracket.</span>
+              <div className="flex flex-col items-start">
+                <span className={"text-sm font-bold tracking-wider block text-left transition-colors text-amber-400"}>Doppia Eliminazione</span>
+                <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Tabellone Winners e Losers Bracket.</span>
               </div>
             </label>
             
-            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+            <label className="flex items-center justify-start gap-4 w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="formatRadio" value="gironi_eliminazione" checked={format === "gironi_eliminazione"} onChange={() => setFormat("gironi_eliminazione")} className="w-5 h-5 accent-blue-500 shrink-0 cursor-pointer" />
-              <div className="flex flex-col items-end pl-4">
-                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-blue-400"}>Gironi + Eliminazione</span>
-                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Fase a gruppi seguita da playoff stile Mondiali.</span>
+              <div className="flex flex-col items-start">
+                <span className={"text-sm font-bold tracking-wider block text-left transition-colors text-blue-400"}>Gironi + Eliminazione</span>
+                <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Fase a gruppi seguita da playoff stile Mondiali.</span>
               </div>
             </label>
           </div>
 
-          <div className="flex flex-col justify-center flex-1">
-            <div className="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col gap-6 shadow-inner">
-              <div className="flex flex-col items-center text-center">
+          <div className="flex flex-col justify-center">
+            <div className="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col gap-6 shadow-inner h-full">
+              <div className="flex flex-col items-center text-center mt-2">
                 <label className="text-xs font-black uppercase tracking-wider text-purple-300 block mb-3">
                   Gol per vincere ogni Set
                 </label>
@@ -317,7 +317,7 @@ export default function TournamentForm() {
                       type="button"
                       onClick={() => updateGoalSettings(val, Math.min(advantageThreshold, val - 1))}
                       className={clsx(
-                        "w-12 h-12 rounded-xl text-lg font-black transition shadow-sm",
+                        "w-9 h-9 rounded-lg text-sm font-black transition shadow-sm",
                         targetGoals === val ? "bg-purple-600 text-white border-2 border-purple-400 shadow-purple-500/30" : "bg-slate-900 border-2 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
                       )}
                     >
@@ -329,7 +329,7 @@ export default function TournamentForm() {
 
               <div className="h-px w-full bg-slate-700/50"></div>
 
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center text-center mb-2">
                 <label className="text-xs font-black uppercase tracking-wider text-yellow-400 block mb-3">
                   Soglia Vantaggi (Pari a cui scattano)
                 </label>
@@ -340,7 +340,7 @@ export default function TournamentForm() {
                       type="button"
                       onClick={() => updateGoalSettings(targetGoals, val)}
                       className={clsx(
-                        "w-12 h-12 rounded-xl text-lg font-black transition shadow-sm",
+                        "w-9 h-9 rounded-lg text-sm font-black transition shadow-sm",
                         advantageThreshold === val ? "bg-yellow-500 text-slate-950 border-2 border-yellow-300 shadow-yellow-500/30" : "bg-slate-900 border-2 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
                       )}
                     >
@@ -366,31 +366,31 @@ export default function TournamentForm() {
         </div>
       )}
 
-      <div>
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="flex flex-col flex-1 bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 shadow-inner">
+      <div className="flex justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full max-w-5xl">
+          <div className="flex flex-col bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 shadow-inner">
             <h3 className="text-lg font-black text-slate-300 mb-6">Composizione Squadre</h3>
-            <label className="flex items-center justify-between w-full cursor-pointer group">
+            <label className="flex items-center justify-start gap-4 w-full cursor-pointer group">
               <input type="radio" name="typeRadio" value="sorteggio_ruoli" checked={type === "sorteggio_ruoli"} onChange={() => setType("sorteggio_ruoli")} className="w-5 h-5 accent-emerald-500 shrink-0 cursor-pointer" />
-              <div className="flex flex-col items-end pl-4">
-                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-emerald-400"}>Sorteggio per Ruoli</span>
-                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Crea coppie unendo un attaccante e un difensore.</span>
+              <div className="flex flex-col items-start">
+                <span className={"text-sm font-bold tracking-wider block text-left transition-colors text-emerald-400"}>Sorteggio per Ruoli</span>
+                <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Crea coppie unendo un attaccante e un difensore.</span>
               </div>
             </label>
             
-            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+            <label className="flex items-center justify-start gap-4 w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="typeRadio" value="sorteggio_integrale" checked={type === "sorteggio_integrale"} onChange={() => setType("sorteggio_integrale")} className="w-5 h-5 accent-amber-500 shrink-0 cursor-pointer" />
-              <div className="flex flex-col items-end pl-4">
-                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-amber-400"}>Sorteggio Integrale</span>
-                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Composizione puramente casuale.</span>
+              <div className="flex flex-col items-start">
+                <span className={"text-sm font-bold tracking-wider block text-left transition-colors text-amber-400"}>Sorteggio Integrale</span>
+                <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Composizione puramente casuale.</span>
               </div>
             </label>
             
-            <label className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
+            <label className="flex items-center justify-start gap-4 w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer group">
               <input type="radio" name="typeRadio" value="coppie_fisse" checked={type === "coppie_fisse"} onChange={() => setType("coppie_fisse")} className="w-5 h-5 accent-blue-500 shrink-0 cursor-pointer" />
-              <div className="flex flex-col items-end pl-4">
-                <span className={"text-sm font-bold tracking-wider block text-right transition-colors text-blue-400"}>Coppie Fisse</span>
-                <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Squadre già formate a priori.</span>
+              <div className="flex flex-col items-start">
+                <span className={"text-sm font-bold tracking-wider block text-left transition-colors text-blue-400"}>Coppie Fisse</span>
+                <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Squadre già formate a priori.</span>
               </div>
             </label>
           </div>
