@@ -845,7 +845,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="bg-blue-950/30 border border-blue-900/50 rounded-xl p-2.5">
                                 <div className="text-[11px] font-black uppercase tracking-widest text-blue-400 mb-2 flex items-center gap-2">
                                   <Shield className="w-4 h-4"/> Defender
-                                  {roleStats.gkMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.gkMatches} match)</span>}
+                                  {roleStats.gkMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.gkMatches} sfide)</span>}
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                   <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Tot Subiti</span><span className="text-lg font-black text-blue-300">{roleStats.gkGoalsConceded > 0 ? roleStats.gkGoalsConceded : <span className="text-slate-600">-</span>}</span></div>
@@ -858,7 +858,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="bg-red-950/30 border border-red-900/50 rounded-xl p-2.5">
                                 <div className="text-[11px] font-black uppercase tracking-widest text-red-400 mb-2 flex items-center gap-2">
                                   <Swords className="w-4 h-4"/> Striker
-                                  {roleStats.stMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.stMatches} match)</span>}
+                                  {roleStats.stMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.stMatches} sfide)</span>}
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                   <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Tot Fatti</span><span className="text-lg font-black text-red-300">{roleStats.stGoalsScored > 0 ? roleStats.stGoalsScored : <span className="text-slate-600">-</span>}</span></div>

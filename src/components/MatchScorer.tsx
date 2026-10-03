@@ -416,10 +416,10 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl md:text-2xl font-black text-white tracking-wider uppercase">
-                Match Scorer
+                Segnapunti Sfida
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                Al Meglio dei 3 Set
+                Al Meglio delle 3 Partite
               </span>
             </div>
             <p className="text-xs text-slate-400">
@@ -448,7 +448,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 mode === "sets" ? "bg-slate-700 text-white shadow" : "text-slate-400 hover:text-white"
               )}
             >
-              🏆 Solo Set
+              🏆 Solo Partite
             </button>
           </div>
 
