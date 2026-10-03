@@ -114,7 +114,7 @@ export default function TournamentForm() {
         
         {/* ROW 1 */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-2">
-          <div className="md:col-span-5 flex flex-col-reverse group">
+          <div className="md:col-span-3 flex flex-col-reverse group">
             <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-bold group-hover:text-purple-400 transition-colors">Orario Primo Fischio</span>
             <input
               type="time"
@@ -123,7 +123,7 @@ export default function TournamentForm() {
               className="w-full bg-transparent border-0 border-b border-transparent text-white font-bold text-xl p-0 focus:ring-0 focus:outline-none placeholder-slate-600 transition-colors"
             />
           </div>
-          <div className="md:col-span-4 flex flex-col-reverse group">
+          <div className="md:col-span-3 flex flex-col-reverse group">
             <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-bold group-hover:text-purple-400 transition-colors">Max Partite al Giorno</span>
             <input
               type="number"
@@ -134,7 +134,7 @@ export default function TournamentForm() {
               className="w-full bg-transparent border-0 border-b border-transparent text-white font-bold text-xl p-0 focus:ring-0 focus:outline-none placeholder-slate-600 transition-colors"
             />
           </div>
-          <div className="md:col-span-3 flex flex-col-reverse group">
+          <div className="md:col-span-6 flex flex-col-reverse group">
             <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-bold group-hover:text-purple-400 transition-colors">Biliardini Disponibili</span>
             <select value={numTables} onChange={(e) => setNumTables(Number(e.target.value))} className="w-full bg-transparent border-0 border-b border-transparent text-white font-bold text-xl p-0 focus:ring-0 focus:outline-none cursor-pointer appearance-none transition-colors">
               <option value={1} className="bg-slate-900">1 Biliardino</option>
@@ -147,8 +147,8 @@ export default function TournamentForm() {
 
         {/* ROW 2 - Giorni di gioco */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-4">
-          <div className="md:col-span-12 flex flex-col-reverse group">
-            <span className="text-[10px] text-slate-500 mt-2 uppercase tracking-wider font-bold group-hover:text-purple-400 transition-colors">Giorni di Gioco Settimanali</span>
+          <div className="md:col-span-12 flex flex-col group">
+            <span className="text-[10px] text-slate-500 mb-2 uppercase tracking-wider font-bold group-hover:text-purple-400 transition-colors">Giorni di Gioco Settimanali</span>
             <div className="flex flex-wrap gap-4 items-center">
               {DAYS_OF_WEEK.map((day) => {
                 const active = scheduleDays.includes(day.value);
