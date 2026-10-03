@@ -96,7 +96,7 @@ export default function PlayerHistoryView({
                         )}
                       </div>
                       <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mt-0.5">
-                        {partner.preferredRole || "Giocatore"}
+                        {partner.preferredRole === 'portiere' ? 'difensore' : (partner.preferredRole || "Giocatore")}
                       </span>
                     </div>
                   </div>
@@ -181,7 +181,7 @@ export default function PlayerHistoryView({
                     )}
                     {roleInMatch === "portiere" && (
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                        🛡️ In Porta
+                        🛡️ In Difesa
                       </span>
                     )}
                     {roleInMatch === "attaccante" && (
