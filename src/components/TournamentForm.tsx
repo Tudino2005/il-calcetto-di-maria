@@ -39,7 +39,7 @@ export default function TournamentForm() {
   const [scheduleStartTime, setScheduleStartTime] = useState<string>("20:00");
   const [scheduleDays, setScheduleDays] = useState<number[]>([2, 4]); // Tue + Thu default
   const [maxMatchesPerDay, setMaxMatchesPerDay] = useState<number>(6);
-  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+
 
   const toggleScheduleDay = (val: number) => {
     setScheduleDays((prev) =>
@@ -108,28 +108,11 @@ export default function TournamentForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
       {/* ─── SEZIONE OPZIONI (CALENDARIO AUTOMATICO) ──────────────────────────────── */}
-      <div className="bg-slate-800/20 border border-indigo-500/20 rounded-2xl flex flex-col overflow-hidden transition-all duration-300">
-        <button 
-          type="button" 
-          onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
-          className="flex items-center justify-between p-4 w-full hover:bg-slate-800/50 transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
-              <Settings className="w-4 h-4 text-indigo-400" />
-            </div>
-            <div className="text-left">
-              <h3 className="text-white font-black uppercase tracking-wider text-sm">Opzioni</h3>
-              <p className="text-slate-500 text-[10px] sm:text-xs">Impostazioni avanzate del torneo</p>
-            </div>
-          </div>
-          <div className="text-indigo-400 p-2">
-            {showAdvancedOptions ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-          </div>
-        </button>
-
-        {showAdvancedOptions && (
-          <div className="p-6 pt-2 border-t border-indigo-500/10 flex flex-col gap-5 animate-fade-in-up">
+      <div className="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-8 shadow-inner flex flex-col gap-8">
+        <h3 className="text-lg font-black text-slate-300 -mb-2">Opzioni</h3>
+        <p className="text-slate-500 text-xs -mt-6">Impostazioni avanzate del torneo</p>
+        
+        <div className="flex flex-col gap-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Start Time */}
               <div>
@@ -217,8 +200,7 @@ export default function TournamentForm() {
                 <p className="text-amber-400 text-xs mt-2 font-bold">⚠ Seleziona almeno un giorno per generare il calendario.</p>
               )}
             </div>
-          </div>
-        )}
+        </div>
       </div>
 
       <div className="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-8 shadow-inner flex flex-col gap-10">
