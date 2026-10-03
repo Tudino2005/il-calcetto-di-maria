@@ -53,7 +53,7 @@ export default async function PlayersPage() {
               <p className="text-slate-400 text-center py-8 col-span-full">Nessun giocatore registrato.</p>
             ) : (
               players.map((p) => (
-                <Link href={`/players/${p.id}`} key={p.id} className="flex flex-col items-center justify-start transition-all group cursor-pointer py-2">
+                <Link href={`/players/${p.id}`} key={p.id} title="Clicca per aprire la scheda del giocatore" className="flex flex-col items-center justify-start transition-all group cursor-pointer py-2">
                   <div className="relative w-16 h-16 sm:w-20 sm:h-20 mb-3">
                     {p.avatarUrl ? (
                       <img src={`/players/${p.avatarUrl}`} alt={p.name} className="w-full h-full object-cover rounded-full border-2 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] group-hover:scale-105 transition-transform" />
