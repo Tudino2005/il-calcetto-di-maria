@@ -700,7 +700,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
 
           <div className="bg-slate-900 border border-slate-700 px-8 py-5 rounded-3xl mb-8 text-center shadow-2xl max-w-md w-full">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">
-              Risultato Finale Set
+              Risultato Finale Partita
             </span>
             <div className="text-5xl font-black text-white tracking-wider mb-4">
               <span className={teamAWon ? "text-red-400" : "text-slate-400"}>
@@ -1107,7 +1107,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             <span className="text-emerald-400 font-bold">Partita Conclusa</span>
           ) : (
             <span className="text-slate-300 font-bold">
-              In corso (Set {currentSetNumber} di 3) • {setsWonA} a {setsWonB} nei set
+              In corso (Partita {currentSetNumber} di 3) • {setsWonA} a {setsWonB} nelle partite
             </span>
           )}
         </div>
