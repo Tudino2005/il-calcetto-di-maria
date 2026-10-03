@@ -445,7 +445,7 @@ export default function TournamentForm() {
                 </div>
               )}
 
-              <div className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50 max-w-[250px]">
+              <div className="flex items-center justify-start gap-4 w-full mt-4 pt-4 border-t border-slate-700/50">
                 <button
                   type="button"
                   onClick={() => setAllowRoleSwaps(!allowRoleSwaps)}
@@ -462,7 +462,7 @@ export default function TournamentForm() {
                   />
                 </button>
                 <div className="flex flex-col items-start">
-                  <label className={clsx("text-sm font-bold tracking-wider block text-right", allowRoleSwaps ? "text-blue-400" : "text-slate-400")}>
+                  <label className={clsx("text-sm font-bold tracking-wider block text-left", allowRoleSwaps ? "text-blue-400" : "text-slate-400")}>
                     Inversione Ruoli
                   </label>
                   <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">
