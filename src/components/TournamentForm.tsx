@@ -395,11 +395,11 @@ export default function TournamentForm() {
             </label>
           </div>
 
-          <div className="flex flex-col justify-center flex-1">
-            <div className={clsx("bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col justify-center items-center h-full gap-6 shadow-inner transition-all duration-300", type === "coppie_fisse" ? "opacity-0 pointer-events-none" : "opacity-100")}>
+          <div className="flex flex-col justify-center">
+            <div className={clsx("bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col justify-center h-full gap-6 shadow-inner transition-all duration-300", type === "coppie_fisse" ? "opacity-0 pointer-events-none" : "opacity-100")}>
               {type !== "coppie_fisse" && (
-                <div className="w-full max-w-[250px] flex flex-col items-center">
-                  <div className="flex items-center justify-between w-full">
+                <div className="w-full flex flex-col items-start">
+                  <div className="flex items-center justify-start gap-4 w-full cursor-pointer">
                     <button
                       type="button"
                       onClick={() => setIsBalancedDraw(!isBalancedDraw)}
@@ -413,15 +413,15 @@ export default function TournamentForm() {
                         }`}
                       />
                     </button>
-                    <div className="flex flex-col items-end pl-4">
-                      <label className="text-sm font-bold tracking-wider text-emerald-400 block text-right">
+                    <div className="flex flex-col items-start">
+                      <label className="text-sm font-bold tracking-wider text-emerald-400 block text-left">
                         Torneo Equilibrato
                       </label>
-                      <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Associa giocatori forti a giocatori deboli</span>
+                      <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Associa giocatori forti a giocatori deboli</span>
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between w-full mt-4 pt-4 border-t border-slate-700/50">
+                  <div className="flex items-center justify-start gap-4 w-full mt-4 pt-4 border-t border-slate-700/50 cursor-pointer">
                     <button
                       type="button"
                       onClick={() => setAvoidRepeatedPairs(!avoidRepeatedPairs)}
@@ -435,11 +435,11 @@ export default function TournamentForm() {
                         }`}
                       />
                     </button>
-                    <div className="flex flex-col items-end pl-4">
-                      <label className="text-sm font-bold tracking-wider text-amber-400 block text-right">
+                    <div className="flex flex-col items-start">
+                      <label className="text-sm font-bold tracking-wider text-amber-400 block text-left">
                         Evita coppie ripetute
                       </label>
-                      <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">Penalizza coppie già formate in passato</span>
+                      <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">Penalizza coppie già formate in passato</span>
                     </div>
                   </div>
                 </div>
@@ -461,11 +461,11 @@ export default function TournamentForm() {
                     )}
                   />
                 </button>
-                <div className="flex flex-col items-end pl-4">
+                <div className="flex flex-col items-start">
                   <label className={clsx("text-sm font-bold tracking-wider block text-right", allowRoleSwaps ? "text-blue-400" : "text-slate-400")}>
                     Inversione Ruoli
                   </label>
-                  <span className="text-[10px] text-slate-400 text-right leading-tight mt-0.5">
+                  <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">
                     {allowRoleSwaps 
                       ? "Ruoli interscambiabili in partita"
                       : "I giocatori mantengono il ruolo"}
