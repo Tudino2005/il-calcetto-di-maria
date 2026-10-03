@@ -40,7 +40,7 @@ export default function PlayerHistoryView({
     <>
       {/* RIEPILOGO PER COMPAGNO */}
       <section className="mb-8">
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+        <div className="flex items-center justify-start mb-6 flex-wrap gap-4 md:gap-10">
           <h3 className="text-2xl font-black uppercase tracking-wider text-white flex items-center gap-3">
             <Users className="w-7 h-7 text-purple-400" /> RIEPILOGO PER COMPAGNO
           </h3>
