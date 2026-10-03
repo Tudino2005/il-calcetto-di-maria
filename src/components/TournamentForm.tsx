@@ -311,7 +311,7 @@ export default function TournamentForm() {
                   Gol per vincere ogni Set
                 </label>
                 <div className="flex gap-2">
-                  {[5, 6, 7, 8, 10].map(val => (
+                  {[5, 6, 7, 8, 9, 10].map(val => (
                     <button
                       key={val}
                       type="button"

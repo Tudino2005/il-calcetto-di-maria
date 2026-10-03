@@ -465,7 +465,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 Gol per vincere ogni Set
               </label>
               <div className="flex gap-1.5">
-                {[5, 6, 7, 8, 10].map(val => (
+                {[5, 6, 7, 8, 9, 10].map(val => (
                   <button
                     key={val}
                     onClick={() => updateSettings("goals", val, advantageThreshold === 99 ? 99 : val - 1)}
