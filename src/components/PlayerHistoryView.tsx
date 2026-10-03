@@ -16,15 +16,19 @@ export default function PlayerHistoryView({
   partnerStats: any[];
   allMatches: any[];
 }) {
-  const [selectedPartnerId, setSelectedPartnerId] = useState<string>("all");
+  const [selectedPartnerId, setSelectedPartnerId] = useState<string>("");
 
-  const filteredPartners = selectedPartnerId === "all" 
-    ? partnerStats 
-    : partnerStats.filter(p => p.partner.id === selectedPartnerId);
+  const filteredPartners = selectedPartnerId === ""
+    ? []
+    : selectedPartnerId === "all" 
+      ? partnerStats 
+      : partnerStats.filter(p => p.partner.id === selectedPartnerId);
 
-  const filteredMatches = selectedPartnerId === "all"
-    ? allMatches
-    : allMatches.filter(m => {
+  const filteredMatches = selectedPartnerId === ""
+    ? []
+    : selectedPartnerId === "all"
+      ? allMatches
+      : allMatches.filter(m => {
         const isTeamA = m.teamA?.player1Id === playerId || m.teamA?.player2Id === playerId;
         const myTeam = isTeamA ? m.teamA : m.teamB;
         if (!myTeam) return false;
@@ -48,6 +52,7 @@ export default function PlayerHistoryView({
               onChange={(e) => setSelectedPartnerId(e.target.value)}
               className="bg-slate-900 text-white font-bold px-4 py-2 rounded-lg border border-slate-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
             >
+              <option value="">Seleziona Compagno</option>
               <option value="all">Tutti i compagni</option>
               {partnerStats.map(p => (
                 <option key={p.partner.id} value={p.partner.id}>
