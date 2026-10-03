@@ -277,7 +277,7 @@ export default function MatchLobbyClient({ players }: { players: any[] }) {
         className="w-full bg-gradient-to-r from-red-500 to-blue-500 hover:from-red-400 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-3xl py-8 rounded-3xl shadow-2xl flex items-center justify-center gap-4 transition-all"
       >
         <PlayCircle className="w-10 h-10" />
-        {isSubmitting ? "AVVIO IN CORSO..." : "AVVIA MATCH AL VOLO!"}
+        {isSubmitting ? "AVVIO IN CORSO..." : "AVVIA SFIDA AL VOLO!"}
       </button>
 
       <style dangerouslySetInnerHTML={{__html: `

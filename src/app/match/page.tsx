@@ -35,7 +35,7 @@ export default async function NewMatchPage() {
           <Link href="/admin" className="p-3 bg-slate-800 rounded-xl hover:bg-slate-700 transition">
             <ArrowLeft className="w-6 h-6 text-white" />
           </Link>
-          <h1 className="text-3xl font-bold text-white">Nuova Partita Libera</h1>
+          <h1 className="text-3xl font-bold text-white">Nuova Sfida Libera</h1>
         </div>
       </header>
 

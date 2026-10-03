@@ -107,7 +107,7 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                     <th className="p-4 font-bold">Squadra</th>
                     <th className="p-4 font-bold text-center" title="Partite Giocate">PG</th>
                     <th className="p-4 font-bold text-center" title="Vinte">V</th>
-                    <th className="p-4 font-bold text-center" title="Differenza Set">DS</th>
+                    <th className="p-4 font-bold text-center" title="Differenza Partite">DP</th>
                     <th className="p-4 font-bold text-center text-purple-400">PTI</th>
                   </tr>
                 </thead>
@@ -121,7 +121,7 @@ export default function GroupStageView({ groups, qualifiersPerGroup, tournamentI
                     // 1. Punti
                     if (a.points !== b.points) return b.points - a.points;
                     
-                    // 2. Differenza Set (DS)
+                    // 2. Differenza Partite (DP)
                     const diffA = (a.setsFor || 0) - (a.setsAgainst || 0);
                     const diffB = (b.setsFor || 0) - (b.setsAgainst || 0);
                     if (diffA !== diffB) return diffB - diffA;

@@ -59,7 +59,7 @@ export default function DoubleEliminationBracket({ tournament }: { tournament: a
             </div>
             {m.setScores && formatSetScores(m.setScores) && (
               <div className="text-[10px] font-black text-emerald-400 bg-slate-950/80 px-2 py-0.5 rounded text-center border border-slate-800 tracking-wider">
-                Set: {formatSetScores(m.setScores)}
+                Partite: {formatSetScores(m.setScores)}
               </div>
             )}
           </div>

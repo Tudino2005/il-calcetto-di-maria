@@ -65,7 +65,7 @@ export default async function CeremonyPage({ params }: { params: Promise<{ id: s
                     <div className="flex gap-4">
                       <div className="px-6 py-2 bg-blue-950/50 border border-blue-900/50 rounded-xl flex flex-col items-center">
                         <span className="text-blue-400 text-3xl font-black">{gk.stats.defensiveIndex}</span>
-                        <span className="text-[10px] text-blue-300/50 font-bold uppercase tracking-widest">Gol Subiti / Match</span>
+                        <span className="text-[10px] text-blue-300/50 font-bold uppercase tracking-widest">Gol Subiti / Sfida</span>
                       </div>
                       <div className="px-6 py-2 bg-blue-950/50 border border-blue-900/50 rounded-xl flex flex-col items-center">
                         <span className="text-blue-400 text-3xl font-black">{gk.stats.gkWinRate}%</span>
@@ -103,7 +103,7 @@ export default async function CeremonyPage({ params }: { params: Promise<{ id: s
                     <div className="flex gap-4">
                       <div className="px-6 py-2 bg-red-950/50 border border-red-900/50 rounded-xl flex flex-col items-center">
                         <span className="text-red-400 text-3xl font-black">{st.stats.offensiveIndex}</span>
-                        <span className="text-[10px] text-red-300/50 font-bold uppercase tracking-widest">Gol Fatti / Match</span>
+                        <span className="text-[10px] text-red-300/50 font-bold uppercase tracking-widest">Gol Fatti / Sfida</span>
                       </div>
                       <div className="px-6 py-2 bg-red-950/50 border border-red-900/50 rounded-xl flex flex-col items-center">
                         <span className="text-red-400 text-3xl font-black">{st.stats.stWinRate}%</span>

@@ -164,7 +164,7 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
                     {/* VS BADGE */}
                     <div className="shrink-0 flex flex-col items-center justify-center self-center mx-4 gap-6 mt-2">
                       <div className="text-xl font-black text-white bg-pink-500 px-8 py-3 rounded-2xl shadow-lg border-2 border-pink-400 uppercase tracking-widest">
-                        MATCH {revealedCount + 1}
+                        SFIDA {revealedCount + 1}
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="bg-slate-950 px-8 py-5 mx-2 rounded-3xl text-5xl font-black text-white shadow-inner flex flex-col items-center border-2 border-slate-800">
@@ -265,13 +265,13 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
       {/* RIGHT COLUMN: THE GRID */}
       <div className="w-[45%] bg-slate-950/80 p-8 flex flex-col z-10 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
         <h3 className="text-slate-500 font-bold tracking-widest uppercase text-sm mb-6 border-b border-slate-800 pb-4">
-          Match Generati
+          Sfide Generate
         </h3>
 
         <div className="flex-1 overflow-y-auto no-scrollbar pr-2 flex flex-col gap-4">
           {round1Matches.slice(0, revealedCount).map((m: any, idx: number) => (
             <div key={idx} className="bg-slate-900 border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3 animate-slide-in-right">
-              <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">Match {idx + 1}</div>
+              <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">Sfida {idx + 1}</div>
               
               <div className="flex items-center justify-between">
                 <div className="flex-1 flex flex-col font-bold text-lg text-white uppercase truncate pr-4">

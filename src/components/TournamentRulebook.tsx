@@ -20,7 +20,7 @@ export default function TournamentRulebook({ tournament }: { tournament: any }) 
   // 2. Logica Dinamica: Punteggio e Vantaggi
   const targetGoals = tournament.targetGoals || 7;
   const advantageThreshold = tournament.advantageThreshold || 5;
-  const scoringDesc = `Ogni set viene vinto dalla prima squadra che raggiunge i ${targetGoals} Gol. Se si arriva sul punteggio di ${advantageThreshold}-${advantageThreshold}, si attivano i Vantaggi: per vincere servirà uno scarto di almeno 2 gol (es. ${advantageThreshold+2}-${advantageThreshold}, ${advantageThreshold+3}-${advantageThreshold+1}).`;
+  const scoringDesc = `Ogni partita viene vinta dalla prima squadra che raggiunge i ${targetGoals} Gol. ${advantageThreshold === 99 ? 'I vantaggi sono disattivati. La partita termina non appena una squadra raggiunge i gol previsti.' : `Se si arriva sul punteggio di ${advantageThreshold}-${advantageThreshold}, si attivano i Vantaggi: per vincere servirà uno scarto di almeno 2 gol (es. ${advantageThreshold+2}-${advantageThreshold}).`}`;
 
   // 3. Logica Dinamica: Ruoli e Composizione
   let rolesDesc = "";

@@ -380,7 +380,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
   };
 
   const handleResetMatch = () => {
-    if (confirm("Vuoi davvero azzerare completamente la partita e ripartire dal Set 1 (0-0)?")) {
+    if (confirm("Vuoi davvero azzerare completamente la partita e ripartire dalla Partita 1 (0-0)?")) {
       setCompletedSets([]);
       setCurrentSetGoals([]);
       setSetFinishedModal(null);
@@ -423,7 +423,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              {match.tournamentId ? "Partita di Torneo" : "Partita Libera"} • Vince chi conquista 2 set
+              {match.tournamentId ? "Sfida di Torneo" : "Sfida Libera"} • Vince chi conquista 2 partite
             </p>
           </div>
         </div>
@@ -554,15 +554,15 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             </div>
             <div>
               <div className="text-base font-black text-yellow-400 uppercase tracking-wider">
-                ⚡ VANTAGGI SET {currentSetNumber} (Pari raggiunto a {advantageThreshold})
+                ⚡ VANTAGGI PARTITA {currentSetNumber} (Pari raggiunto a {advantageThreshold})
               </div>
               <p className="text-xs text-slate-300">
-                Punteggio azzerato per i vantaggi: <b>vince il set chi segna 2 gol consecutivi (+2)</b>. Se l'avversario pareggia, si riazzera!
+                Punteggio azzerato per i vantaggi: <b>vince la partita chi segna 2 gol consecutivi (+2)</b>. Se l'avversario pareggia, si riazzera!
               </p>
             </div>
           </div>
           <div className="bg-slate-900/80 px-4 py-1.5 rounded-xl border border-yellow-500/30 shrink-0">
-            <span className="text-[11px] text-slate-400 font-bold block uppercase">Gol Effettivi Set {currentSetNumber}:</span>
+            <span className="text-[11px] text-slate-400 font-bold block uppercase">Gol Effettivi Partita {currentSetNumber}:</span>
             <span className="text-lg font-black text-white">{currentSetState.scoreA} - {currentSetState.scoreB}</span>
           </div>
         </div>
@@ -576,7 +576,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
               <Trophy className="w-8 h-8 text-purple-400" />
             </div>
             <span className="text-xs font-black uppercase tracking-widest text-purple-400 block mb-1">
-              Set {setFinishedModal.setNumber} Concluso
+              Partita {setFinishedModal.setNumber} Conclusa
             </span>
             <h2 className="text-2xl md:text-3xl font-black text-white mb-2">
               Vinto da{" "}
@@ -592,19 +592,19 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
 
             <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 my-6">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                Situazione Set Partita (Al meglio delle 3)
+                Situazione Partite Sfida (Al meglio delle 3)
               </span>
               <div className="flex items-center justify-center gap-6 text-2xl font-black">
-                <span className="text-red-400">{setsWonA} Set</span>
+                <span className="text-red-400">{setsWonA} Partite</span>
                 <span className="text-slate-600">-</span>
-                <span className="text-blue-400">{setsWonB} Set</span>
+                <span className="text-blue-400">{setsWonB} Partite</span>
               </div>
               <p className="text-xs text-slate-400 mt-2">
                 {setsWonA === 1 && setsWonB === 1
-                  ? "Parità 1-1! Si va al 3° Set Decisivo (La Bella)!"
+                  ? "Parità 1-1! Si va al 3ª Partita Decisiva (La Bella)!"
                   : setsWonA === 1
-                  ? "Squadra Rossa a un solo set dalla vittoria della partita!"
-                  : "Squadra Blu a un solo set dalla vittoria della partita!"}
+                  ? "Squadra Rossa a una sola partita dalla vittoria della sfida!"
+                  : "Squadra Blu a una sola partita dalla vittoria della sfida!"}
               </p>
             </div>
 
@@ -612,7 +612,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             {(teamARoles || teamBRoles) && (
               <div className="bg-slate-950/60 border border-slate-800 rounded-2xl p-3 mb-6 text-left">
                 <span className="text-[11px] font-black uppercase text-slate-400 block mb-2 text-center">
-                  🔄 Cambio Tattico di Posizione per il Set {currentSetNumber}?
+                  🔄 Cambio Tattico di Posizione per la Partita {currentSetNumber}?
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   {teamARoles && match.teamA && (
@@ -668,21 +668,21 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 onClick={() => setSetFinishedModal(null)}
                 className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-black text-lg rounded-2xl transition-all shadow-lg shadow-purple-950/50 flex items-center justify-center gap-2"
               >
-                <span>Inizia Set {currentSetNumber}</span>
+                <span>Inizia Partita {currentSetNumber}</span>
                 <ChevronRight className="w-5 h-5" />
               </button>
               <button
                 onClick={undoLastSet}
                 className="text-xs text-slate-400 hover:text-white px-4 py-2 rounded-xl transition"
               >
-                Annulla ultimo gol (Correggi Set {setFinishedModal.setNumber})
+                Annulla ultimo gol (Correggi Partita {setFinishedModal.setNumber})
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* OVERLAY VITTORIA PARTITA (2 Set Vinti) */}
+      {/* OVERLAY VITTORIA PARTITA (2 Partite Vinte) */}
       {isMatchFinished && (
         <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 animate-in fade-in zoom-in duration-300">
           <Trophy className="w-24 h-24 md:w-32 md:h-32 text-yellow-400 mb-4 animate-bounce" />
@@ -715,12 +715,12 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             {/* Recap dei singoli set */}
             {(completedSets.length > 0 || (match.setScores && formatSetScores(match.setScores))) && (
               <div className="border-t border-slate-800 pt-3 flex flex-col gap-2">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Dettaglio Set Giocati:</span>
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Dettaglio Partite Giocate:</span>
                 <div className="flex justify-center gap-2 flex-wrap">
                   {completedSets.length > 0 ? (
                     completedSets.map((s) => (
                       <span key={s.setNumber} className="px-3 py-1 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-slate-300">
-                        Set {s.setNumber}: <b className="text-white">{s.scoreA}-{s.scoreB}</b> {s.inAdvantages && "(Vantaggi)"}
+                        Partita {s.setNumber}: <b className="text-white">{s.scoreA}-{s.scoreB}</b> {s.inAdvantages && "(Vantaggi)"}
                       </span>
                     ))
                   ) : (
@@ -751,7 +751,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 }}
                 className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-black text-lg hover:scale-105 transition-transform shadow-xl"
               >
-                Nuova Partita Libera
+                Nuova Sfida Libera
               </Link>
             )}
           </div>
@@ -763,7 +763,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         <div className="text-center mb-2">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest bg-slate-800 border border-slate-700 text-purple-300 shadow">
             <Play className="w-3.5 h-3.5 text-purple-400 fill-purple-400" />
-            In corso: Set {currentSetNumber} di 3 {currentSetNumber === 3 && "(La Bella - Decisivo)"}
+            In corso: Partita {currentSetNumber} di 3 {currentSetNumber === 3 && "(La Bella - Decisivo)"}
           </span>
         </div>
       )}
@@ -781,7 +781,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             <div className="flex items-center justify-end mb-2 min-h-[24px]">
               {mode === "goals" && currentSetState.inAdvantages && currentSetState.advA === 1 && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-500 text-white animate-pulse">
-                  Set Point Rosso (+1)
+                  Punto Partita Rosso (+1)
                 </span>
               )}
             </div>
@@ -829,14 +829,14 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                   {currentSetState.scoreA}
                 </div>
                 <span className="text-xs text-slate-400 font-black uppercase tracking-widest mt-1">
-                  Gol nel Set {currentSetNumber}
+                  Gol nella Partita {currentSetNumber}
                 </span>
 
                 {/* VANTAGGI DUEL HUD (Se in fase vantaggi nel set corrente) */}
                 {currentSetState.inAdvantages && (
                   <div className="mt-4 w-full bg-slate-950/80 border border-red-500/40 rounded-2xl p-3 text-center">
                     <div className="text-[11px] font-black uppercase tracking-wider text-red-400 mb-2">
-                      Vantaggi Set {currentSetNumber} (Serve +2 consecutivo)
+                      Vantaggi Partita {currentSetNumber} (Serve +2 consecutivo)
                     </div>
                     <div className="flex items-center justify-center gap-3">
                       <div className={clsx(
@@ -866,7 +866,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 <span className="text-8xl md:text-9xl font-black text-white tabular-nums">
                   {match.scoreTeamA}
                 </span>
-                <span className="text-sm text-slate-400 font-bold uppercase tracking-widest mt-2">Set Vinti</span>
+                <span className="text-sm text-slate-400 font-bold uppercase tracking-widest mt-2">Partite Vinte</span>
               </>
             )}
           </div>
@@ -875,7 +875,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
           {mode === "goals" && (
             <div className="mb-4">
               <div className="flex justify-between items-center text-[10px] text-slate-400 uppercase font-black tracking-wider mb-2">
-                <span>Stecca Gol Set {currentSetNumber} (1 - 10)</span>
+                <span>Stecca Gol Partita {currentSetNumber} (1 - 10)</span>
                 <span>Target: {targetGoals} gol</span>
               </div>
               <div className="grid grid-cols-10 gap-1 sm:gap-1.5 w-full">
@@ -928,7 +928,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 disabled={isPending}
                 className="flex-1 h-14 sm:h-16 rounded-2xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-black text-xl sm:text-2xl shadow-lg shadow-red-950/50 active:scale-95 transition-transform disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {mode === "goals" ? "+ GOL ROSSO" : "+ SET ROSSO"}
+                {mode === "goals" ? "+ GOL ROSSO" : "+ PARTITA ROSSA"}
               </button>
             </div>
           )}
@@ -945,7 +945,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             <div className="flex items-center justify-end mb-2 min-h-[24px]">
               {mode === "goals" && currentSetState.inAdvantages && currentSetState.advB === 1 && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-500 text-white animate-pulse">
-                  Set Point Blu (+1)
+                  Punto Partita Blu (+1)
                 </span>
               )}
             </div>
@@ -993,14 +993,14 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                   {currentSetState.scoreB}
                 </div>
                 <span className="text-xs text-slate-400 font-black uppercase tracking-widest mt-1">
-                  Gol nel Set {currentSetNumber}
+                  Gol nella Partita {currentSetNumber}
                 </span>
 
                 {/* VANTAGGI DUEL HUD (Se in fase vantaggi nel set corrente) */}
                 {currentSetState.inAdvantages && (
                   <div className="mt-4 w-full bg-slate-950/80 border border-blue-500/40 rounded-2xl p-3 text-center">
                     <div className="text-[11px] font-black uppercase tracking-wider text-blue-400 mb-2">
-                      Vantaggi Set {currentSetNumber} (Serve +2 consecutivo)
+                      Vantaggi Partita {currentSetNumber} (Serve +2 consecutivo)
                     </div>
                     <div className="flex items-center justify-center gap-3">
                       <div className={clsx(
@@ -1030,7 +1030,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 <span className="text-8xl md:text-9xl font-black text-white tabular-nums">
                   {match.scoreTeamB}
                 </span>
-                <span className="text-sm text-slate-400 font-bold uppercase tracking-widest mt-2">Set Vinti</span>
+                <span className="text-sm text-slate-400 font-bold uppercase tracking-widest mt-2">Partite Vinte</span>
               </>
             )}
           </div>
@@ -1039,7 +1039,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
           {mode === "goals" && (
             <div className="mb-4">
               <div className="flex justify-between items-center text-[10px] text-slate-400 uppercase font-black tracking-wider mb-2">
-                <span>Stecca Gol Set {currentSetNumber} (1 - 10)</span>
+                <span>Stecca Gol Partita {currentSetNumber} (1 - 10)</span>
                 <span>Target: {targetGoals} gol</span>
               </div>
               <div className="grid grid-cols-10 gap-1 sm:gap-1.5 w-full">
@@ -1092,7 +1092,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                 disabled={isPending}
                 className="flex-1 h-14 sm:h-16 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-black text-xl sm:text-2xl shadow-lg shadow-blue-950/50 active:scale-95 transition-transform disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {mode === "goals" ? "+ GOL BLU" : "+ SET BLU"}
+                {mode === "goals" ? "+ GOL BLU" : "+ PARTITA BLU"}
               </button>
             </div>
           )}
@@ -1118,7 +1118,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
               onClick={undoLastSet}
               className="text-xs text-slate-400 hover:text-yellow-400 transition"
             >
-              Annulla Set Precedente
+              Annulla Partita Precedente
             </button>
           )}
 

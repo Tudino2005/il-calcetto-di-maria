@@ -176,7 +176,7 @@ export default function PlayerHistoryView({
                     ) : (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <Swords className="w-3.5 h-3.5 text-emerald-400" />
-                        Partita Libera
+                        Sfida Libera
                       </span>
                     )}
                     {roleInMatch === "portiere" && (
@@ -197,7 +197,7 @@ export default function PlayerHistoryView({
                   </div>
                   {m.setScores && formatSetScores(m.setScores) && (
                     <div className="text-xs font-black text-emerald-400 mt-1 tracking-wider">
-                      Dettaglio Set: {formatSetScores(m.setScores)}
+                      Dettaglio Partite: {formatSetScores(m.setScores)}
                     </div>
                   )}
                 </div>

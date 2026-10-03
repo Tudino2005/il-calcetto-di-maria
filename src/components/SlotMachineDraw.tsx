@@ -642,12 +642,12 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
                  
                  <div className="text-left space-y-16">
                     <div>
-                       <h3 className="text-3xl font-black text-yellow-400 mb-6">1. Formato del Match</h3>
+                       <h3 className="text-3xl font-black text-yellow-400 mb-6">1. Formato della Sfida</h3>
                        <p className="text-2xl text-slate-100 leading-relaxed">
                          {tournament.format === 'gironi_eliminazione' ? "Il torneo inizia con una fase a gironi all'italiana. Le migliori squadre accederanno alla fase ad eliminazione diretta." :
                           tournament.format === 'doppia_eliminazione' ? "Il torneo prevede un tabellone principale (Winners) e uno di ripescaggio (Losers). Una sconfitta non ti elimina definitivamente!" :
                           "Il torneo si disputa con la formula dell'eliminazione diretta."} 
-                         Ogni partita si gioca al meglio dei 3 set (vince chi se ne aggiudica 2). Vince il singolo set la squadra che per prima raggiunge i {tournament.targetGoals || 6} gol. È obbligatorio uno scarto di due reti per la vittoria: in caso di parità, si andrà ai vantaggi ad oltranza finché una squadra non otterrà un doppio vantaggio consecutivo.
+                         Ogni sfida si gioca al meglio delle 3 partite (vince chi se ne aggiudica 2). Vince la singola partita la squadra che per prima raggiunge i {tournament.targetGoals || 6} gol. È obbligatorio uno scarto di due reti per la vittoria: in caso di parità, si andrà ai vantaggi ad oltranza finché una squadra non otterrà un doppio vantaggio consecutivo.
                        </p>
                     </div>
                     <div>

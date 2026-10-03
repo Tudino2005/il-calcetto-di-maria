@@ -48,7 +48,7 @@ export default async function AdminHome() {
             <Play className="w-12 h-12 text-blue-400" />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">Partita Libera</h2>
+            <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">Sfida Libera</h2>
             <p className="text-slate-400 font-bold">Sfida 2v2 al volo</p>
           </div>
         </Link>

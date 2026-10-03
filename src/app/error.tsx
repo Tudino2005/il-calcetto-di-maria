@@ -51,7 +51,7 @@ export default function ErrorBoundary({
           className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold flex items-center gap-2 transition active:scale-95 border border-slate-700"
         >
           <Swords className="w-5 h-5" />
-          <span>Partita Libera</span>
+          <span>Sfida Libera</span>
         </Link>
       </div>
     </div>

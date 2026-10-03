@@ -590,9 +590,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                   <div className="col-span-1 text-center" title="Sfide Giocate">SG</div>
                   <div className="col-span-1 text-center text-emerald-400/70" title="Vittorie">V</div>
                   <div className="col-span-1 text-center text-red-400/70" title="Perse">P</div>
-                  <div className="col-span-1 text-center" title="Set Vinti">SV</div>
-                  <div className="col-span-1 text-center" title="Set Persi">SP</div>
-                  <div className="col-span-1 text-center" title="Differenza Set">DS</div>
+                  <div className="col-span-1 text-center" title="Partite Vinte">PV</div>
+                  <div className="col-span-1 text-center" title="Partite Perse">PP</div>
+                  <div className="col-span-1 text-center" title="Differenza Partite">DP</div>
                   <div className="col-span-1 text-center text-white" title="Win Rate %">WR%</div>
                   <div className="col-span-1 text-center">Ultime 5</div>
                 </div>
@@ -636,9 +636,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                         <div className="col-span-1 text-center text-emerald-400 font-bold">{stats.v}</div>
                         {/* P */}
                         <div className="col-span-1 text-center text-red-400 font-bold">{stats.p}</div>
-                        {/* SV */}
+                        {/* PV */}
                         <div className="col-span-1 text-center text-slate-300 font-medium">{stats.sv}</div>
-                        {/* SP */}
+                        {/* PP */}
                         <div className="col-span-1 text-center text-slate-300 font-medium">{stats.sp}</div>
                         {/* DS */}
                         <div className="col-span-1 text-center font-bold text-slate-300">
@@ -672,7 +672,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 {/* FOOTER INFO */}
                 <div className="bg-slate-950 p-2 text-center text-[15px] text-slate-500 font-bold uppercase tracking-widest border-t border-slate-800">
-                  SG: Sfide Giocate • V: Vittorie • P: Perse • SV: Set Vinti • SP: Set Persi • DS: Differenza Set • WR%: Win Rate (Vittorie / Sfide)
+                  SG: Sfide Giocate • V: Vittorie • P: Perse • PV: Partite Vinte • PP: Partite Perse • DP: Diff. Partite • WR%: Win Rate (Vittorie / Sfide)
                 </div>
               </div>
             </div>
@@ -1136,7 +1136,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     </div>
                     <div className="flex-1 relative z-10 border-l border-slate-700/50 pl-6">
                       <p className="text-slate-400 font-medium text-sm leading-snug">
-                        Ogni set viene vinto dalla prima squadra che raggiunge i <b>{t.targetGoals || 7} Gol</b>. Se si arriva sul <b>{(t.advantageThreshold || 5)}-{(t.advantageThreshold || 5)}</b>, si attivano i Vantaggi: per vincere servirà uno scarto di 2 gol.
+                        Ogni partita viene vinta dalla prima squadra che raggiunge i <b>{t.targetGoals || 7} Gol</b>. {t.advantageThreshold === 99 ? 'Vantaggi disattivati (la partita termina esattamente ai gol previsti).' : `Se si arriva sul <b>${t.advantageThreshold || 5}-${t.advantageThreshold || 5}</b>, si attivano i Vantaggi: per vincere servirà uno scarto di 2 gol.`}
                       </p>
                     </div>
                   </div>
@@ -1282,7 +1282,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               // 1. Punti
                               if (a.points !== b.points) return b.points - a.points;
                               
-                              // 2. Differenza Set (DS)
+                              // 2. Differenza Partite (DP)
                               const diffA = (a.setsFor || 0) - (a.setsAgainst || 0);
                               const diffB = (b.setsFor || 0) - (b.setsAgainst || 0);
                               if (diffA !== diffB) return diffB - diffA;
@@ -1467,7 +1467,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                     ))}
                     {currentSlide.tournament.matches?.filter((m: any) => m.winnerTeamId).length === 0 && (
-                       <p className="text-slate-500 text-center py-4">Nessun match ancora terminato.</p>
+                       <p className="text-slate-500 text-center py-4">Nessuna sfida ancora terminata.</p>
                     )}
                   </div>
                 </div>
