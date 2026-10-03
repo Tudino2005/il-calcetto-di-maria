@@ -462,7 +462,7 @@ export default function TournamentForm() {
                   />
                 </button>
                 <div className="flex flex-col items-start">
-                  <label className={clsx("text-sm font-bold tracking-wider block text-left", allowRoleSwaps ? "text-blue-400" : "text-slate-400")}>
+                  <label className={"text-sm font-bold tracking-wider block text-left text-blue-400"}>
                     Inversione Ruoli
                   </label>
                   <span className="text-[10px] text-slate-400 text-left leading-tight mt-0.5">
