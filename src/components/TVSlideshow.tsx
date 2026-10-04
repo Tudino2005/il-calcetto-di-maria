@@ -628,7 +628,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
 
                 {/* ROWS */}
-                <div className="flex flex-col flex-1 overflow-y-auto min-h-0">
+                <div className="flex flex-col flex-1">
                   {(!data.freeMatchesStats || data.freeMatchesStats.length === 0) ? (
                     <div className="flex flex-col items-center justify-center text-slate-500 py-16">
                       <Swords className="w-16 h-16 mb-4 opacity-50" />
