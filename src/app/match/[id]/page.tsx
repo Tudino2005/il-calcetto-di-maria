@@ -10,6 +10,7 @@ export default async function MatchPage({ params }: { params: Promise<{ id: stri
     include: {
       teamA: { include: { player1: true, player2: true } },
       teamB: { include: { player1: true, player2: true } },
+      tournament: true
     }
   });
 

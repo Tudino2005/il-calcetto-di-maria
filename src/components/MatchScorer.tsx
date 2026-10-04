@@ -18,6 +18,7 @@ type MatchInfo = {
   tournamentId: string | null;
   teamA: TeamInfo | null;
   teamB: TeamInfo | null;
+  tournament?: any;
   setScores?: any;
   teamA_goalkeeperId?: string | null;
   teamA_strikerId?: string | null;
@@ -105,6 +106,12 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
 
   // Load saved general settings
   useEffect(() => {
+    if (match.tournament) {
+      setMode(match.tournament.scoringMode as ScorerMode || "goals");
+      setTargetGoals(match.tournament.targetGoals || 7);
+      setAdvantageThreshold(match.tournament.advantageThreshold ?? 5);
+      return;
+    }
     try {
       const saved = localStorage.getItem("foosball_scorer_settings");
       if (saved) {
@@ -114,7 +121,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         if (parsed.advantageThreshold) setAdvantageThreshold(parsed.advantageThreshold);
       }
     } catch {}
-  }, []);
+  }, [match.tournament]);
 
   const updateSettings = (newMode: ScorerMode, newTarget: number, newThreshold: number) => {
     setMode(newMode);

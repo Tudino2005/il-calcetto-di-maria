@@ -1,20 +1,17 @@
 import re
 
-with open('prisma/schema.prisma', 'r') as f:
-    content = f.read()
+def patch_file(filepath):
+    with open(filepath, 'r') as f:
+        content = f.read()
 
-old_fields = """  allowRoleSwaps     Boolean  @default(true)
-  targetGoals        Int      @default(10)
-  advantageThreshold Int      @default(2)"""
+    # Find the Tournament model and add scoringMode
+    target = 'advantageThreshold Int                  @default(5)\n'
+    replacement = target + '  scoringMode    String                   @default("goals") // "goals" or "sets"\n'
+    
+    if 'scoringMode' not in content:
+        content = content.replace(target, replacement)
 
-new_fields = """  allowRoleSwaps     Boolean  @default(true)
-  isBalancedDraw     Boolean  @default(false)
-  targetGoals        Int      @default(10)
-  advantageThreshold Int      @default(2)"""
+    with open(filepath, 'w') as f:
+        f.write(content)
 
-content = content.replace(old_fields, new_fields)
-
-with open('prisma/schema.prisma', 'w') as f:
-    f.write(content)
-
-print("Patched schema!")
+patch_file('prisma/schema.prisma')

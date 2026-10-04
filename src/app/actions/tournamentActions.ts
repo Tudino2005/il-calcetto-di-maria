@@ -21,6 +21,7 @@ export async function createTournament(formData: FormData) {
   const allowRoleSwaps = allowRoleSwapsStr === "true";
   const isBalancedDraw = formData.get("isBalancedDraw") === "true";
   const avoidRepeatedPairs = formData.get("avoidRepeatedPairs") === "true";
+  const scoringMode = (formData.get("scoringMode") as string) || "goals";
   const targetGoals = Number(formData.get("targetGoals") || 7);
   const advantageThreshold = Number(formData.get("advantageThreshold") || 5);
 
@@ -46,6 +47,7 @@ export async function createTournament(formData: FormData) {
       allowRoleSwaps,
       isBalancedDraw,
       avoidRepeatedPairs,
+      scoringMode,
       targetGoals,
       advantageThreshold,
       status: "setup",

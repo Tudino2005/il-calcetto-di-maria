@@ -102,6 +102,7 @@ model Tournament {
   maxTeams       Int                      @default(8)
   targetGoals    Int                      @default(7)
   advantageThreshold Int                  @default(5)
+  scoringMode    String                   @default("goals") // "goals" or "sets"
   allowRoleSwaps Boolean                  @default(false)
   isBalancedDraw Boolean                  @default(false)
   avoidRepeatedPairs Boolean              @default(false)
