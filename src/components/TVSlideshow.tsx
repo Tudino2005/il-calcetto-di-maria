@@ -95,7 +95,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   
   // Slide for Hall of Fame
   if (completedTournaments.length > 0) {
-    slides.push({ type: "hall_of_fame", duration: 30000 });
+    const hofDuration = Math.max(20000, 5000 + (completedTournaments.length * 8000));
+    slides.push({ type: "hall_of_fame", duration: hofDuration });
   }
 
   
@@ -1493,7 +1494,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               </h2>
               
               <div className="flex-1 w-full overflow-hidden relative mask-edges px-4">
-                <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 15000) / 1000 * 0.6}s` }}>
+                <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 15000) / 1000}s` }}>
                   {completedTournaments.map((t: any) => {
                   const formatLabel = t.format === "eliminazione_diretta" 
                     ? "Eliminazione Diretta" 
