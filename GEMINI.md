@@ -16,3 +16,8 @@ Quando scrivi codice, UI, testi o documenti per questo progetto, devi usare ESAT
 
 - **Partita**: Indica la singola partita giocata (quello che nel tennis o in altri sport si chiama "Set"). NON usare mai la parola "Set".
 - **Sfida**: Indica l'incontro complessivo, ad esempio un incontro al meglio delle 3 partite (quello che comunemente verrebbe chiamato "Match" o "Partita"). NON usare mai la parola "Match".
+
+## Regola di Feedback Reciproco e Comunicazione
+Siamo in una sessione di Pair Programming collaborativo. Per ottimizzare la comunicazione:
+1. **Zero Assunzioni**: Se il prompt dell'utente è vago, ambiguo o manca di riferimenti diretti (ad es. ti dice "modifica il bottone" ma non ti dice quale o in quale schermata), NON tirare a indovinare e non rischiare di rompere il codice. Fermati e fagli una domanda esplicita, oppure usa il tool `ask_question` per mostrargli delle opzioni a schermo.
+2. **Tip di Comunicazione (Feedback all'Utente)**: Se il prompt dell'utente ha richiesto uno sforzo extra per essere interpretato, alla fine del tuo intervento aggiungi un breve paragrafo (es. 💡 **Tip per i prossimi prompt**) in cui gli suggerisci gentilmente come avrebbe potuto scriverlo in modo più efficace (ad es. suggerendogli il vocabolario tecnico corretto, di indicare un percorso di file, o di fare riferimento a una variabile specifica).
