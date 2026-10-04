@@ -42,11 +42,8 @@ export default function TVSlideshow({ data }: { data: any }) {
 
   
   if (data.recentFreeMatches && data.recentFreeMatches.length > 0) {
-    const matchCount = data.recentFreeMatches.length;
-    const scrollNeeded = matchCount > 14;
-    // 1.1s per match, min 12s
-    const recentMatchesDuration = scrollNeeded ? Math.max(12000, matchCount * 1100) : 12000;
-    slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
+    // Static view, no scrolling
+    slides.push({ type: "recent_matches", duration: 20000 });
   }
 
   // Slides for Player Advanced Stats (TOP 3 Podiums)
@@ -874,22 +871,14 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* RECENT MATCHES SLIDE */}
           {currentSlide.type === "recent_matches" && (() => {
-            const scrollNeeded = currentSlide.scrollNeeded ?? (data.recentFreeMatches.length > 14);
-            const durationSec = (currentSlide.duration || 12000) / 1000;
-
             return (
               <div className="flex flex-col items-center w-full h-[90vh] relative z-10 px-12">
                 <h2 className="text-3xl font-black uppercase tracking-widest text-slate-300 mb-6 shrink-0">
                   Ultime Sfide Libere
                 </h2>
                 
-                <div className="flex-1 w-full max-w-[95vw] mx-auto overflow-hidden relative mask-edges flex justify-center px-4">
-                  <div 
-                    className={`w-full grid grid-cols-3 xl:grid-cols-4 gap-6 content-start pb-12 ${
-                      scrollNeeded ? 'animate-scroll-matches' : 'my-auto'
-                    }`}
-                    style={scrollNeeded ? { animationDuration: `${durationSec}s` } : undefined}
-                  >
+                <div className="flex-1 w-full max-w-[95vw] mx-auto overflow-hidden relative flex justify-center px-4">
+                  <div className="w-full grid grid-cols-3 xl:grid-cols-4 gap-6 content-start my-auto">
                     {data.recentFreeMatches.map((m: any) => {
                       const date = m.playedAt ? new Date(m.playedAt) : new Date();
                       const isValidDate = !isNaN(date.getTime());
