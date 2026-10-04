@@ -260,19 +260,19 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl flex items-center justify-between w-full backdrop-blur-md gap-4">
                   <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
                     <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Cosa si intende per "Sfida"</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni singola partita (Libera o Torneo) è sempre calcolata al meglio delle 3 partite.</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni singola Sfida (Libera o Torneo) è sempre calcolata al meglio delle 3 partite.</span>
                   </div>
                   <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
-                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali partite contano</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Assolutamente tutte le partite giocate (Sia Tornei che Sfide Libere).</span>
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali sfide contano</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Assolutamente tutte le Sfide giocate (sia di Torneo che Libere).</span>
                   </div>
                   <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
                     <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Come sono calcolate</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ordinamento per numero di Vittorie Totali. A parità di vittorie, decide il Win Rate %.</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ordinamento a Punti (3pt per il 2-0, 2pt per 2-1, 1pt per 1-2). Poi Vittorie, poi Win Rate.</span>
                   </div>
                   <div className="flex flex-col flex-1 px-4">
                     <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore (o coppia) che abbia vinto almeno una volta.</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore (o coppia) che abbia giocato almeno una Sfida.</span>
                   </div>
                 </div>
               </div>
@@ -393,19 +393,19 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl flex items-center justify-between w-full backdrop-blur-md gap-4">
                   <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
                     <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Cosa si intende per "Sfida"</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni singola partita (Libera o Torneo) è sempre calcolata al meglio delle 3 partite.</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni singola Sfida (Libera o Torneo) è sempre calcolata al meglio delle 3 partite.</span>
                   </div>
                   <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
-                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali partite contano</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Assolutamente tutte le partite giocate (Sia Tornei che Sfide Libere).</span>
+                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali sfide contano</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Assolutamente tutte le Sfide giocate (sia di Torneo che Libere).</span>
                   </div>
                   <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
                     <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Come sono calcolate</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ordinamento per numero di Vittorie Totali. A parità di vittorie, decide il Win Rate %.</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ordinamento a Punti (3pt per il 2-0, 2pt per 2-1, 1pt per 1-2). Poi Vittorie, poi Win Rate.</span>
                   </div>
                   <div className="flex flex-col flex-1 px-4">
                     <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore (o coppia) che abbia vinto almeno una volta.</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore (o coppia) che abbia giocato almeno una Sfida.</span>
                   </div>
                 </div>
               </div>
@@ -567,8 +567,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ogni sfida amichevole è sempre calcolata al meglio delle 3 partite.</span>
                     </div>
                     <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
-                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali partite contano</span>
-                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Esclusivamente le Sfide Libere (Le partite dei Tornei non influiscono).</span>
+                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Quali sfide contano</span>
+                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Esclusivamente le Sfide Libere (le sfide di Torneo non influiscono).</span>
                     </div>
                     <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
                       <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Come sono calcolate</span>
@@ -576,7 +576,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     </div>
                     <div className="flex flex-col flex-1 px-4">
                       <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
-                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore che abbia giocato almeno una sfida libera.</span>
+                      <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore che abbia giocato e vinto almeno una Sfida Libera.</span>
                     </div>
                   </div>
                 </div>
