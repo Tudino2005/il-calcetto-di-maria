@@ -548,7 +548,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="flex items-center gap-4 mb-2">
                   <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
                   <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg">
-                    Sfide Libere
+                    RANKING SFIDE LIBERE
                   </h2>
                   <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
                 </div>
