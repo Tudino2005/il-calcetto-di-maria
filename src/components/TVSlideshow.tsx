@@ -907,33 +907,33 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const scoreL = teamAWon ? m.scoreTeamB : m.scoreTeamA;
 
                       return (
-                        <div key={m.id} className="bg-slate-900/90 border border-slate-700 py-2 px-4 rounded-2xl shadow-xl backdrop-blur-sm flex items-center justify-between shrink-0 h-fit gap-4">
+                        <div key={m.id} className="bg-slate-900/90 border border-slate-700 py-2 px-4 rounded-2xl shadow-xl backdrop-blur-sm flex items-center shrink-0 h-fit gap-6 w-fit justify-self-center max-w-full">
                           
-                          {/* TEAMS STACKED */}
-                          <div className="flex flex-col gap-1 flex-1 overflow-hidden">
-                            <div className="flex items-center justify-between w-full">
-                              <div className="font-bold text-white flex items-center gap-2 leading-tight truncate min-w-0">
+                          {/* TEAMS & MATCH SCORES */}
+                          <div className="flex flex-col gap-1 shrink-0">
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="font-bold text-white flex items-center gap-2 leading-tight">
                                 <Trophy className="w-4 h-4 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
-                                <span className="truncate text-[15px]">
+                                <span className="text-[15px] truncate">
                                   {winner?.player1?.name || "G1"} <span className="text-slate-500 text-[11px] mx-1">&</span> {winner?.player2?.name || "G2"}
                                 </span>
                               </div>
-                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md text-sm shrink-0 ml-2">{scoreW}</div>
+                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md text-sm shrink-0">{scoreW}</div>
                             </div>
                             
-                            <div className="flex items-center justify-between w-full">
-                              <div className="font-bold text-slate-500 flex items-center gap-2 leading-tight truncate min-w-0 ml-6">
-                                <span className="truncate text-[15px]">
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="font-bold text-slate-500 flex items-center gap-2 leading-tight ml-6">
+                                <span className="text-[15px] truncate">
                                   {loser?.player1?.name || "G1"} <span className="text-slate-700 text-[11px] mx-1">&</span> {loser?.player2?.name || "G2"}
                                 </span>
                               </div>
-                              <div className="font-black text-slate-400 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800 text-sm shrink-0 ml-2">{scoreL}</div>
+                              <div className="font-black text-slate-400 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800 text-sm shrink-0">{scoreL}</div>
                             </div>
                           </div>
 
                           {/* PARTITE SCORES */}
                           {m.setScores && formatSetScores(m.setScores) && (
-                            <div className="flex flex-col items-end justify-center border-l border-slate-700/50 pl-4 shrink-0">
+                            <div className="flex flex-col items-start justify-center border-l border-slate-700/50 pl-4 shrink-0">
                               <span className="text-[10px] text-purple-400/80 uppercase tracking-widest font-black mb-0.5">Punteggi</span>
                               <span className="text-emerald-400 font-black tracking-wider text-[13px]">{formatSetScores(m.setScores)}</span>
                             </div>
