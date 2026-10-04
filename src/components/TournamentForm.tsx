@@ -31,7 +31,7 @@ export default function TournamentForm() {
   const [scoringMode, setScoringMode] = useState<'goals' | 'sets'>('goals');
   const [targetGoals, setTargetGoals] = useState<number>(7);
   const [advantageThreshold, setAdvantageThreshold] = useState<number>(5);
-  const [allowRoleSwaps, setAllowRoleSwaps] = useState<boolean>(false);
+  const [allowRoleSwaps, setAllowRoleSwaps] = useState<boolean>(true);
   const [isBalancedDraw, setIsBalancedDraw] = useState<boolean>(false);
   const [avoidRepeatedPairs, setAvoidRepeatedPairs] = useState<boolean>(false);
 
@@ -91,7 +91,7 @@ export default function TournamentForm() {
     if (drawDate && type !== "coppie_fisse") formData.append("drawDate", drawDate);
     if (pricePerPlayer) formData.append("pricePerPlayer", pricePerPlayer);
     if (prizes) formData.append("prizes", prizes);
-    formData.append("allowRoleSwaps", type === "coppie_fisse" ? "false" : allowRoleSwaps.toString());
+    formData.append("allowRoleSwaps", allowRoleSwaps.toString());
     formData.append("isBalancedDraw", type === "coppie_fisse" ? "false" : isBalancedDraw.toString());
     formData.append("avoidRepeatedPairs", avoidRepeatedPairs.toString());
     formData.append("targetGoals", targetGoals.toString());
@@ -435,7 +435,7 @@ export default function TournamentForm() {
           </div>
 
           <div className="flex flex-col justify-center">
-            <div className={clsx("bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col justify-center h-full gap-6 shadow-inner transition-all duration-300", type === "coppie_fisse" ? "opacity-0 pointer-events-none" : "opacity-100")}>
+            <div className={"bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 flex flex-col justify-center h-full gap-6 shadow-inner transition-all duration-300 opacity-100"}>
               {type !== "coppie_fisse" && (
                 <div className="w-full flex flex-col items-start">
                   <div className="flex items-center justify-start gap-4 w-full cursor-pointer">
@@ -484,7 +484,7 @@ export default function TournamentForm() {
                 </div>
               )}
 
-              <div className="flex items-center justify-start gap-4 w-full mt-4 pt-4 border-t border-slate-700/50">
+              <div className={clsx("flex items-center justify-start gap-4 w-full", type !== "coppie_fisse" && "mt-4 pt-4 border-t border-slate-700/50")}>
                 <button
                   type="button"
                   onClick={() => setAllowRoleSwaps(!allowRoleSwaps)}
