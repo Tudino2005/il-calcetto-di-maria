@@ -385,7 +385,7 @@ export default function TournamentForm() {
                 <div className="flex-1 flex flex-col items-center justify-center text-center mt-4 mb-4">
                   <span className="text-4xl mb-4 opacity-50">🏆</span>
                   <p className="text-sm font-bold text-slate-300">Modalità Solo Partite</p>
-                  <p className="text-xs text-slate-500 mt-2 max-w-[200px]">Il segnapunti conterà solo i set vinti, senza tracciare i gol.</p>
+                  <p className="text-xs text-slate-500 mt-2 max-w-[200px]">Il segnapunti conterà solo le partite vinte, senza tracciare i gol.</p>
                 </div>
               )}
             </div>
