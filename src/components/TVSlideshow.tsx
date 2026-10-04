@@ -43,7 +43,7 @@ export default function TVSlideshow({ data }: { data: any }) {
   
   if (data.recentFreeMatches && data.recentFreeMatches.length > 0) {
     const matchCount = data.recentFreeMatches.length;
-    const scrollNeeded = matchCount > 3;
+    const scrollNeeded = matchCount > 14;
     // 1.1s per match, min 12s
     const recentMatchesDuration = scrollNeeded ? Math.max(12000, matchCount * 1100) : 12000;
     slides.push({ type: "recent_matches", duration: recentMatchesDuration, scrollNeeded });
@@ -874,7 +874,7 @@ export default function TVSlideshow({ data }: { data: any }) {
 
           {/* RECENT MATCHES SLIDE */}
           {currentSlide.type === "recent_matches" && (() => {
-            const scrollNeeded = currentSlide.scrollNeeded ?? (data.recentFreeMatches.length > 3);
+            const scrollNeeded = currentSlide.scrollNeeded ?? (data.recentFreeMatches.length > 14);
             const durationSec = (currentSlide.duration || 12000) / 1000;
 
             return (
@@ -907,45 +907,35 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const scoreL = teamAWon ? m.scoreTeamB : m.scoreTeamA;
 
                       return (
-                        <div key={m.id} className="bg-slate-900/90 border border-slate-700 p-4 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col justify-center shrink-0 h-fit">
-                          {/* HEADER WITH TIME */}
-                          <div className="flex items-center justify-center text-xs text-slate-400 font-bold uppercase tracking-widest border-b border-slate-700/50 pb-2 mb-3">
-                            <span className="flex items-center gap-2">
-                              {timeLabel}
-                              {isToday && <span className="text-emerald-500">Recente</span>}
-                            </span>
-                          </div>
-
-                          {/* TEAMS & SCORES */}
-                          <div className="flex items-center justify-between text-lg overflow-hidden whitespace-nowrap">
-                            {/* WINNER */}
-                            <div className="font-bold text-white flex items-center gap-2 leading-tight truncate flex-1 min-w-0">
-                              <Trophy className="w-5 h-5 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
-                              <span className="truncate">
-                                {winner?.player1?.name || "G1"} <span className="text-slate-500 text-sm mx-1">&</span> {winner?.player2?.name || "G2"}
-                              </span>
+                        <div key={m.id} className="bg-slate-900/90 border border-slate-700 py-2 px-4 rounded-2xl shadow-xl backdrop-blur-sm flex items-center justify-between shrink-0 h-fit gap-4">
+                          
+                          {/* TEAMS STACKED */}
+                          <div className="flex flex-col gap-1 flex-1 overflow-hidden">
+                            <div className="flex items-center justify-between w-full">
+                              <div className="font-bold text-white flex items-center gap-2 leading-tight truncate min-w-0">
+                                <Trophy className="w-4 h-4 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
+                                <span className="truncate text-[15px]">
+                                  {winner?.player1?.name || "G1"} <span className="text-slate-500 text-[11px] mx-1">&</span> {winner?.player2?.name || "G2"}
+                                </span>
+                              </div>
+                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md text-sm shrink-0 ml-2">{scoreW}</div>
                             </div>
                             
-                            {/* SCORE SEPARATOR */}
-                            <div className="flex items-center gap-2 mx-3 shrink-0">
-                              <div className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg text-lg">{scoreW}</div>
-                              <span className="text-slate-600 font-black text-base">-</span>
-                              <div className="font-black text-slate-400 bg-slate-950 px-2 py-0.5 rounded-lg border border-slate-800 text-lg">{scoreL}</div>
-                            </div>
-
-                            {/* LOSER */}
-                            <div className="font-bold text-slate-500 flex items-center leading-tight truncate flex-1 justify-end min-w-0 text-right">
-                              <span className="truncate">
-                                {loser?.player1?.name || "G1"} <span className="text-slate-700 text-sm mx-1">&</span> {loser?.player2?.name || "G2"}
-                              </span>
+                            <div className="flex items-center justify-between w-full">
+                              <div className="font-bold text-slate-500 flex items-center gap-2 leading-tight truncate min-w-0 ml-6">
+                                <span className="truncate text-[15px]">
+                                  {loser?.player1?.name || "G1"} <span className="text-slate-700 text-[11px] mx-1">&</span> {loser?.player2?.name || "G2"}
+                                </span>
+                              </div>
+                              <div className="font-black text-slate-400 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800 text-sm shrink-0 ml-2">{scoreL}</div>
                             </div>
                           </div>
 
-                          {/* SET SCORES */}
+                          {/* PARTITE SCORES */}
                           {m.setScores && formatSetScores(m.setScores) && (
-                            <div className="flex items-center justify-center gap-3 text-xs font-bold bg-slate-950/60 px-3 py-1.5 rounded-lg border border-slate-800 mt-4 mx-auto w-fit">
-                              <span className="text-[15px] text-purple-400 uppercase tracking-widest font-black">Punteggi Set:</span>
-                              <span className="text-emerald-400 font-black tracking-wider text-sm">{formatSetScores(m.setScores)}</span>
+                            <div className="flex flex-col items-end justify-center border-l border-slate-700/50 pl-4 shrink-0">
+                              <span className="text-[10px] text-purple-400/80 uppercase tracking-widest font-black mb-0.5">Punteggi</span>
+                              <span className="text-emerald-400 font-black tracking-wider text-[13px]">{formatSetScores(m.setScores)}</span>
                             </div>
                           )}
                         </div>
