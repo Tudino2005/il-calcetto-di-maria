@@ -34,11 +34,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   slides.push({ type: "leaderboard_roles", duration: leaderboardDuration });
 
   if (data.freeMatchesStats && data.freeMatchesStats.length > 0) {
-    const playersPerPage = 10;
-    const pages = Math.ceil(data.freeMatchesStats.length / playersPerPage);
-    for (let p = 0; p < pages; p++) {
-      slides.push({ type: "leaderboard_free", duration: 25000, page: p });
-    }
+    // Only show TOP 10 (page 0), do not create extra slides for players > 10
+    slides.push({ type: "leaderboard_free", duration: 25000, page: 0 });
   } else {
     slides.push({ type: "leaderboard_free", duration: 20000, page: 0 });
   }
@@ -230,7 +227,7 @@ export default function TVSlideshow({ data }: { data: any }) {
       <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-50 bg-gradient-to-b from-slate-950 to-transparent">
         <div className="flex items-center gap-4">
           <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-widest uppercase">
-            IL CALCETTO DI MARIA
+            ARENA DEL BILIARDINO
           </h1>
           <img src="/images/red-player-table-football.png" alt="Logo" className="h-10 w-auto object-contain drop-shadow-md" />
         </div>

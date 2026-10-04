@@ -24,7 +24,7 @@ export default async function AdminHome() {
 
       <header className="mb-12 text-center">
         <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-tight">
-          IL CALCETTO DI MARIA
+          ARENA DEL BILIARDINO
         </h1>
         <p className="text-slate-400 mt-3 text-2xl font-medium uppercase tracking-widest">Pannello di Controllo</p>
       </header>

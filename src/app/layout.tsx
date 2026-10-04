@@ -13,11 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Il Calcetto di Maria - Tornei di Calcio Balilla",
+  title: "Arena del Biliardino - Tornei di Calcio Balilla",
   description: "L'app ufficiale per la gestione dei tornei, statistiche e classifiche di Calcio Balilla (biliardino).",
   keywords: ["calcio balilla", "biliardino", "tornei", "calcetto", "maria", "statistiche biliardino", "foosball", "app biliardino"],
   openGraph: {
-    title: "Il Calcetto di Maria - Tornei",
+    title: "Arena del Biliardino - Tornei",
     description: "Gestione tornei, statistiche e classifiche di Calcio Balilla.",
     type: "website",
     locale: "it_IT",
