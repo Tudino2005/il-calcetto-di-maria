@@ -330,7 +330,7 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
 
       <audio ref={audioRef1} src="/seven-nation-army.mp3" preload="auto" loop />
       <audio ref={audioRef2} src="/song2-blur.mp3" preload="auto" loop />
-      <audio ref={audioRef3} src="/champions-league.mp3" preload="auto" onEnded={() => finishDrawAnimation(tournament.id).then(() => window.location.reload())} />
+      <audio ref={audioRef3} src="/champions-league.mp3" preload="auto" onEnded={() => window.location.reload()} />
 
       {introState === "pending" && (
         <div className="absolute inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center">

@@ -64,15 +64,12 @@ export default function MatchesDrawCeremony({ tournament }: { tournament: any })
       if (isFinished) return; // Prevent multiple executions
       const t1 = setTimeout(() => {
         setIsFinished(true);
-        // Wait 10 seconds on the final screen before moving to in_progress
-        setTimeout(async () => {
-          try {
-            await finishMatchesDrawAnimation(tournament.id);
-          } catch (e) {
-            console.error(e);
-          } finally {
-            window.location.assign(window.location.href);
-          }
+        // Update DB immediately so refresh won't restart the draw
+        finishMatchesDrawAnimation(tournament.id).catch(console.error);
+        
+        // Wait 10 seconds on the final screen before reloading
+        setTimeout(() => {
+          window.location.assign(window.location.href);
         }, 10000);
       }, 1000);
       return () => clearTimeout(t1);
