@@ -883,9 +883,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                   Ultime Sfide Libere
                 </h2>
                 
-                <div className="flex-1 w-full max-w-7xl mx-auto overflow-hidden relative mask-edges flex justify-center px-4">
+                <div className="flex-1 w-full max-w-[95vw] mx-auto overflow-hidden relative mask-edges flex justify-center px-4">
                   <div 
-                    className={`w-full grid grid-cols-2 gap-4 content-start pb-12 ${
+                    className={`w-full grid grid-cols-3 xl:grid-cols-4 gap-6 content-start pb-12 ${
                       scrollNeeded ? 'animate-scroll-matches' : 'my-auto'
                     }`}
                     style={scrollNeeded ? { animationDuration: `${durationSec}s` } : undefined}
@@ -907,11 +907,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const scoreL = teamAWon ? m.scoreTeamB : m.scoreTeamA;
 
                       return (
-                        <div key={m.id} className="bg-slate-900/90 border border-slate-700 py-2 px-4 rounded-2xl shadow-xl backdrop-blur-sm flex items-center shrink-0 h-fit gap-6 w-fit justify-self-center max-w-full">
+                        <div key={m.id} className="bg-slate-900/90 border border-slate-700 py-2 px-4 rounded-2xl shadow-xl backdrop-blur-sm flex items-center justify-between shrink-0 h-fit gap-4 w-full">
                           
                           {/* TEAMS & MATCH SCORES */}
-                          <div className="flex flex-col gap-1 shrink-0">
-                            <div className="flex items-center justify-between gap-4">
+                          <div className="flex flex-col gap-1 flex-1 overflow-hidden pr-2">
+                            <div className="flex items-center justify-between w-full">
                               <div className="font-bold text-white flex items-center gap-2 leading-tight">
                                 <Trophy className="w-4 h-4 text-yellow-500 shrink-0 drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]" />
                                 <span className="text-[15px] truncate">
@@ -921,7 +921,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               <div className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md text-sm shrink-0">{scoreW}</div>
                             </div>
                             
-                            <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center justify-between w-full">
                               <div className="font-bold text-slate-500 flex items-center gap-2 leading-tight ml-6">
                                 <span className="text-[15px] truncate">
                                   {loser?.player1?.name || "G1"} <span className="text-slate-700 text-[11px] mx-1">&</span> {loser?.player2?.name || "G2"}
