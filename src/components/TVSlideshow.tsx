@@ -543,7 +543,7 @@ export default function TVSlideshow({ data }: { data: any }) {
           {/* LEADERBOARD FREE MATCHES (SERIE A STYLE) */}
 
           {currentSlide.type === "leaderboard_free" && (
-            <div className="flex flex-col items-center w-full max-w-7xl h-[90vh] justify-start relative z-10 mx-auto px-4">
+            <div className="flex flex-col items-center w-full max-w-[95vw] h-[90vh] justify-start relative z-10 mx-auto px-4">
               <div className="flex flex-col items-center gap-2 mb-4 shrink-0 w-full">
                 <div className="flex items-center gap-4 mb-2">
                   <Swords className="w-12 h-12 text-emerald-400 drop-shadow-lg" />
@@ -576,7 +576,42 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
               </div>
               
-              <div className="w-full bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 min-h-0">
+                            <div className="flex w-full gap-6 flex-1 min-h-0">
+                {/* VERTICAL LEGEND SIDEBAR */}
+                <div className="w-56 bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl p-6 flex flex-col gap-3 shrink-0">
+                  <h3 className="text-emerald-400 font-black text-sm uppercase tracking-widest border-b border-slate-700/50 pb-2 mb-1">Legenda</h3>
+                  <div className="flex items-center gap-3">
+                    <span className="text-white font-black text-xl w-10 text-right">SG</span>
+                    <span className="text-slate-400 font-bold text-xs uppercase tracking-wider">Sfide<br/>Giocate</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-emerald-400 font-black text-xl w-10 text-right">V</span>
+                    <span className="text-slate-400 font-bold text-xs uppercase tracking-wider">Vittorie</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-red-400 font-black text-xl w-10 text-right">P</span>
+                    <span className="text-slate-400 font-bold text-xs uppercase tracking-wider">Perse</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-slate-300 font-black text-xl w-10 text-right">PV</span>
+                    <span className="text-slate-400 font-bold text-xs uppercase tracking-wider">Partite<br/>Vinte</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-slate-300 font-black text-xl w-10 text-right">PP</span>
+                    <span className="text-slate-400 font-bold text-xs uppercase tracking-wider">Partite<br/>Perse</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-slate-300 font-black text-xl w-10 text-right">DP</span>
+                    <span className="text-slate-400 font-bold text-xs uppercase tracking-wider">Diff.<br/>Partite</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center gap-1 mt-auto bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <span className="text-white font-black text-xl">WR%</span>
+                    <span className="text-slate-400 font-bold text-[11px] uppercase tracking-wider text-center">Win Rate<br/><span className="text-[9px] text-slate-500">(Vittorie / Sfide)</span></span>
+                  </div>
+                </div>
+                
+                {/* TABLE CONTAINER */}
+                <div className="w-full bg-slate-900/95 border border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 min-h-0">
                 {/* TABLE HEADER */}
                 <div className="grid grid-cols-12 gap-2 bg-slate-950/80 p-4 border-b border-slate-700/50 text-slate-400 font-bold uppercase tracking-widest text-xs">
                   <div className="col-span-1 text-center">Pos</div>
@@ -664,10 +699,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                   )}
                 </div>
                 
-                {/* FOOTER INFO */}
-                <div className="bg-slate-950 p-2 text-center text-[15px] text-slate-500 font-bold uppercase tracking-widest border-t border-slate-800">
-                  SG: Sfide Giocate • V: Vittorie • P: Perse • PV: Partite Vinte • PP: Partite Perse • DP: Diff. Partite • WR%: Win Rate (Vittorie / Sfide)
-                </div>
+              </div>
               </div>
             </div>
           )}
