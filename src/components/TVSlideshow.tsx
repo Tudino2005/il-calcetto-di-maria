@@ -422,7 +422,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {defenderStats.map((p: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={p.id} className="flex items-center bg-slate-900 border border-slate-800 py-3 px-6 rounded-2xl shadow-sm">
+                      <div key={p.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-blue-500" :
@@ -432,9 +432,10 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                          <div className="flex items-baseline gap-4 min-w-0 flex-1">
-                            <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                            <div className="text-sm font-bold text-slate-400 shrink-0">{p.wins} V / {p.played} G</div>
+                          <div className="flex flex-col min-w-0 justify-center">
+                            <div className="flex items-center gap-3">
+                              <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
+                            </div>
                           </div>
                         </div>
                         <div className="flex-1 flex justify-center items-center min-w-0">
@@ -457,9 +458,12 @@ export default function TVSlideshow({ data }: { data: any }) {
                             );
                           })()}
                         </div>
-                        <div className="flex items-center w-[25%] shrink-0 ml-auto justify-end">
+                        <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
                           <div className="text-2xl font-black text-blue-500 flex items-baseline gap-1">
                             {p.points} <span className="text-sm">PT</span>
+                          </div>
+                          <div className="text-sm font-bold text-slate-400 text-right">
+                            {p.wins} V / {p.played} G
                           </div>
                         </div>
                       </div>
