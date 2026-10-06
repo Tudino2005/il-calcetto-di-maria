@@ -27,9 +27,8 @@ export default function TVSlideshow({ data }: { data: any }) {
   
   // Build slides array
   const slides: any[] = [];  // Leaderboard Slide (Auto-scrolling)
-  const maxRows = Math.max(playerStats.length, teamStats.length);
   // Calculate dynamic duration based on rows (approx 3.5s per row), minimum 20 seconds
-  const leaderboardDuration = Math.max(20000, maxRows * 3500);
+  const leaderboardDuration = 30000;
   slides.push({ type: "leaderboard", duration: leaderboardDuration });
   slides.push({ type: "leaderboard_roles", duration: leaderboardDuration });
 
