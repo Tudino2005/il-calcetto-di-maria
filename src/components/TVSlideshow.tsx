@@ -281,8 +281,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                     <span className="text-slate-300 font-medium text-[10px] md:text-xs leading-tight">Ordinamento a Punti (3pt per 2-0, 2pt per 2-1, 1pt per 1-2). Poi Vittorie, Win Rate.</span>
                   </div>
                   <div className="flex flex-col flex-1 px-4">
-                    <span className="text-emerald-400 font-black text-[10px] md:text-xs uppercase tracking-widest mb-1">Chi entra in classifica</span>
-                    <span className="text-slate-300 font-medium text-[10px] md:text-xs leading-tight">Qualsiasi giocatore o coppia che abbia giocato almeno una Sfida.</span>
+                    <span className="text-emerald-400 font-black text-[10px] md:text-xs uppercase tracking-widest mb-1">Chi accede in classifica</span>
+                    <span className="text-slate-300 font-medium text-[10px] md:text-xs leading-tight">Vengono mostrati a schermo solo i migliori 15 giocatori e coppie che abbiano vinto almeno una sfida (WR% &gt; 0).</span>
                   </div>
                 </div>
               </div>
@@ -614,7 +614,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Tramite algoritmo Wilson Score. Premia chi vince con costanza nel tempo.</span>
                     </div>
                     <div className="flex flex-col flex-1 px-4">
-                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
+                      <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi accede in classifica</span>
                       <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore che abbia giocato e vinto almeno una Sfida Libera.</span>
                     </div>
                   </div>
