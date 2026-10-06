@@ -252,7 +252,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               
               <div className="flex items-center justify-center shrink-0 w-full mb-1">
                 <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg text-center">
-                  CLASSIFICHE GENERALI
+                  RANKING ASSOLUTO
                 </h2>
               </div>
               
@@ -385,7 +385,13 @@ export default function TVSlideshow({ data }: { data: any }) {
             const strikerStats = playerStats.filter((p: any) => p.preferredRole?.toLowerCase() === 'attaccante');
             
             return (
-            <div className="flex flex-col w-full h-[90vh] gap-6">
+            <div className="flex flex-col w-full h-[90vh] gap-4">
+              
+              <div className="flex items-center justify-center shrink-0 w-full mb-1">
+                <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg text-center">
+                  RANKING PER RUOLO
+                </h2>
+              </div>
               
               {/* HEADER LEGEND */}
               <div className="flex justify-center shrink-0 w-full">
@@ -417,7 +423,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
-                    <Shield className="w-10 h-10 text-blue-500" /> TOP DEFENDERS
+                    DEFENDERS
                   </h3>
                 </div>
                 
@@ -481,7 +487,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]">
-                    <Swords className="w-10 h-10 text-red-500" /> TOP STRIKERS
+                    STRIKERS
                   </h3>
                 </div>
                 
