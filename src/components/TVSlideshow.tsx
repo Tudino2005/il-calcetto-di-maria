@@ -306,14 +306,16 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                                                    <div className="flex items-baseline gap-4 min-w-0 flex-1">
+                                                    <div className="flex items-baseline min-w-0 flex-1">
                             <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                            <div className="text-sm font-bold text-slate-400 shrink-0">{p.wins} V / {p.played} G</div>
                           </div>
                         </div>
                         
-                        <div className="flex items-center shrink-0 ml-4">
-                          <div className="text-2xl font-black text-yellow-500 flex items-baseline gap-1">
+                        <div className="flex items-center gap-6 shrink-0 ml-4">
+                          <div className="text-sm font-bold text-slate-400 text-right w-24 tracking-wide">
+                            {p.wins} V / {p.played} G
+                          </div>
+                          <div className="text-2xl font-black text-yellow-500 flex items-baseline justify-end gap-1 w-16">
                             {p.points} <span className="text-sm">PT</span>
                           </div>
                         </div>
@@ -348,18 +350,20 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                          <div className="flex items-baseline gap-4 min-w-0 flex-1">
+                          <div className="flex items-baseline min-w-0 flex-1">
                             <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
                               <span className="text-xl font-bold text-white truncate leading-tight">{t.player1?.name || "Giocatore 1"}</span>
                               <span className="text-base font-black text-yellow-500/70">&</span>
                               <span className="text-xl font-bold text-white truncate leading-tight">{t.player2?.name || "Giocatore 2"}</span>
                             </div>
-                            <div className="text-sm font-bold text-slate-400 shrink-0">{t.wins} V / {t.played} G</div>
                           </div>
                         </div>
                         
-                        <div className="flex items-center shrink-0 ml-4">
-                          <div className="text-2xl font-black text-yellow-500 flex items-baseline gap-1">
+                        <div className="flex items-center gap-6 shrink-0 ml-4">
+                          <div className="text-sm font-bold text-slate-400 text-right w-24 tracking-wide">
+                            {t.wins} V / {t.played} G
+                          </div>
+                          <div className="text-2xl font-black text-yellow-500 flex items-baseline justify-end gap-1 w-16">
                             {t.points} <span className="text-sm">PT</span>
                           </div>
                         </div>
