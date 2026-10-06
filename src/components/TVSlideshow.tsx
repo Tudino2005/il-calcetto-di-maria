@@ -265,8 +265,30 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
               </div>
 
+              {/* HEADER LEGEND */}
+              <div className="flex justify-center shrink-0 w-full px-4 md:px-12">
+                <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl flex items-center justify-between w-full max-w-[1300px] backdrop-blur-md gap-4">
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-[10px] md:text-xs uppercase tracking-widest mb-1">Cosa si intende per "Sfida"</span>
+                    <span className="text-slate-300 font-medium text-[10px] md:text-xs leading-tight">Ogni singola Sfida (Libera o Torneo) è sempre calcolata al meglio delle 3 partite.</span>
+                  </div>
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-[10px] md:text-xs uppercase tracking-widest mb-1">Quali sfide contano</span>
+                    <span className="text-slate-300 font-medium text-[10px] md:text-xs leading-tight">Assolutamente tutte le Sfide giocate (sia di Torneo che Libere).</span>
+                  </div>
+                  <div className="flex flex-col flex-1 border-r border-slate-700 px-4">
+                    <span className="text-emerald-400 font-black text-[10px] md:text-xs uppercase tracking-widest mb-1">Come sono calcolate</span>
+                    <span className="text-slate-300 font-medium text-[10px] md:text-xs leading-tight">Ordinamento a Punti (3pt per 2-0, 2pt per 2-1, 1pt per 1-2). Poi Vittorie, Win Rate.</span>
+                  </div>
+                  <div className="flex flex-col flex-1 px-4">
+                    <span className="text-emerald-400 font-black text-[10px] md:text-xs uppercase tracking-widest mb-1">Chi entra in classifica</span>
+                    <span className="text-slate-300 font-medium text-[10px] md:text-xs leading-tight">Qualsiasi giocatore o coppia che abbia giocato almeno una Sfida.</span>
+                  </div>
+                </div>
+              </div>
+
               {/* TWO COLUMNS */}
-              <div className="flex w-11/12 mx-auto flex-1 min-h-0 gap-8 lg:gap-16">
+              <div className="flex w-full max-w-[1300px] mx-auto flex-1 min-h-0 gap-8 lg:gap-16 px-4">
               
               {/* TOP SINGLES FIXED CARD */}
               <div className="flex-1 flex flex-col p-4 relative min-h-0">
