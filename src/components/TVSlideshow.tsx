@@ -248,7 +248,13 @@ export default function TVSlideshow({ data }: { data: any }) {
           
           {/* LEADERBOARD SLIDE */}
           {currentSlide.type === "leaderboard" && (
-            <div className="flex flex-col w-full h-[90vh] gap-6">
+            <div className="flex flex-col w-full h-[90vh] gap-4">
+              
+              <div className="flex items-center justify-center shrink-0 w-full mb-1">
+                <h2 className="text-5xl font-black uppercase tracking-widest text-white drop-shadow-lg text-center">
+                  CLASSIFICHE GENERALI
+                </h2>
+              </div>
               
               {/* HEADER LEGEND */}
               <div className="flex justify-center shrink-0 w-full">
@@ -281,16 +287,16 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
-                    <Medal className="w-10 h-10 text-yellow-500" /> TOP SINGOLI
+                    SINGOLI
                   </h3>
                 </div>
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-4" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6}s` }}>
                     {playerStats.map((p: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                      <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 py-3 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-yellow-500" :
@@ -300,21 +306,15 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                                                    <div className="flex flex-col min-w-0 justify-center flex-1">
-                            <div className="flex items-center gap-3 flex-1 justify-between pr-6">
-                              <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-
-                            </div>
+                                                    <div className="flex items-baseline gap-4 min-w-0 flex-1">
+                            <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
+                            <div className="text-sm font-bold text-slate-400 shrink-0">{p.wins} V / {p.played} G</div>
                           </div>
-
                         </div>
                         
-                        <div className="flex flex-col items-end shrink-0 ml-4">
+                        <div className="flex items-center shrink-0 ml-4">
                           <div className="text-2xl font-black text-yellow-500 flex items-baseline gap-1">
                             {p.points} <span className="text-sm">PT</span>
-                          </div>
-                          <div className="text-sm font-bold text-slate-400 text-right">
-                            {p.wins} V / {p.played} G
                           </div>
                         </div>
                       </div>
@@ -329,16 +329,16 @@ export default function TVSlideshow({ data }: { data: any }) {
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]">
-                    <Users className="w-10 h-10 text-blue-400" /> TOP COPPIE
+                    COPPIE
                   </h3>
                 </div>
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (teamStats.length / Math.max(1, playerStats.length))}s` }}>
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-4" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (teamStats.length / Math.max(1, playerStats.length))}s` }}>
                     {teamStats.map((t: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                      <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 py-3 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-yellow-500" :
@@ -348,19 +348,19 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                          <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
-                            <span className="text-xl font-bold text-white truncate leading-tight">{t.player1?.name || "Giocatore 1"}</span>
-                            <span className="text-base font-black text-yellow-500/70">&</span>
-                            <span className="text-xl font-bold text-white truncate leading-tight">{t.player2?.name || "Giocatore 2"}</span>
+                          <div className="flex items-baseline gap-4 min-w-0 flex-1">
+                            <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
+                              <span className="text-xl font-bold text-white truncate leading-tight">{t.player1?.name || "Giocatore 1"}</span>
+                              <span className="text-base font-black text-yellow-500/70">&</span>
+                              <span className="text-xl font-bold text-white truncate leading-tight">{t.player2?.name || "Giocatore 2"}</span>
+                            </div>
+                            <div className="text-sm font-bold text-slate-400 shrink-0">{t.wins} V / {t.played} G</div>
                           </div>
                         </div>
                         
-                        <div className="flex flex-col items-end shrink-0 ml-4">
+                        <div className="flex items-center shrink-0 ml-4">
                           <div className="text-2xl font-black text-yellow-500 flex items-baseline gap-1">
                             {t.points} <span className="text-sm">PT</span>
-                          </div>
-                          <div className="text-sm font-bold text-slate-400 text-right">
-                            {t.wins} V / {t.played} G
                           </div>
                         </div>
                       </div>
@@ -418,11 +418,11 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (defenderStats.length / Math.max(1, playerStats.length))}s` }}>
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-4" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (defenderStats.length / Math.max(1, playerStats.length))}s` }}>
                     {defenderStats.map((p: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={p.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                      <div key={p.id} className="flex items-center bg-slate-900 border border-slate-800 py-3 px-6 rounded-2xl shadow-sm">
                         <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-blue-500" :
@@ -432,10 +432,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                           }`}>
                             {rank}
                           </div>
-                          <div className="flex flex-col min-w-0 justify-center">
-                            <div className="flex items-center gap-3">
-                              <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                            </div>
+                          <div className="flex items-baseline gap-4 min-w-0 flex-1">
+                            <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
+                            <div className="text-sm font-bold text-slate-400 shrink-0">{p.wins} V / {p.played} G</div>
                           </div>
                         </div>
                         <div className="flex-1 flex justify-center items-center min-w-0">
@@ -458,12 +457,9 @@ export default function TVSlideshow({ data }: { data: any }) {
                             );
                           })()}
                         </div>
-                        <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
+                        <div className="flex items-center w-[25%] shrink-0 ml-auto justify-end">
                           <div className="text-2xl font-black text-blue-500 flex items-baseline gap-1">
                             {p.points} <span className="text-sm">PT</span>
-                          </div>
-                          <div className="text-sm font-bold text-slate-400 text-right">
-                            {p.wins} V / {p.played} G
                           </div>
                         </div>
                       </div>
@@ -482,7 +478,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 </div>
                 
                 <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (strikerStats.length / Math.max(1, playerStats.length))}s` }}>
+                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-4" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * (strikerStats.length / Math.max(1, playerStats.length))}s` }}>
                     {strikerStats.map((t: any, i: number) => {
                       const rank = i + 1;
                       return (
@@ -1494,7 +1490,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               </h2>
               
               <div className="flex-1 w-full overflow-hidden relative mask-edges px-4">
-                <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-6" style={{ animationDuration: `${(currentSlide.duration || 15000) / 1000}s` }}>
+                <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-4" style={{ animationDuration: `${(currentSlide.duration || 15000) / 1000}s` }}>
                   {completedTournaments.map((t: any) => {
                   const formatLabel = t.format === "eliminazione_diretta" 
                     ? "Eliminazione Diretta" 
