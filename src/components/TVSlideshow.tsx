@@ -257,7 +257,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               </div>
               
               {/* QR Code in alto a destra */}
-              <div className="absolute top-2 right-8 flex flex-col items-center bg-white p-2 rounded-xl shadow-2xl">
+              <div className="absolute top-2 right-32 lg:right-48 flex flex-col items-center bg-white p-2 rounded-xl shadow-2xl">
                 <div className="bg-slate-100 p-2 rounded-lg">
                   <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
                 </div>
@@ -291,7 +291,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 w-full">
                   <div className="w-full flex flex-col">
-                    {playerStats.slice(0, 20).map((p: any, i: number) => {
+                    {playerStats.filter((p: any) => p.wins > 0).slice(0, 15).map((p: any, i: number) => {
                       const rank = i + 1;
                       const sp = p.played - p.wins;
                       const wr = p.winRate ?? '-';
@@ -307,7 +307,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                         </div>
                         <div className="flex items-center justify-center">
                           {p.avatarUrl ? (
-                            <img src={p.avatarUrl} className="w-6 h-6 rounded-full object-cover border border-slate-700" alt={p.name} />
+                            <img src={`/players/${p.avatarUrl}`} className="w-6 h-6 rounded-full object-cover border border-slate-700" alt={p.name} />
                           ) : (
                             <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[9px] font-bold text-white">
                               {p.name.substring(0, 2).toUpperCase()}
@@ -348,7 +348,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 w-full">
                   <div className="w-full flex flex-col">
-                    {teamStats.slice(0, 20).map((t: any, i: number) => {
+                    {teamStats.filter((t: any) => t.wins > 0).slice(0, 15).map((t: any, i: number) => {
                       const rank = i + 1;
                       const sp = t.played - t.wins;
                       const wr = t.winRate ?? '-';
