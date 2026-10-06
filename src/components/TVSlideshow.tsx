@@ -296,7 +296,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {playerStats.map((p: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={p.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 py-3 px-6 rounded-2xl shadow-sm">
+                      <div key={p.id} className="flex items-center justify-between py-3 px-6">
                         <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-yellow-500" :
@@ -340,7 +340,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {teamStats.map((t: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 py-3 px-6 rounded-2xl shadow-sm">
+                      <div key={t.id} className="flex items-center justify-between py-3 px-6">
                         <div className="flex items-center gap-6 min-w-0 flex-1">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-yellow-500" :
@@ -426,7 +426,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {defenderStats.map((p: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={p.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                      <div key={p.id} className="flex items-center p-4 px-6">
                         <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-blue-500" :
@@ -490,7 +490,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     {strikerStats.map((t: any, i: number) => {
                       const rank = i + 1;
                       return (
-                      <div key={t.id} className="flex items-center bg-slate-900 border border-slate-800 p-4 px-6 rounded-2xl shadow-sm">
+                      <div key={t.id} className="flex items-center p-4 px-6">
                         <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
                           <div className={`text-3xl font-black w-8 text-center shrink-0 ${
                             rank === 1 ? "text-red-500" :
