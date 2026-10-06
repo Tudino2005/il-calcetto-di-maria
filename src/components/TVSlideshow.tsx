@@ -282,7 +282,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               <div className="flex w-2/3 mx-auto flex-1 min-h-0 gap-8 lg:gap-16">
               
               {/* TOP SINGLES FIXED CARD */}
-              <div className="flex-1 flex flex-col bg-slate-900/80 p-6 md:p-8 rounded-[3rem] shadow-2xl backdrop-blur-sm relative min-h-0">
+              <div className="flex-1 flex flex-col p-6 md:p-8 relative min-h-0">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   
@@ -326,7 +326,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               </div>
 
               {/* TOP TEAMS FIXED CARD */}
-              <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[3rem] shadow-2xl backdrop-blur-sm relative">
+              <div className="flex-1 flex flex-col p-8 relative">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   
@@ -413,7 +413,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               <div className="flex w-2/3 mx-auto flex-1 min-h-0 gap-8 lg:gap-16">
               
               {/* TOP DEFENDERS FIXED CARD */}
-              <div className="flex-1 flex flex-col bg-slate-900/80 p-6 md:p-8 rounded-[3rem] shadow-2xl backdrop-blur-sm relative min-h-0">
+              <div className="flex-1 flex flex-col p-6 md:p-8 relative min-h-0">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
@@ -477,7 +477,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               </div>
 
               {/* TOP STRIKERS FIXED CARD */}
-              <div className="flex-1 flex flex-col bg-slate-900/80 p-8 rounded-[3rem] shadow-2xl backdrop-blur-sm relative">
+              <div className="flex-1 flex flex-col p-8 relative">
                 
                 <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]">
