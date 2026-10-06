@@ -403,8 +403,8 @@ export default function TVSlideshow({ data }: { data: any }) {
                     <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Ordinamento a Punti (3pt per il 2-0, 2pt per 2-1, 1pt per 1-2). Poi Vittorie, poi Win Rate.</span>
                   </div>
                   <div className="flex flex-col flex-1 px-4">
-                    <span className="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Chi entra in classifica</span>
-                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Qualsiasi giocatore (o coppia) che abbia giocato almeno una Sfida.</span>
+                    <span className="text-blue-400 font-black text-xs md:text-sm uppercase tracking-widest mb-1">Calcolo Media Gol</span>
+                    <span className="text-slate-300 font-medium text-xs md:text-sm leading-tight">Totale dei gol diviso per il numero di Sfide giocate nel ruolo.</span>
                   </div>
                 </div>
               </div>
