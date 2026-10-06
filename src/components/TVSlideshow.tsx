@@ -451,7 +451,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                             return (
                               <div className="flex items-center gap-6 shrink-0 mx-2">
                                 <div className="flex flex-col items-center gap-1">
-                                  <span className="text-[12px] text-blue-500 font-bold uppercase tracking-widest leading-none">Tot Subiti</span>
+                                  <span className="text-[12px] text-blue-500 font-bold uppercase tracking-widest leading-none">Gol Subiti</span>
                                   <span className="text-2xl font-black text-white leading-none">{tSubiti}</span>
                                 </div>
                                 <div className="flex flex-col items-center gap-1">
@@ -513,7 +513,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                             return (
                               <div className="flex items-center gap-6 shrink-0 mx-2">
                                 <div className="flex flex-col items-center gap-1">
-                                  <span className="text-[12px] text-red-500 font-bold uppercase tracking-widest leading-none">Tot Fatti</span>
+                                  <span className="text-[12px] text-red-500 font-bold uppercase tracking-widest leading-none">Gol Fatti</span>
                                   <span className="text-2xl font-black text-white leading-none">{tFatti}</span>
                                 </div>
                                 <div className="flex flex-col items-center gap-1">
@@ -879,7 +879,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                   {roleStats.gkMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.gkMatches} sfide)</span>}
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
-                                  <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Tot Subiti</span><span className="text-lg font-black text-blue-300">{roleStats.gkGoalsConceded > 0 ? roleStats.gkGoalsConceded : <span className="text-slate-600">-</span>}</span></div>
+                                  <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Gol Subiti</span><span className="text-lg font-black text-blue-300">{roleStats.gkGoalsConceded > 0 ? roleStats.gkGoalsConceded : <span className="text-slate-600">-</span>}</span></div>
                                   <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Media</span><span className="text-lg font-black text-blue-200">{roleStats.defensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
                                 </div>
                               </div>
@@ -892,7 +892,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                                   {roleStats.stMatches > 0 && <span className="text-slate-500 font-bold normal-case text-[15px]">({roleStats.stMatches} sfide)</span>}
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
-                                  <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Tot Fatti</span><span className="text-lg font-black text-red-300">{roleStats.stGoalsScored > 0 ? roleStats.stGoalsScored : <span className="text-slate-600">-</span>}</span></div>
+                                  <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Gol Fatti</span><span className="text-lg font-black text-red-300">{roleStats.stGoalsScored > 0 ? roleStats.stGoalsScored : <span className="text-slate-600">-</span>}</span></div>
                                   <div className="flex items-center justify-between bg-slate-900/70 rounded-xl px-4 py-2"><span className="text-[13px] font-black uppercase text-slate-400">Media</span><span className="text-lg font-black text-red-200">{roleStats.offensiveIndex ?? <span className="text-slate-600">-</span>}</span></div>
                                 </div>
                               </div>
