@@ -298,7 +298,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     SINGOLI
                   </h3>
                   {/* Table Header */}
-                  <div className="grid grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 px-2 mt-4 text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-700/80 pb-2">
+                  <div className="grid grid-cols-[2rem_2rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 px-2 mt-4 text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-700/80 pb-2">
                     <div className="text-center">#</div>
                     <div></div>
                     <div>Nome</div>
@@ -317,7 +317,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const sp = p.played - p.wins;
                       const wr = p.winRate ?? '-';
                       return (
-                      <div key={p.id} className="grid grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 items-center py-1.5 px-2 border-b border-slate-800/40">
+                      <div key={p.id} className="grid grid-cols-[2rem_2rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 items-center py-1.5 px-2 border-b border-slate-800/40">
                         <div className={`text-lg font-black text-center shrink-0 ${
                           rank === 1 ? "text-yellow-500" :
                           rank === 2 ? "text-slate-300" :
@@ -335,7 +335,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                             </div>
                           )}
                         </div>
-                        <div className="text-[17px] font-bold text-white truncate leading-tight">{p.name}</div>
+                        <div className="text-[17px] font-bold text-white whitespace-nowrap leading-tight">{p.name}</div>
                         <div className="text-sm font-semibold text-slate-400 text-center">{p.played}</div>
                         <div className="text-sm font-semibold text-slate-400 text-center">{p.wins}</div>
                         <div className="text-sm font-semibold text-slate-400 text-center">{sp}</div>
@@ -355,7 +355,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     COPPIE
                   </h3>
                   {/* Table Header */}
-                  <div className="grid grid-cols-[2rem_3rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 px-2 mt-4 text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-700/80 pb-2">
+                  <div className="grid grid-cols-[2rem_3rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 px-2 mt-4 text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-700/80 pb-2">
                     <div className="text-center">#</div>
                     <div></div>
                     <div>Nome</div>
@@ -374,7 +374,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const sp = t.played - t.wins;
                       const wr = t.winRate ?? '-';
                       return (
-                      <div key={t.id} className="grid grid-cols-[2rem_3rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 items-center py-1.5 px-2 border-b border-slate-800/40">
+                      <div key={t.id} className="grid grid-cols-[2rem_3rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3.5rem_3.5rem] gap-2 items-center py-1.5 px-2 border-b border-slate-800/40">
                         <div className={`text-lg font-black text-center shrink-0 ${
                           rank === 1 ? "text-yellow-500" :
                           rank === 2 ? "text-slate-300" :
@@ -391,10 +391,10 @@ export default function TVSlideshow({ data }: { data: any }) {
                             {t.player2?.name.substring(0, 2).toUpperCase()}
                           </div>
                         </div>
-                        <div className="flex items-baseline gap-1 min-w-0 flex-wrap truncate">
-                          <span className="text-[17px] font-bold text-white truncate">{t.player1?.name || "G1"}</span>
+                        <div className="flex items-baseline gap-1 min-w-0 flex-nowrap whitespace-nowrap">
+                          <span className="text-[17px] font-bold text-white whitespace-nowrap">{t.player1?.name || "G1"}</span>
                           <span className="text-xs font-black text-yellow-500/70">&</span>
-                          <span className="text-[17px] font-bold text-white truncate">{t.player2?.name || "G2"}</span>
+                          <span className="text-[17px] font-bold text-white whitespace-nowrap">{t.player2?.name || "G2"}</span>
                         </div>
                         <div className="text-sm font-semibold text-slate-400 text-center">{t.played}</div>
                         <div className="text-sm font-semibold text-slate-400 text-center">{t.wins}</div>
@@ -462,7 +462,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 w-full">
                   <div className="w-full flex flex-col">
-                    <div className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 border-b border-slate-600 mb-2">
+                    <div className="grid grid-cols-[1.5rem_1.5rem_minmax(13rem,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 border-b border-slate-600 mb-2">
                       <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">#</div>
                       <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider"></div>
                       <div className="text-[10px] md:text-xs font-black text-slate-500 text-left uppercase tracking-wider">Nome</div>
@@ -485,7 +485,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const med = sg > 0 ? (gs / sg).toFixed(2) : '-';
 
                       return (
-                        <div key={p.id} className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 lg:py-3 border-b border-slate-800/40 items-center">
+                        <div key={p.id} className="grid grid-cols-[1.5rem_1.5rem_minmax(13rem,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 lg:py-3 border-b border-slate-800/40 items-center">
                           <div className={`text-sm lg:text-lg font-black text-center ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-600'}`}>{rank}</div>
                           <div className="flex items-center justify-center">
                             {p.avatarUrl ? (
@@ -496,7 +496,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               </div>
                             )}
                           </div>
-                          <div className="text-sm lg:text-lg font-bold text-white truncate">{p.name}</div>
+                          <div className="text-sm lg:text-lg font-bold text-white whitespace-nowrap">{p.name}</div>
                           <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sg}</div>
                           <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sv}</div>
                           <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sp}</div>
@@ -520,7 +520,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                 
                 <div className="flex-1 w-full">
                   <div className="w-full flex flex-col">
-                    <div className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 border-b border-slate-600 mb-2">
+                    <div className="grid grid-cols-[1.5rem_1.5rem_minmax(13rem,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 border-b border-slate-600 mb-2">
                       <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">#</div>
                       <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider"></div>
                       <div className="text-[10px] md:text-xs font-black text-slate-500 text-left uppercase tracking-wider">Nome</div>
@@ -543,7 +543,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                       const med = sg > 0 ? (gf / sg).toFixed(2) : '-';
 
                       return (
-                        <div key={p.id} className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 lg:py-3 border-b border-slate-800/40 items-center">
+                        <div key={p.id} className="grid grid-cols-[1.5rem_1.5rem_minmax(13rem,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(13rem,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 lg:py-3 border-b border-slate-800/40 items-center">
                           <div className={`text-sm lg:text-lg font-black text-center ${rank === 1 ? 'text-red-500' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-600'}`}>{rank}</div>
                           <div className="flex items-center justify-center">
                             {p.avatarUrl ? (
@@ -554,7 +554,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                               </div>
                             )}
                           </div>
-                          <div className="text-sm lg:text-lg font-bold text-white truncate">{p.name}</div>
+                          <div className="text-sm lg:text-lg font-bold text-white whitespace-nowrap">{p.name}</div>
                           <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sg}</div>
                           <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sv}</div>
                           <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sp}</div>
