@@ -450,130 +450,120 @@ export default function TVSlideshow({ data }: { data: any }) {
               </div>
 
               {/* TWO COLUMNS */}
-              <div className="flex w-2/3 mx-auto flex-1 min-h-0 gap-8 lg:gap-16">
+              <div className="flex w-full max-w-[1300px] mx-auto flex-1 min-h-0 gap-8 lg:gap-16 px-4">
               
               {/* TOP DEFENDERS FIXED CARD */}
               <div className="flex-1 flex flex-col p-6 md:p-8 relative min-h-0">
-                
-                <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
+                <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-4">
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
                     DEFENDERS
                   </h3>
                 </div>
                 
-                <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-4" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * ((defenderStats.length + 8) / (Math.max(1, playerStats.length) + 8))}s` }}>
-                    {defenderStats.map((p: any, i: number) => {
+                <div className="flex-1 w-full">
+                  <div className="w-full flex flex-col">
+                    <div className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 border-b border-slate-600 mb-2">
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">#</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider"></div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-left uppercase tracking-wider">Nome</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">SG</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">SV</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">SP</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">GS</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">MED</div>
+                      <div className="text-[10px] md:text-xs font-black text-yellow-600 text-right uppercase tracking-wider">PT</div>
+                    </div>
+                    {defenderStats.filter((p: any) => p.wins > 0).slice(0, 15).map((p: any, i: number) => {
                       const rank = i + 1;
+                      const advStats = data.advancedPlayerStats?.find((s: any) => s.playerId === p.id);
+                      const rStats = advStats?.roleStats;
+                      
+                      const sg = rStats?.gkMatches || 0;
+                      const sv = rStats?.gkWins || 0;
+                      const sp = sg - sv;
+                      const gs = rStats?.gkGoalsConceded || 0;
+                      const med = sg > 0 ? (gs / sg).toFixed(2) : '-';
+
                       return (
-                      <div key={p.id} className="flex items-center p-4 px-6">
-                        <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
-                          <div className={`text-3xl font-black w-8 text-center shrink-0 ${
-                            rank === 1 ? "text-blue-500" :
-                            rank === 2 ? "text-slate-300" :
-                            rank === 3 ? "text-orange-400" :
-                            "text-slate-600"
-                          }`}>
-                            {rank}
-                          </div>
-                          <div className="flex flex-col min-w-0 justify-center">
-                            <div className="flex items-center gap-3">
-                              <div className="text-2xl font-bold text-white truncate leading-tight">{p.name}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex-1 flex justify-center items-center min-w-0">
-                          {(() => {
-                            const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === p.id);
-                            const rStats = advStats?.roleStats;
-                            const tSubiti = rStats?.gkGoalsConceded || 0;
-                            const mSubiti = rStats?.gkMatches > 0 ? (tSubiti / rStats.gkMatches).toFixed(2) : '-';
-                            return (
-                              <div className="flex items-center gap-6 shrink-0 mx-2">
-                                <div className="flex flex-col items-center gap-1">
-                                  <span className="text-[12px] text-blue-500 font-bold uppercase tracking-widest leading-none">Gol Subiti</span>
-                                  <span className="text-2xl font-black text-white leading-none">{tSubiti}</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1">
-                                  <span className="text-[12px] text-blue-500 font-bold uppercase tracking-widest leading-none">Media</span>
-                                  <span className="text-2xl font-black text-white leading-none">{mSubiti}</span>
-                                </div>
+                        <div key={p.id} className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 lg:py-3 border-b border-slate-800/40 items-center">
+                          <div className={`text-sm lg:text-lg font-black text-center ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-600'}`}>{rank}</div>
+                          <div className="flex items-center justify-center">
+                            {p.avatarUrl ? (
+                              <img src={`/players/${p.avatarUrl}`} className="w-6 h-6 rounded-full object-cover border border-slate-700" alt={p.name} />
+                            ) : (
+                              <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[9px] font-bold text-white">
+                                {p.name.substring(0, 2).toUpperCase()}
                               </div>
-                            );
-                          })()}
-                        </div>
-                        <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
-                          <div className="text-2xl font-black text-blue-500 flex items-baseline gap-1">
-                            {p.points} <span className="text-sm">PT</span>
+                            )}
                           </div>
-                          <div className="text-sm font-bold text-slate-400 text-right">
-                            {p.wins} V / {p.played} G
-                          </div>
+                          <div className="text-sm lg:text-lg font-bold text-white truncate">{p.name}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sg}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sv}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sp}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{gs}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{med}</div>
+                          <div className="text-base lg:text-xl font-black text-yellow-500 text-right">{p.points}</div>
                         </div>
-                      </div>
-                    )})}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
 
               {/* TOP STRIKERS FIXED CARD */}
-              <div className="flex-1 flex flex-col p-8 relative">
-                
-                <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-6">
+              <div className="flex-1 flex flex-col p-6 md:p-8 relative min-h-0">
+                <div className="shrink-0 z-20 relative pb-6 border-b border-slate-700/50 mb-4">
                   <h3 className="text-3xl font-bold text-center flex items-center justify-center gap-4 text-white uppercase tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]">
                     STRIKERS
                   </h3>
                 </div>
                 
-                <div className="flex-1 overflow-hidden relative z-10 w-full mask-edges">
-                  <div className="absolute top-0 left-0 w-full animate-scroll-vertical flex flex-col gap-4" style={{ animationDuration: `${(currentSlide.duration || 12000) / 1000 * 0.6 * ((strikerStats.length + 8) / (Math.max(1, playerStats.length) + 8))}s` }}>
-                    {strikerStats.map((t: any, i: number) => {
+                <div className="flex-1 w-full">
+                  <div className="w-full flex flex-col">
+                    <div className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 border-b border-slate-600 mb-2">
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">#</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider"></div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-left uppercase tracking-wider">Nome</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">SG</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">SV</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">SP</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">GF</div>
+                      <div className="text-[10px] md:text-xs font-black text-slate-500 text-center uppercase tracking-wider">MED</div>
+                      <div className="text-[10px] md:text-xs font-black text-red-600 text-right uppercase tracking-wider">PT</div>
+                    </div>
+                    {strikerStats.filter((p: any) => p.wins > 0).slice(0, 15).map((p: any, i: number) => {
                       const rank = i + 1;
+                      const advStats = data.advancedPlayerStats?.find((s: any) => s.playerId === p.id);
+                      const rStats = advStats?.roleStats;
+                      
+                      const sg = rStats?.stMatches || 0;
+                      const sv = rStats?.stWins || 0;
+                      const sp = sg - sv;
+                      const gf = rStats?.stGoalsScored || 0;
+                      const med = sg > 0 ? (gf / sg).toFixed(2) : '-';
+
                       return (
-                      <div key={t.id} className="flex items-center p-4 px-6">
-                        <div className="flex items-center gap-6 min-w-0 w-[40%] shrink-0">
-                          <div className={`text-3xl font-black w-8 text-center shrink-0 ${
-                            rank === 1 ? "text-red-500" :
-                            rank === 2 ? "text-slate-300" :
-                            rank === 3 ? "text-orange-400" :
-                            "text-slate-600"
-                          }`}>
-                            {rank}
-                          </div>
-                          <div className="flex flex-col min-w-0 justify-center">
-                            <span className="text-2xl font-bold text-white truncate leading-tight">{t.name}</span>
-                          </div>
-                        </div>
-                        <div className="flex-1 flex justify-center items-center min-w-0">
-                          {(() => {
-                            const advStats = data.advancedPlayerStats?.find((aps: any) => aps.player.id === t.id);
-                            const rStats = advStats?.roleStats;
-                            const tFatti = rStats?.stGoalsScored || 0;
-                            const mFatti = rStats?.stMatches > 0 ? (tFatti / rStats.stMatches).toFixed(2) : '-';
-                            return (
-                              <div className="flex items-center gap-6 shrink-0 mx-2">
-                                <div className="flex flex-col items-center gap-1">
-                                  <span className="text-[12px] text-red-500 font-bold uppercase tracking-widest leading-none">Gol Fatti</span>
-                                  <span className="text-2xl font-black text-white leading-none">{tFatti}</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1">
-                                  <span className="text-[12px] text-red-500 font-bold uppercase tracking-widest leading-none">Media</span>
-                                  <span className="text-2xl font-black text-white leading-none">{mFatti}</span>
-                                </div>
+                        <div key={p.id} className="grid grid-cols-[1.5rem_1.5rem_minmax(0,1fr)_1.5rem_1.5rem_1.5rem_2.5rem_2.5rem_2rem] lg:grid-cols-[2rem_2rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem_3rem_3.5rem_3.5rem] gap-2 md:gap-4 px-2 py-2 lg:py-3 border-b border-slate-800/40 items-center">
+                          <div className={`text-sm lg:text-lg font-black text-center ${rank === 1 ? 'text-red-500' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-600'}`}>{rank}</div>
+                          <div className="flex items-center justify-center">
+                            {p.avatarUrl ? (
+                              <img src={`/players/${p.avatarUrl}`} className="w-6 h-6 rounded-full object-cover border border-slate-700" alt={p.name} />
+                            ) : (
+                              <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[9px] font-bold text-white">
+                                {p.name.substring(0, 2).toUpperCase()}
                               </div>
-                            );
-                          })()}
-                        </div>
-                        <div className="flex flex-col items-end w-[25%] shrink-0 ml-auto">
-                          <div className="text-2xl font-black text-red-500 flex items-baseline gap-1">
-                            {t.points} <span className="text-sm">PT</span>
+                            )}
                           </div>
-                          <div className="text-sm font-bold text-slate-400 text-right">
-                            {t.wins} V / {t.played} G
-                          </div>
+                          <div className="text-sm lg:text-lg font-bold text-white truncate">{p.name}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sg}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sv}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{sp}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{gf}</div>
+                          <div className="text-xs lg:text-sm font-semibold text-slate-400 text-center">{med}</div>
+                          <div className="text-base lg:text-xl font-black text-red-500 text-right">{p.points}</div>
                         </div>
-                      </div>
-                    )})}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
