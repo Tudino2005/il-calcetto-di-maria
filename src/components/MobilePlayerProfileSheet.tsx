@@ -99,7 +99,7 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                   {allPartners.map((partnerObj: any) => (
                     <div key={partnerObj.partner.id} className="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50 flex flex-col gap-2">
                       <div className="flex items-center justify-between border-b border-slate-700/50 pb-2">
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
                           {partnerObj.partner.avatarUrl ? (
                             <img src={`/players/${partnerObj.partner.avatarUrl}`} className="w-8 h-8 rounded-full object-cover border border-slate-700 shrink-0" alt="" />
                           ) : (
@@ -110,41 +110,41 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                           <span className="font-bold text-white truncate text-sm">{partnerObj.partner.name}</span>
                         </div>
                         {partnerObj.teamRank && (
-                          <div className="flex flex-col items-end shrink-0 ml-2">
-                            <span className="text-[8px] uppercase font-black text-purple-400/80 tracking-wider">Ranking</span>
-                            <span className="text-sm font-black text-purple-400">{partnerObj.teamRank}°</span>
+                          <div className="flex items-center gap-2 shrink-0 ml-2">
+                            <span className="text-[10px] font-bold text-purple-400/80 tracking-wide normal-case">Ranking di coppia</span>
+                            <span className="text-xl font-black text-purple-400 leading-none">{partnerObj.teamRank}°</span>
                           </div>
                         )}
                       </div>
                       <div className="grid grid-cols-7 gap-1 pt-2 pb-1 border-t border-slate-700/30 mt-1">
-                        <div className="flex flex-col items-center">
-                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">SG</span>
-                          <span className="text-xs font-bold text-slate-300 leading-none">{partnerObj.played}</span>
+                        <div className="flex flex-col items-center justify-between gap-1.5">
+                          <span className="text-[7px] uppercase font-black text-slate-500 tracking-wider text-center leading-[1.1] max-w-[40px]">Sfide<br/>Giocate</span>
+                          <span className="text-xs font-bold text-slate-300 leading-none">{partnerObj.played ?? '-'}</span>
                         </div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">V</span>
-                          <span className="text-xs font-bold text-emerald-400/90 leading-none">{partnerObj.wins}</span>
+                        <div className="flex flex-col items-center justify-between gap-1.5">
+                          <span className="text-[7px] uppercase font-black text-slate-500 tracking-wider text-center leading-[1.1] max-w-[40px]">Sfide<br/>Vinte</span>
+                          <span className="text-xs font-bold text-emerald-400/90 leading-none">{partnerObj.wins ?? '-'}</span>
                         </div>
-                        <div className="flex flex-col items-center bg-slate-900/30 rounded py-0.5">
-                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">PG</span>
-                          <span className="text-xs font-bold text-slate-300 leading-none">{partnerObj.setsPlayed}</span>
+                        <div className="flex flex-col items-center justify-between gap-1.5 bg-slate-900/30 rounded py-0.5">
+                          <span className="text-[7px] uppercase font-black text-slate-500 tracking-wider text-center leading-[1.1] max-w-[40px]">Partite<br/>Giocate</span>
+                          <span className="text-xs font-bold text-slate-300 leading-none">{partnerObj.setsPlayed ?? 'N/D'}</span>
                         </div>
-                        <div className="flex flex-col items-center bg-slate-900/30 rounded py-0.5">
-                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">V</span>
-                          <span className="text-xs font-bold text-emerald-400/90 leading-none">{partnerObj.setsWon}</span>
+                        <div className="flex flex-col items-center justify-between gap-1.5 bg-slate-900/30 rounded py-0.5">
+                          <span className="text-[7px] uppercase font-black text-slate-500 tracking-wider text-center leading-[1.1] max-w-[40px]">Partite<br/>Vinte</span>
+                          <span className="text-xs font-bold text-emerald-400/90 leading-none">{partnerObj.setsWon ?? 'N/D'}</span>
                         </div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">GF</span>
-                          <span className="text-xs font-bold text-emerald-500 leading-none">{partnerObj.goalsFor}</span>
+                        <div className="flex flex-col items-center justify-between gap-1.5">
+                          <span className="text-[7px] uppercase font-black text-slate-500 tracking-wider text-center leading-[1.1] max-w-[40px]">Gol<br/>Fatti</span>
+                          <span className="text-xs font-bold text-emerald-500 leading-none">{partnerObj.goalsFor ?? '-'}</span>
                         </div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">GS</span>
-                          <span className="text-xs font-bold text-red-500 leading-none">{partnerObj.goalsAgainst}</span>
+                        <div className="flex flex-col items-center justify-between gap-1.5">
+                          <span className="text-[7px] uppercase font-black text-slate-500 tracking-wider text-center leading-[1.1] max-w-[40px]">Gol<br/>Subiti</span>
+                          <span className="text-xs font-bold text-red-500 leading-none">{partnerObj.goalsAgainst ?? '-'}</span>
                         </div>
-                        <div className="flex flex-col items-center border-l border-slate-700/50 pl-1">
-                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">WR</span>
+                        <div className="flex flex-col items-center justify-between gap-1.5 border-l border-slate-700/50 pl-1">
+                          <span className="text-[7px] uppercase font-black text-slate-500 tracking-wider text-center leading-[1.1] max-w-[40px]">Win<br/>Rate</span>
                           <span className={`text-[11px] font-black leading-none ${Number(partnerObj.winRate) >= 50 ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {partnerObj.winRate}%
+                            {partnerObj.winRate ?? '-'}%
                           </span>
                         </div>
                       </div>
