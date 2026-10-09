@@ -155,7 +155,7 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
               )}
 
               {activeTab === 'storico' && (
-                <div className="flex flex-col gap-2 pb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-8">
                   {matches.map((m: any) => (
                     <div key={m.id} className="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50 flex flex-col gap-2">
                       <div className="flex justify-between items-center border-b border-slate-700/50 pb-2">
