@@ -33,39 +33,38 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
 
   const renderSingoli = () => (
     <div className="flex flex-col gap-3 pb-24 px-4 mt-4">
-      <div className="grid grid-cols-[1.5rem_minmax(0,1fr)_2rem_2rem_2.5rem] gap-2 px-2 text-[10px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
+      <div className="grid grid-cols-[1.25rem_minmax(0,1fr)_1.25rem_1.25rem_1.25rem_2rem_1.5rem] gap-1.5 px-2 text-[9px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
         <div className="text-center">#</div>
-        <div>Giocatore</div>
-        <div className="text-center">WR</div>
-        <div className="text-center">PT</div>
+        <div>NOME</div>
+        <div className="text-center">SG</div>
+        <div className="text-center">SV</div>
+        <div className="text-center">SP</div>
+        <div className="text-center">WR%</div>
+        <div className="text-right text-yellow-500/50">PT</div>
       </div>
       {filteredSingoli.map((p: any, i: number) => {
         const rank = playerStats.findIndex((x: any) => x.id === p.id) + 1;
         const wr = p.winRate ?? '-';
         return (
-          <div key={p.id} onClick={() => { const advStats = advancedPlayerStats?.find((s: any) => s.player?.id === p.id); setSelectedPlayer({ p, rank, advStats, isTeam: false }); }} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-transform">
-            <div className={`w-6 text-center font-black ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-500'}`}>
+          <div key={p.id} onClick={() => { const advStats = advancedPlayerStats?.find((s: any) => s.player?.id === p.id); setSelectedPlayer({ p, rank, advStats, isTeam: false }); }} className="bg-slate-900/50 border border-slate-800 rounded-xl p-2.5 grid grid-cols-[1.25rem_minmax(0,1fr)_1.25rem_1.25rem_1.25rem_2rem_1.5rem] gap-1.5 items-center cursor-pointer active:scale-[0.98] transition-transform">
+            <div className={`text-center text-xs font-black ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-500'}`}>
               {rank}
             </div>
-            <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
               {p.avatarUrl ? (
-                <img src={`/players/${p.avatarUrl}`} className="w-10 h-10 rounded-full object-cover border-2 border-slate-700 shrink-0" alt={p.name} />
+                <img src={`/players/${p.avatarUrl}`} className="w-7 h-7 rounded-full object-cover border border-slate-700 shrink-0" alt={p.name} />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center font-bold text-white shrink-0">
+                <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-white text-[9px] shrink-0">
                   {p.name.substring(0, 2).toUpperCase()}
                 </div>
               )}
-              <div className="flex flex-col min-w-0">
-                <span className="font-bold text-white truncate text-base">{p.name}</span>
-                <span className="text-xs text-slate-400">{p.wins} V / {p.played} G</span>
-              </div>
+              <span className="font-bold text-white truncate text-sm">{p.name}</span>
             </div>
-            <div className="flex flex-col items-center justify-center shrink-0 w-12">
-              <span className="text-xs font-bold text-slate-300">{wr}{wr !== '-' ? '%' : ''}</span>
-            </div>
-            <div className="flex flex-col items-end justify-center shrink-0 w-10">
-              <span className="text-lg font-black text-yellow-500">{p.points}</span>
-            </div>
+            <div className="text-center text-[11px] font-bold text-slate-400">{p.played}</div>
+            <div className="text-center text-[11px] font-bold text-emerald-400/80">{p.wins}</div>
+            <div className="text-center text-[11px] font-bold text-red-400/80">{p.played - p.wins}</div>
+            <div className="text-center text-[11px] font-bold text-slate-300">{wr}{wr !== '-' ? '%' : ''}</div>
+            <div className="text-right text-sm font-black text-yellow-500">{p.points}</div>
           </div>
         );
       })}
@@ -75,34 +74,32 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
 
   const renderCoppie = () => (
     <div className="flex flex-col gap-3 pb-24 px-4 mt-4">
-      <div className="grid grid-cols-[1.5rem_minmax(0,1fr)_2rem_2rem_2.5rem] gap-2 px-2 text-[10px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
+      <div className="grid grid-cols-[1.25rem_minmax(0,1fr)_1.25rem_1.25rem_1.25rem_2rem_1.5rem] gap-1.5 px-2 text-[9px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
         <div className="text-center">#</div>
-        <div>Coppia</div>
-        <div className="text-center">WR</div>
-        <div className="text-center">PT</div>
+        <div>NOME</div>
+        <div className="text-center">SG</div>
+        <div className="text-center">SV</div>
+        <div className="text-center">SP</div>
+        <div className="text-center">WR%</div>
+        <div className="text-right text-yellow-500/50">PT</div>
       </div>
       {filteredCoppie.map((t: any, i: number) => {
         const rank = teamStats.findIndex((x: any) => x.id === t.id) + 1;
         const wr = t.winRate ?? '-';
         return (
-          <div key={t.id} onClick={() => setSelectedPlayer({ p: t, rank, isTeam: true })} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-transform">
-            <div className={`w-6 text-center font-black ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-500'}`}>
+          <div key={t.id} onClick={() => setSelectedPlayer({ p: t, rank, isTeam: true })} className="bg-slate-900/50 border border-slate-800 rounded-xl p-2.5 grid grid-cols-[1.25rem_minmax(0,1fr)_1.25rem_1.25rem_1.25rem_2rem_1.5rem] gap-1.5 items-center cursor-pointer active:scale-[0.98] transition-transform">
+            <div className={`text-center text-xs font-black ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-500'}`}>
               {rank}
             </div>
-            <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-white truncate text-sm">{t.player1?.name || "G1"}</span>
-                <span className="text-[10px] text-yellow-500/70 font-black">&</span>
-                <span className="font-bold text-white truncate text-sm">{t.player2?.name || "G2"}</span>
-              </div>
-              <span className="text-xs text-slate-400">{t.wins} V / {t.played} G</span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-white truncate text-[11px] leading-tight">{t.player1?.name || "G1"}</span>
+              <span className="font-bold text-white truncate text-[11px] leading-tight">{t.player2?.name || "G2"}</span>
             </div>
-            <div className="flex flex-col items-center justify-center shrink-0 w-12">
-              <span className="text-xs font-bold text-slate-300">{wr}{wr !== '-' ? '%' : ''}</span>
-            </div>
-            <div className="flex flex-col items-end justify-center shrink-0 w-10">
-              <span className="text-lg font-black text-yellow-500">{t.points}</span>
-            </div>
+            <div className="text-center text-[11px] font-bold text-slate-400">{t.played}</div>
+            <div className="text-center text-[11px] font-bold text-emerald-400/80">{t.wins}</div>
+            <div className="text-center text-[11px] font-bold text-red-400/80">{t.played - t.wins}</div>
+            <div className="text-center text-[11px] font-bold text-slate-300">{wr}{wr !== '-' ? '%' : ''}</div>
+            <div className="text-right text-sm font-black text-yellow-500">{t.points}</div>
           </div>
         );
       })}
