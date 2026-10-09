@@ -60,7 +60,7 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
               </div>
 
               {/* TABS */}
-              <div className="flex bg-slate-800/50 p-1 rounded-xl mt-6 border border-slate-700/50">
+              <div className="flex bg-slate-800/50 p-1 rounded-xl mt-6 border border-slate-700/50 max-w-md mx-auto w-full">
                 <button onClick={() => setActiveTab('panoramica')} className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'panoramica' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400'}`}><Activity className="w-3.5 h-3.5" /> Panoramica</button>
                 <button onClick={() => setActiveTab('compagni')} className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'compagni' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400'}`}><Users className="w-3.5 h-3.5" /> Compagni</button>
                 <button onClick={() => setActiveTab('storico')} className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-colors ${activeTab === 'storico' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400'}`}><Calendar className="w-3.5 h-3.5" /> Storico</button>
@@ -95,36 +95,50 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
               )}
 
               {activeTab === 'compagni' && (
-                <div className="flex flex-col gap-2 pb-8">
-                  <div className="grid grid-cols-[minmax(0,1fr)_2rem_3rem_3rem] gap-2 px-2 text-[9px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2 sticky top-0 bg-slate-900 z-10">
-                    <div>Partner</div>
-                    <div className="text-center">G</div>
-                    <div className="text-center">WR</div>
-                    <div className="text-center">GF/GS</div>
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-8">
                   {allPartners.map((partnerObj: any) => (
-                    <div key={partnerObj.partner.id} className="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50 flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        {partnerObj.partner.avatarUrl ? (
-                          <img src={`/players/${partnerObj.partner.avatarUrl}`} className="w-8 h-8 rounded-full object-cover border border-slate-700 shrink-0" alt="" />
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-white text-[10px] shrink-0">
-                            {partnerObj.partner.name.substring(0, 2).toUpperCase()}
+                    <div key={partnerObj.partner.id} className="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50 flex flex-col gap-2">
+                      <div className="flex items-center justify-between border-b border-slate-700/50 pb-2">
+                        <div className="flex items-center gap-3 min-w-0">
+                          {partnerObj.partner.avatarUrl ? (
+                            <img src={`/players/${partnerObj.partner.avatarUrl}`} className="w-8 h-8 rounded-full object-cover border border-slate-700 shrink-0" alt="" />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-white text-[10px] shrink-0">
+                              {partnerObj.partner.name.substring(0, 2).toUpperCase()}
+                            </div>
+                          )}
+                          <span className="font-bold text-white truncate text-sm">{partnerObj.partner.name}</span>
+                        </div>
+                        {partnerObj.teamRank && (
+                          <div className="flex flex-col items-end shrink-0 ml-2">
+                            <span className="text-[8px] uppercase font-black text-purple-400/80 tracking-wider">Ranking</span>
+                            <span className="text-sm font-black text-purple-400">{partnerObj.teamRank}°</span>
                           </div>
                         )}
-                        <span className="font-bold text-white truncate">{partnerObj.partner.name}</span>
                       </div>
-                      <div className="w-8 text-center text-xs font-bold text-slate-400 shrink-0">{partnerObj.played}</div>
-                      <div className={`w-12 text-center text-xs font-black shrink-0 ${Number(partnerObj.winRate) >= 50 ? 'text-emerald-400' : 'text-red-400'}`}>
-                        {partnerObj.winRate}%
-                      </div>
-                      <div className="w-12 text-right text-[10px] font-bold text-slate-500 shrink-0 flex flex-col">
-                        <span className="text-emerald-500/70">{partnerObj.goalsFor} GF</span>
-                        <span className="text-red-500/70">{partnerObj.goalsAgainst} GS</span>
+                      <div className="flex items-center justify-between pt-1 px-1">
+                        <div className="flex flex-col items-center">
+                          <span className="text-[9px] uppercase font-black text-slate-500 tracking-wider mb-0.5">G</span>
+                          <span className="text-sm font-bold text-slate-300 leading-none">{partnerObj.played}</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[9px] uppercase font-black text-slate-500 tracking-wider mb-0.5">WR</span>
+                          <span className={`text-sm font-black leading-none ${Number(partnerObj.winRate) >= 50 ? 'text-emerald-400' : 'text-red-400'}`}>
+                            {partnerObj.winRate}%
+                          </span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[9px] uppercase font-black text-slate-500 tracking-wider mb-0.5">GF/GS</span>
+                          <div className="flex items-center gap-1 text-xs font-bold leading-none">
+                            <span className="text-emerald-500">{partnerObj.goalsFor}</span>
+                            <span className="text-slate-600">-</span>
+                            <span className="text-red-500">{partnerObj.goalsAgainst}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
-                  {allPartners.length === 0 && <div className="text-center text-slate-500 text-xs py-4">Nessun partner.</div>}
+                  {allPartners.length === 0 && <div className="text-center text-slate-500 text-xs py-4 col-span-full">Nessun partner.</div>}
                 </div>
               )}
 

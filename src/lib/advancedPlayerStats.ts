@@ -12,7 +12,7 @@ export async function getAdvancedPlayerStatsForTV() {
   });
 
   const allPlayers = await prisma.player.findMany();
-  const { playerStats } = await getLeaderboardData();
+  const { playerStats, teamStats } = await getLeaderboardData();
   
   const playerRankMap = new Map();
   playerStats.forEach((p: any, idx: number) => {
@@ -113,10 +113,21 @@ export async function getAdvancedPlayerStatsForTV() {
       }
     });
 
-    const partnerStats = Array.from(partnerMap.values()).map((p: any) => ({
-      ...p,
-      winRate: p.played > 0 ? ((p.wins / p.played) * 100).toFixed(1) : "0.0"
-    }));
+    const teamRankMap = new Map();
+    teamStats.forEach((t: any, idx: number) => {
+      // Create a unique key for the team to look it up easily
+      const key = [t.player1Id, t.player2Id].sort().join('-');
+      teamRankMap.set(key, idx + 1);
+    });
+
+    const partnerStats = Array.from(partnerMap.values()).map((p: any) => {
+      const teamKey = [player.id, p.partner.id].sort().join('-');
+      return {
+        ...p,
+        teamRank: teamRankMap.get(teamKey) || null,
+        winRate: p.played > 0 ? ((p.wins / p.played) * 100).toFixed(1) : "0.0"
+      };
+    });
 
     let idealPartner = partnerStats.filter((p: any) => p.played >= 3);
     if (idealPartner.length > 0) {
