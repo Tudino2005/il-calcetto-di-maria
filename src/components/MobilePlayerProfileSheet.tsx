@@ -160,9 +160,6 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                     <div key={m.id} className="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50 flex flex-col gap-2">
                       <div className="flex justify-between items-center border-b border-slate-700/50 pb-2">
                         <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${m.role === 'Attaccante' ? 'bg-red-500/20 text-red-400' : m.role === 'Difensore' ? 'bg-blue-500/20 text-blue-400' : 'bg-slate-700 text-slate-300'}`}>
-                            {m.role}
-                          </span>
                           <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${m.tournamentId ? 'bg-yellow-500/20 text-yellow-500' : 'bg-blue-500/20 text-blue-400'}`}>{m.tournamentId ? 'TORNEO' : 'SFIDA LIBERA'}</span>
                         </div>
                         <div className="flex items-center gap-3">
