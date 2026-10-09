@@ -81,11 +81,35 @@ export async function getAdvancedPlayerStatsForTV() {
 
       if (partner) {
         if (!partnerMap.has(partner.id)) {
-          partnerMap.set(partner.id, { partner, played: 0, wins: 0 });
+          partnerMap.set(partner.id, { partner, played: 0, wins: 0, goalsFor: 0, goalsAgainst: 0 });
         }
         const entry = partnerMap.get(partner.id);
         entry.played += 1;
         if (iWon) entry.wins += 1;
+        
+        let teamGoals = 0;
+        let opponentGoals = 0;
+        if (m.setScores) {
+          try {
+            const parsedSets = typeof m.setScores === 'string' ? JSON.parse(m.setScores) : m.setScores;
+            if (Array.isArray(parsedSets)) {
+              for (const set of parsedSets) {
+                if (isTeamA) {
+                  teamGoals += Number(set.scoreA || 0);
+                  opponentGoals += Number(set.scoreB || 0);
+                } else {
+                  teamGoals += Number(set.scoreB || 0);
+                  opponentGoals += Number(set.scoreA || 0);
+                }
+              }
+            }
+          } catch (e) {}
+        } else {
+          teamGoals = isTeamA ? (Number(m.scoreTeamA) || 0) : (Number(m.scoreTeamB) || 0);
+          opponentGoals = isTeamA ? (Number(m.scoreTeamB) || 0) : (Number(m.scoreTeamA) || 0);
+        }
+        entry.goalsFor += teamGoals;
+        entry.goalsAgainst += opponentGoals;
       }
     });
 
@@ -111,8 +135,17 @@ export async function getAdvancedPlayerStatsForTV() {
     const bestPartner = idealPartner.length > 0 ? idealPartner[0] : null;
 
     recentMatches.sort((a: any, b: any) => new Date(b.playedAt || b.createdAt).getTime() - new Date(a.playedAt || a.createdAt).getTime());
-    const last5Matches = recentMatches.slice(0, 5).map((m: any) => {
+    const allMatchesFormatted = recentMatches.map((m: any) => {
       const isTeamA = m.teamA?.player1Id === player.id || m.teamA?.player2Id === player.id;
+      
+      // Determina il ruolo
+      let myRole = 'Jolly';
+      const myTeam = isTeamA ? m.teamA : m.teamB;
+      if (myTeam) {
+        if (m.teamA?.player1Id === player.id || m.teamB?.player1Id === player.id) myRole = 'Difensore';
+        if (m.teamA?.player2Id === player.id || m.teamB?.player2Id === player.id) myRole = 'Attaccante';
+      }
+
       return {
         id: m.id,
         playedAt: m.playedAt,
@@ -120,9 +153,15 @@ export async function getAdvancedPlayerStatsForTV() {
         myTeam: isTeamA ? m.teamA : m.teamB,
         oppTeam: isTeamA ? m.teamB : m.teamA,
         myScore: isTeamA ? m.scoreTeamA : m.scoreTeamB,
-        oppScore: isTeamA ? m.scoreTeamB : m.scoreTeamA
+        oppScore: isTeamA ? m.scoreTeamB : m.scoreTeamA,
+        setScores: m.setScores,
+        tournamentId: m.tournamentId, // For knowing if it's a tournament or free match
+        role: myRole,
+        isTeamA
       };
     });
+    
+    const last5Matches = allMatchesFormatted.slice(0, 5);
 
 
 
@@ -137,7 +176,9 @@ export async function getAdvancedPlayerStatsForTV() {
       avgGoalsPerMatch,
       roleStats,
       bestPartner,
+      allPartners: partnerStats.sort((a,b) => b.played !== a.played ? b.played - a.played : Number(b.winRate) - Number(a.winRate)),
       last5Matches,
+      allMatches: allMatchesFormatted,
     };
 
   });
