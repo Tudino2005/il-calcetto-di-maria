@@ -165,53 +165,53 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                           </span>
                           <span className="text-[10px] text-slate-400 font-bold">{m.tournamentId ? 'TORNEO' : 'SFIDA LIBERA'}</span>
                         </div>
-                        <span className="text-[10px] font-bold text-slate-500">
-                          {new Date(m.playedAt).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}
-                        </span>
+                        <div className="flex items-center gap-3">
+                          <span className={`font-black text-lg leading-none ${m.won ? 'text-emerald-400' : 'text-red-400'}`}>
+                            {m.myScore} - {m.oppScore}
+                          </span>
+                          <span className="text-[10px] font-bold text-slate-500">
+                            {new Date(m.playedAt).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}
+                          </span>
+                        </div>
                       </div>
                       
-                      <div className="flex justify-between items-stretch text-sm pt-1">
-                        <div className="flex flex-col justify-between min-w-0 flex-1">
+                      <div className="flex justify-between items-center text-sm pt-1">
+                        <div className="flex flex-col justify-between min-w-0 flex-1 gap-1">
                           <span className="font-bold truncate text-white">
                             {m.myTeam?.player1?.name} & {m.myTeam?.player2?.name}
                           </span>
-                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest my-1.5 pl-1">
+                          <span className="font-bold text-slate-500 uppercase pl-1">
                             VS
                           </span>
                           <span className="font-bold truncate text-slate-300">
                             {m.oppTeam?.player1?.name} & {m.oppTeam?.player2?.name}
                           </span>
                         </div>
-                        <div className="flex flex-col items-end justify-between shrink-0 ml-3">
-                          <span className={`font-black text-xl leading-none pt-0.5 ${m.won ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {m.myScore} - {m.oppScore}
-                          </span>
-                        </div>
+                        
+                        {/* Set Scores if present (centered vertically via items-center) */}
+                        {m.setScores && typeof m.setScores === 'string' && (
+                          <div className="flex items-center gap-1 shrink-0 ml-3">
+                            {(() => {
+                              try {
+                                const sets = JSON.parse(m.setScores);
+                                if (Array.isArray(sets) && sets.length > 0) {
+                                  return sets.map((s: any, i: number) => {
+                                    const mySetScore = m.isTeamA ? s.scoreA : s.scoreB;
+                                    const oppSetScore = m.isTeamA ? s.scoreB : s.scoreA;
+                                    const wonSet = Number(mySetScore) > Number(oppSetScore);
+                                    return (
+                                      <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${wonSet ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
+                                        {mySetScore}-{oppSetScore}
+                                      </span>
+                                    );
+                                  });
+                                }
+                              } catch (e) {}
+                              return null;
+                            })()}
+                          </div>
+                        )}
                       </div>
-                      
-                      {/* Set Scores if present */}
-                      {m.setScores && typeof m.setScores === 'string' && (
-                        <div className="flex items-center justify-end gap-1 mt-1">
-                          {(() => {
-                            try {
-                              const sets = JSON.parse(m.setScores);
-                              if (Array.isArray(sets) && sets.length > 0) {
-                                return sets.map((s: any, i: number) => {
-                                  const mySetScore = m.isTeamA ? s.scoreA : s.scoreB;
-                                  const oppSetScore = m.isTeamA ? s.scoreB : s.scoreA;
-                                  const wonSet = Number(mySetScore) > Number(oppSetScore);
-                                  return (
-                                    <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${wonSet ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
-                                      {mySetScore}-{oppSetScore}
-                                    </span>
-                                  );
-                                });
-                              }
-                            } catch(e) {}
-                            return null;
-                          })()}
-                        </div>
-                      )}
                     </div>
                   ))}
                   {matches.length === 0 && <div className="text-center text-slate-500 text-xs py-4">Nessuna partita.</div>}
