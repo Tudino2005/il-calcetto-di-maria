@@ -180,7 +180,7 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                           <span className="font-bold truncate text-white">
                             {m.myTeam?.player1?.name} & {m.myTeam?.player2?.name}
                           </span>
-                          <span className="font-black text-[11px] text-slate-500 uppercase pl-8">
+                          <span className="font-black text-[11px] text-slate-500 uppercase w-full text-center">
                             VS
                           </span>
                           <span className="font-bold truncate text-slate-300">
