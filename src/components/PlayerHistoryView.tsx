@@ -53,7 +53,7 @@ export default function PlayerHistoryView({
               className="bg-slate-900 text-white font-bold px-4 py-2 rounded-lg border border-slate-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
             >
               <option value="">Seleziona Compagno</option>
-              <option value="all">Tutti i compagni</option>
+              <option value="all">Tutti i partner</option>
               {partnerStats.map(p => (
                 <option key={p.partner.id} value={p.partner.id}>
                   {p.partner.name}
