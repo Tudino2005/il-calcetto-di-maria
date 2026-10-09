@@ -19,6 +19,11 @@ import { TVDoubleEliminationBracket } from "@/components/TVDoubleEliminationBrac
 
 export default function TVSlideshow({ data }: { data: any }) {
   const router = useRouter();
+  const [qrUrl, setQrUrl] = useState("");
+  useEffect(() => {
+    setQrUrl(`${window.location.origin}/classifiche`);
+  }, []);
+
   const { playerStats, teamStats, promoTournaments, inProgressTournaments, completedTournaments } = data;
   
   // Filter out players with 0 wins from Sfide Libere
@@ -259,7 +264,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               {/* QR Code in alto a destra */}
               <div className="absolute top-16 right-8 lg:right-16 z-50 flex flex-col items-center bg-white p-2 rounded-xl shadow-2xl">
                 <div className="bg-slate-100 p-2 rounded-lg">
-                  {typeof window !== "undefined" ? <QRCode value={`${window.location.origin}/classifiche`} size={64} /> : <div style={{width: 64, height: 64}} />}
+                  {qrUrl ? <QRCode value={qrUrl} size={64} /> : <div style={{width: 64, height: 64}} />}
                 </div>
                 <div className="text-[10px] font-bold text-slate-800 mt-1 max-w-[80px] text-center leading-tight">
                   Classifica Completa
