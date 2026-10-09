@@ -481,7 +481,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     </div>
                     {defenderStats.filter((p: any) => p.wins > 0).slice(0, 15).map((p: any, i: number) => {
                       const rank = i + 1;
-                      const advStats = data.advancedPlayerStats?.find((s: any) => s.playerId === p.id);
+                      const advStats = data.advancedPlayerStats?.find((s: any) => s.player?.id === p.id);
                       const rStats = advStats?.roleStats;
                       
                       const sg = rStats?.gkMatches || 0;
@@ -539,7 +539,7 @@ export default function TVSlideshow({ data }: { data: any }) {
                     </div>
                     {strikerStats.filter((p: any) => p.wins > 0).slice(0, 15).map((p: any, i: number) => {
                       const rank = i + 1;
-                      const advStats = data.advancedPlayerStats?.find((s: any) => s.playerId === p.id);
+                      const advStats = data.advancedPlayerStats?.find((s: any) => s.player?.id === p.id);
                       const rStats = advStats?.roleStats;
                       
                       const sg = rStats?.stMatches || 0;

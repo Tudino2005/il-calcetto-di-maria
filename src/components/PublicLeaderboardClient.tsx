@@ -131,17 +131,17 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
           </button>
         </div>
 
-        <div className="grid grid-cols-[1.5rem_minmax(0,1fr)_2.5rem_2.5rem_2.5rem] gap-2 px-2 text-[10px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
+        <div className="grid grid-cols-[1.25rem_minmax(0,1fr)_2.5rem_2.5rem_2rem] gap-1.5 px-2 text-[9px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
           <div className="text-center">#</div>
-          <div>Giocatore</div>
+          <div>NOME</div>
           <div className="text-center">{activeRole === 'defenders' ? 'GS' : 'GF'}</div>
           <div className="text-center">MED</div>
-          <div className="text-center">PT</div>
+          <div className="text-right text-yellow-500/50">PT</div>
         </div>
         
         {list.map((p: any) => {
           const rank = baseList.findIndex((x: any) => x.id === p.id) + 1;
-          const advStats = advancedPlayerStats?.find((s: any) => s.playerId === p.id);
+          const advStats = advancedPlayerStats?.find((s: any) => s.player?.id === p.id);
           const rStats = advStats?.roleStats;
           
           let matches = 0, goals = 0, media = '-';
