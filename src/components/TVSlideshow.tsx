@@ -263,7 +263,7 @@ export default function TVSlideshow({ data }: { data: any }) {
               {/* QR Code in alto a destra */}
               <div className="absolute top-16 right-8 lg:right-16 z-50 flex flex-col items-center bg-white p-2 rounded-xl shadow-2xl">
                 <div className="bg-slate-100 p-2 rounded-lg">
-                  {qrUrl ? <img src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrUrl)}`} alt="QR" className="w-16 h-16 object-contain" /> : <div className="w-16 h-16" />}
+                  {qrUrl ? <img src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(qrUrl)}`} alt="QR" className="w-16 h-16 object-contain" /> : <div className="w-16 h-16" />}
                 </div>
                 <div className="text-[10px] font-bold text-slate-800 mt-1 max-w-[80px] text-center leading-tight">
                   Classifica Completa

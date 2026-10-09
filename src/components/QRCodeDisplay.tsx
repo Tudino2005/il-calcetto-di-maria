@@ -21,7 +21,7 @@ export default function QRCodeDisplay({ tournamentId }: { tournamentId: string }
       <div className="bg-white p-4 rounded-2xl">
         {/* Usiamo un servizio gratuito e super affidabile per generare il QR */}
         <img 
-          src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(url)}`} 
+          src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=0&data=${encodeURIComponent(url)}`} 
           alt="QR Code Iscrizione"
           className="w-48 h-48 md:w-64 md:h-64 object-contain"
         />
