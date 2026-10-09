@@ -81,7 +81,7 @@ export async function getAdvancedPlayerStatsForTV() {
 
       if (partner) {
         if (!partnerMap.has(partner.id)) {
-          partnerMap.set(partner.id, { partner, played: 0, wins: 0, goalsFor: 0, goalsAgainst: 0 });
+          partnerMap.set(partner.id, { partner, played: 0, wins: 0, goalsFor: 0, goalsAgainst: 0, setsPlayed: 0, setsWon: 0 });
         }
         const entry = partnerMap.get(partner.id);
         entry.played += 1;
@@ -94,12 +94,17 @@ export async function getAdvancedPlayerStatsForTV() {
             const parsedSets = typeof m.setScores === 'string' ? JSON.parse(m.setScores) : m.setScores;
             if (Array.isArray(parsedSets)) {
               for (const set of parsedSets) {
+                entry.setsPlayed += 1;
+                const scoreA = Number(set.scoreA || 0);
+                const scoreB = Number(set.scoreB || 0);
                 if (isTeamA) {
-                  teamGoals += Number(set.scoreA || 0);
-                  opponentGoals += Number(set.scoreB || 0);
+                  teamGoals += scoreA;
+                  opponentGoals += scoreB;
+                  if (scoreA > scoreB) entry.setsWon += 1;
                 } else {
-                  teamGoals += Number(set.scoreB || 0);
-                  opponentGoals += Number(set.scoreA || 0);
+                  teamGoals += scoreB;
+                  opponentGoals += scoreA;
+                  if (scoreB > scoreA) entry.setsWon += 1;
                 }
               }
             }

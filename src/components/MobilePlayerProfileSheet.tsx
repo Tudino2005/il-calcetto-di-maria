@@ -116,24 +116,36 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center justify-between pt-1 px-1">
+                      <div className="grid grid-cols-7 gap-1 pt-2 pb-1 border-t border-slate-700/30 mt-1">
                         <div className="flex flex-col items-center">
-                          <span className="text-[9px] uppercase font-black text-slate-500 tracking-wider mb-0.5">G</span>
-                          <span className="text-sm font-bold text-slate-300 leading-none">{partnerObj.played}</span>
+                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">SG</span>
+                          <span className="text-xs font-bold text-slate-300 leading-none">{partnerObj.played}</span>
                         </div>
                         <div className="flex flex-col items-center">
-                          <span className="text-[9px] uppercase font-black text-slate-500 tracking-wider mb-0.5">WR</span>
-                          <span className={`text-sm font-black leading-none ${Number(partnerObj.winRate) >= 50 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">V</span>
+                          <span className="text-xs font-bold text-emerald-400/90 leading-none">{partnerObj.wins}</span>
+                        </div>
+                        <div className="flex flex-col items-center bg-slate-900/30 rounded py-0.5">
+                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">PG</span>
+                          <span className="text-xs font-bold text-slate-300 leading-none">{partnerObj.setsPlayed}</span>
+                        </div>
+                        <div className="flex flex-col items-center bg-slate-900/30 rounded py-0.5">
+                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">V</span>
+                          <span className="text-xs font-bold text-emerald-400/90 leading-none">{partnerObj.setsWon}</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">GF</span>
+                          <span className="text-xs font-bold text-emerald-500 leading-none">{partnerObj.goalsFor}</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">GS</span>
+                          <span className="text-xs font-bold text-red-500 leading-none">{partnerObj.goalsAgainst}</span>
+                        </div>
+                        <div className="flex flex-col items-center border-l border-slate-700/50 pl-1">
+                          <span className="text-[8px] uppercase font-black text-slate-500 tracking-wider mb-1">WR</span>
+                          <span className={`text-[11px] font-black leading-none ${Number(partnerObj.winRate) >= 50 ? 'text-emerald-400' : 'text-red-400'}`}>
                             {partnerObj.winRate}%
                           </span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-[9px] uppercase font-black text-slate-500 tracking-wider mb-0.5">GF/GS</span>
-                          <div className="flex items-center gap-1 text-xs font-bold leading-none">
-                            <span className="text-emerald-500">{partnerObj.goalsFor}</span>
-                            <span className="text-slate-600">-</span>
-                            <span className="text-red-500">{partnerObj.goalsAgainst}</span>
-                          </div>
                         </div>
                       </div>
                     </div>
