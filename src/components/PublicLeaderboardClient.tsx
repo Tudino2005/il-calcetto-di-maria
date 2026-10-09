@@ -32,7 +32,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
   const filteredStrikers = strikerStats.filter((p: any) => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const renderSingoli = () => (
-    <div className="flex flex-col gap-3 pb-24 px-4 mt-4">
+    <div className="flex flex-col gap-3 pb-8 px-4 mt-4">
       <div className="grid grid-cols-[1.25rem_minmax(0,1fr)_1.25rem_1.25rem_1.25rem_2rem_1.5rem] gap-1.5 px-2 text-[9px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
         <div className="text-center">#</div>
         <div>NOME</div>
@@ -73,7 +73,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
   );
 
   const renderCoppie = () => (
-    <div className="flex flex-col gap-3 pb-24 px-4 mt-4">
+    <div className="flex flex-col gap-3 pb-8 px-4 mt-4">
       <div className="grid grid-cols-[1.25rem_minmax(0,1fr)_1.25rem_1.25rem_1.25rem_2rem_1.5rem] gap-1.5 px-2 text-[9px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-800 pb-2">
         <div className="text-center">#</div>
         <div>NOME</div>
@@ -113,7 +113,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
     const titleColor = activeRole === 'defenders' ? 'text-yellow-500' : 'text-red-500';
 
     return (
-      <div className="flex flex-col gap-3 pb-24 px-4 mt-4">
+      <div className="flex flex-col gap-3 pb-8 px-4 mt-4">
         
         {/* Sub-tabs per i ruoli */}
         <div className="flex bg-slate-900 p-1 rounded-xl mx-auto w-full max-w-sm mb-2 border border-slate-800">
@@ -194,7 +194,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
     <div className="flex flex-col min-h-screen bg-slate-950 w-full max-w-md mx-auto relative shadow-2xl overflow-hidden">
       
       {/* HEADER */}
-      <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 pt-12 pb-4 px-4 flex flex-col gap-4">
+      <div className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 pt-8 pb-3 px-4 flex flex-col gap-3 shadow-xl">
         <h1 className="text-2xl font-black text-white text-center tracking-widest flex items-center justify-center gap-2">
           <Trophy className="w-6 h-6 text-yellow-500" />
           ARENA STATS
@@ -207,8 +207,33 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
             placeholder="Cerca giocatore o coppia..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-700 rounded-full py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-slate-900 border border-slate-700 rounded-full py-2 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
           />
+        </div>
+
+        {/* TOP NAVIGATION TABS */}
+        <div className="flex bg-slate-900/50 p-1 rounded-xl border border-slate-700/50 w-full">
+          <button 
+            onClick={() => { setActiveTab('singoli'); window.scrollTo(0, 0); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] font-black rounded-lg transition-colors ${activeTab === 'singoli' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-300'}`}
+          >
+            <User className={`w-3.5 h-3.5 ${activeTab === 'singoli' ? 'text-emerald-400' : ''}`} />
+            <span className="uppercase tracking-wider">Singoli</span>
+          </button>
+          <button 
+            onClick={() => { setActiveTab('coppie'); window.scrollTo(0, 0); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] font-black rounded-lg transition-colors ${activeTab === 'coppie' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-300'}`}
+          >
+            <Users className={`w-3.5 h-3.5 ${activeTab === 'coppie' ? 'text-blue-400' : ''}`} />
+            <span className="uppercase tracking-wider">Coppie</span>
+          </button>
+          <button 
+            onClick={() => { setActiveTab('ruoli'); window.scrollTo(0, 0); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] font-black rounded-lg transition-colors ${activeTab === 'ruoli' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-slate-300'}`}
+          >
+            <Shield className={`w-3.5 h-3.5 ${activeTab === 'ruoli' ? 'text-purple-400' : ''}`} />
+            <span className="uppercase tracking-wider">Ruoli</span>
+          </button>
         </div>
       </div>
 
@@ -217,35 +242,6 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
         {activeTab === 'singoli' && renderSingoli()}
         {activeTab === 'coppie' && renderCoppie()}
         {activeTab === 'ruoli' && renderRuoli()}
-      </div>
-
-      {/* BOTTOM NAV */}
-      <div className="fixed bottom-0 left-0 w-full z-50 flex justify-center pb-4">
-        <div className="w-full max-w-md bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 flex items-center justify-around p-2 pb-6 pt-3">
-          <button 
-            onClick={() => setActiveTab('singoli')}
-            className={`flex flex-col items-center gap-1 w-20 transition-colors ${activeTab === 'singoli' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
-          >
-            <User className="w-6 h-6" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Singoli</span>
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('coppie')}
-            className={`flex flex-col items-center gap-1 w-20 transition-colors ${activeTab === 'coppie' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
-          >
-            <Users className="w-6 h-6" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Coppie</span>
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('ruoli')}
-            className={`flex flex-col items-center gap-1 w-20 transition-colors ${activeTab === 'ruoli' ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
-          >
-            <Shield className="w-6 h-6" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Ruoli</span>
-          </button>
-        </div>
       </div>
 
       <MobilePlayerProfileSheet isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} playerInfo={selectedPlayer} />
