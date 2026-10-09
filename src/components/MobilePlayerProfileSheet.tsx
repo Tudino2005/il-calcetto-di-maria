@@ -31,8 +31,6 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
 
   let globalSetsPlayed = 0;
   let globalSetsWon = 0;
-  let globalGoalsFor = 0;
-  let globalGoalsAgainst = 0;
 
   matches.forEach((m: any) => {
     if (m.setScores && typeof m.setScores === 'string') {
@@ -43,8 +41,6 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
             globalSetsPlayed++;
             const myScore = m.isTeamA ? Number(s.scoreA) : Number(s.scoreB);
             const oppScore = m.isTeamA ? Number(s.scoreB) : Number(s.scoreA);
-            globalGoalsFor += myScore;
-            globalGoalsAgainst += oppScore;
             if (myScore > oppScore) globalSetsWon++;
           });
         }
@@ -104,11 +100,11 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                   </div>
                   <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2">
                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">GOL<br/>FATTI</span>
-                    <span className="text-lg font-bold text-emerald-400">{globalGoalsFor}</span>
+                    <span className="text-lg font-bold text-emerald-400">{advStats?.goalsFor ?? 0}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2">
                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">GOL<br/>SUBITI</span>
-                    <span className="text-lg font-bold text-red-400">{globalGoalsAgainst}</span>
+                    <span className="text-lg font-bold text-red-400">{advStats?.goalsAgainst ?? 0}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center flex-1 px-2">
                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">WIN<br/>RATE</span>
@@ -129,25 +125,10 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
               
               {activeTab === 'panoramica' && (
                 <div className="grid grid-cols-2 gap-3 pb-8">
-                  <div className="bg-slate-900/50 border border-blue-500/30 rounded-xl p-3 flex flex-col">
-                    <div className="flex items-center gap-1.5 mb-2"><Shield className="w-3.5 h-3.5 text-blue-400" /><span className="text-[10px] uppercase font-black tracking-wider text-blue-400">In Porta</span></div>
-                    <div className="text-2xl font-black text-white leading-none">{rStats?.defensiveIndex || "-"} <span className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Subiti</span></div>
-                    <div className="flex justify-between text-[10px] font-bold mt-auto pt-2 border-t border-slate-800"><span className="text-slate-400">{rStats?.gkMatches || 0} G</span><span className="text-yellow-500">{rStats?.gkWinRate ? `${rStats.gkWinRate}% V` : "-"}</span></div>
-                  </div>
-                  <div className="bg-slate-900/50 border border-red-500/30 rounded-xl p-3 flex flex-col">
-                    <div className="flex items-center gap-1.5 mb-2"><Swords className="w-3.5 h-3.5 text-red-400" /><span className="text-[10px] uppercase font-black tracking-wider text-red-400">In Attacco</span></div>
-                    <div className="text-2xl font-black text-white leading-none">{rStats?.offensiveIndex || "-"} <span className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Fatti</span></div>
-                    <div className="flex justify-between text-[10px] font-bold mt-auto pt-2 border-t border-slate-800"><span className="text-slate-400">{rStats?.stMatches || 0} G</span><span className="text-yellow-500">{rStats?.stWinRate ? `${rStats.stWinRate}% V` : "-"}</span></div>
-                  </div>
                   <div className="bg-slate-900/50 border border-purple-500/30 rounded-xl p-3 flex flex-col">
                     <div className="flex items-center gap-1.5 mb-2"><Sparkles className="w-3.5 h-3.5 text-purple-400" /><span className="text-[10px] uppercase font-black tracking-wider text-purple-400">Miglior Partner</span></div>
                     <div className="text-[15px] font-black text-white leading-tight truncate">{bp?.partner?.name || "-"}</div>
                     <div className="flex justify-between text-[10px] font-bold mt-auto pt-2 border-t border-slate-800"><span className="text-slate-400">{bp?.played || 0} G</span><span className="text-emerald-400">{bp?.winRate || "0"}% V</span></div>
-                  </div>
-                  <div className="bg-slate-900/50 border border-emerald-500/30 rounded-xl p-3 flex flex-col">
-                    <div className="flex items-center gap-1.5 mb-2"><Trophy className="w-3.5 h-3.5 text-emerald-400" /><span className="text-[10px] uppercase font-black tracking-wider text-emerald-400">Rendimento Totale</span></div>
-                    <div className="text-2xl font-black text-white leading-none">{p.played} <span className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Partite</span></div>
-                    <div className="flex justify-between text-[10px] font-bold mt-auto pt-2 border-t border-slate-800"><span className="text-emerald-400">{p.wins} V</span><span className="text-yellow-500">{p.winRate || 0}% V</span></div>
                   </div>
                 </div>
               )}
@@ -256,7 +237,7 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                                     const wonSet = Number(mySetScore) > Number(oppSetScore);
                                     return (
                                       <span key={i} className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${wonSet ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
-                                        {mySetScore}-{oppSetScore}
+                                        {mySetScore}-{oppSetScore}{s.scorers?.[p.id] ? ` ⚽${s.scorers[p.id]}` : ""}
                                       </span>
                                     );
                                   });

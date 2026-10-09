@@ -34,6 +34,23 @@ type CompletedSet = {
   scoreB: number;
   inAdvantages: boolean;
   winner: "A" | "B";
+  scorers?: Record<string, number>; // playerId -> gol attribuiti nel set
+};
+
+const buildSetPayload = (sets: CompletedSet[]) => sets.map(s => ({
+  setNumber: s.setNumber,
+  scoreA: s.scoreA,
+  scoreB: s.scoreB,
+  ...(s.scorers && Object.keys(s.scorers).length > 0 ? { scorers: s.scorers } : {})
+}));
+
+const countScorers = (goals: ("A" | "B")[], scorers: (string | null)[]) => {
+  const out: Record<string, number> = {};
+  goals.forEach((_, i) => {
+    const id = scorers[i];
+    if (id) out[id] = (out[id] || 0) + 1;
+  });
+  return out;
 };
 
 export default function MatchScorer({ match }: { match: MatchInfo }) {
@@ -167,6 +184,22 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
     return [];
   });
 
+  // Marcatore di ogni gol del set corrente (parallelo a currentSetGoals; null = non attribuito)
+  const [currentSetScorers, setCurrentSetScorers] = useState<(string | null)[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(sessionStorageKey);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          const goals = Array.isArray(parsed.currentSetGoals) ? parsed.currentSetGoals : [];
+          const sc = Array.isArray(parsed.currentSetScorers) ? parsed.currentSetScorers : [];
+          return goals.map((_: any, i: number) => sc[i] ?? null);
+        }
+      } catch {}
+    }
+    return [];
+  });
+
   // Inter-set modal state (shown when a set is won but match continues)
   const [setFinishedModal, setSetFinishedModal] = useState<CompletedSet | null>(null);
 
@@ -175,10 +208,17 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
     try {
       localStorage.setItem(sessionStorageKey, JSON.stringify({
         completedSets,
-        currentSetGoals
+        currentSetGoals,
+        currentSetScorers
       }));
     } catch {}
-  }, [completedSets, currentSetGoals, sessionStorageKey]);
+  }, [completedSets, currentSetGoals, currentSetScorers, sessionStorageKey]);
+
+  // Gol attribuiti per giocatore nel set corrente
+  const currentScorerCounts = useMemo(
+    () => countScorers(currentSetGoals, currentSetScorers),
+    [currentSetGoals, currentSetScorers]
+  );
 
   // Derived sets won count
   const setsWonA = completedSets.filter(s => s.winner === "A").length;
@@ -271,7 +311,8 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         scoreA: currentSetState.scoreA,
         scoreB: currentSetState.scoreB,
         inAdvantages: currentSetState.inAdvantages,
-        winner: winner
+        winner: winner,
+        scorers: countScorers(currentSetGoals, currentSetScorers)
       };
 
       const nextSetsA = setsWonA + (winner === "A" ? 1 : 0);
@@ -281,6 +322,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
       const newCompletedList = [...completedSets, newCompletedSet];
       setCompletedSets(newCompletedList);
       setCurrentSetGoals([]);
+      setCurrentSetScorers([]);
 
       // If match is finished, update DB with final sets and winner
       let finalWinnerId: string | null = null;
@@ -288,11 +330,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
         finalWinnerId = nextSetsA >= 2 ? match.teamA?.id || null : match.teamB?.id || null;
       }
 
-      const formattedSetsPayload = newCompletedList.map(s => ({
-        setNumber: s.setNumber,
-        scoreA: s.scoreA,
-        scoreB: s.scoreB
-      }));
+      const formattedSetsPayload = buildSetPayload(newCompletedList);
 
       startTransition(() => {
         updateExactMatchScore(match.id, nextSetsA, nextSetsB, finalWinnerId, formattedSetsPayload);
@@ -305,9 +343,10 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
   }, [currentSetState.setWinner, isMatchFinished, currentSetState.scoreA, currentSetState.scoreB, currentSetState.inAdvantages, currentSetNumber, setsWonA, setsWonB, completedSets, match.teamA?.id, match.teamB?.id, match.id, setFinishedModal]);
 
   // Add goal to current set
-  const addGoal = (team: "A" | "B") => {
+  const addGoal = (team: "A" | "B", scorerId: string | null = null) => {
     if (isMatchFinished || currentSetState.setWinner || isPending) return;
     setCurrentSetGoals(prev => [...prev, team]);
+    setCurrentSetScorers(prev => [...prev, scorerId]);
   };
 
   // Remove last goal in current set
@@ -328,6 +367,9 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
     const next = [...currentSetGoals];
     next.splice(targetIdx, 1);
     setCurrentSetGoals(next);
+    const nextScorers = [...currentSetScorers];
+    nextScorers.splice(targetIdx, 1);
+    setCurrentSetScorers(nextScorers);
   };
 
   // Undo entire last set in case of error
@@ -339,28 +381,49 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
 
     // Reconstruct goals of that set minus the winning goal
     const reconstructed: ("A" | "B")[] = [];
-    for (let i = 0; i < last.scoreA; i++) reconstructed.push("A");
-    for (let i = 0; i < last.scoreB; i++) reconstructed.push("B");
-    // Remove the last goal to keep set open
-    if (last.winner === "A") {
-      const idx = reconstructed.lastIndexOf("A");
-      if (idx !== -1) reconstructed.splice(idx, 1);
-    } else {
-      const idx = reconstructed.lastIndexOf("B");
-      if (idx !== -1) reconstructed.splice(idx, 1);
+    const reconstructedScorers: (string | null)[] = [];
+    const teamPlayerIds = (t: "A" | "B") => {
+      const team = t === "A" ? match.teamA : match.teamB;
+      return team ? [team.player1.id, team.player2.id] : [];
+    };
+    const pushTeam = (t: "A" | "B", total: number) => {
+      const ids = teamPlayerIds(t);
+      let used = 0;
+      for (const id of ids) {
+        const n = last.scorers?.[id] || 0;
+        for (let i = 0; i < n && used < total; i++, used++) {
+          reconstructed.push(t);
+          reconstructedScorers.push(id);
+        }
+      }
+      for (; used < total; used++) {
+        reconstructed.push(t);
+        reconstructedScorers.push(null);
+      }
+    };
+    pushTeam("A", last.scoreA);
+    pushTeam("B", last.scoreB);
+    // Remove the last goal to keep set open (preferisci un gol non attribuito)
+    {
+      let idx = -1;
+      for (let i = reconstructed.length - 1; i >= 0; i--) {
+        if (reconstructed[i] === last.winner && reconstructedScorers[i] === null) { idx = i; break; }
+      }
+      if (idx === -1) idx = reconstructed.lastIndexOf(last.winner);
+      if (idx !== -1) {
+        reconstructed.splice(idx, 1);
+        reconstructedScorers.splice(idx, 1);
+      }
     }
 
     setCurrentSetGoals(reconstructed);
+    setCurrentSetScorers(reconstructedScorers);
     setSetFinishedModal(null);
 
     const prevSetsA = newCompleted.filter(s => s.winner === "A").length;
     const prevSetsB = newCompleted.filter(s => s.winner === "B").length;
 
-    const formattedSetsPayload = newCompleted.map(s => ({
-      setNumber: s.setNumber,
-      scoreA: s.scoreA,
-      scoreB: s.scoreB
-    }));
+    const formattedSetsPayload = buildSetPayload(newCompleted);
 
     startTransition(() => {
       updateExactMatchScore(match.id, prevSetsA, prevSetsB, null, formattedSetsPayload);
@@ -390,6 +453,7 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
     if (confirm("Vuoi davvero azzerare completamente la partita e ripartire dalla Partita 1 (0-0)?")) {
       setCompletedSets([]);
       setCurrentSetGoals([]);
+      setCurrentSetScorers([]);
       setSetFinishedModal(null);
       try {
         localStorage.removeItem(sessionStorageKey);
@@ -411,6 +475,27 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
       </div>
     );
   }
+
+  const renderGoalBtn = (team: "A" | "B", playerId: string, color: "red" | "blue") => {
+    if (mode !== "goals" || isMatchFinished) return null;
+    const n = currentScorerCounts[playerId] || 0;
+    return (
+      <button
+        type="button"
+        onClick={() => addGoal(team, playerId)}
+        disabled={isPending || !!currentSetState.setWinner}
+        title="Gol di questo giocatore (conta anche per la squadra)"
+        className={clsx(
+          "w-full px-4 py-2 rounded-xl font-black text-sm uppercase tracking-wider border-2 transition active:scale-95 disabled:opacity-40 flex items-center justify-center gap-2",
+          color === "red"
+            ? "border-red-400/70 text-red-200 bg-red-600/20 hover:bg-red-600/40"
+            : "border-blue-400/70 text-blue-200 bg-blue-600/20 hover:bg-blue-600/40"
+        )}
+      >
+        ⚽ GOL{n > 0 && <span className="px-1.5 rounded bg-white/15 text-white">{n}</span>}
+      </button>
+    );
+  };
 
   return (
     <div className="flex-1 flex flex-col p-3 sm:p-6 xl:p-8 relative w-full min-h-screen">
@@ -794,13 +879,13 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             </div>
             {teamARoles && (
               <div className="mt-0 flex items-center gap-3 flex-wrap">
-                <span className="text-sm sm:text-base bg-slate-950/70 border border-red-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                <div className="flex flex-col gap-1.5">{renderGoalBtn("A", teamARoles.goalkeeperId, "red")}<span className="text-sm sm:text-base bg-slate-950/70 border border-red-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
                   <span className="text-lg">🛡️</span>
                   <span className="text-slate-400 font-bold">Porta:</span>
                   <strong className="text-white">
                     {match.teamA.player1.id === teamARoles.goalkeeperId ? match.teamA.player1.name : match.teamA.player2.name}
                   </strong>
-                </span>
+                </span></div>
                 {!isMatchFinished && (
                   <button
                     type="button"
@@ -812,13 +897,13 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                     <span>Inverti</span>
                   </button>
                 )}
-                <span className="text-sm sm:text-base bg-slate-950/70 border border-red-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                <div className="flex flex-col gap-1.5">{renderGoalBtn("A", teamARoles.strikerId, "red")}<span className="text-sm sm:text-base bg-slate-950/70 border border-red-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
                   <span className="text-lg">⚔️</span>
                   <span className="text-slate-400 font-bold">Attacco:</span>
                   <strong className="text-white">
                     {match.teamA.player1.id === teamARoles.strikerId ? match.teamA.player1.name : match.teamA.player2.name}
                   </strong>
-                </span>
+                </span></div>
                 {teamARoles.isAdapted && teamARoles.adaptationNote && (
                   <span className="text-[10px] text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
                     ⚠️ {teamARoles.adaptationNote}
@@ -958,13 +1043,13 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
             </div>
             {teamBRoles && (
               <div className="mt-0 flex items-center gap-3 flex-wrap">
-                <span className="text-sm sm:text-base bg-slate-950/70 border border-blue-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                <div className="flex flex-col gap-1.5">{renderGoalBtn("B", teamBRoles.goalkeeperId, "blue")}<span className="text-sm sm:text-base bg-slate-950/70 border border-blue-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
                   <span className="text-lg">🛡️</span>
                   <span className="text-slate-400 font-bold">Porta:</span>
                   <strong className="text-white">
                     {match.teamB.player1.id === teamBRoles.goalkeeperId ? match.teamB.player1.name : match.teamB.player2.name}
                   </strong>
-                </span>
+                </span></div>
                 {!isMatchFinished && (
                   <button
                     type="button"
@@ -976,13 +1061,13 @@ export default function MatchScorer({ match }: { match: MatchInfo }) {
                     <span>Inverti</span>
                   </button>
                 )}
-                <span className="text-sm sm:text-base bg-slate-950/70 border border-blue-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
+                <div className="flex flex-col gap-1.5">{renderGoalBtn("B", teamBRoles.strikerId, "blue")}<span className="text-sm sm:text-base bg-slate-950/70 border border-blue-500/30 px-4 py-2 rounded-xl text-slate-200 flex items-center gap-2 shadow-sm">
                   <span className="text-lg">⚔️</span>
                   <span className="text-slate-400 font-bold">Attacco:</span>
                   <strong className="text-white">
                     {match.teamB.player1.id === teamBRoles.strikerId ? match.teamB.player1.name : match.teamB.player2.name}
                   </strong>
-                </span>
+                </span></div>
                 {teamBRoles.isAdapted && teamBRoles.adaptationNote && (
                   <span className="text-[10px] text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
                     ⚠️ {teamBRoles.adaptationNote}

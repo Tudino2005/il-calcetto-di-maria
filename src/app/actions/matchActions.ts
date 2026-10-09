@@ -151,8 +151,26 @@ export async function updateExactMatchScore(
 ) {
   try {
     console.log("UPDATE_EXACT_MATCH_SCORE CALLED:", { matchId, scoreA, scoreB, winnerTeamId, setScores });
-    const match = await prisma.match.findUnique({ where: { id: matchId } });
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: { teamA: true, teamB: true }
+    });
     if (!match) return null;
+
+    // Sanifica i marcatori: solo giocatori del match, e mai piu' gol di quelli della squadra
+    if (Array.isArray(setScores)) {
+      const idsA = [match.teamA?.player1Id, match.teamA?.player2Id].filter(Boolean) as string[];
+      const idsB = [match.teamB?.player1Id, match.teamB?.player2Id].filter(Boolean) as string[];
+      setScores = setScores.map((s: any) => {
+        if (!s || !s.scorers) return s;
+        const clean: Record<string, number> = {};
+        for (const [pid, n] of Object.entries(s.scorers as Record<string, number>)) {
+          if (idsA.includes(pid) || idsB.includes(pid)) clean[pid] = Math.max(0, Number(n) || 0);
+        }
+        const { scorers, ...rest } = s;
+        return Object.keys(clean).length > 0 ? { ...rest, scorers: clean } : rest;
+      });
+    }
 
     const data: any = { scoreTeamA: scoreA, scoreTeamB: scoreB, winnerTeamId };
     if (setScores !== undefined) {

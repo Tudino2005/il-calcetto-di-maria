@@ -49,6 +49,43 @@ export async function getAdvancedPlayerStatsForTV() {
       }
     });
 
+    // Gol INDIVIDUALI: fatti = gol attribuiti al giocatore + gol di squadra non attribuiti se era attaccante;
+    // subiti = gol incassati dalla squadra nei match in cui era difensore.
+    let individualGoalsFor = 0;
+    let individualGoalsAgainst = 0;
+    allMatches.forEach((m: any) => {
+      const isTeamA = m.teamA?.player1Id === player.id || m.teamA?.player2Id === player.id;
+      const isTeamB = m.teamB?.player1Id === player.id || m.teamB?.player2Id === player.id;
+      if (!isTeamA && !isTeamB) return;
+
+      const role = getEffectiveMatchRole(m, player.id);
+      const myTeam = isTeamA ? m.teamA : m.teamB;
+      const teammateIds = [myTeam?.player1Id, myTeam?.player2Id].filter(Boolean) as string[];
+
+      let sets: any[] | null = null;
+      if (m.setScores) {
+        try {
+          const parsed = typeof m.setScores === 'string' ? JSON.parse(m.setScores) : m.setScores;
+          if (Array.isArray(parsed)) sets = parsed;
+        } catch (e) {}
+      }
+      if (!sets) {
+        sets = [{ scoreA: m.scoreTeamA, scoreB: m.scoreTeamB }];
+      }
+
+      sets.forEach((set: any) => {
+        const teamGoals = Number((isTeamA ? set.scoreA : set.scoreB) || 0);
+        const oppGoals = Number((isTeamA ? set.scoreB : set.scoreA) || 0);
+        const scorers: Record<string, number> = set.scorers || {};
+        const own = Number(scorers[player.id] || 0);
+        const attributed = teammateIds.reduce((sum, id) => sum + Number(scorers[id] || 0), 0);
+        const unattributed = Math.max(0, teamGoals - attributed);
+
+        individualGoalsFor += own + (role === 'attaccante' ? unattributed : 0);
+        if (role === 'portiere') individualGoalsAgainst += oppGoals;
+      });
+    });
+
     const avgGoalsPerMatch = basicStats.played > 0
       ? (totalGoalsScored / basicStats.played).toFixed(2)
       : null;
@@ -187,6 +224,8 @@ export async function getAdvancedPlayerStatsForTV() {
       winRate: basicStats.winRate,
       points: basicStats.points,
       totalGoalsScored,
+      goalsFor: individualGoalsFor,
+      goalsAgainst: individualGoalsAgainst,
       avgGoalsPerMatch,
       roleStats,
       bestPartner,
