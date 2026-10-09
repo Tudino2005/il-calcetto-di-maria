@@ -170,17 +170,20 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                         </span>
                       </div>
                       
-                      <div className="flex justify-between items-center text-sm pt-1">
-                        <div className="flex flex-col min-w-0 flex-1">
-                          <span className={`font-bold truncate ${m.won ? 'text-white' : 'text-slate-400'}`}>
+                      <div className="flex justify-between items-stretch text-sm pt-1">
+                        <div className="flex flex-col justify-between min-w-0 flex-1">
+                          <span className="font-bold truncate text-white">
                             {m.myTeam?.player1?.name} & {m.myTeam?.player2?.name}
                           </span>
-                          <span className={`text-xs truncate ${!m.won ? 'text-white' : 'text-slate-500'}`}>
-                            vs {m.oppTeam?.player1?.name} & {m.oppTeam?.player2?.name}
+                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest my-1.5 pl-1">
+                            VS
+                          </span>
+                          <span className="font-bold truncate text-slate-300">
+                            {m.oppTeam?.player1?.name} & {m.oppTeam?.player2?.name}
                           </span>
                         </div>
-                        <div className="flex flex-col items-end shrink-0 ml-3">
-                          <span className={`font-black text-xl leading-none ${m.won ? 'text-emerald-400' : 'text-red-400'}`}>
+                        <div className="flex flex-col items-end justify-between shrink-0 ml-3">
+                          <span className={`font-black text-xl leading-none pt-0.5 ${m.won ? 'text-emerald-400' : 'text-red-400'}`}>
                             {m.myScore} - {m.oppScore}
                           </span>
                         </div>
