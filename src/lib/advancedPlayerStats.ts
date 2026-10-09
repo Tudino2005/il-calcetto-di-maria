@@ -54,6 +54,77 @@ export async function getAdvancedPlayerStatsForTV() {
       : null;
 
     const roleStats = calculatePlayerRoleStats(player.id, allMatches);
+    // Calculate best partner and recent matches
+    const partnerMap = new Map();
+    const recentMatches: any[] = [];
+
+    allMatches.forEach((m: any) => {
+      const isTeamA = m.teamA?.player1Id === player.id || m.teamA?.player2Id === player.id;
+      const isTeamB = m.teamB?.player1Id === player.id || m.teamB?.player2Id === player.id;
+      if (!isTeamA && !isTeamB) return;
+
+      recentMatches.push(m);
+
+      let partner = null;
+      let myTeam = null;
+      let iWon = false;
+
+      if (isTeamA) {
+        myTeam = m.teamA;
+        iWon = m.winnerTeamId === m.teamAId;
+        partner = m.teamA.player1Id === player.id ? m.teamA.player2 : m.teamA.player1;
+      } else {
+        myTeam = m.teamB;
+        iWon = m.winnerTeamId === m.teamBId;
+        partner = m.teamB.player1Id === player.id ? m.teamB.player2 : m.teamB.player1;
+      }
+
+      if (partner) {
+        if (!partnerMap.has(partner.id)) {
+          partnerMap.set(partner.id, { partner, played: 0, wins: 0 });
+        }
+        const entry = partnerMap.get(partner.id);
+        entry.played += 1;
+        if (iWon) entry.wins += 1;
+      }
+    });
+
+    const partnerStats = Array.from(partnerMap.values()).map((p: any) => ({
+      ...p,
+      winRate: p.played > 0 ? ((p.wins / p.played) * 100).toFixed(1) : "0.0"
+    }));
+
+    let idealPartner = partnerStats.filter((p: any) => p.played >= 3);
+    if (idealPartner.length > 0) {
+      idealPartner.sort((a, b) => {
+        const wrDiff = Number(b.winRate) - Number(a.winRate);
+        if (wrDiff !== 0) return wrDiff;
+        return b.played - a.played;
+      });
+    } else {
+      idealPartner = partnerStats.sort((a, b) => {
+        const wrDiff = Number(b.winRate) - Number(a.winRate);
+        if (wrDiff !== 0) return wrDiff;
+        return b.played - a.played;
+      });
+    }
+    const bestPartner = idealPartner.length > 0 ? idealPartner[0] : null;
+
+    recentMatches.sort((a: any, b: any) => new Date(b.playedAt || b.createdAt).getTime() - new Date(a.playedAt || a.createdAt).getTime());
+    const last5Matches = recentMatches.slice(0, 5).map((m: any) => {
+      const isTeamA = m.teamA?.player1Id === player.id || m.teamA?.player2Id === player.id;
+      return {
+        id: m.id,
+        playedAt: m.playedAt,
+        won: m.winnerTeamId === (isTeamA ? m.teamAId : m.teamBId),
+        myTeam: isTeamA ? m.teamA : m.teamB,
+        oppTeam: isTeamA ? m.teamB : m.teamA,
+        myScore: isTeamA ? m.scoreTeamA : m.scoreTeamB,
+        oppScore: isTeamA ? m.scoreTeamB : m.scoreTeamA
+      };
+    });
+
+
 
     return {
       player,
@@ -65,7 +136,10 @@ export async function getAdvancedPlayerStatsForTV() {
       totalGoalsScored,
       avgGoalsPerMatch,
       roleStats,
+      bestPartner,
+      last5Matches,
     };
+
   });
   
   const validStats = advancedStats.filter(Boolean) as any[];

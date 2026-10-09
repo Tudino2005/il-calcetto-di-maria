@@ -2,11 +2,13 @@
 
 import React, { useState } from "react";
 import { Search, User, Users, Shield, Trophy } from "lucide-react";
+import MobilePlayerProfileSheet from "./MobilePlayerProfileSheet";
 
 export default function PublicLeaderboardClient({ data }: { data: any }) {
   const [activeTab, setActiveTab] = useState("singoli"); // singoli, coppie, ruoli
   const [activeRole, setActiveRole] = useState("defenders"); // defenders, strikers
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
 
   const { playerStats, teamStats, advancedPlayerStats } = data;
 
@@ -41,7 +43,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
         const rank = playerStats.findIndex((x: any) => x.id === p.id) + 1;
         const wr = p.winRate ?? '-';
         return (
-          <div key={p.id} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-3">
+          <div key={p.id} onClick={() => { const advStats = advancedPlayerStats?.find((s: any) => s.player?.id === p.id); setSelectedPlayer({ p, rank, advStats, isTeam: false }); }} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-transform">
             <div className={`w-6 text-center font-black ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-500'}`}>
               {rank}
             </div>
@@ -83,7 +85,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
         const rank = teamStats.findIndex((x: any) => x.id === t.id) + 1;
         const wr = t.winRate ?? '-';
         return (
-          <div key={t.id} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-3">
+          <div key={t.id} onClick={() => setSelectedPlayer({ p: t, rank, isTeam: true })} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-3 cursor-pointer active:scale-[0.98] transition-transform">
             <div className={`w-6 text-center font-black ${rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-500'}`}>
               {rank}
             </div>
@@ -157,7 +159,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
           }
 
           return (
-            <div key={p.id} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-2">
+            <div key={p.id} onClick={() => { const advStats = advancedPlayerStats?.find((s: any) => s.player?.id === p.id); setSelectedPlayer({ p, rank, advStats, isTeam: false }); }} className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 flex items-center gap-2 cursor-pointer active:scale-[0.98] transition-transform">
               <div className={`w-6 text-center font-black ${rank === 1 ? titleColor : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-orange-400' : 'text-slate-500'}`}>
                 {rank}
               </div>
@@ -249,6 +251,7 @@ export default function PublicLeaderboardClient({ data }: { data: any }) {
         </div>
       </div>
 
+      <MobilePlayerProfileSheet isOpen={!!selectedPlayer} onClose={() => setSelectedPlayer(null)} playerInfo={selectedPlayer} />
     </div>
   );
 }
