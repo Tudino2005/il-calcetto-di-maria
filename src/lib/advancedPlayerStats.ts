@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import { calculatePlayerRoleStats } from "./roleUtils";
+import { calculatePlayerRoleStats, getEffectiveMatchRole } from "./roleUtils";
 import { getLeaderboardData } from "./leaderboardData";
 
 export async function getAdvancedPlayerStatsForTV() {
@@ -138,13 +138,11 @@ export async function getAdvancedPlayerStatsForTV() {
     const allMatchesFormatted = recentMatches.map((m: any) => {
       const isTeamA = m.teamA?.player1Id === player.id || m.teamA?.player2Id === player.id;
       
-      // Determina il ruolo
+      // Determina il ruolo usando la logica ufficiale
+      const effective = getEffectiveMatchRole(m, player.id);
       let myRole = 'Jolly';
-      const myTeam = isTeamA ? m.teamA : m.teamB;
-      if (myTeam) {
-        if (m.teamA?.player1Id === player.id || m.teamB?.player1Id === player.id) myRole = 'Difensore';
-        if (m.teamA?.player2Id === player.id || m.teamB?.player2Id === player.id) myRole = 'Attaccante';
-      }
+      if (effective === 'portiere') myRole = 'Difensore';
+      if (effective === 'attaccante') myRole = 'Attaccante';
 
       return {
         id: m.id,
