@@ -29,6 +29,31 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
   const allPartners = advStats?.allPartners || [];
   const matches = advStats?.allMatches || [];
 
+  let globalSetsPlayed = 0;
+  let globalSetsWon = 0;
+  let globalGoalsFor = 0;
+  let globalGoalsAgainst = 0;
+
+  matches.forEach((m: any) => {
+    if (m.setScores && typeof m.setScores === 'string') {
+      try {
+        const sets = JSON.parse(m.setScores);
+        if (Array.isArray(sets)) {
+          sets.forEach(s => {
+            globalSetsPlayed++;
+            const myScore = m.isTeamA ? Number(s.scoreA) : Number(s.scoreB);
+            const oppScore = m.isTeamA ? Number(s.scoreB) : Number(s.scoreA);
+            globalGoalsFor += myScore;
+            globalGoalsAgainst += oppScore;
+            if (myScore > oppScore) globalSetsWon++;
+          });
+        }
+      } catch(e) {}
+    }
+  });
+
+  const winRate = advStats?.played > 0 ? ((advStats.wins / advStats.played) * 100).toFixed(1) : "0.0";
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -37,9 +62,11 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
           <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed bottom-0 left-0 right-0 z-[101] h-[90vh] bg-slate-900 rounded-t-3xl border-t border-slate-700 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
             <div className="w-full flex justify-center pt-3 pb-2 cursor-pointer" onClick={onClose}><div className="w-12 h-1.5 bg-slate-700 rounded-full" /></div>
             
-            <div className="px-4 sm:px-6 pt-2 pb-4 shrink-0">
-              <div className="flex justify-between items-start relative">
-                <div className="flex items-center gap-4">
+            <div className="px-4 sm:px-6 pt-2 pb-4 shrink-0 relative">
+              <button onClick={onClose} className="absolute top-2 right-4 sm:right-6 p-2 bg-slate-800 rounded-full text-slate-400 hover:text-white z-10"><X className="w-5 h-5" /></button>
+              
+              <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 pr-12">
+                <div className="flex items-center gap-4 shrink-0">
                   {p.avatarUrl ? (
                     <img src={`/players/${p.avatarUrl}`} className="w-16 h-16 rounded-full object-cover border-2 border-slate-700" alt={p.name} />
                   ) : (
@@ -56,7 +83,38 @@ export default function MobilePlayerProfileSheet({ isOpen, onClose, playerInfo }
                     </span>
                   </div>
                 </div>
-                <button onClick={onClose} className="p-2 bg-slate-800 rounded-full text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
+                
+                {/* GLOBAL STATS GRID */}
+                <div className="flex-1 w-full max-w-2xl bg-slate-900/50 rounded-xl p-3 border border-slate-700/50 flex justify-around items-center">
+                  <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">SFIDE<br/>GIOCATE</span>
+                    <span className="text-lg font-bold text-white">{advStats?.played || 0}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">SFIDE<br/>VINTE</span>
+                    <span className="text-lg font-bold text-emerald-400">{advStats?.wins || 0}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2 bg-slate-800/20 rounded-l-md">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">PARTITE<br/>GIOCATE</span>
+                    <span className="text-lg font-bold text-white">{globalSetsPlayed}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2 bg-slate-800/20 rounded-r-md">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">PARTITE<br/>VINTE</span>
+                    <span className="text-lg font-bold text-emerald-400">{globalSetsWon}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">GOL<br/>FATTI</span>
+                    <span className="text-lg font-bold text-emerald-400">{globalGoalsFor}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-800/80 px-2">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">GOL<br/>SUBITI</span>
+                    <span className="text-lg font-bold text-red-400">{globalGoalsAgainst}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center flex-1 px-2">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight mb-1 h-6 flex items-center">WIN<br/>RATE</span>
+                    <span className="text-lg font-black text-emerald-400">{winRate}%</span>
+                  </div>
+                </div>
               </div>
 
               {/* TABS */}
