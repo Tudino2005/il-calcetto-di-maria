@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Trophy, Dices, Users, Sparkles, Play } from "lucide-react";
+import { Trophy, Dices, Users, Sparkles, Play, FastForward } from "lucide-react";
 import { finishDrawAnimation } from "@/app/actions/tournamentActions";
 import { useRouter } from "next/navigation";
 import RoleIcon from "./RoleIcon";
@@ -74,6 +74,32 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
       window.removeEventListener("resize", handleResize);
     };
   }, [showcaseIndex, teams]);
+  const [isSkipping, setIsSkipping] = useState(false);
+
+  const handleSkipCeremony = async () => {
+    if (isSkipping) return;
+    setIsSkipping(true);
+    if (audioRef1.current) audioRef1.current.pause();
+    if (audioRef2.current) audioRef2.current.pause();
+    if (audioRef3.current) audioRef3.current.pause();
+    try {
+      await finishDrawAnimation(tournament.id);
+    } catch (e) {
+      console.error(e);
+    }
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "s" || e.key === "S") {
+        handleSkipCeremony();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [tournament.id, isSkipping]);
+
   const audioRef1 = useRef<HTMLAudioElement | null>(null);
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
   const audioRef3 = useRef<HTMLAudioElement | null>(null);
@@ -327,6 +353,17 @@ export default function SlotMachineDraw({ tournament, advancedPlayerStats = [] }
         .flip-out { animation: flipOut 0.6s ease-in forwards; }
         .flip-in { animation: flipIn 0.6s ease-out forwards; }
       `}</style>
+
+            {/* Floating Skip Button */}
+      <button
+        onClick={handleSkipCeremony}
+        disabled={isSkipping}
+        title="Premi ESC o S per saltare la cerimonia ed andare al tabellone"
+        className="fixed top-4 right-4 z-[999999] flex items-center gap-2 px-4 py-2.5 bg-slate-900/90 hover:bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-700 hover:border-red-500 shadow-2xl transition-all active:scale-95 cursor-pointer backdrop-blur-md group"
+      >
+        <FastForward className="w-4 h-4 text-amber-400 group-hover:text-white transition-colors" />
+        <span>{isSkipping ? "Interruzione..." : "Salta Cerimonia (ESC)"}</span>
+      </button>
 
       <audio ref={audioRef1} src="/seven-nation-army.mp3" preload="auto" loop />
       <audio ref={audioRef2} src="/song2-blur.mp3" preload="auto" loop />

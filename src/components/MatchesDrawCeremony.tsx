@@ -3,10 +3,33 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { finishMatchesDrawAnimation } from "@/app/actions/tournamentActions";
-import { Swords } from "lucide-react";
+import { Swords, FastForward } from "lucide-react";
 
 export default function MatchesDrawCeremony({ tournament }: { tournament: any }) {
   const round1Matches = tournament.matches || [];
+  const [isSkipping, setIsSkipping] = useState(false);
+
+  const handleSkipCeremony = async () => {
+    if (isSkipping) return;
+    setIsSkipping(true);
+    try {
+      await finishMatchesDrawAnimation(tournament.id);
+    } catch (e) {
+      console.error(e);
+    }
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "s" || e.key === "S") {
+        handleSkipCeremony();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [tournament.id, isSkipping]);
+
   const router = useRouter();
   
   const [revealedCount, setRevealedCount] = useState(0);

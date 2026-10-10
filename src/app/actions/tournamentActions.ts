@@ -799,3 +799,19 @@ export async function generateSchedule(tournamentId: string): Promise<{
   const report = formatScheduleReport(summary);
   return { ok: true, report };
 }
+
+export async function forceFinishTournamentCeremony(tournamentId: string) {
+  try {
+    await prisma.tournament.update({
+      where: { id: tournamentId },
+      data: { status: "in_progress" }
+    });
+    revalidatePath("/");
+    revalidatePath("/tournaments");
+    revalidatePath(`/tournaments/${tournamentId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("forceFinishTournamentCeremony error:", error);
+    return { success: false, error: String(error) };
+  }
+}
