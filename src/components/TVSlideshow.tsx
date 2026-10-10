@@ -231,7 +231,7 @@ export default function TVSlideshow({ data }: { data: any }) {
           <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 tracking-widest uppercase">
             ARENA DEL BILIARDINO
           </h1>
-          <img src="/images/red-player-table-football.png" alt="Logo" className="h-10 w-auto object-contain drop-shadow-md" />
+          <img src="/images/LogoArenaBiliardino.png" alt="Arena del Biliardino Logo" className="h-14 w-auto object-contain drop-shadow-lg" />
         </div>
         <div className="flex gap-2">
           {slides.map((_, i) => (
