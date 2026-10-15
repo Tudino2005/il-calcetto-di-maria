@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { startFreeMatch } from "@/app/actions/matchActions";
-import { PlayCircle, Users, ArrowLeftRight } from "lucide-react";
+import { PlayCircle, Users, ArrowLeftRight, Zap, Trophy } from "lucide-react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import RoleIcon from "@/components/RoleIcon";
@@ -11,6 +11,7 @@ import { resolveTeamRoles } from "@/lib/roleUtils";
 export default function MatchLobbyClient({ players }: { players: any[] }) {
   const router = useRouter();
   const [fixedPairs, setFixedPairs] = useState<string[][]>([]);
+  const [matchFormat, setMatchFormat] = useState<"bo3" | "single">("bo3");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [roleOverrides, setRoleOverrides] = useState<{
     teamA?: { goalkeeperId?: string; strikerId?: string };
@@ -89,10 +90,14 @@ export default function MatchLobbyClient({ players }: { players: any[] }) {
     
     setIsSubmitting(true);
     try {
-      const matchId = await startFreeMatch(validPairs, {
-        teamA: resolvedA ? { goalkeeperId: resolvedA.goalkeeperId, strikerId: resolvedA.strikerId } : undefined,
-        teamB: resolvedB ? { goalkeeperId: resolvedB.goalkeeperId, strikerId: resolvedB.strikerId } : undefined,
-      });
+      const matchId = await startFreeMatch(
+        validPairs,
+        {
+          teamA: resolvedA ? { goalkeeperId: resolvedA.goalkeeperId, strikerId: resolvedA.strikerId } : undefined,
+          teamB: resolvedB ? { goalkeeperId: resolvedB.goalkeeperId, strikerId: resolvedB.strikerId } : undefined,
+        },
+        matchFormat
+      );
       router.push(`/match/${matchId}`);
     } catch (e) {
       alert("Errore durante l'avvio della partita.");
@@ -271,10 +276,56 @@ export default function MatchLobbyClient({ players }: { players: any[] }) {
         </div>
       </section>
 
+      {/* SELETTORE FORMATO SFIDA */}
+      <div className="bg-slate-900/90 border border-slate-700/80 rounded-3xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center shrink-0">
+            <Trophy className="w-6 h-6 text-purple-400" />
+          </div>
+          <div>
+            <div className="text-base font-black text-white uppercase tracking-wider">Formato della Sfida</div>
+            <div className="text-xs text-slate-400">
+              {matchFormat === "single" 
+                ? "⚡ Partita Secca: chi conquista il 1° set vince subito la sfida." 
+                : "🏆 Al Meglio delle 3: vince la squadra che conquista per prima 2 partite."}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex bg-slate-950 p-1.5 rounded-2xl border border-slate-800 w-full md:w-auto">
+          <button
+            type="button"
+            onClick={() => setMatchFormat("single")}
+            className={clsx(
+              "flex-1 md:flex-none px-5 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2",
+              matchFormat === "single"
+                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-lg scale-100"
+                : "text-slate-400 hover:text-white"
+            )}
+          >
+            <Zap className="w-4 h-4" />
+            <span>Partita Secca (1 Set)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMatchFormat("bo3")}
+            className={clsx(
+              "flex-1 md:flex-none px-5 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2",
+              matchFormat === "bo3"
+                ? "bg-purple-600 text-white shadow-lg shadow-purple-950/50 scale-100"
+                : "text-slate-400 hover:text-white"
+            )}
+          >
+            <Trophy className="w-4 h-4" />
+            <span>Al Meglio delle 3 (Bo3)</span>
+          </button>
+        </div>
+      </div>
+
       <button 
         onClick={handleStart}
         disabled={isSubmitting || fixedPairs.flat().length !== 4}
-        className="w-full bg-gradient-to-r from-red-500 to-blue-500 hover:from-red-400 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-3xl py-8 rounded-3xl shadow-2xl flex items-center justify-center gap-4 transition-all"
+        className="w-full bg-gradient-to-r from-red-500 to-blue-500 hover:from-red-400 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-2xl sm:text-3xl py-6 sm:py-8 rounded-3xl shadow-2xl flex items-center justify-center gap-4 transition-all"
       >
         <PlayCircle className="w-10 h-10" />
         {isSubmitting ? "AVVIO IN CORSO..." : "AVVIA SFIDA AL VOLO!"}

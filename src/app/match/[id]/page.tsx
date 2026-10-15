@@ -20,7 +20,7 @@ export default async function MatchPage({ params }: { params: Promise<{ id: stri
 
   // Next 15 specific, might need await params.id in latest but let's assume standard app router
   return (
-    <main className="flex-1 p-4 md:p-8 flex flex-col h-screen">
+    <main className="flex-1 w-full h-[100dvh] max-h-[100dvh] overflow-hidden flex flex-col bg-slate-950">
       <MatchScorer match={match} />
     </main>
   );

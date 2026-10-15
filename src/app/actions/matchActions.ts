@@ -64,12 +64,14 @@ export async function createMatch(
     teamA_strikerId?: string | null;
     teamB_goalkeeperId?: string | null;
     teamB_strikerId?: string | null;
-  }
+  },
+  bracketType: string = "winners"
 ) {
   const match = await prisma.match.create({
     data: {
       teamAId,
       teamBId,
+      bracketType,
       teamA_goalkeeperId: roles?.teamA_goalkeeperId,
       teamA_strikerId: roles?.teamA_strikerId,
       teamB_goalkeeperId: roles?.teamB_goalkeeperId,
@@ -382,7 +384,8 @@ export async function startFreeMatch(
   roles?: {
     teamA?: { goalkeeperId?: string; strikerId?: string };
     teamB?: { goalkeeperId?: string; strikerId?: string };
-  }
+  },
+  format: "single" | "bo3" = "bo3"
 ) {
   if (pairs.length !== 2 || pairs[0].length !== 2 || pairs[1].length !== 2) {
     throw new Error("Devi formare esattamente 2 squadre da 2 giocatori.");
@@ -391,12 +394,17 @@ export async function startFreeMatch(
   const teamA = await createTeam(pairs[0][0], pairs[0][1]);
   const teamB = await createTeam(pairs[1][0], pairs[1][1]);
   
-  const match = await createMatch(teamA.id, teamB.id, {
-    teamA_goalkeeperId: roles?.teamA?.goalkeeperId,
-    teamA_strikerId: roles?.teamA?.strikerId,
-    teamB_goalkeeperId: roles?.teamB?.goalkeeperId,
-    teamB_strikerId: roles?.teamB?.strikerId,
-  });
+  const match = await createMatch(
+    teamA.id,
+    teamB.id,
+    {
+      teamA_goalkeeperId: roles?.teamA?.goalkeeperId,
+      teamA_strikerId: roles?.teamA?.strikerId,
+      teamB_goalkeeperId: roles?.teamB?.goalkeeperId,
+      teamB_strikerId: roles?.teamB?.strikerId,
+    },
+    format
+  );
   
   return match.id;
 }
